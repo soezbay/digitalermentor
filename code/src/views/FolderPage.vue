@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
@@ -54,3 +54,4 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
   text-decoration: none;
 }
 </style>
+ -->

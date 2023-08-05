@@ -1,13 +1,20 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 
+
+//routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
+
 const routes = [
   {
     path: '',
-    redirect: '/folder/Inbox'
+    redirect: '/Dashboard'
   },
   {
-    path: '/folder/:id',
-    component: () => import ('../views/FolderPage.vue')
+    path: '/Dashboard',
+    component: () => import ('../views/Dashboard.vue')
+  },
+  {
+    path: '/menu/Dashboard',
+    component: () => import ('../views/Dashboard.vue')
   }
 ]
 
