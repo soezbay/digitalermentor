@@ -12,29 +12,50 @@
         <ion-content>
             <ion-header id="displayUsername">Hallo, 'Username'!</ion-header>
             <ion-header id="zieleHeader">Aktive Ziele</ion-header><br>
-            <ion-datetime></ion-datetime>
+            <div class="kalender">
+                <ion-datetime ></ion-datetime>
+            </div>
+
+
+
         </ion-content>
     </ion-page>
 </template>
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, isPlatform } from '@ionic/vue';
 
 export default {
     components: {
         IonPage,
-        IonHeader,
+        IonHeader, 
         IonToolbar,
         IonTitle,
         IonContent,
         IonDatetime,
         IonItem
+    },
+    setup() {
+
+        const isDesktop = isPlatform('desktop');
+        const isIos = isPlatform('ios');
+        const isMd = isPlatform('mobile');
+
+        return { isIos };
     }
+}
+
+let element = document.getElementsByClassName("kalender");
+if (isPlatform("ios")) {
+    element.className = 'browser-margin';
+    
+} else {
+    element.className = 'custom-margin';
 }
 
 </script>
 
-<style scoped>
+<style>
 ion-content {
     display: flex;
 }
@@ -57,7 +78,13 @@ ion-item {
     margin: auto;
 }
 
-ion-datetime {
+.custom-margin {
+    /* Hier die allgemeine Margin für den Kalender, die auf allen Plattformen gilt */
     margin: auto;
+}
+
+.browser-margin {
+    /* Hier die spezifische Margin für den Kalender, die nur im Browser gilt */
+    margin: 0px;
 }
 </style>
