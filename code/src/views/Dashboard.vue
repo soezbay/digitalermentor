@@ -1,6 +1,5 @@
 <template>
     <ion-page>
-<<<<<<< code/src/views/Dashboard.vue
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
@@ -13,7 +12,7 @@
         <ion-content>
             <ion-header id="displayUsername">Hallo, 'Username'!</ion-header>
             <section>
-            <ion-header id="zieleHeader">Aktive Ziele:</ion-header>
+                <ion-header id="zieleHeader">Aktive Ziele:</ion-header>
                 <div id="flexbox1">
                     <IonItem>
                         <ion-label>EPR</ion-label>
@@ -29,76 +28,77 @@
                     </IonItem>
                     <IonItem>
                         <ion-label>INP</ion-label>
-                    </IonItem>    
+                    </IonItem>
                 </div>
             </section>
             <br>
             <section>
-            <ion-header id="zieleHeader">Termine:</ion-header>
+                <ion-header id="zieleHeader">Termine:</ion-header>
                 <div>
                     <IonItem>
                         <ion-label>xyz</ion-label>
-                    </IonItem>  
+                    </IonItem>
                 </div>
             </section>
             <div id="kalender">
                 <ion-datetime size="cover"></ion-datetime>
             </div>
             <ion-list>
-          <ion-item v-for="(item, index) in usersList" :key="index">
-            <ion-label>
-              <p><strong>BewertungsID:</strong> {{ item.BewertungsID }}</p>
-              <p><strong>BewertungsGruppe:</strong> {{ item.BewertugsGruppe }}</p>
-              <p><strong>Bewertung:</strong> {{ item.Bewertung }}</p>
-              <p><strong>ErstelltAm:</strong> {{ item.ErstelltAm }}</p>
-              <p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
-              <p><strong>BenutzerID:</strong> {{ item.BenutzerID }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
+                <ion-item v-for="(item, index) in usersList" :key="index">
+                    <ion-label>
+                        <p><strong>BewertungsID:</strong> {{ item.BewertungsID }}</p>
+                        <p><strong>BewertungsGruppe:</strong> {{ item.BewertugsGruppe }}</p>
+                        <p><strong>Bewertung:</strong> {{ item.Bewertung }}</p>
+                        <p><strong>ErstelltAm:</strong> {{ item.ErstelltAm }}</p>
+                        <p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
+                        <p><strong>BenutzerID:</strong> {{ item.BenutzerID }}</p>
+                    </ion-label>
+                </ion-item>
+            </ion-list>
         </ion-content>
     </ion-page>
 </template>
 
+<script>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
-  import axios from 'axios';
-  export default {
+import axios from 'axios';
+
+export default {
     components: {
-      IonPage,
-      IonHeader,
-      IonToolbar,
-      IonTitle,
-      IonContent,
-      IonDatetime,
-      IonItem,
-      IonButtons,
-      IonMenuButton,
-      IonLabel,
-      IonList
+        IonPage,
+        IonHeader,
+        IonToolbar,
+        IonTitle,
+        IonContent,
+        IonDatetime,
+        IonItem,
+        IonButtons,
+        IonMenuButton,
+        IonLabel,
+        IonList
     },
     data() {
-      return {
-        usersList: []
-      }
+        return {
+            usersList: []
+        }
     },
     methods: {
-      getData() {
-        axios.get('http://localhost:3000/bewertung').then(Response => {
-          console.log(Response.data)
-          this.usersList = Response.data.bewertungen;
-        }).catch(err => {
-          console.log(err);
-        })
-      }
+        getData() {
+            axios.get('http://localhost:3000/bewertung').then(Response => {
+                console.log(Response.data)
+                this.usersList = Response.data.bewertungen;
+            }).catch(err => {
+                console.log(err);
+            })
+        }
     },
     mounted() {
-      this.getData();
+        this.getData();
     }
-  }
-  </script>
+}
+</script>
 
 <style scoped>
-
 #flexbox1 {
     padding-top: 2%;
     padding-bottom: 2%;
@@ -128,5 +128,4 @@ ion-item {
     font-size: larger;
     text-align: left;
 }
-
 </style>
