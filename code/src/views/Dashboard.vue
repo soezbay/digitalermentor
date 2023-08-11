@@ -1,5 +1,6 @@
 <template>
     <ion-page>
+<<<<<<< code/src/views/Dashboard.vue
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
@@ -43,28 +44,58 @@
             <div id="kalender">
                 <ion-datetime size="cover"></ion-datetime>
             </div>
+            <ion-list>
+          <ion-item v-for="(item, index) in usersList" :key="index">
+            <ion-label>
+              <p><strong>BewertungsID:</strong> {{ item.BewertungsID }}</p>
+              <p><strong>BewertungsGruppe:</strong> {{ item.BewertugsGruppe }}</p>
+              <p><strong>Bewertung:</strong> {{ item.Bewertung }}</p>
+              <p><strong>ErstelltAm:</strong> {{ item.ErstelltAm }}</p>
+              <p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
+              <p><strong>BenutzerID:</strong> {{ item.BenutzerID }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
         </ion-content>
     </ion-page>
 </template>
 
-<script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton, IonItem, IonLabel, IonDatetime } from '@ionic/vue';
-
-
-export default {
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
+  import axios from 'axios';
+  export default {
     components: {
-        IonPage,
-        IonHeader,
-        IonToolbar,
-        IonTitle,
-        IonContent,
-        IonDatetime,
-        IonItem,
-        IonLabel
+      IonPage,
+      IonHeader,
+      IonToolbar,
+      IonTitle,
+      IonContent,
+      IonDatetime,
+      IonItem,
+      IonButtons,
+      IonMenuButton,
+      IonLabel,
+      IonList
+    },
+    data() {
+      return {
+        usersList: []
+      }
+    },
+    methods: {
+      getData() {
+        axios.get('http://localhost:3000/bewertung').then(Response => {
+          console.log(Response.data)
+          this.usersList = Response.data.bewertungen;
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+    },
+    mounted() {
+      this.getData();
     }
-}
-
-</script>
+  }
+  </script>
 
 <style scoped>
 
