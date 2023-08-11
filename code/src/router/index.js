@@ -6,15 +6,23 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 const routes = [
   {
     path: '',
-    redirect: '/Dashboard'
+    redirect: '/dashboard'
   },
   {
-    path: '/Dashboard',
+    path: '/dashboard',
     component: () => import ('../views/Dashboard.vue')
   },
   {
-    path: '/menu/Dashboard',
+    path: '/menu/dashboard',
     component: () => import ('../views/Dashboard.vue')
+  },
+  {
+    path: '/menu/ziele',
+    component: () => import ('../views/Ziele.vue')
+  },
+  {
+    path: '/menu/ziele/:id',
+    component: () => import ('../views/Ziele.vue')
   }
 ]
 

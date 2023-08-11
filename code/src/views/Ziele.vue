@@ -4,15 +4,14 @@
             <ion-toolbar>
                 <ion-buttons>
                     <ion-menu-button color="primary"></ion-menu-button>
-                    <ion-title>Dashboard</ion-title>
+                    <ion-title>Deine Ziele</ion-title>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
-
         <ion-content>
-            <ion-header id="displayUsername">Hallo, 'Username'!</ion-header>
             <section>
-            <ion-header id="zieleHeader">Aktive Ziele:</ion-header>
+                <br>
+                <ion-header class="header1">Sommersemester</ion-header>
                 <div id="flexbox1">
                     <IonItem>
                         <ion-label>EPR</ion-label>
@@ -27,28 +26,37 @@
                         <ion-label>ADS</ion-label>
                     </IonItem>
                     <IonItem>
+                        <ion-label>ADS</ion-label>
+                    </IonItem>
+                    <IonItem>
+                        <ion-label>ADS</ion-label>
+                    </IonItem>
+                    <IonItem>
                         <ion-label>INP</ion-label>
-                    </IonItem>    
+                    </IonItem>          
                 </div>
             </section>
             <br>
             <section>
-            <ion-header id="zieleHeader">Termine:</ion-header>
-                <div>
+                <ion-header class="header1">Wintersemester</ion-header>
+                 <div id="flexbox1">
                     <IonItem>
-                        <ion-label>xyz</ion-label>
-                    </IonItem>  
+                        <ion-label>ADS</ion-label>
+                    </IonItem>
+                    <IonItem>
+                        <ion-label>ADS</ion-label>
+                    </IonItem>
+                    <IonItem>
+                        <ion-label>INP</ion-label>
+                    </IonItem>                      
                 </div>
             </section>
-            <div id="kalender">
-                <ion-datetime size="cover"></ion-datetime>
-            </div>
         </ion-content>
     </ion-page>
 </template>
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton, IonItem, IonLabel, IonDatetime } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton, IonItem, IonLabel } from '@ionic/vue';
 
 
 export default {
@@ -58,7 +66,6 @@ export default {
         IonToolbar,
         IonTitle,
         IonContent,
-        IonDatetime,
         IonItem,
         IonLabel
     }
@@ -68,13 +75,19 @@ export default {
 
 <style scoped>
 
+.header1 {
+    background-color: #27292b;
+    padding: 16px;
+    font-size: x-large;
+    text-align: center;
+}
+
 #flexbox1 {
     padding-top: 2%;
     padding-bottom: 2%;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: center;
     background-color: #27292b;
 }
 
@@ -83,19 +96,10 @@ ion-item {
     background-color: #27292b;
 }
 
-#displayUsername {
-    padding: 20px;
-    font-size: xx-large;
-    text-align: center;
+ion-label {
+   
 }
 
-#zieleHeader {
-    background-color: #27292b;
-    height: 35px;
-    padding-top: 8px;
-    padding-left: 25px;
-    font-size: larger;
-    text-align: left;
-}
+
 
 </style>
