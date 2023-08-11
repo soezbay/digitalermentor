@@ -1,18 +1,50 @@
 <template>
     <ion-page>
-      <ion-header>
-        <ion-toolbar>
-          <ion-buttons>
-            <ion-menu-button color="primary"></ion-menu-button>
-            <ion-title>Dashboard</ion-title>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-  
-      <ion-content>
-        <ion-header id="displayUsername">Hallo, 'Username'!</ion-header>
-        <ion-header id="zieleHeader">Aktive Ziele</ion-header><br>
-        <ion-list>
+<<<<<<< code/src/views/Dashboard.vue
+        <ion-header>
+            <ion-toolbar>
+                <ion-buttons>
+                    <ion-menu-button color="primary"></ion-menu-button>
+                    <ion-title>Dashboard</ion-title>
+                </ion-buttons>
+            </ion-toolbar>
+        </ion-header>
+
+        <ion-content>
+            <ion-header id="displayUsername">Hallo, 'Username'!</ion-header>
+            <section>
+            <ion-header id="zieleHeader">Aktive Ziele:</ion-header>
+                <div id="flexbox1">
+                    <IonItem>
+                        <ion-label>EPR</ion-label>
+                    </IonItem>
+                    <IonItem>
+                        <ion-label>ADS</ion-label>
+                    </IonItem>
+                    <IonItem>
+                        <ion-label>ADS</ion-label>
+                    </IonItem>
+                    <IonItem>
+                        <ion-label>ADS</ion-label>
+                    </IonItem>
+                    <IonItem>
+                        <ion-label>INP</ion-label>
+                    </IonItem>    
+                </div>
+            </section>
+            <br>
+            <section>
+            <ion-header id="zieleHeader">Termine:</ion-header>
+                <div>
+                    <IonItem>
+                        <ion-label>xyz</ion-label>
+                    </IonItem>  
+                </div>
+            </section>
+            <div id="kalender">
+                <ion-datetime size="cover"></ion-datetime>
+            </div>
+            <ion-list>
           <ion-item v-for="(item, index) in usersList" :key="index">
             <ion-label>
               <p><strong>BewertungsID:</strong> {{ item.BewertungsID }}</p>
@@ -24,13 +56,11 @@
             </ion-label>
           </ion-item>
         </ion-list>
-        <ion-datetime></ion-datetime>
-      </ion-content>
+        </ion-content>
     </ion-page>
-  </template>
-  
-  <script>
-  import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
+</template>
+
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
   import axios from 'axios';
   export default {
     components: {
@@ -66,23 +96,37 @@
     }
   }
   </script>
-  
-  <style scoped>
-  ion-content {
+
+<style scoped>
+
+#flexbox1 {
+    padding-top: 2%;
+    padding-bottom: 2%;
     display: flex;
-  }
-  
-  #displayUsername {
-    padding: 30px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #27292b;
+}
+
+ion-item {
+    padding: 1%;
+    background-color: #27292b;
+}
+
+#displayUsername {
+    padding: 20px;
     font-size: xx-large;
     text-align: center;
-  }
-  
-  #zieleHeader {
+}
+
+#zieleHeader {
     background-color: #27292b;
-    padding: 20px;
-    font-size: x-large;
-    text-align: center;
-  }
-  </style>
-  
+    height: 35px;
+    padding-top: 8px;
+    padding-left: 25px;
+    font-size: larger;
+    text-align: left;
+}
+
+</style>
