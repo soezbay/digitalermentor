@@ -21,7 +21,7 @@ const routes = [
     component: () => import ('../views/Ziele.vue')
   },
   {
-    path: '/menu/ziele/:id',
+    path: '/ziele/:id',
     component: () => import ('../views/Ziele.vue')
   }
 ]
