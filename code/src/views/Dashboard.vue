@@ -1,6 +1,5 @@
 <template>
     <ion-page>
-<<<<<<< code/src/views/Dashboard.vue
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
@@ -60,6 +59,7 @@
     </ion-page>
 </template>
 
+<script>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
   import axios from 'axios';
   export default {
