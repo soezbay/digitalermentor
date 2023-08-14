@@ -10,15 +10,56 @@
         </ion-header>
 
         <ion-content>
-            <ion-header id="displayUsername">Hallo, 'Username'!</ion-header>
-            <ion-header id="zieleHeader">Aktive Ziele</ion-header><br>
-            <ion-datetime></ion-datetime>
-        </ion-content>
-    </ion-page>
-</template>
+            <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
+            <ion-header router-link="/menu/ziele" id="zieleHeader">Aktive Ziele:</ion-header>
+            <div id="flexbox1">
+                <ion-item lines="none">
+                    <ion-label>EPR</ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-label>ADS</ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-label>ADS</ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-label>ADS</ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-label>INP</ion-label>
+                </ion-item>
+            </div>
+            <br>
+            <ion-header id="zieleHeader">Termine:</ion-header>
+            <div>
+                <ion-item>
+                    <ion-label>xyz</ion-label>
+                </ion-item>
+            </div>
+            <div id="kalender">
+                <ion-datetime size="cover" max="2100-01-01T00:00:00"></ion-datetime>
+            </div>
+            <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
+            <!-- <ion-list>
+                <div id="module">
+                    <ion-item v-for="(item, index) in usersList" :key="index">
+                        <ion-label>
+                            <p><strong>BewertungsID:</strong> {{ item.BewertungsID }}</p>
+                            <p><strong>BewertungsGruppe:</strong> {{ item.BewertugsGruppe }}</p>
+                            <p><strong>Bewertung:</strong> {{ item.Bewertung }}</p>
+                            <p><strong>ErstelltAm:</strong> {{ item.ErstelltAm }}</p>
+                            <p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
+                            <p><strong>BenutzerID:</strong> {{ item.BenutzerID }}</p>
+                        </ion-label>
+                    </ion-item>
+                </div>
+            </ion-list> -->
+
+            
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
+import axios from 'axios';
 
 export default {
     components: {
@@ -28,36 +69,95 @@ export default {
         IonTitle,
         IonContent,
         IonDatetime,
-        IonItem
+        IonItem,
+        IonButtons,
+        IonMenuButton,
+        IonLabel,
+        IonList
+    },
+    data() {
+        return {
+            usersList: []
+        }
+    },
+    methods: {
+        getData() {
+            axios.get('http://localhost:3000/bewertung').then(Response => {
+                console.log(Response.data)
+                this.usersList = Response.data.bewertungen;
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+
+        getGreeting() {
+            const currentTime = new Date();
+            const currentHour = currentTime.getHours();
+
+            if (currentHour >= 5 && currentHour < 12) {
+                return 'Guten Morgen';
+            } else if (currentHour >= 12 && currentHour < 18) {
+                return 'Guten Mittag';
+            } else {
+                return 'Schönen Abend';
+            }
+        },
+
+        getUsername() {
+            return 'Username' + '!';
+
+        }
+    },
+    mounted() {
+        this.getData();
     }
 }
-
 </script>
 
 <style scoped>
-ion-content {
+#flexbox1 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 2%;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background-color: #27292b;
 }
+
+#flexbox1 ion-item {
+    margin: 1%;
+    width: 85px;
+    text-align: center;
+    border-radius: 20px;
+    background-color: #27292b;
+
+}
+
+.ios #flexbox1 ion-item {
+    margin: 1%;
+    width: 85px;
+    text-align: center;
+    background-color: #27292b;
+}
+
 
 #displayUsername {
-    padding: 30px;
-    font-size: xx-large;
-    text-align: center;
-}
-
-#zieleHeader {
-    background-color: #27292b;
     padding: 20px;
     font-size: x-large;
     text-align: center;
 }
 
-ion-item {
-    text-align: center;
-    margin: auto;
+#zieleHeader {
+    background-color: #27292b;
+    height: 35px;
+    padding-top: 8px;
+    padding-left: 25px;
+    font-size: larger;
+    text-align: left;
 }
 
-ion-datetime {
-    margin: auto;
+#module {
+    height: 20px;
 }
 </style>

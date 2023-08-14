@@ -6,14 +6,14 @@ import Moduluebersicht from '../views/Moduluebersicht.vue';
 const routes = [
   {
     path: '',
-    redirect: '/Dashboard'
+    redirect: '/dashboard'
   },
   {
-    path: '/Dashboard',
+    path: '/dashboard',
     component: () => import ('../views/Dashboard.vue')
   },
   {
-    path: '/menu/Dashboard',
+    path: '/menu/dashboard',
     component: () => import ('../views/Dashboard.vue')
   },
   {
@@ -23,6 +23,13 @@ const routes = [
   {
     path: '/menu/Moduluebersicht',
     component: Moduluebersicht
+  },
+    path: '/menu/ziele',
+    component: () => import ('../views/Ziele.vue')
+  },
+  {
+    path: '/ziele/:id',
+    component: () => import ('../views/Ziele.vue')
   }
 ]
 
