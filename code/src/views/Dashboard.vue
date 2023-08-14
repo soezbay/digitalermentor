@@ -57,10 +57,12 @@
         </ion-content>
     </ion-page>
 </template>
+            
 
 <script>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
 import axios from 'axios';
+
 export default {
     components: {
         IonPage,
@@ -105,6 +107,7 @@ export default {
 
         getUsername() {
             return 'Username' + '!';
+
         }
     },
     mounted() {
