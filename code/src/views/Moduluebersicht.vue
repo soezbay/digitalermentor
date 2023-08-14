@@ -7,12 +7,13 @@
       </ion-header>
       <ion-content>
         <!-- <ion-searchbar animated="true" placeholder="Suche"></ion-searchbar> -->
-          <ion-item>
-      <ion-select label="Studiengang" placeholder="Informatik">
-        <ion-select-option value="MIN">Medieninformatik</ion-select-option>
-        <ion-select-option value="WI">Wirtschaftsinformatik</ion-select-option>
-      </ion-select>
-    </ion-item>
+            <ion-item>
+        <ion-select v-model="selectedStudiengang" label="Studiengang" placeholder="Studiengang auswählen">
+          <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel" :value="studiengang.Kuerzel">
+            {{ studiengang.Name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
 
         <ion-grid>
           <ion-row v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
@@ -53,6 +54,8 @@
 
 import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 // import { searchCircle } from 'ionicons/icons';
+import axios from 'axios';
+
  
 export default {
   components: {
@@ -74,6 +77,9 @@ export default {
   name: "ModulUebersicht",
   data(){
     return{
+
+      selectedStudiengang: null,
+      studiengaenge: [],
       moduleSemesters: [
         [
           {name: "LDS", description: "Logik und diskrete Strukturen (LDS)", showDescription: false},
@@ -146,7 +152,18 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.fetchStudiengaenge();
+  },
   methods: {
+    async fetchStudiengaenge() {
+      try {
+        const response = await axios.get('http://localhost:3000/studiengang');
+        this.studiengaenge = response.data.studiengaenge;
+      } catch (error) {
+        console.error('Error fetching studiengaenge:', error);
+      }
+    },
     toggleDescription(semesterIndex, moduleIndex) {
       this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
     },
