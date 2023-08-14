@@ -1,30 +1,33 @@
 <template>
   <ion-app>
-    <ion-split-pane content-id="main-content">
-      <ion-menu content-id="main-content" type="overlay">
-        <ion-content>
-          <ion-list id="inbox-list">
-            <ion-list-header>Digitaler Mentor</ion-list-header><br>
+    <ion-menu side="end" content-id="main-content">
+      <ion-content class="ion-padding">
+        <ion-toolbar>
+          <ion-menu-toggle>
+            <ion-icon class="ion-float-right" :src = "close" id="close-button"></ion-icon>
+          </ion-menu-toggle>
+        </ion-toolbar>
+        <ion-list>            
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
-                <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
-
-          <ion-list id="labels-list">
-            <ion-list-header>Labels</ion-list-header>
-
-            <ion-item v-for="(label, index) in labels" lines="none" :key="index">
-              <ion-icon aria-hidden="true" slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-content>
-      </ion-menu>
+      </ion-content>
+    </ion-menu>
+    <ion-page>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Digitaler Mentor</ion-title>
+          <ion-buttons slot="end">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
       <ion-router-outlet id="main-content"></ion-router-outlet>
-    </ion-split-pane>
+    </ion-page>
   </ion-app>
 </template>
 
@@ -43,6 +46,7 @@ import {
   IonNote,
   IonRouterOutlet,
   IonSplitPane,
+  IonNav,
 } from '@ionic/vue';
 import { ref } from 'vue';
 import {
@@ -56,10 +60,12 @@ import {
   mailSharp,
   paperPlaneOutline,
   paperPlaneSharp,
+  toggle,
   trashOutline,
   trashSharp,
   warningOutline,
   warningSharp,
+  close,
 } from 'ionicons/icons';
 
 const selectedIndex = ref(0);
@@ -71,37 +77,31 @@ const appPages = [
     mdIcon: mailSharp,
   },
   {
-    title: 'Ziele',
-    url: '/menu/ziele',
+    title: 'Modulübersicht',
+    url: '/menu/moduluebersicht',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp,
   },
   {
-    title: 'Modulübersicht',
-    url: '/menu/modulübersicht',
+    title: 'Studienverlauf',
+    url: '/menu/studienverlauf',
     iosIcon: heartOutline,
     mdIcon: heartSharp,
   },
   {
-    title: 'Profil',
-    url: '/menu/profil',
+    title: 'Studienziele',
+    url: '/menu/studienziele',
     iosIcon: archiveOutline,
     mdIcon: archiveSharp,
   },
   {
-    title: 'Trash',
-    url: '/menu/Trash',
+    title: 'Einstellungen',
+    url: '/menu/einstellungen',
     iosIcon: trashOutline,
     mdIcon: trashSharp,
   },
-  {
-    title: 'Spam',
-    url: '/menu/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp,
-  },
 ];
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
 
 const path = window.location.pathname.split('menu/')[1];
 if (path !== undefined) {
@@ -110,123 +110,40 @@ if (path !== undefined) {
 </script>
 
 <style scoped>
+ion-menu {
+  --min-width: 100%;
+}
+
 ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+  --background: var(--ion-color-primary);
 }
 
-ion-menu.md ion-content {
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-top: 20px;
-  --padding-bottom: 20px;
+ion-menu ion-toolbar {
+  --background: none;
+  padding:0;
 }
 
-ion-menu.md ion-list {
-  padding: 20px 0;
+#close-button {
+  margin-right: auto;
+  margin-top: 0px;
+  font-size: xx-large; 
+  font: bold;
 }
 
-ion-menu.md ion-note {
-  margin-bottom: 30px;
+ion-menu ion-item {
+  --background: var(--ion-color-primary);
+  text-align: center;
+  padding: 10px;
+  font-size: x-large;
+  color: var(--ion-color-light);
+  font: bold; 
 }
 
-ion-menu.md ion-list-header,
-ion-menu.md ion-note {
-  padding-left: 10px;
+ion-menu ion-item.selected {
+  text-decoration: underline;
 }
 
-ion-menu.md ion-list#inbox-list {
-  border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
-}
-
-ion-menu.md ion-list#inbox-list ion-list-header {
-  font-size: 22px;
-  font-weight: 600;
-
-  min-height: 20px;
-}
-
-ion-menu.md ion-list#labels-list ion-list-header {
-  font-size: 16px;
-
-  margin-bottom: 18px;
-
-  color: #757575;
-
-  min-height: 26px;
-}
-
-ion-menu.md ion-item {
-  --padding-start: 10px;
-  --padding-end: 10px;
-  border-radius: 4px;
-}
-
-ion-menu.md ion-item.selected {
-  --background: rgba(var(--ion-color-primary-rgb), 0.14);
-}
-
-ion-menu.md ion-item.selected ion-icon {
-  color: var(--ion-color-primary);
-}
-
-ion-menu.md ion-item ion-icon {
-  color: #616e7e;
-}
-
-ion-menu.md ion-item ion-label {
-  font-weight: 500;
-}
-
-ion-menu.ios ion-content {
-  --padding-bottom: 20px;
-}
-
-ion-menu.ios ion-list {
-  padding: 20px 0 0 0;
-}
-
-ion-menu.ios ion-note {
-  line-height: 24px;
-  margin-bottom: 20px;
-}
-
-ion-menu.ios ion-item {
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --min-height: 50px;
-}
-
-ion-menu.ios ion-item.selected ion-icon {
-  color: var(--ion-color-primary);
-}
-
-ion-menu.ios ion-item ion-icon {
-  font-size: 24px;
-  color: #73849a;
-}
-
-ion-menu.ios ion-list#labels-list ion-list-header {
-  margin-bottom: 8px;
-}
-
-ion-menu.ios ion-list-header,
-ion-menu.ios ion-note {
-  padding-left: 16px;
-  padding-right: 16px;
-}
-
-ion-menu.ios ion-note {
-  margin-bottom: 8px;
-}
-
-ion-note {
-  display: inline-block;
-  font-size: 16px;
-
-  color: var(--ion-color-medium-shade);
-}
-
-ion-item.selected {
-  --color: var(--ion-color-primary);
+ion-menu ion-list {
+  background: var(--ion-color-primary);
 }
 </style>
