@@ -13,42 +13,30 @@
                 <br>
                 <ion-header class="header1">Sommersemester</ion-header>
                 <div id="flexbox1">
-                    <IonItem>
+                    <ion-item lines="none">
                         <ion-label>EPR</ion-label>
-                    </IonItem>
-                    <IonItem>
+                    </ion-item>
+                    <ion-item lines="none">
                         <ion-label>ADS</ion-label>
-                    </IonItem>
-                    <IonItem>
+                    </ion-item>
+                    <ion-item lines="none">
                         <ion-label>ADS</ion-label>
-                    </IonItem>
-                    <IonItem>
+                    </ion-item>
+                    <ion-item lines="none">
                         <ion-label>ADS</ion-label>
-                    </IonItem>
-                    <IonItem>
+                    </ion-item>
+                    <ion-item lines="none">
                         <ion-label>ADS</ion-label>
-                    </IonItem>
-                    <IonItem>
-                        <ion-label>ADS</ion-label>
-                    </IonItem>
-                    <IonItem>
-                        <ion-label>INP</ion-label>
-                    </IonItem>          
+                    </ion-item>       
                 </div>
             </section>
             <br>
             <section>
                 <ion-header class="header1">Wintersemester</ion-header>
                  <div id="flexbox1">
-                    <IonItem>
-                        <ion-label>ADS</ion-label>
-                    </IonItem>
-                    <IonItem>
-                        <ion-label>ADS</ion-label>
-                    </IonItem>
-                    <IonItem>
+                    <ion-item>
                         <ion-label>INP</ion-label>
-                    </IonItem>                      
+                    </ion-item>                      
                 </div>
             </section>
         </ion-content>
@@ -67,7 +55,9 @@ export default {
         IonTitle,
         IonContent,
         IonItem,
-        IonLabel
+        IonButtons,
+        IonMenuButton,
+        IonLabel,
     }
 }
 
@@ -77,7 +67,7 @@ export default {
 
 .header1 {
     background-color: #27292b;
-    padding: 16px;
+    padding: 10px;
     font-size: x-large;
     text-align: center;
 }
@@ -85,20 +75,21 @@ export default {
 #flexbox1 {
     padding-top: 2%;
     padding-bottom: 2%;
+    padding-left: 2%;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     background-color: #27292b;
 }
 
-ion-item {
-    padding: 1%;
+#flexbox1 ion-item {
+    margin: 1%;
+    width: 85px;
+    text-align: center;
+    border-radius: 20px;
     background-color: #27292b;
 }
 
-ion-label {
-   
-}
 
 
 
