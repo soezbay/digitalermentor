@@ -84,7 +84,7 @@ export default {
     },
     methods: {
         getData() {
-            axios.get('http://localhost:3000/bewertung').then(Response => {
+            axios.get('http://localhost:8000/bewertung').then(Response => {
                 console.log(Response.data)
                 this.usersList = Response.data.bewertungen;
             }).catch(err => {
