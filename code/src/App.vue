@@ -115,7 +115,7 @@ ion-menu {
 }
 
 ion-menu ion-content {
-  --background: rgb(140, 153, 0);
+  --background: var(--ion-color-primary);
 }
 
 ion-menu ion-toolbar {
@@ -131,11 +131,11 @@ ion-menu ion-toolbar {
 }
 
 ion-menu ion-item {
-  --background: rgb(140, 153, 0);
+  --background: var(--ion-color-primary);
   text-align: center;
   padding: 10px;
   font-size: x-large;
-  color: white;
+  color: var(--ion-color-light);
   font: bold; 
 }
 
@@ -144,6 +144,6 @@ ion-menu ion-item.selected {
 }
 
 ion-menu ion-list {
-  background: rgb(140, 153, 0);
+  background: var(--ion-color-primary);
 }
 </style>
