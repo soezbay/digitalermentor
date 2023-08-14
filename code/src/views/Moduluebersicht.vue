@@ -7,6 +7,7 @@
       </ion-header>
       <ion-content>
         <!-- <ion-searchbar animated="true" placeholder="Suche"></ion-searchbar> -->
+        <!-- Studiengangauswahl aus Datenbank -->
             <ion-item>
         <ion-select v-model="selectedStudiengang" label="Studiengang" placeholder="Studiengang auswählen">
           <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel" :value="studiengang.Kuerzel">
