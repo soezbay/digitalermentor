@@ -54,7 +54,9 @@
                     </ion-item>
                 </div>
             </ion-list> -->
-
+        </ion-content>
+    </ion-page>
+</template>
             
 
 <script>
