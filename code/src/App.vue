@@ -1,15 +1,15 @@
 <template>
   <ion-app>
     <ion-menu side="end" content-id="main-content">
-      <ion-content class="ion-padding" id="menu-content">
-        <ion-toolbar id="menu-toolbar">
+      <ion-content class="ion-padding">
+        <ion-toolbar>
           <ion-menu-toggle>
-            <ion-icon class="ion-float-right" id="close-button" :src = "close"></ion-icon>
+            <ion-icon class="ion-float-right" :src = "close" id="close-button"></ion-icon>
           </ion-menu-toggle>
         </ion-toolbar>
-        <ion-list id="menu-list">            
+        <ion-list>            
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }" id="menu-item">
+              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
@@ -77,34 +77,28 @@ const appPages = [
     mdIcon: mailSharp,
   },
   {
-    title: 'Outbox',
-    url: '/menu/Outbox',
+    title: 'Modulübersicht',
+    url: '/menu/moduluebersicht',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp,
   },
   {
-    title: 'Favorites',
-    url: '/menu/Favorites',
+    title: 'Studienverlauf',
+    url: '/menu/studienverlauf',
     iosIcon: heartOutline,
     mdIcon: heartSharp,
   },
   {
-    title: 'Archived',
-    url: '/menu/Archived',
+    title: 'Studienziele',
+    url: '/menu/studienziele',
     iosIcon: archiveOutline,
     mdIcon: archiveSharp,
   },
   {
-    title: 'Trash',
-    url: '/menu/Trash',
+    title: 'Einstellungen',
+    url: '/menu/einstellungen',
     iosIcon: trashOutline,
     mdIcon: trashSharp,
-  },
-  {
-    title: 'Spam',
-    url: '/menu/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp,
   },
 ];
 
@@ -120,18 +114,13 @@ ion-menu {
   --min-width: 100%;
 }
 
-ion-menu ion-header ion-toolbar{
-  border: none;
-  background: none;
+ion-menu ion-content {
+  --background: rgb(140, 153, 0);
 }
 
-#menu-toolbar {
+ion-menu ion-toolbar {
   --background: none;
   padding:0;
-}
-
-#menu-content {
-  --background: rgb(140, 153, 0);
 }
 
 #close-button {
@@ -141,12 +130,7 @@ ion-menu ion-header ion-toolbar{
   font: bold;
 }
 
-#menu-header {
-  --background: none;
-  --border: none;
-}
-
-#menu-item {
+ion-menu ion-item {
   --background: rgb(140, 153, 0);
   text-align: center;
   padding: 10px;
@@ -155,11 +139,11 @@ ion-menu ion-header ion-toolbar{
   font: bold; 
 }
 
-#menu-item.selected {
+ion-menu ion-item.selected {
   text-decoration: underline;
 }
 
-#menu-list {
+ion-menu ion-list {
   background: rgb(140, 153, 0);
 }
 </style>
