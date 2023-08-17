@@ -17,14 +17,6 @@
       </ion-content>
     </ion-menu>
     <ion-page>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Digitaler Mentor</ion-title>
-          <ion-buttons slot="end">
-            <ion-menu-button></ion-menu-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
       <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
       <ion-router-outlet id="main-content"></ion-router-outlet>
     </ion-page>
@@ -90,7 +82,7 @@ const appPages = [
   },
   {
     title: 'Studienziele',
-    url: '/menu/studienziele',
+    url: '/menu/ziele',
     iosIcon: archiveOutline,
     mdIcon: archiveSharp,
   },
