@@ -81,6 +81,8 @@ export default {
 
       selectedStudiengang: null,
       studiengaenge: [],
+      wahlpflichtModule: [],
+      pflichtModule: [],
       moduleSemesters: [
         [
           {name: "LDS", description: "Logik und diskrete Strukturen (LDS)", showDescription: false},
@@ -159,10 +161,26 @@ export default {
   methods: {
     async fetchStudiengaenge() {
       try {
-        const response = await axios.get('http://localhost:3000/studiengang');
+        const response = await axios.get('http://localhost:8000/studiengang');
         this.studiengaenge = response.data.studiengaenge;
       } catch (error) {
         console.error('Error fetching studiengaenge:', error);
+      }
+    },
+    async fetchPflichtModule(selectedStudiengang) {
+      try {
+        const response = await axios.get('http://localhost:8000/pflicht/${selectedStudiengang}');
+        this.pflichtModule = response.data.modules
+      } catch (error) {
+        console.error('Error fetching pflichtmodule:', error);
+      }
+    },
+    async fetchWahplfichtModule(selectedStudiengang) {
+      try {
+        const response = await axios.get('http://localhost:8000/studiengang/${selectedStudiengang}');
+        this.wahlpflichtModule = response.data.modules
+      } catch (error) {
+        console.error('Error fetching wahlpfichtmodule:', error);
       }
     },
     toggleDescription(semesterIndex, moduleIndex) {
