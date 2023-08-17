@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
+import Dashboard from '../views/Dashboard.vue';
 import Moduluebersicht from '../views/Moduluebersicht.vue';
+import Ziele from '../views/Ziele.vue';
+import Termine from '../routerpages/Termine.vue';
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
 
@@ -10,28 +13,40 @@ const routes = [
   },
   {
     path: '/dashboard',
-    component: () => import ('../views/Dashboard.vue')
+    component: Dashboard
   },
   {
     path: '/menu/dashboard',
-    component: () => import ('../views/Dashboard.vue')
+    component: Dashboard
   },
   {
-    path: '/Moduluebersicht',
+    path: '/moduluebersicht',
     component: Moduluebersicht
   },
   {
-    path: '/menu/Moduluebersicht',
+    path: '/menu/moduluebersicht',
     component: Moduluebersicht
   },
   {
     path: '/menu/ziele',
-    component: () => import ('../views/Ziele.vue')
+    component: Ziele
   },
   {
     path: '/ziele/:id',
-    component: () => import ('../views/Ziele.vue')
-  }
+    component: Ziele
+  },
+  {
+    path: '/termine',
+    component: Termine
+  },
+  {
+    path: '/termine/:id',
+    component: () => import('../routerpages/TermineDetails.vue')
+  },
+  {
+    path: '/dashboard/termine',
+    component: Termine
+  },
 ]
 
 const router = createRouter({
