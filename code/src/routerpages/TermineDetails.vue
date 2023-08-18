@@ -11,10 +11,23 @@
         </ion-header>
 
         <ion-content>
-            <ion-header>
-                <ion-title v-if="!loadedTermin">Dieser Termin existiert nicht</ion-title>
-                <ion-title v-else>{{ loadedTermin.titel }}</ion-title>
-            </ion-header>
+            <ion-title v-if="!loadedTermin">Dieser Termin existiert nicht</ion-title>
+            <div v-else class="ion-padding">
+                <ion-header>
+                    <h1 class="ion-text-center">{{ loadedTermin.titel }}</h1>
+                </ion-header><br>
+                <ion-item>
+                    <ion-label>{{ loadedTermin.datum }}, {{ loadedTermin.zeit }}</ion-label>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Ort: {{ loadedTermin.ort }}</ion-label>
+                </ion-item>
+                <br>
+                <div>
+                    Beschreibung:<br><br>
+                    {{ loadedTermin.beschreibung }}
+                </div>
+            </div>
         </ion-content>
     </ion-page>
 </template>
@@ -72,3 +85,14 @@ export default {
 }
 
 </script>
+
+<style scoped>
+ion-titel {
+    background-color: #27292b;
+    height: 35px;
+    padding-top: 8px;
+    padding-left: 25px;
+    font-size: larger;
+    text-align: left;
+}
+</style>

@@ -30,7 +30,7 @@
                 </ion-item>
             </div>
             <br>
-            <ion-header router-link="/dashboard/termine" id="zieleHeader">Termine:</ion-header>
+            <ion-header router-link="/menu/dashboard/termine" id="zieleHeader">Termine:</ion-header>
             <div>
                 <ion-item>
                     <ion-label>xyz</ion-label>

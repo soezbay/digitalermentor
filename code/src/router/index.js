@@ -44,8 +44,12 @@ const routes = [
     component: () => import('../routerpages/TermineDetails.vue')
   },
   {
-    path: '/dashboard/termine',
+    path: '/menu/dashboard/termine',
     component: Termine
+  },
+  {
+    path: '/menu/dashboard/termine/add_termin',
+    component: () => import('../routerpages/AddTermin.vue')
   },
 ]
 
