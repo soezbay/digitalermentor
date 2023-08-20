@@ -2,7 +2,9 @@
   <ion-page>
       <ion-header>
           <ion-toolbar>
-              <ion-title><p>text-align: center; Modulübersicht</p></ion-title>
+            <div class="title-block">
+          <ion-title>Modulübersicht</ion-title>
+        </div>
           </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -16,8 +18,12 @@
         </ion-select>
       </ion-item>
 
-        <ion-grid [fixed]="true">
-          <ion-row v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
+          <!-- Module aus Datenbank -->
+
+          
+        <!-- <ion-grid :fixed="true"> -->
+          <ion-grid>
+          <ion-row id="font" v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
             <ion-list-header v-if="semesterIndex === 6">
               <ion-list-header><h5>Wahlpflichtmodul: INF</h5></ion-list-header>
             </ion-list-header>
@@ -30,7 +36,7 @@
                 </ion-list-header>
                 </ion-list-header>
                 <ion-row id="proSemester">
-          <ion-col  id="jedesModul" v-for="(module, index) in semesterModules" :key="index" @click="toggleDescription(semesterIndex, index)">
+          <ion-col  class="jedesModul" v-for="(module, index) in semesterModules" :key="index" @click="toggleDescription(semesterIndex, index)">
               <ion-label>{{ module.name }}</ion-label>
             
               <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
@@ -121,7 +127,7 @@ export default {
         ],
         [
           {name: "PXP", description: "Praxisphase"},
-          {name: "Bachelorarbeit", description: "Beschreibung für M1 - Semester 6", showDescription: false},
+          {name: "BA", description: "Bachelorarbeit", showDescription: false},
           {name: "KBIN", description: "Kolloquium zur Bachelorarbeit Informatik", showDescription: false},
           ],
         [
@@ -186,27 +192,34 @@ export default {
     toggleDescription(semesterIndex, moduleIndex) {
       this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
     },
-    showModuleDetails(moduleName){
-      // Navigation zur Modulbescreibungsseite implementieren
-      //console.log("Modulbeschreibung für", moduleName);
-    },
-    showModuleRating(moduleName){
-      // Navigation zur Bewertungsseite implementieren
-      //console.log("Bewertung für", moduleName);
-    }
   },
 };
 
 </script>
 
 <style scoped>
- #jedesModul {
+
+.title-block {
+  background-color: #8C99004D;
+  border-radius: 15px;
+  padding: 10px;
+  text-align: center;
+}
+
+ .jedesModul {
  margin: 1%;
   width: 85px;
   text-align: center;
   border-radius: 15px;
   background: #fff;
   color: #000000;
+  font-family: Quicksand;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+
 }  
 /*ion-grid {
     --ion-grid-width: 50%;
@@ -219,20 +232,23 @@ export default {
 
     --ion-grid-columns: 2;
   }*/
+#font{
+  font-family: Quicksand;
+font-size: 16px;
+font-weight: 400;
+line-height: 20px;
+letter-spacing: 0em;
+text-align: left;
+
+}
+
   ion-col {
     background-color: #135d54;
     border: solid 3px #fff;
     color: #fff;
     text-align: center;
   }
-/* border-radius: 15px;
-  background: #fff;
-  color: #000000; 
-  padding: 20px;
-  margin: 20px;
-  width: 150px;
-  height: 15px;
-  text-align: center; */
+
 #proSemester{
   border-radius: 15px;
   background: #8C99004D; 
