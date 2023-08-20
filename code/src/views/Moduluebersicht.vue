@@ -2,7 +2,7 @@
   <ion-page>
       <ion-header>
           <ion-toolbar>
-              <ion-title><p>Modulübersicht</p></ion-title>
+              <ion-title><p>text-align: center; Modulübersicht</p></ion-title>
           </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -16,7 +16,7 @@
         </ion-select>
       </ion-item>
 
-        <ion-grid>
+        <ion-grid [fixed]="true">
           <ion-row v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
             <ion-list-header v-if="semesterIndex === 6">
               <ion-list-header><h5>Wahlpflichtmodul: INF</h5></ion-list-header>
@@ -29,20 +29,20 @@
                   <h5>{{ semesterIndex + 1 }}. Semester</h5>
                 </ion-list-header>
                 </ion-list-header>
-          <ion-col v-for="(module, index) in semesterModules" :key="index" @click="toggleDescription(semesterIndex, index)">
-              <ion-card> 
-                <ion-card-header> 
-                  <ion-card-title>{{ module.name }}</ion-card-title>
-                </ion-card-header>
-              <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content>
-            </ion-card>
+                <ion-row id="proSemester">
+          <ion-col  id="jedesModul" v-for="(module, index) in semesterModules" :key="index" @click="toggleDescription(semesterIndex, index)">
+              <ion-label>{{ module.name }}</ion-label>
             
-            <ion-text v-if="module.showDescription">
+              <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
+            
+            
+            <!-- <ion-text v-if="module.showDescription">
                 <a @click="showModuleDetails(module.name)">Modulbeschreibung </a>
                 <a @click="showModuleRating(module.name)"> Bewertung </a>
-              </ion-text>
+              </ion-text> -->
 
           </ion-col>
+        </ion-row>
         </ion-row>
       </ion-grid>
     </ion-content>
@@ -107,17 +107,17 @@ export default {
         ],
         [
           {name: "SPIN", description: "Softwareprojekt Informatik (SPIN)", showDescription: false},
-          {name: "Wahlpflicht: INF", description: "Siehe Auswahl unten", showDescription: false},
-          {name: "Wahlpflicht: INF", description: "Siehe Auswahl unten", showDescription: false},
-          {name: "Wahlpflicht: Lehreinheit", description: "Siehe Auswahl unten", showDescription: false},
-          {name: "Wahlpflicht: Lehreinheit", description: "Siehe Auswahl unten", showDescription: false},
+          {name: "WP: INF", description: "Siehe Auswahl unten", showDescription: false},
+          {name: "WP: INF", description: "Siehe Auswahl unten", showDescription: false},
+          {name: "WP: L", description: "Siehe Auswahl unten", showDescription: false},
+          {name: "WP: L", description: "Siehe Auswahl unten", showDescription: false},
         ],
         [
           {name: "SPIN", description: "Softwareprojekt Informatik (SPIN)", showDescription: false},
-          {name: "Wahlpflicht: INF", description: "Siehe Auswahl unten", showDescription: false},
-          {name: "Wahlpflicht: INF", description: "Siehe Auswahl unten", showDescription: false},
-          {name: "Wahlpflicht: Lehreinheit", description: "Siehe Auswahl unten", showDescription: false},
-          {name: "Wahlpflicht: Lehreinheit", description: "Siehe Auswahl unten", showDescription: false},
+          {name: "WP: INF", description: "Siehe Auswahl unten", showDescription: false},
+          {name: "WP: INF", description: "Siehe Auswahl unten", showDescription: false},
+          {name: "WP: L", description: "Siehe Auswahl unten", showDescription: false},
+          {name: "WP: L", description: "Siehe Auswahl unten", showDescription: false},
         ],
         [
           {name: "PXP", description: "Praxisphase"},
@@ -198,3 +198,44 @@ export default {
 };
 
 </script>
+
+<style scoped>
+ #jedesModul {
+ margin: 1%;
+  width: 85px;
+  text-align: center;
+  border-radius: 15px;
+  background: #fff;
+  color: #000000;
+}  
+/*ion-grid {
+    --ion-grid-width: 50%;
+
+    --ion-grid-width-xs: 50%;
+    --ion-grid-width-sm: 288px;
+    --ion-grid-width-md: 384px;
+    --ion-grid-width-lg: 480px;
+    --ion-grid-width-xl: 570px;
+
+    --ion-grid-columns: 2;
+  }*/
+  ion-col {
+    background-color: #135d54;
+    border: solid 3px #fff;
+    color: #fff;
+    text-align: center;
+  }
+/* border-radius: 15px;
+  background: #fff;
+  color: #000000; 
+  padding: 20px;
+  margin: 20px;
+  width: 150px;
+  height: 15px;
+  text-align: center; */
+#proSemester{
+  border-radius: 15px;
+  background: #8C99004D; 
+  
+} 
+</style>
