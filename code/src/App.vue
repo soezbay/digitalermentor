@@ -68,7 +68,7 @@ import {
   close,
 } from 'ionicons/icons';
 
-const selectedIndex = ref(0);
+const selectedIndex = ref(1);
 const appPages = [
   {
     title: 'Dashbord',
@@ -97,6 +97,12 @@ const appPages = [
   {
     title: 'Einstellungen',
     url: '/menu/einstellungen',
+    iosIcon: trashOutline,
+    mdIcon: trashSharp,
+  },
+  {
+    title: 'Modulbeschreibung',
+    url: '/menu/modulbeschreibung',
     iosIcon: trashOutline,
     mdIcon: trashSharp,
   },

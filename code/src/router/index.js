@@ -25,6 +25,14 @@ const routes = [
     component: Moduluebersicht
   },
   {
+    path: '/menu/modulbeschreibung',
+    component: () => import ('../views/Modulbeschreibung.vue')
+  },
+  {
+    path: '/menu/modulbeschreibung/:url_kuerzel',
+    component: () => import ('../views/Modulbeschreibung.vue')
+  },
+  {
     path: '/menu/ziele',
     component: () => import ('../views/Ziele.vue')
   },
