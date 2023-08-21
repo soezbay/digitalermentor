@@ -3,20 +3,31 @@
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-back-button></ion-back-button>
 					<ion-button color="medium" @click="cancel">Zurück</ion-button>
 				</ion-buttons>
-				<ion-title>Modal</ion-title>
+				<ion-title> {{ selectedModul.name }} </ion-title>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="ion-padding">
-			<ion-item>
-				<ion-input
-					label-placement="stacked"
-					label="Enter your name"
-					v-model="name"
-					placeholder="Your name"></ion-input>
-			</ion-item>
+			<ion-list>
+				<div>
+					<ion-item v-for="(item, index) in modulList" :key="index">
+						<ion-label v-if="selectedModul.name == item.Kuerzel">
+							<p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
+							<p><strong>Name:</strong> {{ item.Name }}</p>
+							<p>
+							<strong>Verantwortliche/r:</strong> {{ item.Verantwortlicher }}
+							</p>
+							<p><strong>Dozent/in:</strong> {{ item.Dozent }}</p>
+							<p><strong>Sprache:</strong> {{ item.Sprache }}</p>
+							<p><strong>Turnus:</strong> {{ item.Turnus }}</p>
+							<p>
+							<strong>Leistungspunkte:</strong> {{ item.Leistungspunkte }}
+							</p>
+						</ion-label>
+					</ion-item>
+				</div>
+			</ion-list>
 		</ion-content>
 	</ion-page>
 </template>
@@ -29,18 +40,19 @@ import {
 	IonTitle,
 	IonToolbar,
 	IonButtons,
-	IonButton,
 	IonItem,
-	IonInput,
 	modalController,
 	IonDatetime,
 	IonLabel,
 	IonList,
 	IonMenuButton,
 	IonBackButton,
+	IonModal,
 } from "@ionic/vue";
+
 import { defineComponent, ref } from "vue";
 import axios from "axios";
+import Moduluebersicht from "./Moduluebersicht.vue";
 
 export default {
 	components: {
@@ -56,30 +68,35 @@ export default {
 		IonLabel,
 		IonList,
 		IonBackButton,
+		IonModal,
 	},
 	data() {
 		return {
-			usersList: [],
+			modulList: [],
 		};
 	},
 	methods: {
-        async fetchStudiengaenge() {
-			try {
-				const response = await axios.get("http://localhost:8000/studiengang");
-				this.studiengaenge = response.data.studiengaenge;
-			} catch (error) {
-				console.error("Error fetching studiengaenge:", error);
-			}
+		getData() {
+			axios
+				.get("http://localhost:8000/modul")
+				.then((Response) => {
+					console.log(Response.data);
+					this.modulList = Response.data.module;
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		},
 		cancel() {
 			modalController.dismiss(null, "cancel");
 		},
-		confirm() {
-			modalController.dismiss(name.value, "confirm");
-		},
 	},
 	mounted() {
 		this.getData();
+	},
+
+	props: {
+		selectedModul: Object,
 	},
 };
 </script>

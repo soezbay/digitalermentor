@@ -50,7 +50,9 @@
 							class="jedesModul"
 							v-for="(module, index) in semesterModules"
 							:key="index">
-							<ion-label @click="openModal">{{ module.name }} </ion-label>
+							<ion-label @click="openModal(module)">
+								{{ module.name }}
+							</ion-label>
 
 							<!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
 
@@ -421,12 +423,17 @@ export default {
 				!this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
 		},
 
-		async openModal() {
-			const modal = await modalController.create({
-				component: Modal,
-			});
-
-			modal.present();
+		async openModal(selectedModul) {
+			const modal = await modalController
+				.create({
+					component: Modal,
+					componentProps: {
+						selectedModul: selectedModul,
+					},
+				})
+				.then((modal) => {
+					modal.present();
+				});
 		},
 	},
 };
