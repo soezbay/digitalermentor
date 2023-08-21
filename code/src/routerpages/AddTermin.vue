@@ -18,13 +18,14 @@
                 </ion-item>
                 <ion-item>
                     <ion-label position="fixed">Datum</ion-label>
-                    <ion-input v-model="inputValue" :value="formattedDate" required />
+                    <ion-input type="date" :value="formattedDate" required></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label position="fixed">Uhrzeit</ion-label>
-                    <ion-input v-model="inputValue" :value="formattedTime" required />
-                    <ion-button id="open-picker">Open</ion-button>
-                    <ion-picker trigger="open-picker" :columns="pickerColumns" :buttons="pickerButtons"></ion-picker>
+                    <ion-input v-model="inputValueTime" required />
+                    <ion-button id="open-picker">Ändern</ion-button>
+                    <ion-picker trigger="open-picker" :columns="pickerColumnsTime"
+                        :buttons="pickerButtonsTime"></ion-picker>
                 </ion-item>
                 <ion-item>
                     <ion-label position="floating">Ort</ion-label>
@@ -40,12 +41,12 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import {
     IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
-    IonDatetime, IonDatetimeButton, IonPicker,
+    IonDatetime, IonDatetimeButton, IonPicker, IonModal,
     IonItem, IonList, IonLabel,
     IonButtons, IonBackButton, IonButton, IonMenuButton,
     IonFab, IonFabButton,
@@ -56,7 +57,7 @@ import {
 export default {
     components: {
         IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
-        IonDatetime, IonDatetimeButton, IonPicker,
+        IonDatetime, IonDatetimeButton, IonPicker, IonModal,
         IonItem, IonList, IonLabel,
         IonButtons, IonBackButton, IonButton, IonMenuButton,
         IonFab, IonFabButton,
@@ -65,20 +66,46 @@ export default {
     },
     setup() {
         const store = useStore();
-        const inputValue = ref(''); // Initialisieren Sie inputValue mit leerem String
+        const inputValueTime = ref(''); // Initialisieren Sie inputValue mit leerem String
+        const inputValueDate = ref('');
 
         const formattedDate = computed(() => {
             const selectedDate = store.getters.getSelectedDate;
-            const formatted = selectedDate ? selectedDate.toLocaleString() : '';
 
-            return formatted.slice(0, -10);
+            const formatted = selectedDate ? selectedDate.toLocaleString().slice(0, -10) : '';
+            const parts = formatted.split(".");
+
+            if (parts[1].length === 2 && parts[2].length === 2) {
+
+                console.log(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                return `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+            } else if (parts[1].length === 1 && parts[2].length === 2) {
+
+                console.log(`${parts[2]}-0${parts[1]}-${parts[0]}`);
+                return `${parts[2]}-0${parts[1]}-${parts[0]}`;
+
+            } else if (parts[1].length === 2 && parts[2].length === 1) {
+
+                console.log(`0${parts[2]}-${parts[1]}-${parts[0]}`);
+                return `0${parts[2]}-${parts[1]}-${parts[0]}`;
+
+            } else if (parts[1].length === 1 && parts[2].length === 1) {
+
+                console.log(`0${parts[2]}-0${parts[1]}-${parts[0]}`);
+                return `0${parts[2]}-0${parts[1]}-${parts[0]}`;
+
+            }
+
         });
+
+        console.log(formattedDate.value);
 
         const formattedTime = computed(() => {
             const selectedDate = store.getters.getSelectedDate;
-            const formatted = selectedDate ? selectedDate.toLocaleString() : '';
+            const formatted = selectedDate ? selectedDate.toLocaleString().slice(0, -3) : '';
 
-            return formatted.slice(11, -3);
+            return formatted.slice(-5);
         });
 
         const generateOptions = (maxValue) => {
@@ -93,7 +120,7 @@ export default {
             return optionsArray;
         };
 
-        const pickerColumns = [
+        const pickerColumnsTime = [
             {
                 name: 'hours',
                 options: generateOptions(24) // Generieren Sie Optionen für Stunden (0 bis 23)
@@ -104,7 +131,7 @@ export default {
             }
         ];
 
-        const pickerButtons = [
+        const pickerButtonsTime = [
             {
                 text: 'Abbrechen',
                 role: 'cancel'
@@ -112,22 +139,35 @@ export default {
             {
                 text: 'Übernehmen',
                 handler: (value) => {
-                    const selectedHours = value.hours.text;
-                    const selectedMinutes = value.minutes.text;
+                    const selectedHours = value.hours.value;
+                    const selectedMinutes = value.minutes.value;
 
-                    // Setzen Sie die ausgewählte Uhrzeit in das inputValue-Ref
-                    inputValue.value = `${selectedHours}:${selectedMinutes}`;
+                    inputValueTime.value = `${selectedHours}:${selectedMinutes}`;
                 }
             }
         ];
 
 
+
+        inputValueTime.value = formattedTime.value;
+        inputValueDate.value = formattedDate;
+
+
         return {
+            inputValueTime,
+            inputValueDate,
             formattedDate,
             formattedTime,
-            pickerColumns,
-            pickerButtons
+            pickerColumnsTime,
+            pickerButtonsTime,
         };
-    }
+    },
+    methods: {
+        formatDate() {
+            const parts = this.originalDate.split("."); // Trenne die Teile der Original-Zeichenkette
+            const formatted = `${parts[2]}-${parts[1]}-${parts[0]}`; // Stelle das Datum im gewünschten Format zusammen
+            this.formattedDate = formatted;
+        },
+    },
 }
 </script>
