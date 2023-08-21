@@ -13,8 +13,8 @@
         <ion-content>
             <ion-list>
                 <ion-item>
-                    <ion-label position="floating">Titel</ion-label>
-                    <ion-input type="text" placeholder="" required />
+                    <ion-label position="fixed">Titel</ion-label>
+                    <ion-input type="text" required />
                 </ion-item>
                 <ion-item>
                     <ion-label position="fixed">Datum</ion-label>
@@ -28,12 +28,12 @@
                         :buttons="pickerButtonsTime"></ion-picker>
                 </ion-item>
                 <ion-item>
-                    <ion-label position="floating">Ort</ion-label>
-                    <ion-input type="text" placeholder="" />
+                    <ion-label position="fixed">Ort</ion-label>
+                    <ion-input type="text" />
                 </ion-item>
                 <ion-item>
                     <ion-label position="floating">Beschreibung</ion-label>
-                    <ion-textarea rows="5" placeholder="" />
+                    <ion-textarea rows="5" />
                 </ion-item>
             </ion-list>
         </ion-content>
@@ -71,35 +71,14 @@ export default {
 
         const formattedDate = computed(() => {
             const selectedDate = store.getters.getSelectedDate;
+            console.log('SelectedDate:' + selectedDate)
 
-            const formatted = selectedDate ? selectedDate.toLocaleString().slice(0, -10) : '';
-            const parts = formatted.split(".");
+            const unformattedDate = selectedDate ? selectedDate.toLocaleString().slice(0, -10) : '';
 
-            if (parts[1].length === 2 && parts[2].length === 2) {
-
-                console.log(`${parts[2]}-${parts[1]}-${parts[0]}`);
-                return `${parts[2]}-${parts[1]}-${parts[0]}`;
-
-            } else if (parts[1].length === 1 && parts[2].length === 2) {
-
-                console.log(`${parts[2]}-0${parts[1]}-${parts[0]}`);
-                return `${parts[2]}-0${parts[1]}-${parts[0]}`;
-
-            } else if (parts[1].length === 2 && parts[2].length === 1) {
-
-                console.log(`0${parts[2]}-${parts[1]}-${parts[0]}`);
-                return `0${parts[2]}-${parts[1]}-${parts[0]}`;
-
-            } else if (parts[1].length === 1 && parts[2].length === 1) {
-
-                console.log(`0${parts[2]}-0${parts[1]}-${parts[0]}`);
-                return `0${parts[2]}-0${parts[1]}-${parts[0]}`;
-
-            }
+            return unformattedDate;
 
         });
-
-        console.log(formattedDate.value);
+        
 
         const formattedTime = computed(() => {
             const selectedDate = store.getters.getSelectedDate;
