@@ -3,12 +3,10 @@
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-button color="medium" @click="cancel">Cancel</ion-button>
+					<ion-back-button></ion-back-button>
+					<ion-button color="medium" @click="cancel">Zurück</ion-button>
 				</ion-buttons>
 				<ion-title>Modal</ion-title>
-				<ion-buttons slot="end">
-					<ion-button @click="confirm" :strong="true">Confirm</ion-button>
-				</ion-buttons>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="ion-padding">
@@ -27,7 +25,7 @@
 import {
 	IonContent,
 	IonHeader,
-  IonPage,
+	IonPage,
 	IonTitle,
 	IonToolbar,
 	IonButtons,
@@ -35,51 +33,53 @@ import {
 	IonItem,
 	IonInput,
 	modalController,
-IonDatetime,
-IonLabel,
-IonList,
-IonMenuButton,
+	IonDatetime,
+	IonLabel,
+	IonList,
+	IonMenuButton,
+	IonBackButton,
 } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
-import axios from 'axios';
-
+import axios from "axios";
 
 export default {
-    components: {
-        IonPage,
-        IonHeader,
-        IonToolbar,
-        IonTitle,
-        IonContent,
-        IonDatetime,
-        IonItem,
-        IonButtons,
-        IonMenuButton,
-        IonLabel,
-        IonList
-    },
-    data() {
-        return {
-            usersList: []
-        }
-    },
-    methods: {
-        getData() {
-            axios.get('http://localhost:8000/bewertung').then(Response => {
-                console.log(Response.data)
-                this.usersList = Response.data.bewertungen;
-            }).catch(err => {
-                console.log(err);
-            })
-        },
-    },
-    mounted() {
-        this.getData();
-    },
-
-cancel() { modalController.dismiss(null, "cancel")},
-confirm() {modalController.dismiss(name.value, "confirm")}
-}
-
-
+	components: {
+		IonPage,
+		IonHeader,
+		IonToolbar,
+		IonTitle,
+		IonContent,
+		IonDatetime,
+		IonItem,
+		IonButtons,
+		IonMenuButton,
+		IonLabel,
+		IonList,
+		IonBackButton,
+	},
+	data() {
+		return {
+			usersList: [],
+		};
+	},
+	methods: {
+        async fetchStudiengaenge() {
+			try {
+				const response = await axios.get("http://localhost:8000/studiengang");
+				this.studiengaenge = response.data.studiengaenge;
+			} catch (error) {
+				console.error("Error fetching studiengaenge:", error);
+			}
+		},
+		cancel() {
+			modalController.dismiss(null, "cancel");
+		},
+		confirm() {
+			modalController.dismiss(name.value, "confirm");
+		},
+	},
+	mounted() {
+		this.getData();
+	},
+};
 </script>
