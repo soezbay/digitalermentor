@@ -30,9 +30,9 @@
             <ion-list-header v-else-if="semesterIndex === 7">
               <ion-list-header><h5>Wahlpflichtmodule: Lehreinheit</h5></ion-list-header>
             </ion-list-header>
-                <ion-list-header v-else>
-                  <ion-list-header>
-                  <h5>{{ semesterIndex + 1 }}. Semester</h5>
+                <ion-list-header v-else> 
+                  <ion-list-header id="font"> 
+                   {{ semesterIndex + 1 }}. Semester
                 </ion-list-header>
                 </ion-list-header>
                 <ion-row id="proSemester">
@@ -213,12 +213,12 @@ export default {
   border-radius: 15px;
   background: #fff;
   color: #000000;
-  font-family: Quicksand;
+  /* font-family: Lorem ipsum;
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
-  letter-spacing: 0em;
-  text-align: left;
+  letter-spacing: 0em; */
+  text-align: center;
 
 }  
 /*ion-grid {
@@ -233,9 +233,8 @@ export default {
     --ion-grid-columns: 2;
   }*/
 #font{
-  font-family: Quicksand;
 font-size: 16px;
-font-weight: 400;
+font-weight: 350;
 line-height: 20px;
 letter-spacing: 0em;
 text-align: left;
