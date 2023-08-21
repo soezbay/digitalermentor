@@ -40,8 +40,8 @@
                 <ion-datetime size="cover" max="2100-01-01T00:00:00"></ion-datetime>
             </div>
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
-            <!-- <ion-list>
-                <div id="module">
+            <ion-list>
+                <div>
                     <ion-item v-for="(item, index) in usersList" :key="index">
                         <ion-label>
                             <p><strong>BewertungsID:</strong> {{ item.BewertungsID }}</p>
@@ -53,8 +53,10 @@
                         </ion-label>
                     </ion-item>
                 </div>
-            </ion-list> -->
-
+            </ion-list>
+        </ion-content>
+    </ion-page>
+</template>
             
 
 <script>
@@ -82,7 +84,7 @@ export default {
     },
     methods: {
         getData() {
-            axios.get('http://localhost:3000/bewertung').then(Response => {
+            axios.get('http://localhost:8000/bewertung').then(Response => {
                 console.log(Response.data)
                 this.usersList = Response.data.bewertungen;
             }).catch(err => {

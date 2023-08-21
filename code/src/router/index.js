@@ -24,6 +24,7 @@ const routes = [
     path: '/menu/Moduluebersicht',
     component: Moduluebersicht
   },
+  {
     path: '/menu/ziele',
     component: () => import ('../views/Ziele.vue')
   },
