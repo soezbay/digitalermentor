@@ -2,14 +2,13 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons>
-          <ion-menu-button color="primary"></ion-menu-button>
+        <div class="title-block">
           <ion-title>Modulübersicht</ion-title>
-        </ion-buttons>
+        </div>
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <!-- <ion-searchbar animated="true" placeholder="Suche"></ion-searchbar> -->
+      
       <!-- Studiengangauswahl aus Datenbank -->
       <ion-item>
         <ion-select v-model="selectedStudiengang" label="Studiengang" placeholder="Studiengang auswählen">
@@ -19,38 +18,37 @@
         </ion-select>
       </ion-item>
 
+      <!-- Module aus Datenbank -->
+
+      <!-- Moduldarstellung-->
       <ion-grid>
-        <ion-row v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
+        <ion-row class="modulfont" v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
           <ion-list-header v-if="semesterIndex === 6">
-            <ion-list-header>
-              <h5>Wahlpflichtmodul: INF</h5>
-            </ion-list-header>
+            <ion-list-header class="modulfont">Wahlpflichtmodul: INF</ion-list-header>
           </ion-list-header>
           <ion-list-header v-else-if="semesterIndex === 7">
-            <ion-list-header>
-              <h5>Wahlpflichtmodule: Lehreinheit</h5>
-            </ion-list-header>
+            <ion-list-header class="modulfont">Wahlpflichtmodule: Lehreinheit</ion-list-header>
           </ion-list-header>
           <ion-list-header v-else>
-            <ion-list-header>
-              <h5>{{ semesterIndex + 1 }}. Semester</h5>
+            <ion-list-header class="modulfont">
+              {{ semesterIndex + 1 }}. Semester
             </ion-list-header>
           </ion-list-header>
-          <ion-col v-for="(module, index) in semesterModules" :key="index"
-            @click="toggleDescription(semesterIndex, index)">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ module.name }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content>
-            </ion-card>
+          <ion-row class="semesterBlock">
+            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index">
+              <ion-label @click="openModal(module)">{{ module.name }}</ion-label>
 
-            <ion-text v-if="module.showDescription">
-              <a @click="showModuleDetails(module.name)">Modulbeschreibung </a>
-              <a @click="showModuleRating(module.name)"> Bewertung </a>
-            </ion-text>
+      <!-- Kurze Modulbeschreibung -->
+       <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
 
-          </ion-col>
+      <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
+            <!-- <ion-text v-if="module.showDescription">
+                <a @click="showModuleDetails(module.name)">Modulbeschreibung </a>
+                <a @click="showModuleRating(module.name)"> Bewertung </a>
+                </ion-text> -->
+
+            </ion-col>
+          </ion-row>
         </ion-row>
       </ion-grid>
     </ion-content>
@@ -61,9 +59,9 @@
 
 <script>
 
-import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar, IonButton } from '@ionic/vue';
-// import { searchCircle } from 'ionicons/icons';
+import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar, modalController } from '@ionic/vue';
 import axios from 'axios';
+import Modal from "./Modulbeschreibung.vue";
 
 
 export default {
@@ -77,13 +75,10 @@ export default {
     IonTitle,
     IonToolbar,
     IonListHeader,
-    IonButton
+    modalController
   },
 
-  // setup() {
-  //     return { searchCircle };
-  //   },
-
+  
   name: "ModulUebersicht",
   data() {
     return {
@@ -116,21 +111,21 @@ export default {
         ],
         [
           { name: "SPIN", description: "Softwareprojekt Informatik (SPIN)", showDescription: false },
-          { name: "Wahlpflicht: INF", description: "Siehe Auswahl unten", showDescription: false },
-          { name: "Wahlpflicht: INF", description: "Siehe Auswahl unten", showDescription: false },
-          { name: "Wahlpflicht: Lehreinheit", description: "Siehe Auswahl unten", showDescription: false },
-          { name: "Wahlpflicht: Lehreinheit", description: "Siehe Auswahl unten", showDescription: false },
+          { name: "WP: INF", description: "Siehe Auswahl unten", showDescription: false },
+          { name: "WP: INF", description: "Siehe Auswahl unten", showDescription: false },
+          { name: "WP: L", description: "Siehe Auswahl unten", showDescription: false },
+          { name: "WP: L", description: "Siehe Auswahl unten", showDescription: false },
         ],
         [
           { name: "SPIN", description: "Softwareprojekt Informatik (SPIN)", showDescription: false },
-          { name: "Wahlpflicht: INF", description: "Siehe Auswahl unten", showDescription: false },
-          { name: "Wahlpflicht: INF", description: "Siehe Auswahl unten", showDescription: false },
-          { name: "Wahlpflicht: Lehreinheit", description: "Siehe Auswahl unten", showDescription: false },
-          { name: "Wahlpflicht: Lehreinheit", description: "Siehe Auswahl unten", showDescription: false },
+          { name: "WP: INF", description: "Siehe Auswahl unten", showDescription: false },
+          { name: "WP: INF", description: "Siehe Auswahl unten", showDescription: false },
+          { name: "WP: L", description: "Siehe Auswahl unten", showDescription: false },
+          { name: "WP: L", description: "Siehe Auswahl unten", showDescription: false },
         ],
         [
           { name: "PXP", description: "Praxisphase" },
-          { name: "Bachelorarbeit", description: "Beschreibung für M1 - Semester 6", showDescription: false },
+          { name: "BA", description: "Bachelorarbeit", showDescription: false },
           { name: "KBIN", description: "Kolloquium zur Bachelorarbeit Informatik", showDescription: false },
         ],
         [
@@ -195,15 +190,57 @@ export default {
     toggleDescription(semesterIndex, moduleIndex) {
       this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
     },
-    showModuleDetails(moduleName) {
-      // Navigation zur Modulbescreibungsseite implementieren
-      //console.log("Modulbeschreibung für", moduleName);
-    },
-    showModuleRating(moduleName) {
-      // Navigation zur Bewertungsseite implementieren
-      //console.log("Bewertung für", moduleName);
-    }
+
+    async openModal(selectedModul) {
+			const modal = await modalController
+				.create({
+					component: Modal,
+					componentProps: {
+						selectedModul: selectedModul,
+					},
+				})
+				.then((modal) => {
+					modal.present();
+				});
+		},
   },
 };
 
 </script>
+
+
+<style scoped>
+.title-block {
+  background-color: #8C99004D;
+  border-radius: 15px;
+  padding: 10px;
+  text-align: center;
+}
+.modulBlock {
+  margin: 1%;
+  width: 85px;
+  text-align: center;
+  border-radius: 15px;
+  background: #fff;
+  color: #000000;
+  text-align: center;
+}
+.modulfont {
+  font-size: 16px;
+  font-weight: 350;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.semesterBlock {
+  border-radius: 15px;
+  background: #8C99004D;
+}
+ion-col {
+  background-color: #135d54;
+  border: solid 3px #fff;
+  color: #fff;
+  text-align: center;
+}
+
+</style>
