@@ -25,10 +25,10 @@
           <ion-grid>
           <ion-row id="font" v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
             <ion-list-header v-if="semesterIndex === 6">
-              <ion-list-header><h5>Wahlpflichtmodul: INF</h5></ion-list-header>
+              <ion-list-header id="font">Wahlpflichtmodul: INF</ion-list-header>
             </ion-list-header>
             <ion-list-header v-else-if="semesterIndex === 7">
-              <ion-list-header><h5>Wahlpflichtmodule: Lehreinheit</h5></ion-list-header>
+              <ion-list-header id="font">Wahlpflichtmodule: Lehreinheit</ion-list-header>
             </ion-list-header>
                 <ion-list-header v-else> 
                   <ion-list-header id="font"> 
