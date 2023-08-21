@@ -35,9 +35,8 @@
             </ion-list-header>
           </ion-list-header>
           <ion-row class="semesterBlock">
-            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index"
-              @click="toggleDescription(semesterIndex, index)">
-              <ion-label>{{ module.name }}</ion-label>
+            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index">
+              <ion-label @click="openModal(module)">{{ module.name }}</ion-label>
 
       <!-- Kurze Modulbeschreibung -->
        <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
@@ -60,8 +59,9 @@
 
 <script>
 
-import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar, modalController } from '@ionic/vue';
 import axios from 'axios';
+import Modal from "./Modulbeschreibung.vue";
 
 
 export default {
@@ -74,7 +74,8 @@ export default {
     IonPage,
     IonTitle,
     IonToolbar,
-    IonListHeader
+    IonListHeader,
+    modalController
   },
 
   
@@ -189,6 +190,19 @@ export default {
     toggleDescription(semesterIndex, moduleIndex) {
       this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
     },
+
+    async openModal(selectedModul) {
+			const modal = await modalController
+				.create({
+					component: Modal,
+					componentProps: {
+						selectedModul: selectedModul,
+					},
+				})
+				.then((modal) => {
+					modal.present();
+				});
+		},
   },
 };
 
