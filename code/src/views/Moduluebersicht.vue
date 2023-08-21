@@ -8,7 +8,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <!-- <ion-searchbar animated="true" placeholder="Suche"></ion-searchbar> -->
+      
       <!-- Studiengangauswahl aus Datenbank -->
       <ion-item>
         <ion-select v-model="selectedStudiengang" label="Studiengang" placeholder="Studiengang auswählen">
@@ -20,33 +20,33 @@
 
       <!-- Module aus Datenbank -->
 
-
-      <!-- <ion-grid :fixed="true"> -->
+      <!-- Moduldarstellung-->
       <ion-grid>
-        <ion-row id="font" v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
+        <ion-row class="modulfont" v-for="(semesterModules, semesterIndex) in moduleSemesters" :key="semesterIndex">
           <ion-list-header v-if="semesterIndex === 6">
-            <ion-list-header id="font">Wahlpflichtmodul: INF</ion-list-header>
+            <ion-list-header class="modulfont">Wahlpflichtmodul: INF</ion-list-header>
           </ion-list-header>
           <ion-list-header v-else-if="semesterIndex === 7">
-            <ion-list-header id="font">Wahlpflichtmodule: Lehreinheit</ion-list-header>
+            <ion-list-header class="modulfont">Wahlpflichtmodule: Lehreinheit</ion-list-header>
           </ion-list-header>
           <ion-list-header v-else>
-            <ion-list-header id="font">
+            <ion-list-header class="modulfont">
               {{ semesterIndex + 1 }}. Semester
             </ion-list-header>
           </ion-list-header>
-          <ion-row id="proSemester">
-            <ion-col class="jedesModul" v-for="(module, index) in semesterModules" :key="index"
+          <ion-row class="semesterBlock">
+            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index"
               @click="toggleDescription(semesterIndex, index)">
               <ion-label>{{ module.name }}</ion-label>
 
-              <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
+      <!-- Kurze Modulbeschreibung -->
+       <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
 
-
-              <!-- <ion-text v-if="module.showDescription">
+      <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
+            <!-- <ion-text v-if="module.showDescription">
                 <a @click="showModuleDetails(module.name)">Modulbeschreibung </a>
                 <a @click="showModuleRating(module.name)"> Bewertung </a>
-              </ion-text> -->
+                </ion-text> -->
 
             </ion-col>
           </ion-row>
@@ -61,7 +61,6 @@
 <script>
 
 import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-// import { searchCircle } from 'ionicons/icons';
 import axios from 'axios';
 
 
@@ -78,10 +77,7 @@ export default {
     IonListHeader
   },
 
-  // setup() {
-  //     return { searchCircle };
-  //   },
-
+  
   name: "ModulUebersicht",
   data() {
     return {
@@ -198,6 +194,7 @@ export default {
 
 </script>
 
+
 <style scoped>
 .title-block {
   background-color: #8C99004D;
@@ -205,8 +202,7 @@ export default {
   padding: 10px;
   text-align: center;
 }
-
-.jedesModul {
+.modulBlock {
   margin: 1%;
   width: 85px;
   text-align: center;
@@ -214,18 +210,18 @@ export default {
   background: #fff;
   color: #000000;
   text-align: center;
-
 }
-
-#font {
+.modulfont {
   font-size: 16px;
   font-weight: 350;
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
-
 }
-
+.semesterBlock {
+  border-radius: 15px;
+  background: #8C99004D;
+}
 ion-col {
   background-color: #135d54;
   border: solid 3px #fff;
@@ -233,9 +229,4 @@ ion-col {
   text-align: center;
 }
 
-#proSemester {
-  border-radius: 15px;
-  background: #8C99004D;
-
-}
 </style>
