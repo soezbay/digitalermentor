@@ -3,9 +3,9 @@
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
-                    <ion-back-button></ion-back-button>
+                    <ion-back-button color="primary" router-link="/menu/dashboard/termine"></ion-back-button>
+                    <ion-title>Termine hinzufügen</ion-title>
                     <ion-menu-button color="primary"></ion-menu-button>
-                    <ion-title>Termine</ion-title>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 
 import {
@@ -70,15 +70,24 @@ export default {
         const inputValueDate = ref('');
 
         const formattedDate = computed(() => {
+            
             const selectedDate = store.getters.getSelectedDate;
             console.log('SelectedDate:' + selectedDate)
 
             const unformattedDate = selectedDate ? selectedDate.toLocaleString().slice(0, -10) : '';
+            
+            const parts = unformattedDate.split(".");
 
-            return unformattedDate;
-
+            if (parts.length !== 3) {
+                return ''; // Fallback für ungültige Daten
+            }
+            const formatted = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;            
+            console.log('formattedDate in compute:' + formatted);
+            return formatted;
         });
-        
+
+        console.log(formattedDate);
+
 
         const formattedTime = computed(() => {
             const selectedDate = store.getters.getSelectedDate;
@@ -133,6 +142,7 @@ export default {
 
 
         return {
+            // selectedDate,
             inputValueTime,
             inputValueDate,
             formattedDate,
@@ -140,13 +150,6 @@ export default {
             pickerColumnsTime,
             pickerButtonsTime,
         };
-    },
-    methods: {
-        formatDate() {
-            const parts = this.originalDate.split("."); // Trenne die Teile der Original-Zeichenkette
-            const formatted = `${parts[2]}-${parts[1]}-${parts[0]}`; // Stelle das Datum im gewünschten Format zusammen
-            this.formattedDate = formatted;
-        },
-    },
+    }
 }
 </script>

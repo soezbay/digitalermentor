@@ -22,7 +22,7 @@ const store = createStore({
                 }
             ],
 
-            selectedDate: null,
+            selectedDate: new Date(),
 
         }
     },

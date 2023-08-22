@@ -124,7 +124,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    background-color: #27292b;
 }
 
 #flexbox1 ion-item {
@@ -132,15 +131,12 @@ export default {
     width: 85px;
     text-align: center;
     border-radius: 20px;
-    background-color: #27292b;
-
 }
 
 .ios #flexbox1 ion-item {
     margin: 1%;
     width: 85px;
     text-align: center;
-    background-color: #27292b;
 }
 
 
@@ -151,7 +147,6 @@ export default {
 }
 
 #zieleHeader {
-    background-color: #27292b;
     height: 35px;
     padding-top: 8px;
     padding-left: 25px;
@@ -164,9 +159,7 @@ export default {
 }
 
 ion-datetime {
-    --background: #5f6332;
     margin: auto;
     border-radius: 16px;
-    box-shadow: rgba(var(--ion-color-rose-rgb), 0.3) 0px 10px 15px -3px;
 }
 </style>

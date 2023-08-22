@@ -3,15 +3,15 @@
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
-                    <ion-back-button></ion-back-button>
-                    <ion-menu-button color="primary"></ion-menu-button>
+                    <ion-back-button color="primary" router-link="/menu/dashboard"></ion-back-button>
                     <ion-title>Termine</ion-title>
+                    <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
 
         <ion-content>
-            <ion-datetime size="cover" max="2100-01-01T00:00:00" v-model="selectedDate"
+            <ion-datetime size="cover" max="2200-01-01T00:00:00" v-model="selectedDate"
                 display-format="D MMM YYYY HH:mm"></ion-datetime>
             <ion-list>
                 <ion-item-sliding v-for="termin in termine" :router-link="`/termine/${termin.id}`" :key="termin.id">
