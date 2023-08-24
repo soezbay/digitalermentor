@@ -1,4 +1,3 @@
-const Bewertung = require('../module/Bewertung');
 const Modul = require('../module/Modul');
 
 exports.getAlleModule = async (req, res, next) => {
@@ -22,4 +21,18 @@ exports.getAlleBewertungenVonModul = async (req, res, next) => {
        console.log(error);
         next(error);
     }
+}
+exports.getModul = async (req, res, next) => {
+       try{
+            let modul1 = req.params.Modul;
+            let studiengang = req.params.Studiengang;
+            const [modul, _] = await Modul.findModul(modul1, studiengang);
+
+            console.log("Received modul:", modul); // Fügen Sie diese Zeile hinzu
+
+            res.status(200).json({modul});
+        }catch (error) {
+           console.log(error);
+            next(error);
+        }
 };

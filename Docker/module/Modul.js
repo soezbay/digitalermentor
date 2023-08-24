@@ -31,5 +31,11 @@ class Modul {
 
         return database.execute(sql);
     }
+
+    static findModul(ModulKuerzel, StudiengangKuerzel) {
+        let sql = `Select * From Modul LEFT JOIN Pflicht ON Pflicht.ModulKuerzel = Modul.Kuerzel LEFT JOIN Wahlpflicht ON Wahlpflicht.ModulKuerzel = Modul.Kuerzel where (Pflicht.StudiengangKuerzel = '${StudiengangKuerzel}' OR Wahlpflicht.StudiengangKuerzel = '${StudiengangKuerzel}') and Modul.Kuerzel = '${ModulKuerzel}';`;
+
+        return database.execute(sql);
+    }
 }
 module.exports = Modul;
