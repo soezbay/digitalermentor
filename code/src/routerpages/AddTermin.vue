@@ -11,11 +11,11 @@
         </ion-header>
 
         <ion-content>
-            <form>
+            <form @submit.prevent="submitFormTermin">
                 <ion-list>
                     <ion-item>
                         <ion-label position="fixed">Titel</ion-label>
-                        <ion-input type="text" required />
+                        <ion-input type="text" required v-model="enteredTitel"/>
                     </ion-item>
                     <ion-item>
                         <ion-label position="fixed">Datum</ion-label>
@@ -30,19 +30,19 @@
                     </ion-item>
                     <ion-item>
                         <ion-label position="fixed">Ort</ion-label>
-                        <ion-input type="text" />
+                        <ion-input type="text" v-model="enteredOrt"/>
                     </ion-item>
                     <ion-item>
                         <ion-label position="floating">Beschreibung</ion-label>
-                        <ion-textarea rows="5" />
+                        <ion-textarea rows="5" v-model="enteredBeschreibung"/>
                     </ion-item>
                 </ion-list>
                 <ion-toolbar class="ion-padding">
                     <ion-buttons slot="start">
-                        <ion-button fill="outline">Clear</ion-button>
+                        <ion-button type="reset" fill="outline" color="danger">Löschen</ion-button>
                     </ion-buttons>
                     <ion-buttons slot="end">
-                        <ion-button fill="solid" color="primary">Speichern</ion-button>
+                        <ion-button type="submit" fill="solid" color="primary">Speichern</ion-button>
                     </ion-buttons>
                 </ion-toolbar>
             </form>
@@ -61,8 +61,9 @@ import {
     IonButtons, IonBackButton, IonButton, IonMenuButton,
     IonFab, IonFabButton,
     IonIcon,
-    IonTextarea, IonInput
+    IonTextarea, IonInput,
 } from '@ionic/vue';
+
 
 export default {
     components: {
@@ -72,9 +73,10 @@ export default {
         IonButtons, IonBackButton, IonButton, IonMenuButton,
         IonFab, IonFabButton,
         IonIcon,
-        IonTextarea, IonInput
+        IonTextarea, IonInput,
     },
     setup() {
+      
         const store = useStore();
         const inputValueTime = ref(''); // Initialisieren Sie inputValue mit leerem String
         const inputValueDate = ref('');
@@ -160,6 +162,40 @@ export default {
             pickerColumnsTime,
             pickerButtonsTime,
         };
+    },
+
+    data() {
+        return {
+            enteredTitel: '',
+            enteredDatum: '',
+            enteredZeit: '',
+            enteredOrt: '',
+            enteredBeschreibung: '',
+        }
+
+    },
+
+    methods: {
+        saveTermin(terminData) {
+            console.log('3. Dispatching in Vuex Store......................');
+            this.$store.dispatch('addTermin', terminData);
+            console.log('4. Replace URL......................');
+            this.$router.go(-1);
+        },
+
+        submitFormTermin() {
+            console.log('1. Sende Termin Daten......................')
+            const terminData = { 
+                enteredTitel: this.enteredTitel,
+                enteredDatum: this.formattedDate,
+                enteredZeit: this.formattedTime,
+                enteredOrt: this.enteredOrt,
+                enteredBeschreibung: this.enteredBeschreibung,           
+            };
+            console.log(terminData);
+            console.log('2. Call Emit......................');
+            this.saveTermin(terminData);
+        }
     }
 }
 </script>

@@ -15,7 +15,7 @@
                 display-format="D MMM YYYY HH:mm"></ion-datetime>
             <ion-list>
                 <ion-item-sliding v-for="termin in termine" :router-link="`/termine/${termin.id}`" :key="termin.id">
-                    <ion-item>
+                    <ion-item color="primary">
                         <ion-label>
                             <h2>{{ termin.titel }}</h2>
                             <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
