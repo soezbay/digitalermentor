@@ -12,17 +12,17 @@
 			<ion-list>
 				<div>
 					<ion-item v-for="(item, index) in modulList" :key="index">
-						<ion-label v-if="selectedModul.name == item.Kuerzel">
+						<ion-label>
 							<p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
 							<p><strong>Name:</strong> {{ item.Name }}</p>
 							<p>
-							<strong>Verantwortliche/r:</strong> {{ item.Verantwortlicher }}
+								<strong>Verantwortliche/r:</strong> {{ item.Verantwortlicher }}
 							</p>
 							<p><strong>Dozent/in:</strong> {{ item.Dozent }}</p>
 							<p><strong>Sprache:</strong> {{ item.Sprache }}</p>
 							<p><strong>Turnus:</strong> {{ item.Turnus }}</p>
 							<p>
-							<strong>Leistungspunkte:</strong> {{ item.Leistungspunkte }}
+								<strong>Leistungspunkte:</strong> {{ item.Leistungspunkte }}
 							</p>
 						</ion-label>
 					</ion-item>
@@ -75,10 +75,11 @@ export default {
 			modulList: [],
 		};
 	},
+
 	methods: {
 		getData() {
 			axios
-				.get("http://localhost:8000/modul")
+				.get("http://localhost:8000/modul/PI/${selectedModul}")
 				.then((Response) => {
 					console.log(Response.data);
 					this.modulList = Response.data.module;
