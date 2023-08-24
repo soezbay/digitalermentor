@@ -11,31 +11,41 @@
         </ion-header>
 
         <ion-content>
-            <ion-list>
-                <ion-item>
-                    <ion-label position="fixed">Titel</ion-label>
-                    <ion-input type="text" required />
-                </ion-item>
-                <ion-item>
-                    <ion-label position="fixed">Datum</ion-label>
-                    <ion-input type="date" :value="formattedDate" required></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label position="fixed">Uhrzeit</ion-label>
-                    <ion-input v-model="inputValueTime" required />
-                    <ion-button id="open-picker">Ändern</ion-button>
-                    <ion-picker trigger="open-picker" :columns="pickerColumnsTime"
-                        :buttons="pickerButtonsTime"></ion-picker>
-                </ion-item>
-                <ion-item>
-                    <ion-label position="fixed">Ort</ion-label>
-                    <ion-input type="text" />
-                </ion-item>
-                <ion-item>
-                    <ion-label position="floating">Beschreibung</ion-label>
-                    <ion-textarea rows="5" />
-                </ion-item>
-            </ion-list>
+            <form>
+                <ion-list>
+                    <ion-item>
+                        <ion-label position="fixed">Titel</ion-label>
+                        <ion-input type="text" required />
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="fixed">Datum</ion-label>
+                        <ion-input type="date" :value="formattedDate" required></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="fixed">Uhrzeit</ion-label>
+                        <ion-input v-model="inputValueTime" required />
+                        <ion-button id="open-picker">Ändern</ion-button>
+                        <ion-picker trigger="open-picker" :columns="pickerColumnsTime"
+                            :buttons="pickerButtonsTime"></ion-picker>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="fixed">Ort</ion-label>
+                        <ion-input type="text" />
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating">Beschreibung</ion-label>
+                        <ion-textarea rows="5" />
+                    </ion-item>
+                </ion-list>
+                <ion-toolbar class="ion-padding">
+                    <ion-buttons slot="start">
+                        <ion-button fill="outline">Clear</ion-button>
+                    </ion-buttons>
+                    <ion-buttons slot="end">
+                        <ion-button fill="solid" color="primary">Speichern</ion-button>
+                    </ion-buttons>
+                </ion-toolbar>
+            </form>
         </ion-content>
     </ion-page>
 </template>
@@ -70,18 +80,18 @@ export default {
         const inputValueDate = ref('');
 
         const formattedDate = computed(() => {
-            
+
             const selectedDate = store.getters.getSelectedDate;
             console.log('SelectedDate:' + selectedDate)
 
             const unformattedDate = selectedDate ? selectedDate.toLocaleString().slice(0, -10) : '';
-            
+
             const parts = unformattedDate.split(".");
 
             if (parts.length !== 3) {
                 return ''; // Fallback für ungültige Daten
             }
-            const formatted = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;            
+            const formatted = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
             console.log('formattedDate in compute:' + formatted);
             return formatted;
         });
