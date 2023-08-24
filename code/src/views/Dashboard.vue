@@ -3,8 +3,8 @@
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
-                    <ion-menu-button color="primary"></ion-menu-button>
                     <ion-title>Dashboard</ion-title>
+                    <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
