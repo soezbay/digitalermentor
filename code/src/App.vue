@@ -82,7 +82,7 @@ const appPages = [
   },
   {
     title: 'Studienziele',
-    url: '/menu/ziele',
+    url: '/menu/studienziele',
     iosIcon: archiveOutline,
     mdIcon: archiveSharp,
   },

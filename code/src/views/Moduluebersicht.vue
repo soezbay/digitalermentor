@@ -2,9 +2,10 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <div class="title-block">
+        <ion-buttons>
           <ion-title>Modulübersicht</ion-title>
-        </div>
+          <ion-menu-button color="primary"></ion-menu-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -38,11 +39,11 @@
             <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index">
               <ion-label @click="openModal(module)">{{ module.name }}</ion-label>
 
-      <!-- Kurze Modulbeschreibung -->
-       <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
+              <!-- Kurze Modulbeschreibung -->
+              <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
 
-      <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
-            <!-- <ion-text v-if="module.showDescription">
+              <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
+              <!-- <ion-text v-if="module.showDescription">
                 <a @click="showModuleDetails(module.name)">Modulbeschreibung </a>
                 <a @click="showModuleRating(module.name)"> Bewertung </a>
                 </ion-text> -->
@@ -60,7 +61,23 @@
 <script>
 
 
-import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar, modalController } from '@ionic/vue';
+import {
+  IonButtons,
+  IonMenuButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonSearchbar,
+  IonSelectOption,
+  IonSelect,
+  IonContent,
+  IonHeader,
+  IonListHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  modalController
+} from '@ionic/vue';
 import axios from 'axios';
 import Modal from "./Modulbeschreibung.vue";
 
@@ -84,7 +101,7 @@ export default {
     IonListHeader,
     modalController
   },
-  
+
   name: "ModulUebersicht",
   data() {
     return {
@@ -198,17 +215,17 @@ export default {
     },
 
     async openModal(selectedModul) {
-			const modal = await modalController
-				.create({
-					component: Modal,
-					componentProps: {
-						selectedModul: selectedModul,
-					},
-				})
-				.then((modal) => {
-					modal.present();
-				});
-		},
+      const modal = await modalController
+        .create({
+          component: Modal,
+          componentProps: {
+            selectedModul: selectedModul,
+          },
+        })
+        .then((modal) => {
+          modal.present();
+        });
+    },
   },
 };
 
@@ -222,6 +239,7 @@ export default {
   padding: 10px;
   text-align: center;
 }
+
 .modulBlock {
   margin: 1%;
   width: 85px;
@@ -231,6 +249,7 @@ export default {
   color: #000000;
   text-align: center;
 }
+
 .modulfont {
   font-size: 16px;
   font-weight: 350;
@@ -238,15 +257,16 @@ export default {
   letter-spacing: 0em;
   text-align: left;
 }
+
 .semesterBlock {
   border-radius: 15px;
   background: #8C99004D;
 }
+
 ion-col {
   background-color: #135d54;
   border: solid 3px #fff;
   color: #fff;
   text-align: center;
 }
-
 </style>
