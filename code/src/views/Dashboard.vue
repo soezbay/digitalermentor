@@ -3,8 +3,8 @@
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
-                    <ion-menu-button color="primary"></ion-menu-button>
                     <ion-title>Dashboard</ion-title>
+                    <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
@@ -30,14 +30,14 @@
                 </ion-item>
             </div>
             <br>
-            <ion-header id="zieleHeader">Termine:</ion-header>
+            <ion-header router-link="/menu/dashboard/termine" id="zieleHeader">Termine:</ion-header>
             <div>
                 <ion-item>
                     <ion-label>xyz</ion-label>
                 </ion-item>
-            </div>
+            </div><br>
             <div id="kalender">
-                <ion-datetime size="cover" max="2100-01-01T00:00:00"></ion-datetime>
+                <ion-datetime size="fixed" max="2100-01-01T00:00:00"></ion-datetime>
             </div>
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
@@ -161,5 +161,12 @@ export default {
 
 #module {
     height: 20px;
+}
+
+ion-datetime {
+    --background: #5f6332;
+    margin: auto;
+    border-radius: 16px;
+    box-shadow: rgba(var(--ion-color-rose-rgb), 0.3) 0px 10px 15px -3px;
 }
 </style>
