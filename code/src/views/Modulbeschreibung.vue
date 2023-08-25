@@ -9,14 +9,13 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="ion-padding">
-			<ion-list>
-				<div>
+            <ion-list>
 					<ion-item v-for="(item, index) in modul" :key="index">
 						<ion-label>
 							<p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
 							<p><strong>Name:</strong> {{ item.Name }}</p>
 							<p>
-								<strong>Verantwortliche/r:</strong> {{ item.Verantwortlicher }}
+								<strong>Verantwortliche/r:</strong> {{ item.Verantwortliche }}
 							</p>
 							<p><strong>Dozent/in:</strong> {{ item.Dozent }}</p>
 							<p><strong>Sprache:</strong> {{ item.Sprache }}</p>
@@ -24,9 +23,15 @@
 							<p>
 								<strong>Leistungspunkte:</strong> {{ item.Leistungspunkte }}
 							</p>
+                            <p><strong>Arbeitsaufwand:</strong> {{ item.Arbeitsaufwand }}</p>
+							<p><strong>Teilnehmerzahl:</strong> {{ item.Teilnehmerzahl }}</p>
+							<p>
+								<strong>Voraussetzungen (Pflicht):</strong> {{ item.VoraussetzungenPflicht }}
+							</p>
+							<p><strong>Voraussetzungen (Empfohlen):</strong> {{ item.VoraussetzungenEmpfohlen }}</p>
+							<p><strong>Prüfungsleistung:</strong> {{ item.Pruefungsleistung }}</p>
 						</ion-label>
 					</ion-item>
-				</div>
 			</ion-list>
 		</ion-content>
 	</ion-page>
@@ -78,13 +83,17 @@ export default {
 		};
 	},
 
+    props: {
+		selectedModul: Object,
+	},
+
 	methods: {
 		getData() {
 			axios
-				.get("http://localhost:8000/modul/PI/ads")
+				.get(`http://localhost:8000/modul/pi/${this.selectedModul.name}`)
 				.then((Response) => {
 					console.log(Response.data);
-					this.modul = Response.data.module;
+					this.modul = Response.data.modul;
 				})
 				.catch((err) => {
 					console.log(err);
@@ -98,8 +107,12 @@ export default {
 		this.getData();
 	},
 
-	props: {
-		selectedModul: Object,
-	},
 };
 </script>
+
+<style scoped>
+    ion-toolbar {
+        --background: none;
+    }
+
+</style>
