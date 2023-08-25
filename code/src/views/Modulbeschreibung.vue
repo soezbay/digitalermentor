@@ -11,7 +11,7 @@
 		<ion-content class="ion-padding">
 			<ion-list>
 				<div>
-					<ion-item v-for="(item, index) in modulList" :key="index">
+					<ion-item v-for="(item, index) in modul" :key="index">
 						<ion-label>
 							<p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
 							<p><strong>Name:</strong> {{ item.Name }}</p>
@@ -48,6 +48,7 @@ import {
 	IonMenuButton,
 	IonBackButton,
 	IonModal,
+    IonButton,
 } from "@ionic/vue";
 
 import { defineComponent, ref } from "vue";
@@ -69,20 +70,21 @@ export default {
 		IonList,
 		IonBackButton,
 		IonModal,
+        IonButton,
 	},
 	data() {
 		return {
-			modulList: [],
+			modul: [],
 		};
 	},
 
 	methods: {
 		getData() {
 			axios
-				.get("http://localhost:8000/modul/PI/${selectedModul}")
+				.get("http://localhost:8000/modul/PI/ads")
 				.then((Response) => {
 					console.log(Response.data);
-					this.modulList = Response.data.module;
+					this.modul = Response.data.module;
 				})
 				.catch((err) => {
 					console.log(err);
