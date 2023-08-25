@@ -6,4 +6,6 @@ router.route("/").get(modulControllers.getAlleModule);
 
 router.route("/:Modul").get(modulControllers.getAlleBewertungenVonModul);
 
+router.route("/:Studiengang/:Modul").get(modulControllers.getModul);
+
 module.exports = router;
