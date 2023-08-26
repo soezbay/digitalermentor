@@ -11,7 +11,11 @@
 
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
-            <ion-header router-link="/menu/ziele" id="zieleHeader">Aktive Ziele:</ion-header>
+            <ion-list-header color="primary" router-link="/menu/ziele" id="header" >
+                <ion-label>
+                    Aktive Ziele
+                </ion-label>
+            </ion-list-header>
             <div id="flexbox1">
                 <ion-item lines="none">
                     <ion-label>EPR</ion-label>
@@ -29,15 +33,22 @@
                     <ion-label>INP</ion-label>
                 </ion-item>
             </div>
-            <br>
-            <ion-header router-link="/menu/dashboard/termine" id="zieleHeader">Termine:</ion-header>
+            <ion-header style="height: 0.3%;"></ion-header>
+            <ion-list-header color='primary' router-link="/menu/dashboard/termine" id="header">
+                <ion-label>
+                    Termine
+                </ion-label>
+            </ion-list-header>
             <div>
                 <ion-item>
-                    <ion-label>xyz</ion-label>
+                    <ion-label v-for="termin in termine" :router-link="`/termine/${termin.id}`">
+                        <h2>{{ termin.titel }}</h2>
+                        <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
+                    </ion-label>
                 </ion-item>
             </div><br>
             <div id="kalender">
-                <ion-datetime size="fixed" max="2100-01-01T00:00:00"></ion-datetime>
+                <ion-datetime :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
             </div>
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
@@ -60,8 +71,23 @@
             
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
+import {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonDatetime,
+    IonButtons,
+    IonMenuButton,
+    IonItem,
+    IonLabel,
+    IonList, IonListHeader
+} from '@ionic/vue';
+
 import axios from 'axios';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
     components: {
@@ -75,7 +101,31 @@ export default {
         IonButtons,
         IonMenuButton,
         IonLabel,
-        IonList
+        IonList, IonListHeader
+    },
+    setup() {
+        const store = useStore();
+
+        const termine = computed(() => {
+            const terminArr = store.getters.termine;
+            return terminArr;
+        });
+
+        const highlightedDates = computed(() => {
+            // Generate highlightedDates from your Vuex store data
+            return termine.value.map(termine => {
+                return {
+                    date: termine.datum, // Use the appropriate property from your termine data
+                    textColor: '#000000', // Customize as needed
+                    backgroundColor: '#D7D5D5', // Customize as needed
+                };
+            });
+        });
+
+
+        return {
+            highlightedDates,
+        };
     },
     data() {
         return {
@@ -112,6 +162,11 @@ export default {
     },
     mounted() {
         this.getData();
+    },
+    computed: {
+        termine() {
+            return this.$store.getters.termine;
+        }
     }
 }
 </script>
@@ -146,12 +201,13 @@ export default {
     text-align: center;
 }
 
-#zieleHeader {
-    height: 35px;
+#header {
+    /* height: 35px;
     padding-top: 8px;
-    padding-left: 25px;
+    padding-left: 25px; */
+    padding-right: 5%;
     font-size: larger;
-    text-align: left;
+    text-align: center;
 }
 
 #module {
@@ -159,7 +215,8 @@ export default {
 }
 
 ion-datetime {
-    margin: auto;
+    --background: #D7D5D5;
+    color: black;
     border-radius: 16px;
-}
+    }
 </style>
