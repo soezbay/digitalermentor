@@ -11,8 +11,8 @@
         </ion-header>
 
         <ion-content>
-            <ion-datetime size="cover" max="2200-01-01T00:00:00" v-model="selectedDate"
-                display-format="D MMM YYYY HH:mm"></ion-datetime>
+            <ion-datetime presentation="date-time" :highlighted-dates="highlightedDates" size="cover"
+                max="2200-01-01T00:00:00" v-model="selectedDate" display-format="D MMM YYYY HH:mm"></ion-datetime>
             <ion-list>
                 <ion-item-sliding v-for="termin in termine" :router-link="`/termine/${termin.id}`" :key="termin.id">
                     <ion-item color="primary">
@@ -53,7 +53,7 @@ import {
 
 } from '@ionic/vue';
 import { add, colorPalette, document, globe } from 'ionicons/icons';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
@@ -82,9 +82,30 @@ export default {
                 store.dispatch('saveSelectedDate', new Date(selectedDate.value));
             }
         }
+
+        const termine = computed(() => {
+
+            const terminArr = store.getters.termine;
+
+            return terminArr;
+        });
+
+        const highlightedDates = computed(() => {
+            // Generate highlightedDates from your Vuex store data
+            return termine.value.map(termine => {
+                return {
+                    date: termine.datum, // Use the appropriate property from your termine data
+                    textColor: '#000000', // Customize as needed
+                    backgroundColor: '#7b8700', // Customize as needed
+                };
+            });
+        });
+
+
         return {
             add, colorPalette, document, globe,
             selectedDate,
+            highlightedDates,
             saveDate
         };
     },
