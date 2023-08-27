@@ -1,12 +1,11 @@
 import { createStore } from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 
 const store = createStore({
     state() {
         return {
             termine: [],
-
             selectedDate: new Date(),
-
         }
     },
 
@@ -25,8 +24,18 @@ const store = createStore({
                 beschreibung: terminData.enteredBeschreibung
             }
             console.log(newTermin);
-            state.termine.unshift(newTermin);
+            state.termine.push(newTermin);
+            state.termine.sort((a, b) => {
+                const dateA = new Date(`${a.datum} ${a.zeit}`);
+                const dateB = new Date(`${b.datum} ${b.zeit}`);
+                return dateA - dateB;
+            });
+        },
+
+        removeTermin(state, terminId) {
+            state.termine = state.termine.filter(termin => termin.id !== terminId);
         }
+
     },
 
     actions: {
@@ -36,6 +45,10 @@ const store = createStore({
 
         addTermin(context, terminData) {
             context.commit('addTermin', terminData);
+        },
+
+        deleteTermin(context, terminId) {
+            context.commit('removeTermin', terminId);
         }
     },
 
@@ -53,7 +66,9 @@ const store = createStore({
         getSelectedDate(state) {
             return state.selectedDate;
         },
-    }
+    },
+
+    plugins: [createPersistedState()]
 });
 
 export default store;

@@ -13,19 +13,30 @@
         <ion-content>
             <ion-datetime presentation="date-time" :highlighted-dates="highlightedDates" size="cover"
                 max="2200-01-01T00:00:00" v-model="selectedDate" display-format="D MMM YYYY HH:mm"></ion-datetime>
-            <ion-list>
-                <ion-item-sliding v-for="termin in termine" :router-link="`/termine/${termin.id}`" :key="termin.id">
-                    <ion-item color="primary">
-                        <ion-label>
-                            <h2>{{ termin.titel }}</h2>
-                            <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
-                        </ion-label>
-                    </ion-item>
-                    <ion-item-options>
-                        <ion-item-option color="danger">Delete</ion-item-option>
-                    </ion-item-options>
-                </ion-item-sliding>
-            </ion-list>
+            <div v-if="termine.length > 0">
+                <ion-list>
+                    <ion-item-sliding v-for="termin in termine" :router-link="`/termine/${termin.id}`" :key="termin.id">
+                        <ion-item color="secondary">
+                            <ion-label>
+                                <h2>{{ termin.titel }}</h2>
+                                <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
+                            </ion-label>
+                        </ion-item>
+                        <ion-item-options>
+                            <ion-item-option color="danger" @click="deleteTermin(termin.id)">
+                                Delete
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </ion-list>
+            </div>
+            <div v-else>
+                <ion-item style="text-align: center;">
+                    <ion-label>
+                        <h2>Keine Termine für diesen Monat.</h2>
+                    </ion-label>
+                </ion-item>
+            </div>
 
             <ion-fab slot="fixed" vertical="bottom" horizontal="end">
                 <ion-fab-button router-link="/menu/dashboard/termine/add_termin" @click="saveDate">
@@ -96,19 +107,24 @@ export default {
                 return {
                     date: termine.datum, // Use the appropriate property from your termine data
                     textColor: '#000000', // Customize as needed
-                    backgroundColor: '#7b8700', // Customize as needed
+                    backgroundColor: '#D7D5D5', // Customize as needed
                 };
             });
         });
 
+        const deleteTermin = (terminId) => {
+            store.dispatch('deleteTermin', terminId);
+        };
 
         return {
             add, colorPalette, document, globe,
             selectedDate,
             highlightedDates,
-            saveDate
+            saveDate,
+            deleteTermin
         };
     },
+
     computed: {
         termine() {
             return this.$store.getters.termine;
