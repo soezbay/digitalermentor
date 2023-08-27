@@ -3,15 +3,15 @@
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
-                    <ion-menu-button color="primary"></ion-menu-button>
                     <ion-title>Dashboard</ion-title>
+                    <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
 
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
-            <ion-list-header color="primary" router-link="/menu/ziele" id="header" >
+            <ion-list-header color="primary" router-link="/menu/ziele" id="header">
                 <ion-label>
                     Aktive Ziele
                 </ion-label>
@@ -35,21 +35,28 @@
             </div>
             <ion-header style="height: 0.3%;"></ion-header>
             <ion-list-header color='primary' router-link="/menu/dashboard/termine" id="header">
-                <ion-label>
-                    Termine
-                </ion-label>
+                <ion-label>Termine</ion-label>
             </ion-list-header>
-            <div>
-                <ion-item>
-                    <ion-label v-for="termin in termine" :router-link="`/termine/${termin.id}`">
-                        <h2>{{ termin.titel }}</h2>
-                        <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
+            <div v-if="termine.length > 0">
+                <ion-list v-for="termin in termine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
+                    <ion-item color="secondary">
+                        <ion-label>
+                            <h2>{{ termin.titel }}</h2>
+                            <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <div v-else>
+                <ion-item style="text-align: center;">
+                    <ion-label>
+                        <h2>Keine Termine für diesen Monat.</h2>
                     </ion-label>
                 </ion-item>
-            </div><br>
-            <div id="kalender">
-                <ion-datetime :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
             </div>
+            <br>
+            <ion-datetime v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
+
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
                 <div>
@@ -86,7 +93,7 @@ import {
 } from '@ionic/vue';
 
 import axios from 'axios';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
@@ -122,14 +129,19 @@ export default {
             });
         });
 
-
         return {
             highlightedDates,
         };
     },
     data() {
         return {
-            usersList: []
+            usersList: [],
+            selectedDate: new Date().toISOString()
+        }
+    },
+    watch: {
+        selectedDate(newDate) {
+            this.updateMonthAndYear(newDate);
         }
     },
     methods: {
@@ -158,6 +170,14 @@ export default {
         getUsername() {
             return 'Username' + '!';
 
+        },
+        updateMonthAndYear(date) {
+            const dateObject = new Date(date);
+            const currentMonth = dateObject.getMonth();
+            const currentYear = dateObject.getFullYear();
+
+            console.log('Aktueller Monat:', currentMonth);
+            console.log('Aktuelles Jahr:', currentYear);
         }
     },
     mounted() {
@@ -166,8 +186,26 @@ export default {
     computed: {
         termine() {
             return this.$store.getters.termine;
-        }
-    }
+        },
+
+        // filteredTermine() {
+        //     const ios = document.getElementsByClassName("sc-ion-label-ios-h sc-ion-label-ios-s ios");
+        //     const md = document.getElementsByClassName("sc-ion-label-md-h sc-ion-label-md-s md");
+        //     const months = [
+        //         'January', 'February', 'March', 'April', 'May', 'June',
+        //         'July', 'August', 'September', 'October', 'November', 'December'
+        //     ];
+
+        //     if (ios.length > 0) {
+
+        //         const parts = ios.split
+
+        //     } else if (md.length > 0) {
+
+        //     }
+        // }
+    },
+
 }
 </script>
 
@@ -188,12 +226,11 @@ export default {
     border-radius: 20px;
 }
 
-.ios #flexbox1 ion-item {
+/* .ios #flexbox1 ion-item {
     margin: 1%;
     width: 85px;
     text-align: center;
-}
-
+} */
 
 #displayUsername {
     padding: 20px;
@@ -205,18 +242,25 @@ export default {
     /* height: 35px;
     padding-top: 8px;
     padding-left: 25px; */
-    padding-right: 5%;
+    padding-right: 4%;
     font-size: larger;
     text-align: center;
 }
 
-#module {
-    height: 20px;
+.ios #header {
+    height: 0;
+    font-size: larger;
+    font-weight: lighter;
+    text-align: center;
+}
+
+.ios #header ion-label {
+    padding-bottom: 0.5%;
 }
 
 ion-datetime {
-    --background: #D7D5D5;
+    --background: #ffffff;
     color: black;
     border-radius: 16px;
-    }
+}
 </style>
