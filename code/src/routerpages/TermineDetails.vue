@@ -3,9 +3,9 @@
         <ion-header>
             <ion-toolbar>
                 <ion-buttons>
-                    <ion-back-button></ion-back-button>
+                    <ion-back-button color="primary" router-link="/menu/dashboard/termine"></ion-back-button>
+                    <ion-title>Termin Details</ion-title>
                     <ion-menu-button color="primary"></ion-menu-button>
-                    <ion-title>Termine</ion-title>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>

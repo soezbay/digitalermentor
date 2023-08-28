@@ -36,8 +36,8 @@
             </ion-list-header>
           </ion-list-header>
           <ion-row class="semesterBlock">
-            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index">
-              <ion-label @click="openModal(module)">{{ module.name }}</ion-label>
+            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index"  @click="openModal(module)">
+              <ion-label>{{ module.name }}</ion-label>
 
               <!-- Kurze Modulbeschreibung -->
               <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
@@ -55,8 +55,6 @@
     </ion-content>
   </ion-page>
 </template>
-
-
 
 <script>
 
@@ -228,16 +226,14 @@ export default {
     },
   },
 };
-
 </script>
-
 
 <style scoped>
 .title-block {
-  background-color: #8C99004D;
-  border-radius: 15px;
-  padding: 10px;
-  text-align: center;
+	background-color: #8c99004d;
+	border-radius: 15px;
+	padding: 10px;
+	text-align: center;
 }
 
 .modulBlock {
@@ -269,4 +265,5 @@ ion-col {
   color: #fff;
   text-align: center;
 }
+
 </style>

@@ -11,7 +11,11 @@
 
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
-            <ion-header router-link="/menu/ziele" id="zieleHeader">Aktive Ziele:</ion-header>
+            <ion-list-header color="primary" router-link="/menu/ziele" id="header">
+                <ion-label>
+                    Aktive Ziele
+                </ion-label>
+            </ion-list-header>
             <div id="flexbox1">
                 <ion-item lines="none">
                     <ion-label>EPR</ion-label>
@@ -29,16 +33,30 @@
                     <ion-label>INP</ion-label>
                 </ion-item>
             </div>
-            <br>
-            <ion-header router-link="/menu/dashboard/termine" id="zieleHeader">Termine:</ion-header>
-            <div>
-                <ion-item>
-                    <ion-label>xyz</ion-label>
-                </ion-item>
-            </div><br>
-            <div id="kalender">
-                <ion-datetime size="fixed" max="2100-01-01T00:00:00"></ion-datetime>
+            <ion-header style="height: 0.3%;"></ion-header>
+            <ion-list-header color='primary' router-link="/menu/dashboard/termine" id="header">
+                <ion-label>Termine</ion-label>
+            </ion-list-header>
+            <div v-if="termine.length > 0">
+                <ion-list v-for="termin in termine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
+                    <ion-item color="secondary">
+                        <ion-label>
+                            <h2>{{ termin.titel }}</h2>
+                            <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
             </div>
+            <div v-else>
+                <ion-item style="text-align: center;">
+                    <ion-label>
+                        <h2>Keine Termine für diesen Monat.</h2>
+                    </ion-label>
+                </ion-item>
+            </div>
+            <br>
+            <ion-datetime v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
+
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
                 <div>
@@ -60,8 +78,23 @@
             
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
+import {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonDatetime,
+    IonButtons,
+    IonMenuButton,
+    IonItem,
+    IonLabel,
+    IonList, IonListHeader
+} from '@ionic/vue';
+
 import axios from 'axios';
+import { computed, watch } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
     components: {
@@ -75,11 +108,40 @@ export default {
         IonButtons,
         IonMenuButton,
         IonLabel,
-        IonList
+        IonList, IonListHeader
+    },
+    setup() {
+        const store = useStore();
+
+        const termine = computed(() => {
+            const terminArr = store.getters.termine;
+            return terminArr;
+        });
+
+        const highlightedDates = computed(() => {
+            // Generate highlightedDates from your Vuex store data
+            return termine.value.map(termine => {
+                return {
+                    date: termine.datum, // Use the appropriate property from your termine data
+                    textColor: '#000000', // Customize as needed
+                    backgroundColor: '#D7D5D5', // Customize as needed
+                };
+            });
+        });
+
+        return {
+            highlightedDates,
+        };
     },
     data() {
         return {
-            usersList: []
+            usersList: [],
+            selectedDate: new Date().toISOString()
+        }
+    },
+    watch: {
+        selectedDate(newDate) {
+            this.updateMonthAndYear(newDate);
         }
     },
     methods: {
@@ -108,11 +170,42 @@ export default {
         getUsername() {
             return 'Username' + '!';
 
+        },
+        updateMonthAndYear(date) {
+            const dateObject = new Date(date);
+            const currentMonth = dateObject.getMonth();
+            const currentYear = dateObject.getFullYear();
+
+            console.log('Aktueller Monat:', currentMonth);
+            console.log('Aktuelles Jahr:', currentYear);
         }
     },
     mounted() {
         this.getData();
-    }
+    },
+    computed: {
+        termine() {
+            return this.$store.getters.termine;
+        },
+
+        // filteredTermine() {
+        //     const ios = document.getElementsByClassName("sc-ion-label-ios-h sc-ion-label-ios-s ios");
+        //     const md = document.getElementsByClassName("sc-ion-label-md-h sc-ion-label-md-s md");
+        //     const months = [
+        //         'January', 'February', 'March', 'April', 'May', 'June',
+        //         'July', 'August', 'September', 'October', 'November', 'December'
+        //     ];
+
+        //     if (ios.length > 0) {
+
+        //         const parts = ios.split
+
+        //     } else if (md.length > 0) {
+
+        //     }
+        // }
+    },
+
 }
 </script>
 
@@ -124,7 +217,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    background-color: #27292b;
 }
 
 #flexbox1 ion-item {
@@ -132,17 +224,13 @@ export default {
     width: 85px;
     text-align: center;
     border-radius: 20px;
-    background-color: #27292b;
-
 }
 
-.ios #flexbox1 ion-item {
+/* .ios #flexbox1 ion-item {
     margin: 1%;
     width: 85px;
     text-align: center;
-    background-color: #27292b;
-}
-
+} */
 
 #displayUsername {
     padding: 20px;
@@ -150,23 +238,29 @@ export default {
     text-align: center;
 }
 
-#zieleHeader {
-    background-color: #27292b;
-    height: 35px;
+#header {
+    /* height: 35px;
     padding-top: 8px;
-    padding-left: 25px;
+    padding-left: 25px; */
+    padding-right: 4%;
     font-size: larger;
-    text-align: left;
+    text-align: center;
 }
 
-#module {
-    height: 20px;
+.ios #header {
+    height: 0;
+    font-size: larger;
+    font-weight: lighter;
+    text-align: center;
+}
+
+.ios #header ion-label {
+    padding-bottom: 0.5%;
 }
 
 ion-datetime {
-    --background: #5f6332;
-    margin: auto;
+    --background: #ffffff;
+    color: black;
     border-radius: 16px;
-    box-shadow: rgba(var(--ion-color-rose-rgb), 0.3) 0px 10px 15px -3px;
 }
 </style>
