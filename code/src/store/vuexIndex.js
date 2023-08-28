@@ -1,41 +1,54 @@
 import { createStore } from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 
 const store = createStore({
     state() {
         return {
-            termine: [
-                {
-                    id: 't1',
-                    titel: 'App programmieren',
-                    datum: '22. Januar 2023',
-                    zeit: '16:00 Uhr',
-                    ort: 'kein ort',
-                    beschreibung: 'keine beschreibung'
-                },
-                {
-                    id: 't2',
-                    titel: 'Kollegen treffen',
-                    datum: '24. Januar 2023',
-                    zeit: '12:00 Uhr',
-                    ort: 'kein ort',
-                    beschreibung: 'keine beschreibung'
-                }
-            ],
-
-            selectedDate: null,
-
+            termine: [],
+            selectedDate: new Date(),
         }
     },
 
     mutations: {
         setSelectedDate(state, date) {
             state.selectedDate = date;
+        },
+
+        addTermin(state, terminData) {
+            const newTermin = {
+                id: terminData.enteredDatum + " " + terminData.enteredZeit,
+                titel: terminData.enteredTitel,
+                datum: terminData.enteredDatum,
+                zeit: terminData.enteredZeit,
+                ort: terminData.enteredOrt,
+                beschreibung: terminData.enteredBeschreibung
+            }
+            console.log(newTermin);
+            state.termine.push(newTermin);
+            state.termine.sort((a, b) => {
+                const dateA = new Date(`${a.datum} ${a.zeit}`);
+                const dateB = new Date(`${b.datum} ${b.zeit}`);
+                return dateA - dateB;
+            });
+        },
+
+        removeTermin(state, terminId) {
+            state.termine = state.termine.filter(termin => termin.id !== terminId);
         }
+
     },
 
     actions: {
         saveSelectedDate({ commit }, date) {
             commit('setSelectedDate', date);
+        },
+
+        addTermin(context, terminData) {
+            context.commit('addTermin', terminData);
+        },
+
+        deleteTermin(context, terminId) {
+            context.commit('removeTermin', terminId);
         }
     },
 
@@ -43,7 +56,7 @@ const store = createStore({
         termine(state) {
             return state.termine;
         },
-        
+
         termin(state) {
             return (terminId) => {
                 return state.termine.find(termin => termin.id === terminId);
@@ -53,7 +66,9 @@ const store = createStore({
         getSelectedDate(state) {
             return state.selectedDate;
         },
-    }
+    },
+
+    plugins: [createPersistedState()]
 });
 
 export default store;
