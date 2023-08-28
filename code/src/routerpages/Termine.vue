@@ -2,9 +2,11 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
-                <ion-buttons>
+                <ion-title>Termine</ion-title>
+                <ion-buttons slot="start">                
                     <ion-back-button color="primary" router-link="/menu/dashboard"></ion-back-button>
-                    <ion-title>Termine</ion-title>
+                </ion-buttons>
+                <ion-buttons slot="end">
                     <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>
             </ion-toolbar>

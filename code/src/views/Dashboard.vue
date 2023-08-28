@@ -2,8 +2,8 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
-                <ion-buttons>
-                    <ion-title>Dashboard</ion-title>
+                <ion-title>Dashboard</ion-title>
+                <ion-buttons slot="end">
                     <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>
             </ion-toolbar>
