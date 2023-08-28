@@ -20,7 +20,7 @@
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
     "axiom": "^0.1.6",
-    "axios": "^1.4.0",
+    "axios": "^1.5.0",
     "ionicons": "^7.0.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
