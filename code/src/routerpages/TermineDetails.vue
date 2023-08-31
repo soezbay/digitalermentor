@@ -12,20 +12,28 @@
 
         <ion-content>
             <ion-title v-if="!loadedTermin">Dieser Termin existiert nicht</ion-title>
-            <div v-else class="ion-padding">
-                <ion-header>
-                    <h1 class="ion-text-center">{{ loadedTermin.titel }}</h1>
+            <div v-else>
+                <ion-header style="text-align: center; padding: 8%;">
+                    <ion-label style="font-size: x-large; ">
+                        {{ loadedTermin.titel }}
+                    </ion-label>
                 </ion-header><br>
-                <ion-item>
-                    <ion-label>{{ loadedTermin.datum }}, {{ loadedTermin.zeit }}</ion-label>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Ort: {{ loadedTermin.ort }}</ion-label>
-                </ion-item>
-                <br>
-                <div>
-                    Beschreibung:<br><br>
-                    {{ loadedTermin.beschreibung }}
+                <div style="padding-left: 2%;">
+                    <ion-item>
+                        <ion-label style="font-size: larger;">
+                            Datum: {{ formattedDate }}<br><br>
+                            Uhrzeit: {{ loadedTermin.zeit }}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Ort: {{ loadedTermin.ort }}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>
+                            Beschreibung:<br><br>
+                            {{ loadedTermin.beschreibung }}
+                        </ion-label>
+                    </ion-item>
                 </div>
             </div>
         </ion-content>
@@ -75,6 +83,15 @@ export default {
     computed: {
         loadedTermin() {
             return this.$store.getters.termin(this.terminId);
+        },
+        formattedDate() {
+            const unformattedDate = this.loadedTermin.datum;
+            console.log(unformattedDate);
+            const dateParts = unformattedDate.split('-');
+            const year = dateParts[0];
+            const month = dateParts[1];
+            const day = dateParts[2];
+            return `${day}.${month}.${year}`;
         }
     },
     // watch: {

@@ -55,7 +55,8 @@
                 </ion-item>
             </div>
             <br>
-            <ion-datetime v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
+            <ion-datetime class="target-class" presentation="date" @ionChange="onDateChange" v-model="selectedDate"
+                :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
 
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
@@ -93,7 +94,7 @@ import {
 } from '@ionic/vue';
 
 import axios from 'axios';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
@@ -139,11 +140,6 @@ export default {
             selectedDate: new Date().toISOString()
         }
     },
-    watch: {
-        selectedDate(newDate) {
-            this.updateMonthAndYear(newDate);
-        }
-    },
     methods: {
         getData() {
             axios.get('http://localhost:8000/bewertung').then(Response => {
@@ -153,7 +149,6 @@ export default {
                 console.log(err);
             })
         },
-
         getGreeting() {
             const currentTime = new Date();
             const currentHour = currentTime.getHours();
@@ -166,18 +161,24 @@ export default {
                 return 'Schönen Abend';
             }
         },
-
         getUsername() {
             return 'Username' + '!';
 
         },
         updateMonthAndYear(date) {
             const dateObject = new Date(date);
-            const currentMonth = dateObject.getMonth();
+            const currentMonth = dateObject.getMonth() + 1;
             const currentYear = dateObject.getFullYear();
 
             console.log('Aktueller Monat:', currentMonth);
             console.log('Aktuelles Jahr:', currentYear);
+        },
+
+        onDateChange(event) {
+            const selectedDate = event.target.value.substring(0, 7);
+            console.log(selectedDate); // YYYY-MM date format
+
+            // Weitere Verarbeitung mit dem ausgewählten Datum
         }
     },
     mounted() {
@@ -187,23 +188,6 @@ export default {
         termine() {
             return this.$store.getters.termine;
         },
-
-        // filteredTermine() {
-        //     const ios = document.getElementsByClassName("sc-ion-label-ios-h sc-ion-label-ios-s ios");
-        //     const md = document.getElementsByClassName("sc-ion-label-md-h sc-ion-label-md-s md");
-        //     const months = [
-        //         'January', 'February', 'March', 'April', 'May', 'June',
-        //         'July', 'August', 'September', 'October', 'November', 'December'
-        //     ];
-
-        //     if (ios.length > 0) {
-
-        //         const parts = ios.split
-
-        //     } else if (md.length > 0) {
-
-        //     }
-        // }
     },
 
 }
