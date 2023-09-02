@@ -10,38 +10,28 @@
         </ion-header>
 
         <ion-content>
-            <IonGrid>
-                <IonRow>
-                    <ion-col>
-                        <div id="imageContainer">
-                            <img style="border-radius: 25px;" alt="" src="resources/SleepingKoala.jpg" />
-                            <div id="pb">
-                                <ion-avatar>
-                                    <img alt="" src="resources/icon.png" />
-                                </ion-avatar>
-                            </div>
-                        </div>
-                    </ion-col>
-                </IonRow>
-                <div style="height: 60px;"></div>
-                <ion-row>
-                    <ion-col style="text-align: center;">
-                        <div>
-                            <h1>Name</h1>
-                            <h4>Max Mustermann</h4>
+            <div id="imageContainer">
+                <img style="border-radius: 25px;" alt="" src="resources/KoalaSleeping.jpg" />
+                <div id="pb">
+                    <ion-avatar>
+                        <img alt="" src="resources/icon.png" />
+                    </ion-avatar>
+                </div>
+            </div>
+            <div style="height: 70px;"></div>
+            <div style="text-align: center;">
+                <h1>Name</h1>
+                <h4>Max Mustermann</h4>
 
-                            <h1>Studiengang</h1>
-                            <h4>Informatik (B.Sc)</h4>
+                <h1>Studiengang</h1>
+                <h4>Informatik (B.Sc)</h4>
 
-                            <h1>Fachsemster</h1>
-                            <h4 style="margin-bottom: 0px;">4</h4>
+                <h1>Fachsemster</h1>
+                <h4 style="margin-bottom: 0px;">4</h4>
 
-                            <h1>Email</h1>
-                            <h4>Max Mustermann</h4>
-                        </div>
-                    </ion-col>
-                </ion-row>
-            </IonGrid>
+                <h1>Email</h1>
+                <h4>Max Mustermann</h4>
+            </div>
         </ion-content>
     </ion-page>
 </template>
@@ -60,11 +50,7 @@ import {
     IonList,
     IonFab, IonFabButton,
     IonIcon,
-    IonAvatar,
-    IonRow,
-    IonCol,
-    IonGrid
-
+    IonAvatar
 } from '@ionic/vue';
 
 export default {
@@ -83,10 +69,7 @@ export default {
         IonFabButton,
         IonFab, IonFabButton,
         IonIcon,
-        IonAvatar,
-        IonRow,
-        IonCol,
-        IonGrid
+        IonAvatar
     }
 }
 </script>
@@ -94,6 +77,8 @@ export default {
 <style scoped>
 #imageContainer {
     position: relative;
+    margin: 5px;
+    margin-top: 10px;
 }
 
 #pb {
