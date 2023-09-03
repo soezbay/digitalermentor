@@ -32,6 +32,14 @@ const store = createStore({
             });
         },
 
+        updateTermin(state, updatedTermin) {
+            const index = state.termine.findIndex((termin) => termin.id === updatedTermin.id);
+            if (index !== -1) {
+              // Wenn der Termin gefunden wurde, aktualisieren Sie ihn
+              state.termine[index] = updatedTermin;
+            }
+          },
+
         removeTermin(state, terminId) {
             state.termine = state.termine.filter(termin => termin.id !== terminId);
         }
@@ -47,6 +55,10 @@ const store = createStore({
             context.commit('addTermin', terminData);
         },
 
+        updateTermin({ commit }, updatedTermin) {
+            commit('updateTermin', updatedTermin);
+          },
+
         deleteTermin(context, terminId) {
             context.commit('removeTermin', terminId);
         }
@@ -59,9 +71,13 @@ const store = createStore({
 
         termin(state) {
             return (terminId) => {
-                return state.termine.find(termin => termin.id === terminId);
+                return state.termine.find(termin =>  termin.id === terminId);
             };
         },
+
+        termin: (state) => (id) => {
+            return state.termine.find((termin) => termin.id === id);
+          },
 
         getSelectedDate(state) {
             return state.selectedDate;

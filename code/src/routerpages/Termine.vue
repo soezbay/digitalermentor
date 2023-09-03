@@ -19,12 +19,15 @@
                         <ion-item color="secondary">
                             <ion-label>
                                 <h2>{{ termin.titel }}</h2>
-                                <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
+                                <h3>{{ termin.ort }}</h3>
+                            </ion-label>
+                            <ion-label slot="end">
+                                <h2>{{ formatDate(termin.datum) }} - {{ termin.zeit }}</h2>
                             </ion-label>
                         </ion-item>
                         <ion-item-options>
-                            <ion-item-option color="danger" @click="deleteTermin(termin.id)">
-                                Delete
+                            <ion-item-option style="margin-bottom: 0.5px;" color="danger" @click="deleteTermin(termin.id)">
+                                <ion-icon slot="icon-only" :icon="trash"></ion-icon>
                             </ion-item-option>
                         </ion-item-options>
                     </ion-item-sliding>
@@ -63,7 +66,7 @@ import {
     IonItemSliding, IonItemOptions, IonItemOption,
 
 } from '@ionic/vue';
-import { add, colorPalette, document, globe } from 'ionicons/icons';
+import { add, trash } from 'ionicons/icons';
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 
@@ -95,9 +98,7 @@ export default {
         }
 
         const termine = computed(() => {
-
             const terminArr = store.getters.termine;
-
             return terminArr;
         });
 
@@ -112,16 +113,27 @@ export default {
             });
         });
 
+        const formatDate = (dateString) => {
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                const [year, month, day] = parts;
+                return `${day}.${month}.${year}`;
+            }
+            return dateString; // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+        };
+
         const deleteTermin = (terminId) => {
             store.dispatch('deleteTermin', terminId);
         };
 
         return {
-            add, colorPalette, document, globe,
+            add,
             selectedDate,
             highlightedDates,
             saveDate,
-            deleteTermin
+            formatDate,
+            deleteTermin,
+            trash
         };
     },
 
@@ -131,6 +143,7 @@ export default {
         }
     }
 }
+
 
 </script>
 

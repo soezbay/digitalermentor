@@ -37,12 +37,15 @@
             <ion-list-header color='primary' router-link="/menu/dashboard/termine" id="header">
                 <ion-label>Termine</ion-label>
             </ion-list-header>
-            <div v-if="termine.length > 0">
-                <ion-list v-for="termin in termine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
+            <div v-if="kommendeTermine.length > 0">
+                <ion-list v-for="termin in kommendeTermine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
                     <ion-item color="secondary">
                         <ion-label>
                             <h2>{{ termin.titel }}</h2>
-                            <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
+                            <h3>{{ termin.ort }}</h3>
+                        </ion-label>
+                        <ion-label slot="end">
+                            <h2>{{ formatDate(termin.datum) }} - {{ termin.zeit }}</h2>
                         </ion-label>
                     </ion-item>
                 </ion-list>
@@ -55,9 +58,9 @@
                 </ion-item>
             </div>
             <br>
-            <ion-datetime class="target-class" presentation="date" @ionChange="onDateChange" v-model="selectedDate"
-                :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
-
+            <ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover"
+                max="2100-01-01T00:00:00">
+            </ion-datetime>
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
                 <div>
@@ -130,8 +133,18 @@ export default {
             });
         });
 
+        const formatDate = (dateString) => {
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                const [year, month, day] = parts;
+                return `${day}.${month}.${year}`;
+            }
+            return dateString; // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+        };
+
         return {
             highlightedDates,
+            formatDate
         };
     },
     data() {
@@ -165,29 +178,20 @@ export default {
             return 'Username' + '!';
 
         },
-        updateMonthAndYear(date) {
-            const dateObject = new Date(date);
-            const currentMonth = dateObject.getMonth() + 1;
-            const currentYear = dateObject.getFullYear();
-
-            console.log('Aktueller Monat:', currentMonth);
-            console.log('Aktuelles Jahr:', currentYear);
-        },
-
-        onDateChange(event) {
-            const selectedDate = event.target.value.substring(0, 7);
-            console.log(selectedDate); // YYYY-MM date format
-
-            // Weitere Verarbeitung mit dem ausgewählten Datum
-        }
     },
     mounted() {
         this.getData();
     },
     computed: {
-        termine() {
-            return this.$store.getters.termine;
-        },
+        kommendeTermine() {
+        const currentDate = new Date();
+        const kommendeTermine = this.$store.getters.termine.filter(termin => {
+            const terminDate = new Date(termin.datum);
+            return terminDate >= currentDate;
+        });
+
+        return kommendeTermine.slice(0, 3); // Nur die ersten zwei Termine
+    }
     },
 
 }
