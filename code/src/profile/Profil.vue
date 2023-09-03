@@ -3,6 +3,11 @@
         <ion-header>
             <ion-toolbar>
                 <ion-title>Dein Profil</ion-title>
+                <ion-buttons slot="start">
+                    <ion-button color="primary" router-link="/menu/profil/changeProfile">
+                        <ion-icon slot="icon-only" :icon="create"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
                 <ion-buttons slot="end">
                     <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>
@@ -23,6 +28,9 @@
                 <h1>Name</h1>
                 <h4>Max Mustermann</h4>
 
+                <h1>Matrikel Nr.</h1>
+                <h4>202021000</h4>
+
                 <h1>Studiengang</h1>
                 <h4>Informatik (B.Sc)</h4>
 
@@ -30,13 +38,14 @@
                 <h4 style="margin-bottom: 0px;">4</h4>
 
                 <h1>Email</h1>
-                <h4>Max Mustermann</h4>
+                <h4>max.mustermann@studmail.w-hs.de</h4>
             </div>
         </ion-content>
     </ion-page>
 </template>
 
 <script>
+import { create } from 'ionicons/icons';
 import {
     IonPage,
     IonHeader,
@@ -44,7 +53,7 @@ import {
     IonTitle,
     IonContent,
     IonDatetime,
-    IonButtons, IonBackButton, IonMenuButton,
+    IonButtons, IonBackButton, IonMenuButton, IonButton,
     IonItem,
     IonLabel,
     IonList,
@@ -62,7 +71,7 @@ export default {
         IonContent,
         IonDatetime,
         IonItem,
-        IonButtons, IonBackButton, IonMenuButton,
+        IonButtons, IonBackButton, IonMenuButton, IonButton,
         IonLabel,
         IonList,
         IonFab,
@@ -70,6 +79,9 @@ export default {
         IonFab, IonFabButton,
         IonIcon,
         IonAvatar
+    },
+    setup() {
+        return { create };
     }
 }
 </script>

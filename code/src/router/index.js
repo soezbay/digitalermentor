@@ -64,6 +64,10 @@ const routes = [
   {
     path: '/menu/profil',
     component: Profil
+  },
+  {
+    path: '/menu/profil/changeProfile',
+    component: () => import('../profile/changeProfile.vue')
   }
 
 ]
