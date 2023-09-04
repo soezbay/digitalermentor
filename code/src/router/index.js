@@ -59,6 +59,11 @@ const routes = [
     path: '/menu/dashboard/termine/add_termin',
     component: () => import('../routerpages/AddTermin.vue')
   },
+  {
+    path: '/deineziele',
+    name: 'Ziele',
+    component: () => import('../views/DeineZiele.vue')
+  },
 ]
 
 const router = createRouter({
