@@ -4,6 +4,7 @@ import createPersistedState from 'vuex-persistedstate';
 const store = createStore({
     state() {
         return {
+            userData: [],
             termine: [],
             selectedDate: new Date(),
         }
@@ -53,6 +54,10 @@ const store = createStore({
     },
 
     getters: {
+        userData(state) {
+            return state.userData;
+        },
+        
         termine(state) {
             return state.termine;
         },
