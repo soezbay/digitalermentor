@@ -1,25 +1,23 @@
 <template>
   <ion-app>
-    <ion-menu side="end" content-id="main-content">
-      <ion-content class="ion-padding">
-        <ion-toolbar>
-          <ion-menu-toggle>
-            <ion-icon class="ion-float-right" :src = "close" id="close-button"></ion-icon>
-          </ion-menu-toggle>
-        </ion-toolbar>
-        <ion-list>            
+    <ion-split-pane content-id="main-content">
+      <ion-menu side="end" content-id="main-content" type="overlay">
+        <ion-content class="ion-padding">
+          <ion-list>
+            <ion-list-header>Digitaler Mentor</ion-list-header>
+            <hr class="solid">
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
-                <ion-label>{{ p.title }}</ion-label>
-              </ion-item>
+                <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
+                  :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+                  <ion-label>{{ p.title }}</ion-label>
+                </ion-item>
+                <hr v-if="i === appPages.length - 3" class="solid">
             </ion-menu-toggle>
           </ion-list>
-      </ion-content>
-    </ion-menu>
-    <ion-page>
-      <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
+        </ion-content>
+      </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
-    </ion-page>
+    </ion-split-pane>
   </ion-app>
 </template>
 
@@ -86,7 +84,7 @@ const appPages = [
     iosIcon: archiveOutline,
     mdIcon: archiveSharp,
   },
-  
+
   {
     title: 'Modulbeschreibung',
     url: '/menu/modulbeschreibung',
@@ -107,48 +105,49 @@ const appPages = [
   },
 ];
 
-
 const path = window.location.pathname.split('menu/')[1];
 if (path !== undefined) {
   selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
 }
+
 </script>
 
 <style scoped>
+hr.solid {
+  border-top: 3px solid #757e1b;
+}
+
+ion-menu ion-content ion-list-header {
+  --background: var(--ion-color-primary);
+  text-align: left;
+  padding: 10px;
+  font-size: x-large;
+  color: var(--ion-color-light);
+}
+
 ion-menu {
-  --min-width: 100%;
+  --min-width: 70%;
 }
 
 ion-menu ion-content {
   --background: var(--ion-color-primary);
 }
 
-ion-menu ion-toolbar {
-  --background: none;
-  padding:0;
-}
+ion-menu ion-list {
+  padding: 5px 0;
+  background: var(--ion-color-primary);
 
-#close-button {
-  margin-right: auto;
-  margin-top: 0px;
-  font-size: xx-large; 
-  font: bold;
 }
 
 ion-menu ion-item {
   --background: var(--ion-color-primary);
-  text-align: center;
+  text-align: left;
   padding: 10px;
-  font-size: x-large;
+  font-size: larger;
   color: var(--ion-color-light);
-  font: bold; 
 }
 
 ion-menu ion-item.selected {
-  text-decoration: underline;
-}
-
-ion-menu ion-list {
-  background: var(--ion-color-primary);
+  background-color: #6b8e23;
 }
 </style>
