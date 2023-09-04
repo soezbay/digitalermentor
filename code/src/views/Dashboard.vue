@@ -38,7 +38,7 @@
                 <ion-label>Termine</ion-label>
             </ion-list-header>
             <div v-if="termine.length > 0">
-                <ion-list v-for="termin in termine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
+                <ion-list v-for="termin in termine" :key="termin.id" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
                     <ion-item color="secondary">
                         <ion-label>
                             <h2>{{ termin.titel }}</h2>

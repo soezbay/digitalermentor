@@ -2,14 +2,13 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons>
+        <div class="title-block">
           <ion-title>Modulübersicht</ion-title>
-          <ion-menu-button color="primary"></ion-menu-button>
-        </ion-buttons>
+        </div>
       </ion-toolbar>
     </ion-header>
     <ion-content>
-
+      
       <!-- Studiengangauswahl aus Datenbank -->
       <ion-item>
         <ion-select v-model="selectedStudiengang" label="Studiengang" placeholder="Studiengang auswählen">
@@ -19,6 +18,9 @@
         </ion-select>
       </ion-item>
 
+      <!-- ModulSearch -->
+      <ion-searchbar v-model="searchQuery" placeholder="Modul suchen"></ion-searchbar>
+      
       <!-- Module aus Datenbank -->
 
       <!-- Moduldarstellung-->
@@ -36,14 +38,15 @@
             </ion-list-header>
           </ion-list-header>
           <ion-row class="semesterBlock">
-            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index"  @click="openModal(module)">
+            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index"
+              @click="toggleDescription(semesterIndex, index)">
               <ion-label>{{ module.name }}</ion-label>
 
-              <!-- Kurze Modulbeschreibung -->
-              <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
+      <!-- Kurze Modulbeschreibung -->
+       <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
 
-              <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
-              <!-- <ion-text v-if="module.showDescription">
+      <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
+            <!-- <ion-text v-if="module.showDescription">
                 <a @click="showModuleDetails(module.name)">Modulbeschreibung </a>
                 <a @click="showModuleRating(module.name)"> Bewertung </a>
                 </ion-text> -->
@@ -56,37 +59,16 @@
   </ion-page>
 </template>
 
+
+
 <script>
 
-
-import {
-  IonButtons,
-  IonMenuButton,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonSearchbar,
-  IonSelectOption,
-  IonSelect,
-  IonContent,
-  IonHeader,
-  IonListHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  modalController
-} from '@ionic/vue';
+import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import axios from 'axios';
-import Modal from "./Modulbeschreibung.vue";
 
 
 export default {
   components: {
-    IonButtons,
-    IonMenuButton,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonSearchbar,
     IonSelectOption,
     IonSelect,
@@ -95,11 +77,10 @@ export default {
     IonPage,
     IonTitle,
     IonToolbar,
-
-    IonListHeader,
-    modalController
+    IonListHeader
   },
 
+  
   name: "ModulUebersicht",
   data() {
     return {
@@ -108,6 +89,7 @@ export default {
       studiengaenge: [],
       wahlpflichtModule: [],
       pflichtModule: [],
+      searchQuery: '',
       moduleSemesters: [
         [
           { name: "LDS", description: "Logik und diskrete Strukturen (LDS)", showDescription: false },
@@ -211,31 +193,31 @@ export default {
     toggleDescription(semesterIndex, moduleIndex) {
       this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
     },
-
-    async openModal(selectedModul) {
-      const modal = await modalController
-        .create({
-          component: Modal,
-          componentProps: {
-            selectedModul: selectedModul,
-          },
-        })
-        .then((modal) => {
-          modal.present();
-        });
-    },
   },
+  computed: {
+    filteredModuleSemesters() {
+      if (!this.searchQuery) {
+        return this.moduleSemesters;
+      }
+      const lowerCaseQuery = this.searchQuery.toLowerCase();
+      return this.moduleSemesters.map(semesterModules => {
+        return semesterModules.filter(module => module.name.toLowerCase().includes(lowerCaseQuery));
+      });
+    }
+  }
 };
+
+
 </script>
+
 
 <style scoped>
 .title-block {
-	background-color: #8c99004d;
-	border-radius: 15px;
-	padding: 10px;
-	text-align: center;
+  background-color: #8C99004D;
+  border-radius: 15px;
+  padding: 10px;
+  text-align: center;
 }
-
 .modulBlock {
   margin: 1%;
   width: 85px;
@@ -245,7 +227,6 @@ export default {
   color: #000000;
   text-align: center;
 }
-
 .modulfont {
   font-size: 16px;
   font-weight: 350;
@@ -253,12 +234,10 @@ export default {
   letter-spacing: 0em;
   text-align: left;
 }
-
 .semesterBlock {
   border-radius: 15px;
   background: #8C99004D;
 }
-
 ion-col {
   background-color: #135d54;
   border: solid 3px #fff;
