@@ -3,6 +3,7 @@ import Dashboard from '../views/Dashboard.vue';
 import Moduluebersicht from '../views/Moduluebersicht.vue';
 import Ziele from '../views/Ziele.vue';
 import Termine from '../routerpages/Termine.vue';
+import Studienverlauf from '../views/Studienverlauf.vue';
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
 
@@ -58,6 +59,14 @@ const routes = [
   {
     path: '/menu/dashboard/termine/add_termin',
     component: () => import('../routerpages/AddTermin.vue')
+  },
+  {
+    path: '/studienverlauf',
+    component: Studienverlauf
+  },
+  {
+    path: '/menu/studienverlauf',
+    component: Studienverlauf
   },
 ]
 
