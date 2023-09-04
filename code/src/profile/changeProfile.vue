@@ -10,46 +10,44 @@
         </ion-header>
 
         <ion-content>
-            <div style="height: 40px;"></div>
+            <div style="height: 30px;"></div>
             <form action="">
-                <ion-avatar style="margin: auto;">
-                    <img alt="" src="resources/icon.png" />
+                <ion-avatar style="margin: auto;" v-on:click="pickAvatarImage">
+                    <img alt="" :src="avatarImage" />
                 </ion-avatar>
+
                 <ion-list>
                     <ion-item>
                         <ion-label position="fixed">Vorname:</ion-label>
-                        <ion-input type="text" required/>
+                        <ion-input type="text" required />
                     </ion-item>
                     <ion-item>
                         <ion-label position="fixed">Nachname:</ion-label>
-                        <ion-input type="text" required/>
+                        <ion-input type="text" required />
                     </ion-item>
                     <ion-item>
                         <ion-label position="fixed">Studiengang:</ion-label>
-                        <ion-input type="number" required/>
+                        <ion-input type="number" required />
                     </ion-item>
                     <ion-item>
                         <ion-label position="fixed">Semester:</ion-label>
-                        <ion-input type="text" required/>
+                        <ion-input type="text" required />
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="stacked">Email:</ion-label>
+                        <ion-input type="email" required />
                     </ion-item>
                     <br><br>
                     <ion-item>
-                        <ion-label position="stacked">Email:</ion-label>
-                        <ion-input type="email" required/>
-                    </ion-item>
-                    <ion-item>
                         <ion-label position="stacked">Passwort:</ion-label>
-                        <ion-input type="text" required/>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label position="stacked">Passwort wiederholen</ion-label>
-                        <ion-input type="password" required/>
+                        <ion-input type="text" required />
                     </ion-item>
                     <ion-toolbar class="ion-padding">
-                    <ion-buttons>
-                        <ion-button style="margin: auto;" type="submit" fill="solid" color="primary">Übernehmen</ion-button>
-                    </ion-buttons>
-                </ion-toolbar>
+                        <ion-buttons>
+                            <ion-button style="margin: auto;" type="submit" fill="solid"
+                                color="primary">Übernehmen</ion-button>
+                        </ion-buttons>
+                    </ion-toolbar>
                 </ion-list>
             </form>
         </ion-content>
@@ -57,6 +55,7 @@
 </template>
 
 <script>
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import {
     IonPage,
     IonHeader,
@@ -88,10 +87,31 @@ export default {
         IonList,
         IonFab,
         IonFabButton,
-        IonFab, IonFabButton,
         IonIcon,
         IonAvatar,
         IonInput
+    },
+    data() {
+        return {
+            avatarImage: 'resources/icon.png' // Hier wird das Standardbild festgelegt
+        };
+    },
+    methods: {
+        async pickAvatarImage() {
+            try {
+                const image = await Camera.getPhoto({
+                    quality: 80,
+                    allowEditing: false, // Setzen Sie dies auf true, wenn Sie das Bild zuschneiden möchten
+                    resultType: CameraResultType.Uri, // Verwenden Sie Uri, um die URI des Bildes zu erhalten
+                    source: CameraSource.Photos // Hier können Sie die Quelle auswählen, z.B. CameraSource.Camera für die Kamera
+                });
+
+                // Aktualisieren Sie das Avatar-Bild mit der ausgewählten URI
+                this.avatarImage = image.webPath;
+            } catch (error) {
+                console.error('Fehler beim Hochladen des Bildes:', error);
+            }
+        }
     }
 }
 </script>
