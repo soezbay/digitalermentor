@@ -76,7 +76,6 @@ export default {
         IonList,
         IonFab,
         IonFabButton,
-        IonFab, IonFabButton,
         IonIcon,
         IonAvatar
     },
