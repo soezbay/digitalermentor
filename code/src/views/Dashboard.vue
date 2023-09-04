@@ -37,12 +37,15 @@
             <ion-list-header color='primary' router-link="/menu/dashboard/termine" id="header">
                 <ion-label>Termine</ion-label>
             </ion-list-header>
-            <div v-if="termine.length > 0">
-                <ion-list v-for="termin in termine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
+            <div v-if="kommendeTermine.length > 0">
+                <ion-list v-for="termin in kommendeTermine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
                     <ion-item color="secondary">
                         <ion-label>
                             <h2>{{ termin.titel }}</h2>
-                            <h3>{{ termin.datum }}, {{ termin.zeit }}</h3>
+                            <h3>{{ termin.ort }}</h3>
+                        </ion-label>
+                        <ion-label slot="end">
+                            <h2>{{ formatDate(termin.datum) }} - {{ termin.zeit }}</h2>
                         </ion-label>
                     </ion-item>
                 </ion-list>
@@ -55,8 +58,9 @@
                 </ion-item>
             </div>
             <br>
-            <ion-datetime v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
-
+            <ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover"
+                max="2100-01-01T00:00:00">
+            </ion-datetime>
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
                 <div>
@@ -93,7 +97,7 @@ import {
 } from '@ionic/vue';
 
 import axios from 'axios';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
@@ -129,19 +133,24 @@ export default {
             });
         });
 
+        const formatDate = (dateString) => {
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                const [year, month, day] = parts;
+                return `${day}.${month}.${year}`;
+            }
+            return dateString; // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+        };
+
         return {
             highlightedDates,
+            formatDate
         };
     },
     data() {
         return {
             usersList: [],
             selectedDate: new Date().toISOString()
-        }
-    },
-    watch: {
-        selectedDate(newDate) {
-            this.updateMonthAndYear(newDate);
         }
     },
     methods: {
@@ -153,7 +162,6 @@ export default {
                 console.log(err);
             })
         },
-
         getGreeting() {
             const currentTime = new Date();
             const currentHour = currentTime.getHours();
@@ -166,44 +174,24 @@ export default {
                 return 'Schönen Abend';
             }
         },
-
         getUsername() {
             return 'Username' + '!';
 
         },
-        updateMonthAndYear(date) {
-            const dateObject = new Date(date);
-            const currentMonth = dateObject.getMonth();
-            const currentYear = dateObject.getFullYear();
-
-            console.log('Aktueller Monat:', currentMonth);
-            console.log('Aktuelles Jahr:', currentYear);
-        }
     },
     mounted() {
         this.getData();
     },
     computed: {
-        termine() {
-            return this.$store.getters.termine;
-        },
+        kommendeTermine() {
+        const currentDate = new Date();
+        const kommendeTermine = this.$store.getters.termine.filter(termin => {
+            const terminDate = new Date(termin.datum);
+            return terminDate >= currentDate;
+        });
 
-        // filteredTermine() {
-        //     const ios = document.getElementsByClassName("sc-ion-label-ios-h sc-ion-label-ios-s ios");
-        //     const md = document.getElementsByClassName("sc-ion-label-md-h sc-ion-label-md-s md");
-        //     const months = [
-        //         'January', 'February', 'March', 'April', 'May', 'June',
-        //         'July', 'August', 'September', 'October', 'November', 'December'
-        //     ];
-
-        //     if (ios.length > 0) {
-
-        //         const parts = ios.split
-
-        //     } else if (md.length > 0) {
-
-        //     }
-        // }
+        return kommendeTermine.slice(0, 3); // Nur die ersten zwei Termine
+    }
     },
 
 }

@@ -17,26 +17,21 @@
                 <ion-list>
                     <ion-item>
                         <ion-label position="fixed">Titel</ion-label>
-                        <ion-input type="text" required v-model="enteredTitel"/>
+                        <ion-input type="text" required v-model="enteredTitel" />
                     </ion-item>
-                    <ion-item>
-                        <ion-label position="fixed">Datum</ion-label>
-                        <ion-input type="date" :value="formattedDate" required></ion-input>
-                    </ion-item>
+                    <ion-datetime :presentation="'date'" size="cover" v-model="enteredDatum"
+                            display-format="YYYY-MM-DD" required></ion-datetime>
                     <ion-item>
                         <ion-label position="fixed">Uhrzeit</ion-label>
-                        <ion-input v-model="inputValueTime" required />
-                        <ion-button id="open-picker">Ändern</ion-button>
-                        <ion-picker trigger="open-picker" :columns="pickerColumnsTime"
-                            :buttons="pickerButtonsTime"></ion-picker>
+                        <ion-input type="time" v-model="enteredZeit" required />
                     </ion-item>
                     <ion-item>
                         <ion-label position="fixed">Ort</ion-label>
-                        <ion-input type="text" v-model="enteredOrt"/>
+                        <ion-input type="text" v-model="enteredOrt" />
                     </ion-item>
                     <ion-item>
                         <ion-label position="floating">Beschreibung</ion-label>
-                        <ion-textarea rows="5" v-model="enteredBeschreibung"/>
+                        <ion-textarea rows="5" v-model="enteredBeschreibung" />
                     </ion-item>
                 </ion-list>
                 <ion-toolbar class="ion-padding">
@@ -77,14 +72,44 @@ export default {
         IonIcon,
         IonTextarea, IonInput,
     },
-    setup() {
-      
-        const store = useStore();
-        const inputValueTime = ref(''); // Initialisieren Sie inputValue mit leerem String
-        const inputValueDate = ref('');
+    data() {
+        return {
+            enteredTitel: '',
+            enteredDatum: '',
+            enteredZeit: '',
+            enteredOrt: '',
+            enteredBeschreibung: '',
+        }
 
-        const formattedDate = computed(() => {
+    },
+    mounted() {
+        // Hier setzen wir enteredDatum und enteredZeit auf die entsprechenden Werte
+        this.enteredDatum = this.getDate();
+        this.enteredZeit = this.getTime();
+    },
+    methods: {
+        saveTermin(terminData) {
+            console.log('3. Dispatching in Vuex Store......................');
+            this.$store.dispatch('addTermin', terminData);
+            console.log('4. Replace URL......................');
+            this.$router.go(-1);
+        },
 
+        submitFormTermin() {
+            console.log('1. Sende Termin Daten......................')
+            const terminData = {
+                enteredTitel: this.enteredTitel,
+                enteredDatum: this.enteredDatum,
+                enteredZeit: this.enteredZeit,
+                enteredOrt: this.enteredOrt,
+                enteredBeschreibung: this.enteredBeschreibung,
+            };
+            console.log(terminData);
+            console.log('2. Call Emit......................');
+            this.saveTermin(terminData);
+        },
+        getDate() {
+            const store = useStore();
             const selectedDate = store.getters.getSelectedDate;
             console.log('SelectedDate:' + selectedDate)
 
@@ -98,106 +123,14 @@ export default {
             const formatted = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
             console.log('formattedDate in compute:' + formatted);
             return formatted;
-        });
-
-        console.log(formattedDate);
-
-
-        const formattedTime = computed(() => {
+        },
+        getTime() {
+            const store = useStore();
             const selectedDate = store.getters.getSelectedDate;
             const formatted = selectedDate ? selectedDate.toLocaleString().slice(0, -3) : '';
 
             return formatted.slice(-5);
-        });
-
-        const generateOptions = (maxValue) => {
-            const optionsArray = [];
-            for (let i = 0; i < maxValue; i++) {
-                const value = i.toString().padStart(2, '0'); // Füllen Sie mit führender Null auf, wenn nötig
-                optionsArray.push({
-                    text: value,
-                    value
-                });
-            }
-            return optionsArray;
-        };
-
-        const pickerColumnsTime = [
-            {
-                name: 'hours',
-                options: generateOptions(24) // Generieren Sie Optionen für Stunden (0 bis 23)
-            },
-            {
-                name: 'minutes',
-                options: generateOptions(60) // Generieren Sie Optionen für Minuten (0 bis 59)
-            }
-        ];
-
-        const pickerButtonsTime = [
-            {
-                text: 'Abbrechen',
-                role: 'cancel'
-            },
-            {
-                text: 'Übernehmen',
-                handler: (value) => {
-                    const selectedHours = value.hours.value;
-                    const selectedMinutes = value.minutes.value;
-
-                    inputValueTime.value = `${selectedHours}:${selectedMinutes}`;
-                }
-            }
-        ];
-
-
-
-        inputValueTime.value = formattedTime.value;
-        inputValueDate.value = formattedDate;
-
-
-        return {
-            // selectedDate,
-            inputValueTime,
-            inputValueDate,
-            formattedDate,
-            formattedTime,
-            pickerColumnsTime,
-            pickerButtonsTime,
-        };
-    },
-
-    data() {
-        return {
-            enteredTitel: '',
-            enteredDatum: '',
-            enteredZeit: '',
-            enteredOrt: '',
-            enteredBeschreibung: '',
         }
-
     },
-
-    methods: {
-        saveTermin(terminData) {
-            console.log('3. Dispatching in Vuex Store......................');
-            this.$store.dispatch('addTermin', terminData);
-            console.log('4. Replace URL......................');
-            this.$router.go(-1);
-        },
-
-        submitFormTermin() {
-            console.log('1. Sende Termin Daten......................')
-            const terminData = { 
-                enteredTitel: this.enteredTitel,
-                enteredDatum: this.formattedDate,
-                enteredZeit: this.formattedTime,
-                enteredOrt: this.enteredOrt,
-                enteredBeschreibung: this.enteredBeschreibung,           
-            };
-            console.log(terminData);
-            console.log('2. Call Emit......................');
-            this.saveTermin(terminData);
-        }
-    }
 }
 </script>
