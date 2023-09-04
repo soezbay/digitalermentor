@@ -10,10 +10,12 @@ app.use(cors());
 const modulRoutes = require('./routes/modulroutes');
 const bewertungsRoutes = require('./routes/bewetungroutes');
 const studiengangRoutes = require('./routes/studiengangroutes');
+const modulZielRoutes = require('./routes/modulZielroutes');
 
 app.use('/modul', modulRoutes);
 app.use('/bewertung', bewertungsRoutes);
 app.use('/studiengang', studiengangRoutes);
+app.use('/modulZiel', modulZielRoutes);
 
 //Global Error Handler
 app.use((err,req,res,next) => {
