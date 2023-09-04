@@ -86,15 +86,22 @@ const appPages = [
     iosIcon: archiveOutline,
     mdIcon: archiveSharp,
   },
+  
   {
-    title: 'Einstellungen',
-    url: '/menu/einstellungen',
+    title: 'Modulbeschreibung',
+    url: '/menu/modulbeschreibung',
     iosIcon: trashOutline,
     mdIcon: trashSharp,
   },
   {
-    title: 'Modulbeschreibung',
-    url: '/menu/modulbeschreibung',
+    title: 'Profil',
+    url: '/menu/profil',
+    iosIcon: trashOutline,
+    mdIcon: trashSharp,
+  },
+  {
+    title: 'Einstellungen',
+    url: '/menu/einstellungen',
     iosIcon: trashOutline,
     mdIcon: trashSharp,
   },
