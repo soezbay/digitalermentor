@@ -45,7 +45,7 @@ import {
   settingsOutline
 } from 'ionicons/icons';
 
-const selectedIndex = ref(1);
+const selectedIndex = ref(0);
 const appPages = [
   {
     title: 'Dashbord',
