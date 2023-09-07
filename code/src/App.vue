@@ -2,18 +2,20 @@
   <ion-app>
     <ion-split-pane content-id="main-content">
       <ion-menu side="end" content-id="main-content" type="overlay">
-        <ion-content class="ion-padding">
-          <ion-list>
+        <ion-content>
+          <ion-list class="padding">
             <ion-list-header>Digitaler Mentor</ion-list-header>
             <hr class="solid">
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
                 <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
                   :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+                  <ion-icon aria-hidden="true" :md="p.mdIcon" style="margin-right: 15px; color: antiquewhite;"></ion-icon>
                   <ion-label>{{ p.title }}</ion-label>
                 </ion-item>
                 <hr v-if="i === appPages.length - 3" class="solid">
             </ion-menu-toggle>
           </ion-list>
+          <ion-icon class="filter" style="font-size: 275px; float: right; padding-top: 10px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
@@ -21,41 +23,26 @@
   </ion-app>
 </template>
 
-
 <script setup>
+import { ref } from 'vue';
 import {
   IonApp,
   IonContent,
   IonIcon,
   IonItem,
   IonLabel,
-  IonList,
-  IonListHeader,
-  IonMenu,
-  IonMenuToggle,
-  IonNote,
+  IonList, IonListHeader,
+  IonMenu, IonMenuToggle,
   IonRouterOutlet,
   IonSplitPane,
-  IonNav,
 } from '@ionic/vue';
-import { ref } from 'vue';
 import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  toggle,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
-  close,
+  desktopOutline,
+  bookOutline,
+  schoolOutline,
+  rocketOutline,
+  personOutline,
+  settingsOutline
 } from 'ionicons/icons';
 
 const selectedIndex = ref(1);
@@ -63,45 +50,32 @@ const appPages = [
   {
     title: 'Dashbord',
     url: '/menu/dashboard',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    mdIcon: desktopOutline,
   },
   {
     title: 'Modulübersicht',
     url: '/menu/moduluebersicht',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
+    mdIcon: bookOutline,
   },
   {
     title: 'Studienverlauf',
     url: '/menu/studienverlauf',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp,
+    mdIcon: schoolOutline,
   },
   {
     title: 'Studienziele',
     url: '/menu/studienziele',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-  },
-
-  {
-    title: 'Modulbeschreibung',
-    url: '/menu/modulbeschreibung',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
+    mdIcon: rocketOutline,
   },
   {
     title: 'Profil',
     url: '/menu/profil',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
+    mdIcon: personOutline,
   },
   {
     title: 'Einstellungen',
     url: '/menu/einstellungen',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
+    mdIcon: settingsOutline,
   },
 ];
 
@@ -109,18 +83,25 @@ const path = window.location.pathname.split('menu/')[1];
 if (path !== undefined) {
   selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
 }
-
 </script>
 
 <style scoped>
 hr.solid {
-  border-top: 3px solid #757e1b;
+  border-top: 5px solid #757e1b;
+}
+.filter {
+ filter: opacity(0.45);
+}
+.padding {
+  padding: 10px;
 }
 
-ion-menu ion-content ion-list-header {
+ion-list-header {
+
   --background: var(--ion-color-primary);
   text-align: left;
-  padding: 10px;
+  padding: 5px;
+  padding-left: 45px;
   font-size: x-large;
   color: var(--ion-color-light);
 }
@@ -140,14 +121,16 @@ ion-menu ion-list {
 }
 
 ion-menu ion-item {
+  border-radius: 25px;
   --background: var(--ion-color-primary);
   text-align: left;
-  padding: 10px;
+  margin: 5px;
+  padding: 5px;
   font-size: larger;
   color: var(--ion-color-light);
 }
 
 ion-menu ion-item.selected {
-  background-color: #6b8e23;
+  --background: #757e1b;
 }
 </style>
