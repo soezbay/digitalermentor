@@ -12,19 +12,5 @@ class Benutzer{
         this.Einstellung = Einstellung;
         this.Kuerzel = Kuerzel;
     }
-
-
-// async getBenutzer(BenutzerID) {
-    
-//     let sql = `Insert into ModulZiel values(
-//         '${this.ZielID}',
-//         '${this.Titel}',
-//          ${this.Semester},
-//         '${this.BenutzerID}',
-//         '${this.Kuerzel}'
-//     )`;
-//     const [newZiel, _] = await database.execute(sql);
-
-//     return newZiel;
-//     }
 }
+module.exports = Benutzer;

@@ -28,11 +28,22 @@ exports.getModul = async (req, res, next) => {
             let studiengang = req.params.Studiengang;
             const [modul, _] = await Modul.findModul(modul1, studiengang);
 
-            console.log("Received modul:", modul); // Fügen Sie diese Zeile hinzu
+          //  console.log("Received modul:", modul); // Fügen Sie diese Zeile hinzu
 
             res.status(200).json({modul});
         }catch (error) {
            console.log(error);
             next(error);
         }
+};
+
+exports.getModuleMitStatus = async (req, res, next) => {
+    try{
+         let BenutzerID	 = req.params.BenutzerID;
+         const [modul, _] = await Modul.findModuleMitStatus(BenutzerID);
+         res.status(200).json({modul});
+     }catch (error) {
+        console.log(error);
+         next(error);
+     }
 };
