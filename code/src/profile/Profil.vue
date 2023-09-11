@@ -2,8 +2,13 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
-                <ion-title>Dein Profil</ion-title>
                 <ion-buttons slot="start">
+                    <ion-button router-link="/menu/dashboard">
+                        <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+                <ion-title>Dein Profil</ion-title>
+                <ion-buttons slot="end">
                     <ion-button color="primary" router-link="/menu/profil/changeProfile">
                         <ion-icon slot="icon-only" :icon="create"></ion-icon>
                     </ion-button>

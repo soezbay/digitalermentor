@@ -2,6 +2,11 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
+                <ion-buttons slot="start">
+                    <ion-button router-link="/menu/dashboard">
+                        <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
                 <ion-title>Dashboard</ion-title>
                 <ion-buttons slot="end">
                     <ion-menu-button color="primary"></ion-menu-button>
@@ -89,11 +94,12 @@ import {
     IonTitle,
     IonContent,
     IonDatetime,
-    IonButtons,
+    IonButtons, IonButton,
     IonMenuButton,
     IonItem,
     IonLabel,
-    IonList, IonListHeader
+    IonList, IonListHeader,
+    IonIcon
 } from '@ionic/vue';
 
 import axios from 'axios';
@@ -109,10 +115,11 @@ export default {
         IonContent,
         IonDatetime,
         IonItem,
-        IonButtons,
+        IonButtons, IonButton,
         IonMenuButton,
         IonLabel,
-        IonList, IonListHeader
+        IonList, IonListHeader,
+        IonIcon
     },
     setup() {
         const store = useStore();
