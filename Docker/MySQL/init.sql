@@ -14,6 +14,7 @@ Create Table Studiengang (
 
 Create Table Benutzer (
 	BenutzerID varchar(10) Primary Key,
+	Martrikelnummer int,
 	Vorname varchar(50),
 	Nachname varchar(50),
 	Fachsemester int,
@@ -118,7 +119,7 @@ Create Table Note (
 	PruefungsID varchar(10),
 	BenutzerID varchar(10),
 	Note smallint,
-	Status varchar(10),
+	Status varchar(20),
 	Versuch smallint,
 	CONSTRAINT NotenID PRIMARY KEY (PruefungsID, BenutzerID),
 	FOREIGN KEY (PruefungsID) REFERENCES Pruefung(PruefungsID),
@@ -244,7 +245,7 @@ Insert Into Pflicht Value("PI", "KBIN",6);
 Insert Into Wahlpflicht Value("PI", "KI",4);
 Insert Into Wahlpflicht Value("PI", "BKV",4);
 
-INSERT INTO Benutzer Value("Test123", "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
+INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
 
 Insert Into Ziel Value("Test1", "ADS", "Test123");
 Insert Into Ziel Value("Test2", "MIN", "Test123");
@@ -257,3 +258,15 @@ Insert Into ModulZiel Value("Test2", "MIN", 2, "Test123", "MIN");
 Insert Into ModulZiel Value("Test3", "OPR", 2, "Test123", "OPR");
 Insert Into ModulZiel Value("Test4", "THI", 2, "Test123", "THI");
 Insert Into ModulZiel Value("Test5", "REN", 2, "Test123", "REN");
+
+Insert Into Pruefung Value("PID1", 1, '2023-09-04 12:00:00', "EPR" );
+Insert Into Pruefung Value("PID2", 1, '2023-09-03 12:00:00', "GMI" );
+Insert Into Pruefung Value("PID3", 1, '2023-09-02 12:00:00', "LDS" );
+Insert Into Pruefung Value("PID4", 2, '2023-09-02 12:00:00', "GMI" );
+
+
+
+Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
+Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 1);
+Insert Into Note Value("PID3", "Test123", 5.0, "Nicht Bestanden", 1);
+Insert Into Note Value("PID4", "Test123", 2.0, "Bestanden", 2);
