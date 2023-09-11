@@ -3,11 +3,12 @@
 http://ionicframework.com/docs/theming/ */ 
 
 
-/* 
-
 /** Ionic CSS Variables **/ 
 
+
 :root { 
+
+  --ion-font-family: -apple-system, BlinkMacSystemFont, 'Quicksand' , sans-serif;
 
   /** primary **/ 
   --ion-color-primary: #8C9900; 
@@ -416,5 +417,12 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e; 
 
   } 
+
+  @font-face {
+    font-family: 'Quicksand';
+    src: url('Quicksand-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
 
 } 
