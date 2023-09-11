@@ -245,3 +245,15 @@ Insert Into Wahlpflicht Value("PI", "KI",4);
 Insert Into Wahlpflicht Value("PI", "BKV",4);
 
 INSERT INTO Benutzer Value("Test123", "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
+
+Insert Into Ziel Value("Test1", "ADS", "Test123");
+Insert Into Ziel Value("Test2", "MIN", "Test123");
+Insert Into Ziel Value("Test3", "OPR", "Test123");
+Insert Into Ziel Value("Test4", "THI", "Test123");
+Insert Into Ziel Value("Test5", "REN", "Test123");
+
+Insert Into ModulZiel Value("Test1", "ADS", 2, "Test123", "ADS");
+Insert Into ModulZiel Value("Test2", "MIN", 2, "Test123", "MIN");
+Insert Into ModulZiel Value("Test3", "OPR", 2, "Test123", "OPR");
+Insert Into ModulZiel Value("Test4", "THI", 2, "Test123", "THI");
+Insert Into ModulZiel Value("Test5", "REN", 2, "Test123", "REN");

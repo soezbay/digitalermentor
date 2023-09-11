@@ -1,112 +1,83 @@
 <template>
   <ion-app>
-    <ion-menu side="end" content-id="main-content">
-      <ion-content class="ion-padding">
-        <ion-toolbar>
-          <ion-menu-toggle>
-            <ion-icon class="ion-float-right" :src = "close" id="close-button"></ion-icon>
-          </ion-menu-toggle>
-        </ion-toolbar>
-        <ion-list>            
+    <ion-split-pane content-id="main-content">
+      <ion-menu side="end" content-id="main-content" type="overlay">
+        <ion-content>
+          <ion-list class="padding">
+            <ion-list-header>Digitaler Mentor</ion-list-header>
+            <hr class="solid">
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
-                <ion-label>{{ p.title }}</ion-label>
-              </ion-item>
+                <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
+                  :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+                  <ion-icon aria-hidden="true" :md="p.mdIcon" style="margin-right: 15px; color: antiquewhite;"></ion-icon>
+                  <ion-label>{{ p.title }}</ion-label>
+                </ion-item>
+                <hr v-if="i === appPages.length - 3" class="solid">
             </ion-menu-toggle>
           </ion-list>
-      </ion-content>
-    </ion-menu>
-    <ion-page>
-      <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
+          <ion-icon class="filter" style="font-size: 275px; float: right; padding-top: 10px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+        </ion-content>
+      </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
-    </ion-page>
+    </ion-split-pane>
   </ion-app>
 </template>
 
-
 <script setup>
+import { ref } from 'vue';
 import {
   IonApp,
   IonContent,
   IonIcon,
   IonItem,
   IonLabel,
-  IonList,
-  IonListHeader,
-  IonMenu,
-  IonMenuToggle,
-  IonNote,
+  IonList, IonListHeader,
+  IonMenu, IonMenuToggle,
   IonRouterOutlet,
   IonSplitPane,
-  IonNav,
 } from '@ionic/vue';
-import { ref } from 'vue';
 import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  toggle,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
-  close,
+  desktopOutline,
+  bookOutline,
+  schoolOutline,
+  rocketOutline,
+  personOutline,
+  settingsOutline
 } from 'ionicons/icons';
 
-const selectedIndex = ref(1);
+const selectedIndex = ref(0);
 const appPages = [
   {
     title: 'Dashbord',
     url: '/menu/dashboard',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    mdIcon: desktopOutline,
   },
   {
     title: 'Modulübersicht',
     url: '/menu/moduluebersicht',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
+    mdIcon: bookOutline,
   },
   {
     title: 'Studienverlauf',
     url: '/menu/studienverlauf',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp,
+    mdIcon: schoolOutline,
   },
   {
     title: 'Studienziele',
     url: '/menu/studienziele',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-  },
-  
-  {
-    title: 'Modulbeschreibung',
-    url: '/menu/modulbeschreibung',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
+    mdIcon: rocketOutline,
   },
   {
     title: 'Profil',
     url: '/menu/profil',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
+    mdIcon: personOutline,
   },
   {
     title: 'Einstellungen',
     url: '/menu/einstellungen',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
+    mdIcon: settingsOutline,
   },
 ];
-
 
 const path = window.location.pathname.split('menu/')[1];
 if (path !== undefined) {
@@ -115,40 +86,51 @@ if (path !== undefined) {
 </script>
 
 <style scoped>
+hr.solid {
+  border-top: 5px solid #757e1b;
+}
+.filter {
+ filter: opacity(0.45);
+}
+.padding {
+  padding: 10px;
+}
+
+ion-list-header {
+
+  --background: var(--ion-color-primary);
+  text-align: left;
+  padding: 5px;
+  padding-left: 45px;
+  font-size: x-large;
+  color: var(--ion-color-light);
+}
+
 ion-menu {
-  --min-width: 100%;
+  --min-width: 70%;
 }
 
 ion-menu ion-content {
   --background: var(--ion-color-primary);
 }
 
-ion-menu ion-toolbar {
-  --background: none;
-  padding:0;
-}
+ion-menu ion-list {
+  padding: 5px 0;
+  background: var(--ion-color-primary);
 
-#close-button {
-  margin-right: auto;
-  margin-top: 0px;
-  font-size: xx-large; 
-  font: bold;
 }
 
 ion-menu ion-item {
+  border-radius: 25px;
   --background: var(--ion-color-primary);
-  text-align: center;
-  padding: 10px;
-  font-size: x-large;
+  text-align: left;
+  margin: 5px;
+  padding: 5px;
+  font-size: larger;
   color: var(--ion-color-light);
-  font: bold; 
 }
 
 ion-menu ion-item.selected {
-  text-decoration: underline;
-}
-
-ion-menu ion-list {
-  background: var(--ion-color-primary);
+  --background: #757e1b;
 }
 </style>
