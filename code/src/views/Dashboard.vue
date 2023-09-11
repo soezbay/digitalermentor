@@ -38,7 +38,8 @@
                 <ion-label>Termine</ion-label>
             </ion-list-header>
             <div v-if="termine.length > 0">
-                <ion-list v-for="termin in termine" :key="termin.id" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
+                <ion-list v-for="termin in termine" :key="termin.id" :router-link="`/termine/${termin.id}`"
+                    style="padding: 0%;">
                     <ion-item color="secondary">
                         <ion-label>
                             <h2>{{ termin.titel }}</h2>
@@ -55,7 +56,8 @@
                 </ion-item>
             </div>
             <br>
-            <ion-datetime v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover" max="2100-01-01T00:00:00"></ion-datetime>
+            <ion-datetime v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover"
+                max="2100-01-01T00:00:00"></ion-datetime>
 
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
