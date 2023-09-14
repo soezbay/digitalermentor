@@ -60,7 +60,12 @@ const routes = [
     component: () => import('../routerpages/AddTermin.vue')
   },
   {
-    path: '/deineziele',
+    path: '/studienziele',
+    name: 'Ziele',
+    component: () => import('../views/DeineZiele.vue')
+  },
+  {
+    path: '/menu/studienziele',
     name: 'Ziele',
     component: () => import('../views/DeineZiele.vue')
   },

@@ -9,14 +9,13 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content>
       <!-- Aktuelles und nicht gewähltes Semester -->
-      <div style="height: 5px;"></div>
-      <ion-toolbar style="height: 50px;">
-        <ion-label style="padding-left: 10px;">Sommersemester</ion-label>
+      <ion-toolbar style="height: 41px;">
+        <ion-label style="padding-left: 23px;">Sommersemester</ion-label>
         <ion-buttons slot="end">
-          <ion-button color="primary"> 
-            <ion-icon :icon="add" size="large"></ion-icon>
+          <ion-button style="padding-right: 20px;" color="primary">
+            <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -26,15 +25,15 @@
         </ion-card>
       </div>
 
-      <ion-toolbar style="height: 50px;">
-        <ion-label style="padding-left: 10px;">Wintersemester</ion-label>
+      <ion-toolbar style="height: 41px;">
+        <ion-label style="padding-left: 23px;">Wintersemester</ion-label>
         <ion-buttons slot="end">
-          <ion-button color="primary"> 
-            <ion-icon :icon="add" size="large"></ion-icon>
+          <ion-button style="padding-right: 20px;" color="primary">
+            <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
-      
+
       <div class="drag-drop-containers">
         <ion-card @dragover="allowDrop" @drop="onDrop" class="drag-drop-box">
           <!-- Hier können Sie Platzhaltertext oder UI hinzufügen -->
@@ -47,15 +46,18 @@
       </ion-row>
 
       <!-- Liste der Semester und Fächer -->
-      <ion-list>
-        <ion-item v-for="(semester, index) in semesterList" :key="index">
+      <ion-list class="ion-padding">
+        <div v-for="(semester, index) in semesterList" :key="index">
           <ion-label>{{ semester.name }}</ion-label>
-          <!-- Fächer als kleine runde Blöcke mit Drag & Drop -->
-          <ion-card v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex" @dragstart="onDragStart(fach)"
-            draggable="true" class="drag-item" :class="fach.status">
-            {{ fach.name }}
-          </ion-card>
-        </ion-item>
+          <ion-item>
+            <!-- Fächer als kleine runde Blöcke mit Drag & Drop -->
+            <ion-card v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex" @dragstart="onDragStart(fach)"
+              draggable="true" class="drag-item" :class="fach.status">
+              <ion-label style="color: #000000; font-weight: bolder;">{{ fach.name }}</ion-label>
+            </ion-card>
+          </ion-item>
+          <br>
+        </div>
       </ion-list>
 
       <!-- Speichern-Button -->
@@ -80,7 +82,7 @@ import {
   IonLabel,
   IonList, IonListHeader,
   IonCard,
-  IonButton, 
+  IonButton,
   IonRow,
   IonIcon
 } from '@ionic/vue';
@@ -112,6 +114,17 @@ export default {
       semesterList: [
         {
           name: '1. Semester',
+          faecher: [
+            { name: 'Fach 1', status: 'versuch3' },
+            { name: 'Fach 2', status: 'versuch2' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+
+          ],
+        },
+        {
+          name: '2. Semester',
           faecher: [
             { name: 'Fach 1', status: 'versuch3' },
             { name: 'Fach 2', status: 'versuch2' },
@@ -149,16 +162,19 @@ export default {
 
   
 <style scoped>
-
 ion-icon {
-  border: 2px solid black;
+  width: 45px;
+  height: 25px;
   border-radius: 30px;
-  background-color: #8C9900;
+  background-color: var(--ion-color-primary);
+  color: white;
 }
+
 .drag-drop-containers {
   display: flex;
   justify-content: space-between;
   padding: 10px;
+  padding-top: 0;
 }
 
 .drag-drop-box {
@@ -182,13 +198,13 @@ ion-icon {
 }
 
 .drag-item {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 5px;
-  border-radius: 50%;
+  border-radius: 20px;
   cursor: pointer;
 }
 
@@ -197,10 +213,10 @@ ion-icon {
 }
 
 .versuch2 {
-  background-color: orange;
+  background-color: sandybrown;
 }
 
 .versuch3 {
-  background-color: red;
+  background-color: #d32e2e;
 }
 </style>
