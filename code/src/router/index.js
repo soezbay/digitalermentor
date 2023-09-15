@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import Dashboard from '../views/Dashboard.vue';
 import Moduluebersicht from '../views/Moduluebersicht.vue';
-import Ziele from '../views/Ziele.vue';
 import Termine from '../routerpages/Termine.vue';
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
@@ -34,14 +33,6 @@ const routes = [
   {
     path: '/menu/modulbeschreibung/:url_kuerzel',
     component: () => import ('../views/Modulbeschreibung.vue')
-  },
-  {
-    path: '/menu/ziele',
-    component: Ziele
-  },
-  {
-    path: '/ziele/:id',
-    component: Ziele
   },
   {
     path: '/termine',

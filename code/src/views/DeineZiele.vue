@@ -10,33 +10,35 @@
     </ion-header>
 
     <ion-content>
+      <div style="height: 20px;"></div>
       <!-- Aktuelles und nicht gewähltes Semester -->
-      <ion-toolbar style="height: 41px;">
-        <ion-label style="padding-left: 23px;">Sommersemester</ion-label>
+      <div class="semesterHeader">
+        <ion-label class="labelHeader">Sommersemester</ion-label>
         <ion-buttons slot="end">
-          <ion-button style="padding-right: 20px;" color="primary">
+          <ion-button style="padding-right: 15px;" color="primary">
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-buttons>
-      </ion-toolbar>
+      </div>
       <div class="drag-drop-containers">
-        <ion-card @dragover="allowDrop" @drop="onDrop" class="drag-drop-box">
-          <!-- Hier können Sie Platzhaltertext oder UI hinzufügen -->
+        <ion-card v-for="(card, index) in getSommersemesterZieleCards()" :key="index" @dragover="allowDrop" @drop="onDrop"
+          class="drag-drop-box">
+          <ion-card-title style="font-size: small;">{{ card.title }}</ion-card-title>
         </ion-card>
       </div>
 
-      <ion-toolbar style="height: 41px;">
-        <ion-label style="padding-left: 23px;">Wintersemester</ion-label>
+      <div class="semesterHeader">
+        <ion-label class="labelHeader">Wintersemester</ion-label>
         <ion-buttons slot="end">
-          <ion-button style="padding-right: 20px;" color="primary">
+          <ion-button style="padding-right: 15px;" color="primary">
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-buttons>
-      </ion-toolbar>
-
+      </div>
       <div class="drag-drop-containers">
-        <ion-card @dragover="allowDrop" @drop="onDrop" class="drag-drop-box">
-          <!-- Hier können Sie Platzhaltertext oder UI hinzufügen -->
+        <ion-card v-for="(card, index) in getWintersemesterZieleCards()" :key="index" @dragover="allowDrop" @drop="onDrop"
+          class="drag-drop-box">
+          <ion-card-title>{{ card.title }}</ion-card-title>
         </ion-card>
       </div>
 
@@ -109,6 +111,24 @@ export default {
   name: 'Ziele',
   data() {
     return {
+      SommersemsterZiele: [
+        {
+          cards: [
+            { ziel: "OPR Bestehen" },
+            { ziel: "LDS Bestehen" }
+          ], // Array zum Speichern der Karten
+        },
+      ],
+
+      WintersemesterZiele: [
+        {
+          cards: [
+            { ziel: "ADS Bestehen" },
+            { ziel: "INS Bestehen" }
+          ], // Array zum Speichern der Karten
+        },
+      ],
+
       aktuellesSemester: 'Wintersemester 2023', // Aktuelles Semester
       nichtGewaehltesSemester: 'Sommersemester 2023', // Nicht gewähltes Semester
       semesterList: [
@@ -155,6 +175,20 @@ export default {
     speichern() {
       // Fügen Sie hier die Logik zum Speichern der ausgewählten Module hinzu
     },
+    getSommersemesterZieleCards() {
+      const ziele = this.SommersemsterZiele[0]; // Annahme: Es gibt nur ein Semester
+      return ziele.cards.map((ziel, index) => ({
+        title: ziel.ziel,
+        index: index + 1, // Index + 1 für die Kartennummer
+      }));
+    },
+    getWintersemesterZieleCards() {
+      const ziele = this.WintersemesterZiele[0]; // Annahme: Es gibt nur ein Semester
+      return ziele.cards.map((ziel, index) => ({
+        title: ziel.ziel,
+        index: index + 1, // Index + 1 für die Kartennummer
+      }));
+    },
   }
 };
 </script>
@@ -162,6 +196,21 @@ export default {
 
   
 <style scoped>
+.semesterHeader {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  /* Platzierung für den Inhalt */
+
+}
+
+.labelHeader {
+  padding-left: 25px;
+}
+
 ion-icon {
   width: 45px;
   height: 25px;
@@ -171,16 +220,21 @@ ion-icon {
 }
 
 .drag-drop-containers {
-  display: flex;
+  display: block;
   justify-content: space-between;
   padding: 10px;
   padding-top: 0;
+  padding-left: 20px;
+  padding-right: 45px;
 }
 
 .drag-drop-box {
-  width: 45%;
+  width: 100%;
+  height: 40px;
   padding: 20px;
+  margin: 10px;
   border: 2px solid #ccc;
+  border-radius: 30px;
   text-align: center;
 }
 
