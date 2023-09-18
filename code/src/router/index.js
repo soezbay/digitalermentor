@@ -3,6 +3,7 @@ import Dashboard from '../views/Dashboard.vue';
 import Moduluebersicht from '../views/Moduluebersicht.vue';
 import Ziele from '../views/Ziele.vue';
 import Termine from '../routerpages/Termine.vue';
+import Studienverlauf from '../views/Studienverlauf.vue';
 import Profil from '../profile/Profil.vue';
 
 
@@ -60,6 +61,14 @@ const routes = [
   {
     path: '/menu/dashboard/termine/add_termin',
     component: () => import('../routerpages/AddTermin.vue')
+  },
+  {
+    path: '/studienverlauf',
+    component: Studienverlauf
+  },
+  {
+    path: '/menu/studienverlauf',
+    component: Studienverlauf
   },
   {
     path: '/menu/profil',
