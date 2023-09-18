@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import Dashboard from '../views/Dashboard.vue';
 import Moduluebersicht from '../views/Moduluebersicht.vue';
 import Termine from '../routerpages/Termine.vue';
+import Studienverlauf from '../views/Studienverlauf.vue';
 import Profil from '../profile/Profil.vue';
 
 
@@ -53,14 +54,12 @@ const routes = [
     component: () => import('../routerpages/AddTermin.vue')
   },
   {
-    path: '/studienziele',
-    name: 'Ziele',
-    component: () => import('../views/DeineZiele.vue')
+    path: '/studienverlauf',
+    component: Studienverlauf
   },
   {
-    path: '/menu/studienziele',
-    name: 'Ziele',
-    component: () => import('../views/DeineZiele.vue')
+    path: '/menu/studienverlauf',
+    component: Studienverlauf
   },
   {
     path: '/menu/profil',
