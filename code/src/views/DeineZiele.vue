@@ -21,10 +21,11 @@
         </ion-buttons>
       </div>
       <div class="drag-drop-containers">
-        <ion-card v-for="(card, index) in getSommersemesterZieleCards()" :key="index" @dragover="allowDrop" @drop="onDrop"
+        <div v-for="(card, index) in getSommersemesterZieleCards()" :key="index" @dragover="allowDrop" @drop="onDrop"
           class="drag-drop-box">
-          <ion-card-title style="font-size: small;">{{ card.title }}</ion-card-title>
-        </ion-card>
+          <button type="button" class="löschenButton"></button>
+            <h5>{{ card.title }}</h5>
+        </div>
       </div>
 
       <div class="semesterHeader">
@@ -36,10 +37,11 @@
         </ion-buttons>
       </div>
       <div class="drag-drop-containers">
-        <ion-card v-for="(card, index) in getWintersemesterZieleCards()" :key="index" @dragover="allowDrop" @drop="onDrop"
+        <div v-for="(card, index) in getWintersemesterZieleCards()" :key="index" @dragover="allowDrop" @drop="onDrop"
           class="drag-drop-box">
-          <ion-card-title>{{ card.title }}</ion-card-title>
-        </ion-card>
+          <button type="button" class="löschenButton"></button>
+            <h5>{{ card.title }}</h5>
+        </div>
       </div>
 
       <!-- Titel "Diese Klausuren musst du noch schreiben" und grüne Linie -->
@@ -204,7 +206,6 @@ export default {
   align-items: center;
   padding: 10px;
   /* Platzierung für den Inhalt */
-
 }
 
 .labelHeader {
@@ -229,13 +230,29 @@ ion-icon {
 }
 
 .drag-drop-box {
+  display: flex;
   width: 100%;
   height: 40px;
-  padding: 20px;
   margin: 10px;
-  border: 2px solid #ccc;
+  border: 2px solid #ffffff;
   border-radius: 30px;
-  text-align: center;
+  text-align: left;
+  background-color: #d2d69e;
+}
+
+h5 {
+  padding: 9px;
+  padding-left: 15px;
+  margin: 0;
+}
+
+.löschenButton {
+  height: 27px;
+  width: 27px;
+  margin-left: 8px;
+  margin-top: 4px;
+  border: 2px solid #ccc;
+  border-radius: 20px;
 }
 
 .klausuren-title {
