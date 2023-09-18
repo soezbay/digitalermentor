@@ -62,13 +62,17 @@ const routes = [
     component: Studienverlauf
   },
   {
+    path: '/menu/studienziele',
+    component: () => import('../views/DeineZiele.vue')
+  },
+  {
     path: '/menu/profil',
     component: Profil
   },
   {
     path: '/menu/profil/changeProfile',
     component: () => import('../profile/changeProfile.vue')
-  }
+  },
 
 ]
 
