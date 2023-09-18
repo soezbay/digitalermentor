@@ -16,7 +16,7 @@
 
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
-            <ion-list-header color="primary" router-link="/menu/ziele" id="header">
+            <ion-list-header color="primary" router-link="/menu/studienziele" id="header">
                 <ion-label>
                     Aktive Ziele
                 </ion-label>
