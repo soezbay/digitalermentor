@@ -14,7 +14,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-
+      
       <!-- Studiengangauswahl aus Datenbank -->
       <ion-item>
         <ion-select v-model="selectedStudiengang" label="Studiengang" placeholder="Studiengang auswählen">
@@ -24,6 +24,9 @@
         </ion-select>
       </ion-item>
 
+      <!-- ModulSearch -->
+      <ion-searchbar v-model="searchQuery" placeholder="Modul suchen"></ion-searchbar>
+      
       <!-- Module aus Datenbank -->
 
       <!-- Moduldarstellung-->
@@ -45,11 +48,11 @@
               @click="openModal(module)">
               <ion-label>{{ module.name }}</ion-label>
 
-              <!-- Kurze Modulbeschreibung -->
-              <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
+      <!-- Kurze Modulbeschreibung -->
+       <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
 
-              <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
-              <!-- <ion-text v-if="module.showDescription">
+      <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
+            <!-- <ion-text v-if="module.showDescription">
                 <a @click="showModuleDetails(module.name)">Modulbeschreibung </a>
                 <a @click="showModuleRating(module.name)"> Bewertung </a>
                 </ion-text> -->
@@ -61,6 +64,8 @@
     </ion-content>
   </ion-page>
 </template>
+
+
 
 <script>
 
@@ -84,16 +89,10 @@ import {
   IonButton
 } from '@ionic/vue';
 import axios from 'axios';
-import Modal from "./Modulbeschreibung.vue";
 
 
 export default {
   components: {
-    IonButtons,
-    IonMenuButton,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonSearchbar,
     IonSelectOption,
     IonSelect,
@@ -107,6 +106,7 @@ export default {
     IonButton
   },
 
+  
   name: "ModulUebersicht",
   data() {
     return {
@@ -115,6 +115,7 @@ export default {
       studiengaenge: [],
       wahlpflichtModule: [],
       pflichtModule: [],
+      searchQuery: '',
       moduleSemesters: [
         [
           { name: "LDS", description: "Logik und diskrete Strukturen (LDS)", showDescription: false },
@@ -218,22 +219,23 @@ export default {
     toggleDescription(semesterIndex, moduleIndex) {
       this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
     },
-
-    async openModal(selectedModul) {
-      const modal = await modalController
-        .create({
-          component: Modal,
-          componentProps: {
-            selectedModul: selectedModul,
-          },
-        })
-        .then((modal) => {
-          modal.present();
-        });
-    },
   },
+  computed: {
+    filteredModuleSemesters() {
+      if (!this.searchQuery) {
+        return this.moduleSemesters;
+      }
+      const lowerCaseQuery = this.searchQuery.toLowerCase();
+      return this.moduleSemesters.map(semesterModules => {
+        return semesterModules.filter(module => module.name.toLowerCase().includes(lowerCaseQuery));
+      });
+    }
+  }
 };
+
+
 </script>
+
 
 <style scoped>
 .title-block {
@@ -242,7 +244,6 @@ export default {
   padding: 10px;
   text-align: center;
 }
-
 .modulBlock {
   margin: 1%;
   width: 85px;
@@ -252,7 +253,6 @@ export default {
   color: #000000;
   text-align: center;
 }
-
 .modulfont {
   font-size: 16px;
   font-weight: 350;
@@ -260,12 +260,10 @@ export default {
   letter-spacing: 0em;
   text-align: left;
 }
-
 .semesterBlock {
   border-radius: 15px;
   background: #8C99004D;
 }
-
 ion-col {
   background-color: #135d54;
   border: solid 3px #fff;
