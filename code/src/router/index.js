@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import Dashboard from '../views/Dashboard.vue';
 import Moduluebersicht from '../views/Moduluebersicht.vue';
 import Termine from '../routerpages/Termine.vue';
+import Profil from '../profile/Profil.vue';
+
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
 
@@ -60,6 +62,15 @@ const routes = [
     name: 'Ziele',
     component: () => import('../views/DeineZiele.vue')
   },
+  {
+    path: '/menu/profil',
+    component: Profil
+  },
+  {
+    path: '/menu/profil/changeProfile',
+    component: () => import('../profile/changeProfile.vue')
+  }
+
 ]
 
 const router = createRouter({

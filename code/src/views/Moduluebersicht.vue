@@ -2,9 +2,15 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <div class="title-block">
-          <ion-title>Modulübersicht</ion-title>
-        </div>
+        <ion-buttons slot="start">
+          <ion-button router-link="/menu/dashboard">
+            <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title>Modulübersicht</ion-title>
+        <ion-buttons slot="end">
+          <ion-menu-button color="primary"></ion-menu-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -39,7 +45,7 @@
           </ion-list-header>
           <ion-row class="semesterBlock">
             <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index"
-              @click="toggleDescription(semesterIndex, index)">
+              @click="openModal(module)">
               <ion-label>{{ module.name }}</ion-label>
 
       <!-- Kurze Modulbeschreibung -->
@@ -63,7 +69,25 @@
 
 <script>
 
-import { IonSearchbar, IonSelectOption, IonSelect, IonContent, IonHeader, IonListHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+
+import {
+  IonButtons,
+  IonMenuButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonSearchbar,
+  IonSelectOption,
+  IonSelect,
+  IonContent,
+  IonHeader,
+  IonListHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  modalController,
+  IonButton
+} from '@ionic/vue';
 import axios from 'axios';
 
 
@@ -77,7 +101,9 @@ export default {
     IonPage,
     IonTitle,
     IonToolbar,
-    IonListHeader
+    IonListHeader,
+    modalController,
+    IonButton
   },
 
   
@@ -213,7 +239,7 @@ export default {
 
 <style scoped>
 .title-block {
-  background-color: #8C99004D;
+  background-color: #8c99004d;
   border-radius: 15px;
   padding: 10px;
   text-align: center;
@@ -244,5 +270,4 @@ ion-col {
   color: #fff;
   text-align: center;
 }
-
 </style>

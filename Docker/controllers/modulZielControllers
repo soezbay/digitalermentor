@@ -1,0 +1,29 @@
+const ModulZiel = require('../module/ModulZiel');
+
+exports.getAllZieleFromBenutzer = async (req, res, next) => {
+    try {
+        let BenutzerID = req.params.BenutzerID;
+        const [ziele, _] = await ModulZiel.findAllFromBenutzer(BenutzerID);
+
+        res.status(200).json({ ziele });
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+};
+
+exports.createZiel = async (req, res, next) => {
+    try {
+        let { ZielID, Titel, Semester, BenutzerID, Kuerzel } = req.body;
+        let modulZiel = new ModulZiel(ZielID, Titel, Semester, BenutzerID, Kuerzel);
+
+        post = await modulZiel.createZiel();
+
+        console.log(modulZiel);
+
+        res.send("Create new ModulZiel Route.");
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+};
