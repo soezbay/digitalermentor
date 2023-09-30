@@ -7,6 +7,7 @@ const store = createStore({
             userData: [],
             termine: [],
             selectedDate: new Date(),
+            ziele: [],
         }
     },
 
@@ -43,7 +44,20 @@ const store = createStore({
 
         removeTermin(state, terminId) {
             state.termine = state.termine.filter(termin => termin.id !== terminId);
-        }
+        },
+
+        addZiel(state, zielData) {
+            const newZiel = {
+                id: zielData.id, // Du kannst hier eine eindeutige ID für das Ziel generieren
+                titel: zielData.titel,
+                beschreibung: zielData.beschreibung
+            }
+            state.ziele.push(newZiel);
+        },
+
+        removeZiel(state, zielId) {
+            state.ziele = state.ziele.filter(ziel => ziel.id !== zielId);
+        },
 
     },
 
@@ -62,7 +76,15 @@ const store = createStore({
 
         deleteTermin(context, terminId) {
             context.commit('removeTermin', terminId);
-        }
+        },
+
+        addZiel(context, zielData) {
+            context.commit('addZiel', zielData);
+        },
+
+        deleteZiel(context, zielId) {
+            context.commit('removeZiel', zielId);
+        },
     },
 
     getters: {
@@ -86,6 +108,14 @@ const store = createStore({
 
         getSelectedDate(state) {
             return state.selectedDate;
+        },
+
+        ziele(state) {
+            return state.ziele;
+        },
+
+        ziel: (state) => (id) => {
+            return state.ziele.find((ziel) => ziel.id === id);
         },
     },
 
