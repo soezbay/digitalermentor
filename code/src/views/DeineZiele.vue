@@ -15,14 +15,13 @@
       <div class="semesterHeader">
         <ion-label class="labelHeader">Sommersemester</ion-label>
         <ion-buttons slot="end">
-          <ion-button style="padding-right: 15px;" color="primary" @click="generateAndAddSommerZiel">
-            <ion-icon class="addButton" :icon="add"></ion-icon>
+          <ion-button style="padding-right: 15px;" color="primary" id="open-SS-modal" expand="block">
+            <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-buttons>
       </div>
       <ion-list class="drag-drop-containers">
-        <ion-item-sliding v-for="ziel in ziele" :key="index" @dragover="allowDrop" @drop="onDrop"
-          class="drag-drop-box-item">
+        <ion-item-sliding v-for="ziel in filteredZiele('Sommersemester')" :key="ziel.id" class="drag-drop-box-item">
           <ion-item color="#d2d69e" class="item-container">
             <ion-label class="card-label">
               <h2>{{ ziel.titel }}</h2>
@@ -31,8 +30,7 @@
           </ion-item>
           <ion-item-options>
             <ion-item-option color="danger">
-              <ion-icon slot="icon-only" :icon="trash"></ion-icon>
-            </ion-item-option>
+              <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon> </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
       </ion-list>
@@ -40,13 +38,13 @@
       <div class="semesterHeader">
         <ion-label class="labelHeader">Wintersemester</ion-label>
         <ion-buttons slot="end">
-          <ion-button style="padding-right: 15px;" color="primary" id="open-modal" expand="block">
+          <ion-button style="padding-right: 15px;" color="primary" id="open-WS-modal" expand="block">
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-buttons>
       </div>
       <ion-list class="drag-drop-containers">
-        <ion-item-sliding v-for="ziel in ziele" :key="index" class="drag-drop-box-item">
+        <ion-item-sliding v-for="ziel in filteredZiele('Wintersemester')" :key="index" class="drag-drop-box-item">
           <ion-item color="#d2d69e" class="item-container">
             <ion-label class="card-label">
               <h2>{{ ziel.titel }}</h2>
@@ -55,7 +53,7 @@
           </ion-item>
           <ion-item-options>
             <ion-item-option color="danger">
-              <ion-icon slot="icon-only" :icon="trash"></ion-icon>
+              <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
             </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
@@ -81,12 +79,12 @@
         </div>
       </ion-list>
 
-      <ion-modal ref="modal" trigger="open-modal" :can-dismiss="canDismiss" :presenting-element="presentingElement">
+      <ion-modal ref="modal" trigger="open-SS-modal" :can-dismiss="canDismiss" :presenting-element="presentingElement">
         <ion-header>
           <ion-toolbar>
             <ion-title>Erstelle ein Ziel</ion-title>
             <ion-buttons slot="end">
-              <ion-button>Speichern</ion-button>
+              <ion-button @click="saveZiel" :disabled="!zielName">Speichern</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
@@ -96,8 +94,37 @@
             <ion-input v-model="zielName"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">Season</ion-label>
-            <ion-input v-model="semesterSeason"></ion-input>
+            <ion-select ref="semesterSelect" label="Season" placeholder="Semesterseason" value="Sommersemester">
+              <ion-select-option value="Sommersemester">Sommersemester</ion-select-option>
+              <ion-select-option value="Wintersemester">Wintersemester</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Info</ion-label>
+            <ion-input v-model="info"></ion-input>
+          </ion-item>
+        </ion-content>
+      </ion-modal>
+
+      <ion-modal ref="modal" trigger="open-WS-modal" :can-dismiss="canDismiss" :presenting-element="presentingElement">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Erstelle ein Ziel</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="saveZiel" :disabled="!zielName">Speichern</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-item>
+            <ion-label position="floating">Zielname</ion-label>
+            <ion-input v-model="zielName" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select ref="semesterSelect" label="Season" placeholder="Semesterseason" value="Wintersemester">
+              <ion-select-option value="Sommersemester">Sommersemester</ion-select-option>
+              <ion-select-option value="Wintersemester">Wintersemester</ion-select-option>
+            </ion-select>
           </ion-item>
           <ion-item>
             <ion-label position="floating">Info</ion-label>
@@ -112,6 +139,7 @@
   
 <script>
 import { add, trash } from 'ionicons/icons';
+import { ref, computed } from 'vue';
 
 import {
   IonPage,
@@ -122,13 +150,15 @@ import {
   IonButtons,
   IonMenuButton, IonButton,
   IonItem,
-  IonLabel,
+  IonLabel, IonInput,
   IonList, IonListHeader,
   IonCard,
   IonRow,
   IonIcon,
   IonItemSliding, IonItemOptions, IonItemOption,
-  IonModal, actionSheetController
+  IonModal,
+  IonSelect, IonSelectOption,
+  actionSheetController
 } from '@ionic/vue';
 
 export default {
@@ -142,7 +172,7 @@ export default {
     IonItem,
     IonButtons,
     IonMenuButton,
-    IonLabel,
+    IonLabel, IonInput,
     IonList, IonListHeader,
     IonCard,
     IonButton,
@@ -150,7 +180,9 @@ export default {
     IonIcon,
     IonItemSliding, IonItemOptions, IonItemOption,
     IonModal,
+    IonSelect, IonSelectOption
   },
+
   data() {
     return {
       presentingElement: undefined,
@@ -187,23 +219,52 @@ export default {
     dismiss() {
       this.$refs.modal.$el.dismiss();
     },
-    async canDismiss() {
-      const actionSheet = await actionSheetController.create({
-        header: 'Fenster schließen und kein Ziel hinzufügen?',
-        buttons: [
-          {
-            text: 'Ja',
-            role: 'confirm',
-          },
-          {
-            text: 'Nein',
-            role: 'cancel',
-          },
-        ],
-      });
-      actionSheet.present();
-      const { role } = await actionSheet.onWillDismiss();
-      return role === 'confirm';
+    // async canDismiss() {
+    //   const actionSheet = await actionSheetController.create({
+    //     header: 'Fenster schließen und kein Ziel hinzufügen?',
+    //     buttons: [
+    //       {
+    //         text: 'Ja',
+    //         role: 'confirm',
+    //       },
+    //       {
+    //         text: 'Nein',
+    //         role: 'cancel',
+    //       },
+    //     ],
+    //   });
+    //   actionSheet.present();
+    //   const { role } = await actionSheet.onWillDismiss();
+    //   return role === 'confirm';
+    // },
+    saveZiel() {
+      const selectedOption = this.$refs.semesterSelect.value;
+      if (this.zielName && selectedOption) {
+        console.log('Erstelle Ziel Daten')
+        const zielData = {
+          id: Date.now(),
+          titel: this.zielName,
+          semesterSeason: selectedOption,
+          beschreibung: this.info
+        };
+        console.log('Dispatche Ziel Daten')
+        this.$store.dispatch('addZiel', zielData);
+        console.log('Schließe Modal')
+        this.zielName = '';
+        this.semesterSeason = '';
+        this.info = '';
+        this.dismiss(); // Schließe das Modal nach dem Speichern
+      } else {
+        console.log('Fehlgeschlagen Daten zu generienen')
+      }
+    },
+    deleteZielHandler(zielId) {
+      this.$store.dispatch('deleteZiel', zielId);
+    },
+
+    filteredZiele(semester) {
+      // Filtere die Ziele basierend auf dem übergebenen Semester
+      return this.ziele.filter(ziel => ziel.semesterSeason === semester);
     },
   },
   // mounted() {

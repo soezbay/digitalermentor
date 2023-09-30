@@ -50,6 +50,7 @@ const store = createStore({
             const newZiel = {
                 id: zielData.id, // Du kannst hier eine eindeutige ID für das Ziel generieren
                 titel: zielData.titel,
+                semesterSeason: zielData.semesterSeason,
                 beschreibung: zielData.beschreibung
             }
             state.ziele.push(newZiel);
