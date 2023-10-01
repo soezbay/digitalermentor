@@ -21,18 +21,22 @@
         </ion-buttons>
       </div>
       <ion-list class="drag-drop-containers">
-        <ion-item-sliding v-for="ziel in filteredZiele('Sommersemester')" :key="ziel.id" class="drag-drop-box-item">
-          <ion-item color="#d2d69e" class="item-container">
-            <ion-label class="card-label">
-              <h2>{{ ziel.titel }}</h2>
-              <p>{{ ziel.beschreibung }}</p>
-            </ion-label>
-          </ion-item>
-          <ion-item-options>
-            <ion-item-option color="danger">
-              <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon> </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
+        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
+          <ion-item-sliding v-for="ziel in filteredZiele('Sommersemester')" :key="ziel.id" class="drag-drop-box-item">
+            <ion-item color="#d2d69e" class="item-container">
+              <ion-label class="card-label">
+                <h2>{{ ziel.titel }}</h2>
+                <p>{{ ziel.beschreibung }}</p>
+              </ion-label>
+              <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option color="danger">
+                <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-reorder-group>
       </ion-list>
 
       <div class="semesterHeader">
@@ -79,7 +83,7 @@
         </div>
       </ion-list>
 
-      <ion-modal ref="modal" trigger="open-SS-modal" :can-dismiss="canDismiss" :presenting-element="presentingElement">
+      <ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
         <ion-header>
           <ion-toolbar>
             <ion-title>Erstelle ein Ziel</ion-title>
@@ -106,7 +110,7 @@
         </ion-content>
       </ion-modal>
 
-      <ion-modal ref="modal" trigger="open-WS-modal" :can-dismiss="canDismiss" :presenting-element="presentingElement">
+      <ion-modal ref="modal_WS" trigger="open-WS-modal" :presenting-element="presentingElement">
         <ion-header>
           <ion-toolbar>
             <ion-title>Erstelle ein Ziel</ion-title>
@@ -158,6 +162,7 @@ import {
   IonItemSliding, IonItemOptions, IonItemOption,
   IonModal,
   IonSelect, IonSelectOption,
+  IonReorder, IonReorderGroup,
   actionSheetController
 } from '@ionic/vue';
 
@@ -180,8 +185,23 @@ export default {
     IonIcon,
     IonItemSliding, IonItemOptions, IonItemOption,
     IonModal,
-    IonSelect, IonSelectOption
+    IonSelect, IonSelectOption,
+    IonReorder, IonReorderGroup
   },
+  setup() {
+      const handleReorder = (event) => {
+        // The `from` and `to` properties contain the index of the item
+        // when the drag started and ended, respectively
+        console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
+
+        // Finish the reorder and position the item in the DOM based on
+        // where the gesture ended. This method can also be called directly
+        // by the reorder group
+        event.detail.complete();
+      };
+
+      return { handleReorder };
+    },
 
   data() {
     return {
@@ -217,7 +237,8 @@ export default {
 
   methods: {
     dismiss() {
-      this.$refs.modal.$el.dismiss();
+      this.$refs.modal_SS.$el.dismiss();
+      this.$refs.modal_WS.$el.dismiss();
     },
     // async canDismiss() {
     //   const actionSheet = await actionSheetController.create({
@@ -332,6 +353,7 @@ export default {
 .card-label {
   margin: 0;
   padding-left: 15px;
+  color: black;
 }
 
 .löschenButton {
