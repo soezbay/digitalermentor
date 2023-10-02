@@ -146,8 +146,6 @@
   
 <script>
 import { add, trash } from 'ionicons/icons';
-import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
 
 import {
   IonPage,
@@ -191,74 +189,6 @@ export default {
     IonSelect, IonSelectOption,
     IonReorder, IonReorderGroup
   },
-  // setup() {
-  //   const store = useStore();
-  //   const itemsSS = ref([]);
-  //   const itemsWS = ref([]);
-
-  //   onMounted(() => {
-  //     // holt die Ziele aus dem Vuex-Store
-  //     const zieleSS = store.getters.zieleSS;
-  //     itemsSS.value = zieleSS;
-  //     const zieleWS = store.getters.zieleWS;
-  //     itemsWS.value = zieleWS;
-  //   });
-  //   // const handleReorder = (event) => {
-
-  //   //   // The `from` and `to` properties contain the index of the item
-  //   //   // when the drag started and ended, respectively
-  //   //   console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
-
-  //   //   // Finish the reorder and position the item in the DOM based on
-  //   //   // where the gesture ended. Update the items variable to the
-  //   //   // new order of items
-  //   //   items.value = event.detail.complete(items.value);
-  //   // };
-
-  //   const handleReorderForSS = (event) => {
-  //     // Die aktualisierte Reihenfolge der Ziele
-  //     const updatedZiele = [...itemsSS.value];
-
-  //     // Die `from` und `to`-Eigenschaften enthalten die Indexe, von wo das Element verschoben wurde und wohin es verschoben wurde.
-  //     const fromIndex = event.detail.from;
-  //     const toIndex = event.detail.to;
-
-  //     // Verschiebe das Ziel-Element in der `updatedZiele`-Liste
-  //     const [removedZiel] = updatedZiele.splice(fromIndex, 1);
-  //     updatedZiele.splice(toIndex, 0, removedZiel);
-
-  //     // Aktualisiere die Reihenfolge der Ziele im Vuex-Store
-  //     console.log(updatedZiele)
-  //     store.dispatch('updateZieleOrderActionForSS', updatedZiele);
-
-  //     // Beende die Reihenfolge-Aktion
-  //     event.detail.complete();
-  //   };
-
-  //   const handleReorderForWS = (event) => {
-  //     // Die aktualisierte Reihenfolge der Ziele
-  //     console.log('Before', itemsWS.value)
-  //     itemsWS.value = event.detail.complete(itemsWS.value);
-  //     console.log('after', itemsWS.value)
-  //     const updatedZiele = itemsWS.value;
-  //     // Die `from` und `to`-Eigenschaften enthalten die Indexe, von wo das Element verschoben wurde und wohin es verschoben wurde.
-  //     // const fromIndex = event.detail.from;
-  //     // const toIndex = event.detail.to;
-
-  //     // Verschiebe das Ziel-Element in der `updatedZiele`-Liste
-  //     // const [removedZiel] = updatedZiele.splice(fromIndex, 1);
-  //     // updatedZiele.splice(toIndex, 0, removedZiel);
-
-  //     // Aktualisiere die Reihenfolge der Ziele im Vuex-Store
-
-  //     store.dispatch('updateZieleOrderActionForWS', updatedZiele);
-
-  //     // Beende die Reihenfolge-Aktion
-  //   };
-
-  //   return { itemsSS, itemsWS, handleReorderForWS, handleReorderForSS };
-  // },
-
   data() {
     return {
       presentingElement: undefined,

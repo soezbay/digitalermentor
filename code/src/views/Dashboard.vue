@@ -16,35 +16,59 @@
 
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
-            <ion-list-header color="primary" router-link="/menu/studienziele" id="header">
+            <ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none">
                 <ion-label>
                     Aktive Ziele
                 </ion-label>
-            </ion-list-header>
-            <div id="flexbox1">
-                <ion-item lines="none">
-                    <ion-label>EPR</ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                    <ion-label>ADS</ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                    <ion-label>ADS</ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                    <ion-label>ADS</ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                    <ion-label>INP</ion-label>
-                </ion-item>
+            </ion-item>
+            <div class="semester-container">
+                <ion-label class="semester-label" style="font-size: larger;">Sommersemester</ion-label>
+                <ion-label class="semester-label" style="font-size: larger;">Wintersemester</ion-label>
+            </div>
+            <div class="ziel-container">
+                <ion-list class="drag-drop-containers">
+                    <div v-if="zieleSS.length > 0" class="drag-drop-box-item">
+                        <ion-item lines="none" color="#d2d69e" class="item-container">
+                            <ion-label class="card-label">
+                                <h2>{{ zieleSS[0].titel }}</h2>
+                                <p>{{ zieleSS[0].beschreibung }}</p>
+                            </ion-label>
+                        </ion-item>
+                        <ion-item lines="none" color="#d2d69e" class="item-container">
+                            <ion-label class="card-label">
+                                <h2>{{ zieleSS[1].titel }}</h2>
+                                <p>{{ zieleSS[1].beschreibung }}</p>
+                            </ion-label>
+                        </ion-item>
+                    </div>
+                </ion-list>
+                <div class="ziel-separator"></div>
+                <ion-list class="drag-drop-containers">
+                    <div v-if="zieleWS.length > 0" class="drag-drop-box-item">
+                        <ion-item lines="none" color="#d2d69e" class="item-container">
+                            <ion-label class="card-label">
+                                <h2>{{ zieleWS[0].titel }}</h2>
+                                <p>{{ zieleWS[0].beschreibung }}</p>
+                            </ion-label>
+                        </ion-item>
+                        <ion-item lines="none" color="#d2d69e" class="item-container">
+                            <ion-label class="card-label">
+                                <h2>{{ zieleWS[1].titel }}</h2>
+                                <p>{{ zieleWS[1].beschreibung }}</p>
+                            </ion-label>
+                        </ion-item>
+                    </div>
+                </ion-list>
             </div>
             <ion-header style="height: 0.3%;"></ion-header>
-            <ion-list-header color='primary' router-link="/menu/dashboard/termine" id="header">
-                <ion-label>Termine</ion-label>
-            </ion-list-header>
+            <ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none">
+                <ion-label>
+                    Termine
+                </ion-label>
+            </ion-item>
             <div v-if="kommendeTermine.length > 0">
                 <ion-list v-for="termin in kommendeTermine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
-                    <ion-item color="secondary">
+                    <ion-item style="background-color: #3d3e40;">
                         <ion-label>
                             <h2>{{ termin.titel }}</h2>
                             <h3>{{ termin.ort }}</h3>
@@ -63,9 +87,11 @@
                 </ion-item>
             </div>
             <br>
-            <ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover"
-                max="2100-01-01T00:00:00">
-            </ion-datetime>
+            <div class="dateDiv">
+                <ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover"
+                    max="2100-01-01T00:00:00">
+                </ion-datetime>
+            </div>
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
             <ion-list>
                 <div>
@@ -191,20 +217,72 @@ export default {
     },
     computed: {
         kommendeTermine() {
-        const currentDate = new Date();
-        const kommendeTermine = this.$store.getters.termine.filter(termin => {
-            const terminDate = new Date(termin.datum);
-            return terminDate >= currentDate;
-        });
+            const currentDate = new Date();
+            const kommendeTermine = this.$store.getters.termine.filter(termin => {
+                const terminDate = new Date(termin.datum);
+                return terminDate >= currentDate;
+            });
 
-        return kommendeTermine.slice(0, 3); // Nur die ersten zwei Termine
-    }
+            return kommendeTermine.slice(0, 3); // Nur die ersten zwei Termine
+        },
+        zieleSS() {
+            return this.$store.getters.zieleSS;
+        },
+        zieleWS() {
+            return this.$store.getters.zieleWS;
+        },
+
     },
 
 }
 </script>
 
 <style scoped>
+.drag-drop-containers {
+    width: 50%;
+}
+
+.semester-container {
+    display: flex;
+    padding-top: 10px;
+    background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
+
+.semester-label {
+    width: 50%;
+    font-size: larger;
+    text-align: center;
+    display: inline-block;
+}
+
+.ziel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ziel-separator {
+    border-left: 2px solid #ccc;
+    height: 130px;
+    margin: 0 3px;
+
+}
+
+.drag-drop-box-item {
+    margin: 5px;
+    border-radius: 30px;
+    text-align: left;
+}
+
+.item-container {
+    margin: 5px;
+    border-radius: 30px;
+    text-align: left;
+    background-color: #d2d69e;
+    text-align: center;
+    color: black;
+}
+
 #flexbox1 {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -221,11 +299,6 @@ export default {
     border-radius: 20px;
 }
 
-/* .ios #flexbox1 ion-item {
-    margin: 1%;
-    width: 85px;
-    text-align: center;
-} */
 
 #displayUsername {
     padding: 20px;
@@ -237,9 +310,12 @@ export default {
     /* height: 35px;
     padding-top: 8px;
     padding-left: 25px; */
-    padding-right: 4%;
     font-size: larger;
     text-align: center;
+}
+
+#header ion-label {
+    padding-left: 20px;
 }
 
 .ios #header {
@@ -253,9 +329,13 @@ export default {
     padding-bottom: 0.5%;
 }
 
+.dateDiv {
+    margin: 10px;
+}
+
 ion-datetime {
-    --background: #ffffff;
-    color: black;
+    background: var(--ion-item-background, var(--ion-background-color, #d2d69e));
+    color: var(--ion-color #fff);
     border-radius: 16px;
 }
 </style>

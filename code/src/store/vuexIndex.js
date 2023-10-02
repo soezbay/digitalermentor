@@ -114,19 +114,6 @@ const store = createStore({
         deleteZiel(context, zielId) {
             context.commit('removeZiel', zielId);
         },
-
-        // async updateZieleOrderActionForSS({ commit }, updatedZiele) {
-        //     // Hier kannst du asynchrone Operationen durchführen, falls erforderlich.
-        //     // Zum Beispiel: Daten vom Server laden, API-Aufrufe, usw.
-        //     // Rufe die Mutation auf, um die Ziele zu aktualisieren
-        //     commit('updateZieleOrderForSS', updatedZiele);
-        // },
-        // async updateZieleOrderActionForWS({ commit }, updatedZiele) {
-        //     // Hier kannst du asynchrone Operationen durchführen, falls erforderlich.
-        //     // Zum Beispiel: Daten vom Server laden, API-Aufrufe, usw.
-        //     // Rufe die Mutation auf, um die Ziele zu aktualisieren
-        //     commit('updateZieleOrderForWS', updatedZiele);
-        // },
     },
 
     getters: {
