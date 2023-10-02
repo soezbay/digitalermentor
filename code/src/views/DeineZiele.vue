@@ -345,6 +345,7 @@ export default {
     },
     deleteZielHandler(zielId) {
       this.$store.dispatch('deleteZiel', zielId);
+      console.log('Gelöschte Ziele:', this.deletedZiele);
     },
 
     filteredZiele(semester) {
@@ -367,6 +368,9 @@ export default {
     zieleWS() {
       return this.$store.getters.zieleWS;
     },
+    deletedZiele() {
+      return this.$store.getters.deletedZiele;
+    }
   }
 };
 </script>

@@ -10,6 +10,7 @@ const store = createStore({
             ziele: [],
             zieleSS: [],
             zieleWS: [],
+            deletedZiele: [],
         }
     },
 
@@ -66,7 +67,11 @@ const store = createStore({
         },
 
         removeZiel(state, zielId) {
+            const targetZiel = state.ziele.find(ziel => ziel.id === zielId);
+            state.deletedZiele.push(targetZiel);
             state.ziele = state.ziele.filter(ziel => ziel.id !== zielId);
+            state.zieleSS = state.zieleSS.filter(ziel => ziel.id !== zielId);
+            state.zieleWS = state.zieleWS.filter(ziel => ziel.id !== zielId);
         },
 
         // updateZieleOrderForSS(state, updatedZiele) {
@@ -162,6 +167,10 @@ const store = createStore({
         zieleWS(state) {
             return state.zieleWS;
         },
+
+        deletedZiele(state) {
+            return state.deletedZiele;
+        }
     },
 
     plugins: [createPersistedState()]
