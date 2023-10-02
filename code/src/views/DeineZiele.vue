@@ -21,8 +21,8 @@
         </ion-buttons>
       </div>
       <ion-list class="drag-drop-containers">
-        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
-          <ion-item-sliding v-for="ziel in filteredZiele('Sommersemester')" :key="ziel.id" class="drag-drop-box-item">
+        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
+          <ion-item-sliding v-for="ziel in zieleSS" :key="ziel.id" class="drag-drop-box-item">
             <ion-item color="#d2d69e" class="item-container">
               <ion-label class="card-label">
                 <h2>{{ ziel.titel }}</h2>
@@ -48,19 +48,22 @@
         </ion-buttons>
       </div>
       <ion-list class="drag-drop-containers">
-        <ion-item-sliding v-for="ziel in filteredZiele('Wintersemester')" :key="index" class="drag-drop-box-item">
-          <ion-item color="#d2d69e" class="item-container">
-            <ion-label class="card-label">
-              <h2>{{ ziel.titel }}</h2>
-              <p>{{ ziel.beschreibung }}</p>
-            </ion-label>
-          </ion-item>
-          <ion-item-options>
-            <ion-item-option color="danger">
-              <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
+        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
+          <ion-item-sliding v-for="ziel in zieleWS" :key="index" class="drag-drop-box-item">
+            <ion-item color="#d2d69e" class="item-container">
+              <ion-label class="card-label">
+                <h2>{{ ziel.titel }}</h2>
+                <p>{{ ziel.beschreibung }}</p>
+              </ion-label>
+              <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option color="danger">
+                <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-reorder-group>
       </ion-list>
 
       <!-- Titel "Diese Klausuren musst du noch schreiben" und grüne Linie -->
@@ -143,7 +146,8 @@
   
 <script>
 import { add, trash } from 'ionicons/icons';
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
 import {
   IonPage,
@@ -167,7 +171,6 @@ import {
 } from '@ionic/vue';
 
 export default {
-
   components: {
     IonPage,
     IonHeader,
@@ -188,20 +191,73 @@ export default {
     IonSelect, IonSelectOption,
     IonReorder, IonReorderGroup
   },
-  setup() {
-      const handleReorder = (event) => {
-        // The `from` and `to` properties contain the index of the item
-        // when the drag started and ended, respectively
-        console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
+  // setup() {
+  //   const store = useStore();
+  //   const itemsSS = ref([]);
+  //   const itemsWS = ref([]);
 
-        // Finish the reorder and position the item in the DOM based on
-        // where the gesture ended. This method can also be called directly
-        // by the reorder group
-        event.detail.complete();
-      };
+  //   onMounted(() => {
+  //     // holt die Ziele aus dem Vuex-Store
+  //     const zieleSS = store.getters.zieleSS;
+  //     itemsSS.value = zieleSS;
+  //     const zieleWS = store.getters.zieleWS;
+  //     itemsWS.value = zieleWS;
+  //   });
+  //   // const handleReorder = (event) => {
 
-      return { handleReorder };
-    },
+  //   //   // The `from` and `to` properties contain the index of the item
+  //   //   // when the drag started and ended, respectively
+  //   //   console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
+
+  //   //   // Finish the reorder and position the item in the DOM based on
+  //   //   // where the gesture ended. Update the items variable to the
+  //   //   // new order of items
+  //   //   items.value = event.detail.complete(items.value);
+  //   // };
+
+  //   const handleReorderForSS = (event) => {
+  //     // Die aktualisierte Reihenfolge der Ziele
+  //     const updatedZiele = [...itemsSS.value];
+
+  //     // Die `from` und `to`-Eigenschaften enthalten die Indexe, von wo das Element verschoben wurde und wohin es verschoben wurde.
+  //     const fromIndex = event.detail.from;
+  //     const toIndex = event.detail.to;
+
+  //     // Verschiebe das Ziel-Element in der `updatedZiele`-Liste
+  //     const [removedZiel] = updatedZiele.splice(fromIndex, 1);
+  //     updatedZiele.splice(toIndex, 0, removedZiel);
+
+  //     // Aktualisiere die Reihenfolge der Ziele im Vuex-Store
+  //     console.log(updatedZiele)
+  //     store.dispatch('updateZieleOrderActionForSS', updatedZiele);
+
+  //     // Beende die Reihenfolge-Aktion
+  //     event.detail.complete();
+  //   };
+
+  //   const handleReorderForWS = (event) => {
+  //     // Die aktualisierte Reihenfolge der Ziele
+  //     console.log('Before', itemsWS.value)
+  //     itemsWS.value = event.detail.complete(itemsWS.value);
+  //     console.log('after', itemsWS.value)
+  //     const updatedZiele = itemsWS.value;
+  //     // Die `from` und `to`-Eigenschaften enthalten die Indexe, von wo das Element verschoben wurde und wohin es verschoben wurde.
+  //     // const fromIndex = event.detail.from;
+  //     // const toIndex = event.detail.to;
+
+  //     // Verschiebe das Ziel-Element in der `updatedZiele`-Liste
+  //     // const [removedZiel] = updatedZiele.splice(fromIndex, 1);
+  //     // updatedZiele.splice(toIndex, 0, removedZiel);
+
+  //     // Aktualisiere die Reihenfolge der Ziele im Vuex-Store
+
+  //     store.dispatch('updateZieleOrderActionForWS', updatedZiele);
+
+  //     // Beende die Reihenfolge-Aktion
+  //   };
+
+  //   return { itemsSS, itemsWS, handleReorderForWS, handleReorderForSS };
+  // },
 
   data() {
     return {
@@ -236,6 +292,14 @@ export default {
   },
 
   methods: {
+    handleReorderForWS(event) {
+      const updatedZieleWS = event.detail.complete(this.zieleWS);
+      this.$store.commit('updateZieleWSOrder', updatedZieleWS);
+    },
+    handleReorderForSS(event) {
+      const updatedZieleSS = event.detail.complete(this.zieleSS);
+      this.$store.commit('updateZieleSSOrder', updatedZieleSS);
+    },
     dismiss() {
       this.$refs.modal_SS.$el.dismiss();
       this.$refs.modal_WS.$el.dismiss();
@@ -295,7 +359,14 @@ export default {
   computed: {
     ziele() {
       return this.$store.getters.ziele;
-    }
+    },
+    zieleSS() {
+      return this.$store.getters.zieleSS;
+    },
+
+    zieleWS() {
+      return this.$store.getters.zieleWS;
+    },
   }
 };
 </script>
@@ -353,7 +424,12 @@ export default {
 .card-label {
   margin: 0;
   padding-left: 15px;
+  font-weight: normal;
   color: black;
+}
+
+.card-label h2 {
+  font-weight: bold;
 }
 
 .löschenButton {
