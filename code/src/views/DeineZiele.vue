@@ -28,7 +28,7 @@
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
           <ion-item-sliding v-for="ziel in zieleSS" :key="ziel.id" class="drag-drop-box-item">
-            <ion-item color="#d2d69e" class="item-container">
+            <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
                 <h2>{{ ziel.titel }}</h2>
                 <p>{{ ziel.beschreibung }}</p>
@@ -55,7 +55,7 @@
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
           <ion-item-sliding v-for="ziel in zieleWS" :key="index" class="drag-drop-box-item">
-            <ion-item color="#d2d69e" class="item-container">
+            <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
                 <h2>{{ ziel.titel }}</h2>
                 <p>{{ ziel.beschreibung }}</p>
