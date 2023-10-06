@@ -7,15 +7,15 @@
             <ion-list-header>Digitaler Mentor</ion-list-header>
             <hr class="solid">
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-                <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
-                  :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
-                  <ion-icon aria-hidden="true" :md="p.mdIcon" style="margin-right: 15px; color: antiquewhite;"></ion-icon>
-                  <ion-label>{{ p.title }}</ion-label>
-                </ion-item>
-                <hr v-if="i === appPages.length - 3" class="solid">
+              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
+                :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+                <ion-icon aria-hidden="true" :md="p.mdIcon" style="margin-right: 15px; color: antiquewhite;"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+              <hr v-if="i === appPages.length - 3" class="solid">
             </ion-menu-toggle>
           </ion-list>
-          <ion-icon class="filter" style="font-size: 275px; float: right; padding-top: 10px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+          <ion-icon class="filter" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
@@ -25,6 +25,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 import {
   IonApp,
   IonContent,
@@ -45,7 +46,7 @@ import {
   settingsOutline
 } from 'ionicons/icons';
 
-const selectedIndex = ref(0);
+// const selectedIndex = ref(0);
 const appPages = [
   {
     title: 'Dashbord',
@@ -79,19 +80,28 @@ const appPages = [
   },
 ];
 
-const path = window.location.pathname.split('menu/')[1];
-if (path !== undefined) {
-  selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
-}
+// const path = window.location.pathname.split('localhost:8100/')[1];
+// if (path !== undefined) {
+//   selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
+// }
+
+const route = useRoute();
+const selectedIndex = ref(appPages.findIndex(page => page.url === route.path));
+
 </script>
 
 <style scoped>
 hr.solid {
   border-top: 5px solid #757e1b;
 }
+
 .filter {
- filter: opacity(0.45);
+  filter: opacity(0.45);
+  font-size: 275px;
+  float: right;
+  padding-top: 10px;
 }
+
 .padding {
   padding: 10px;
 }

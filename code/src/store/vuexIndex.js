@@ -7,6 +7,10 @@ const store = createStore({
             userData: [],
             termine: [],
             selectedDate: new Date(),
+            ziele: [],
+            zieleSS: [],
+            zieleWS: [],
+            deletedZiele: [],
         }
     },
 
@@ -36,14 +40,53 @@ const store = createStore({
         updateTermin(state, updatedTermin) {
             const index = state.termine.findIndex((termin) => termin.id === updatedTermin.id);
             if (index !== -1) {
-              // Wenn der Termin gefunden wurde, aktualisieren Sie ihn
-              state.termine[index] = updatedTermin;
+                // Wenn der Termin gefunden wurde, aktualisieren Sie ihn
+                state.termine[index] = updatedTermin;
             }
-          },
+        },
 
         removeTermin(state, terminId) {
             state.termine = state.termine.filter(termin => termin.id !== terminId);
-        }
+        },
+
+        addZiel(state, zielData) {
+            const newZiel = {
+                id: zielData.id,
+                titel: zielData.titel,
+                semesterSeason: zielData.semesterSeason,
+                beschreibung: zielData.beschreibung
+            }
+            state.ziele.push(newZiel);
+
+            // Füge das Ziel sowohl zum zieleSS-Array als auch zum zieleWS-Array hinzu
+            if (zielData.semesterSeason === 'Sommersemester') {
+                state.zieleSS.push(newZiel);
+            } else if (zielData.semesterSeason === 'Wintersemester') {
+                state.zieleWS.push(newZiel);
+            }
+        },
+
+        removeZiel(state, zielId) {
+            const targetZiel = state.ziele.find(ziel => ziel.id === zielId);
+            state.deletedZiele.push(targetZiel);
+            state.ziele = state.ziele.filter(ziel => ziel.id !== zielId);
+            state.zieleSS = state.zieleSS.filter(ziel => ziel.id !== zielId);
+            state.zieleWS = state.zieleWS.filter(ziel => ziel.id !== zielId);
+        },
+
+        // updateZieleOrderForSS(state, updatedZiele) {
+        //     state.zieleSS = updatedZiele;
+        // },
+        // updateZieleOrderForWS(state, updatedZiele) {
+        //     state.zieleWS = updatedZiele;
+        // },
+
+        updateZieleWSOrder(state, updatedZieleWS) {
+            state.zieleWS = updatedZieleWS;
+        },
+        updateZieleSSOrder(state, updatedZieleSS) {
+            state.zieleSS = updatedZieleSS;
+        },
 
     },
 
@@ -58,35 +101,63 @@ const store = createStore({
 
         updateTermin({ commit }, updatedTermin) {
             commit('updateTermin', updatedTermin);
-          },
+        },
 
         deleteTermin(context, terminId) {
             context.commit('removeTermin', terminId);
-        }
+        },
+
+        addZiel(context, zielData) {
+            context.commit('addZiel', zielData);
+        },
+
+        deleteZiel(context, zielId) {
+            context.commit('removeZiel', zielId);
+        },
     },
 
     getters: {
         userData(state) {
             return state.userData;
         },
-        
+
         termine(state) {
             return state.termine;
         },
 
         termin(state) {
             return (terminId) => {
-                return state.termine.find(termin =>  termin.id === terminId);
+                return state.termine.find(termin => termin.id === terminId);
             };
         },
 
         termin: (state) => (id) => {
             return state.termine.find((termin) => termin.id === id);
-          },
+        },
 
         getSelectedDate(state) {
             return state.selectedDate;
         },
+
+        ziele(state) {
+            return state.ziele;
+        },
+
+        ziel: (state) => (id) => {
+            return state.ziele.find((ziel) => ziel.id === id);
+        },
+
+        zieleSS(state) {
+            return state.zieleSS;
+        },
+
+        zieleWS(state) {
+            return state.zieleWS;
+        },
+
+        deletedZiele(state) {
+            return state.deletedZiele;
+        }
     },
 
     plugins: [createPersistedState()]

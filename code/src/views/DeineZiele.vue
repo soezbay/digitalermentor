@@ -2,6 +2,11 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button router-link="/menu/dashboard">
+            <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
         <ion-title>Deine Ziele</ion-title>
         <ion-buttons slot="end">
           <ion-menu-button color="primary"></ion-menu-button>
@@ -15,32 +20,56 @@
       <div class="semesterHeader">
         <ion-label class="labelHeader">Sommersemester</ion-label>
         <ion-buttons slot="end">
-          <ion-button style="padding-right: 15px;" color="primary">
+          <ion-button style="padding-right: 15px;" color="primary" id="open-SS-modal" expand="block">
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-buttons>
       </div>
-      <div class="drag-drop-containers">
-        <ion-card v-for="(card, index) in getSommersemesterZieleCards()" :key="index" @dragover="allowDrop" @drop="onDrop"
-          class="drag-drop-box">
-          <ion-card-title style="font-size: small;">{{ card.title }}</ion-card-title>
-        </ion-card>
-      </div>
+      <ion-list class="drag-drop-containers">
+        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
+          <ion-item-sliding v-for="ziel in zieleSS" :key="ziel.id" class="drag-drop-box-item">
+            <ion-item color="#d2d69e" class="item-container">
+              <ion-label class="card-label">
+                <h2>{{ ziel.titel }}</h2>
+                <p>{{ ziel.beschreibung }}</p>
+              </ion-label>
+              <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option color="danger">
+                <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-reorder-group>
+      </ion-list>
 
       <div class="semesterHeader">
         <ion-label class="labelHeader">Wintersemester</ion-label>
         <ion-buttons slot="end">
-          <ion-button style="padding-right: 15px;" color="primary">
+          <ion-button style="padding-right: 15px;" color="primary" id="open-WS-modal" expand="block">
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-buttons>
       </div>
-      <div class="drag-drop-containers">
-        <ion-card v-for="(card, index) in getWintersemesterZieleCards()" :key="index" @dragover="allowDrop" @drop="onDrop"
-          class="drag-drop-box">
-          <ion-card-title>{{ card.title }}</ion-card-title>
-        </ion-card>
-      </div>
+      <ion-list class="drag-drop-containers">
+        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
+          <ion-item-sliding v-for="ziel in zieleWS" :key="index" class="drag-drop-box-item">
+            <ion-item color="#d2d69e" class="item-container">
+              <ion-label class="card-label">
+                <h2>{{ ziel.titel }}</h2>
+                <p>{{ ziel.beschreibung }}</p>
+              </ion-label>
+              <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option color="danger">
+                <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-reorder-group>
+      </ion-list>
 
       <!-- Titel "Diese Klausuren musst du noch schreiben" und grüne Linie -->
       <ion-row class="klausuren-title">
@@ -62,16 +91,67 @@
         </div>
       </ion-list>
 
-      <!-- Speichern-Button -->
-      <ion-button expand="full" color="success" @click="speichern">
-        Speichern
-      </ion-button>
+      <ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Erstelle ein Ziel</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="saveZiel" :disabled="!zielName">Speichern</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-item>
+            <ion-label position="floating">Zielname</ion-label>
+            <ion-input v-model="zielName"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select ref="semesterSelect" label="Season" placeholder="Semesterseason" value="Sommersemester">
+              <ion-select-option value="Sommersemester">Sommersemester</ion-select-option>
+              <ion-select-option value="Wintersemester">Wintersemester</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Info</ion-label>
+            <ion-input v-model="info"></ion-input>
+          </ion-item>
+        </ion-content>
+      </ion-modal>
+
+      <ion-modal ref="modal_WS" trigger="open-WS-modal" :presenting-element="presentingElement">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Erstelle ein Ziel</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="saveZiel" :disabled="!zielName">Speichern</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-item>
+            <ion-label position="floating">Zielname</ion-label>
+            <ion-input v-model="zielName" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select ref="semesterSelect" label="Season" placeholder="Semesterseason" value="Wintersemester">
+              <ion-select-option value="Sommersemester">Sommersemester</ion-select-option>
+              <ion-select-option value="Wintersemester">Wintersemester</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Info</ion-label>
+            <ion-input v-model="info"></ion-input>
+          </ion-item>
+        </ion-content>
+      </ion-modal>
+
     </ion-content>
   </ion-page>
 </template>
   
 <script>
-import { add } from 'ionicons/icons';
+import { add, trash } from 'ionicons/icons';
+
 import {
   IonPage,
   IonHeader,
@@ -79,18 +159,21 @@ import {
   IonTitle,
   IonContent,
   IonButtons,
-  IonMenuButton,
+  IonMenuButton, IonButton,
   IonItem,
-  IonLabel,
+  IonLabel, IonInput,
   IonList, IonListHeader,
   IonCard,
-  IonButton,
   IonRow,
-  IonIcon
+  IonIcon,
+  IonItemSliding, IonItemOptions, IonItemOption,
+  IonModal,
+  IonSelect, IonSelectOption,
+  IonReorder, IonReorderGroup,
+  actionSheetController
 } from '@ionic/vue';
 
 export default {
-
   components: {
     IonPage,
     IonHeader,
@@ -100,37 +183,24 @@ export default {
     IonItem,
     IonButtons,
     IonMenuButton,
-    IonLabel,
+    IonLabel, IonInput,
     IonList, IonListHeader,
     IonCard,
     IonButton,
     IonRow,
-    IonIcon
+    IonIcon,
+    IonItemSliding, IonItemOptions, IonItemOption,
+    IonModal,
+    IonSelect, IonSelectOption,
+    IonReorder, IonReorderGroup
   },
-
-  name: 'Ziele',
   data() {
     return {
-      SommersemsterZiele: [
-        {
-          cards: [
-            { ziel: "OPR Bestehen" },
-            { ziel: "LDS Bestehen" }
-          ], // Array zum Speichern der Karten
-        },
-      ],
-
-      WintersemesterZiele: [
-        {
-          cards: [
-            { ziel: "ADS Bestehen" },
-            { ziel: "INS Bestehen" }
-          ], // Array zum Speichern der Karten
-        },
-      ],
-
-      aktuellesSemester: 'Wintersemester 2023', // Aktuelles Semester
-      nichtGewaehltesSemester: 'Sommersemester 2023', // Nicht gewähltes Semester
+      presentingElement: undefined,
+      zielName: '',
+      semesterSeason: '',
+      info: '',
+      add, trash,
       semesterList: [
         {
           name: '1. Semester',
@@ -153,42 +223,89 @@ export default {
         },
         // Weitere Semester und Fächer hier hinzufügen
       ],
-      add
     };
   },
+
   methods: {
-    // Methode, um Drag & Drop zu erlauben
-    allowDrop(event) {
-      event.preventDefault();
+    handleReorderForWS(event) {
+      const updatedZieleWS = event.detail.complete(this.zieleWS);
+      this.$store.commit('updateZieleWSOrder', updatedZieleWS);
     },
-    // Methode, die beim Ziehen eines Faches aufgerufen wird
-    onDragStart(fach) {
-      event.dataTransfer.setData('text/plain', fach.name);
+    handleReorderForSS(event) {
+      const updatedZieleSS = event.detail.complete(this.zieleSS);
+      this.$store.commit('updateZieleSSOrder', updatedZieleSS);
     },
-    // Methode, die beim Ablegen eines Faches aufgerufen wird
-    onDrop(event) {
-      event.preventDefault();
-      const fachName = event.dataTransfer.getData('text/plain');
-      // Fügen Sie hier die Logik hinzu, um das Fach an die richtige Stelle zu verschieben
+    dismiss() {
+      this.$refs.modal_SS.$el.dismiss();
+      this.$refs.modal_WS.$el.dismiss();
     },
-    // Methode zum Speichern der Ziele
-    speichern() {
-      // Fügen Sie hier die Logik zum Speichern der ausgewählten Module hinzu
+    // async canDismiss() {
+    //   const actionSheet = await actionSheetController.create({
+    //     header: 'Fenster schließen und kein Ziel hinzufügen?',
+    //     buttons: [
+    //       {
+    //         text: 'Ja',
+    //         role: 'confirm',
+    //       },
+    //       {
+    //         text: 'Nein',
+    //         role: 'cancel',
+    //       },
+    //     ],
+    //   });
+    //   actionSheet.present();
+    //   const { role } = await actionSheet.onWillDismiss();
+    //   return role === 'confirm';
+    // },
+    saveZiel() {
+      const selectedOption = this.$refs.semesterSelect.value;
+      if (this.zielName && selectedOption) {
+        console.log('Erstelle Ziel Daten')
+        const zielData = {
+          id: Date.now(),
+          titel: this.zielName,
+          semesterSeason: selectedOption,
+          beschreibung: this.info
+        };
+        console.log('Dispatche Ziel Daten')
+        this.$store.dispatch('addZiel', zielData);
+        console.log('Schließe Modal')
+        this.zielName = '';
+        this.semesterSeason = '';
+        this.info = '';
+        this.dismiss(); // Schließe das Modal nach dem Speichern
+      } else {
+        console.log('Fehlgeschlagen Daten zu generienen')
+      }
     },
-    getSommersemesterZieleCards() {
-      const ziele = this.SommersemsterZiele[0]; // Annahme: Es gibt nur ein Semester
-      return ziele.cards.map((ziel, index) => ({
-        title: ziel.ziel,
-        index: index + 1, // Index + 1 für die Kartennummer
-      }));
+    deleteZielHandler(zielId) {
+      this.$store.dispatch('deleteZiel', zielId);
+      console.log('Gelöschte Ziele:', this.deletedZiele);
     },
-    getWintersemesterZieleCards() {
-      const ziele = this.WintersemesterZiele[0]; // Annahme: Es gibt nur ein Semester
-      return ziele.cards.map((ziel, index) => ({
-        title: ziel.ziel,
-        index: index + 1, // Index + 1 für die Kartennummer
-      }));
+
+    filteredZiele(semester) {
+      // Filtere die Ziele basierend auf dem übergebenen Semester
+      return this.ziele.filter(ziel => ziel.semesterSeason === semester);
     },
+  },
+  // mounted() {
+  //   this.presentingElement = this.$refs.page.$el;
+  // },
+
+  computed: {
+    ziele() {
+      return this.$store.getters.ziele;
+    },
+    zieleSS() {
+      return this.$store.getters.zieleSS;
+    },
+
+    zieleWS() {
+      return this.$store.getters.zieleWS;
+    },
+    deletedZiele() {
+      return this.$store.getters.deletedZiele;
+    }
   }
 };
 </script>
@@ -204,14 +321,13 @@ export default {
   align-items: center;
   padding: 10px;
   /* Platzierung für den Inhalt */
-
 }
 
 .labelHeader {
   padding-left: 25px;
 }
 
-ion-icon {
+.semesterHeader ion-icon {
   width: 45px;
   height: 25px;
   border-radius: 30px;
@@ -228,14 +344,40 @@ ion-icon {
   padding-right: 45px;
 }
 
-.drag-drop-box {
-  width: 100%;
-  height: 40px;
-  padding: 20px;
+.drag-drop-box-item {
+  height: 45px;
   margin: 10px;
-  border: 2px solid #ccc;
   border-radius: 30px;
-  text-align: center;
+  text-align: left;
+  background-color: #d2d69e;
+}
+
+.drag-drop-box-item ion-icon {
+  color: white;
+}
+
+.item-container {
+  background-color: #d2d69e;
+}
+
+.card-label {
+  margin: 0;
+  padding-left: 15px;
+  font-weight: normal;
+  color: black;
+}
+
+.card-label h2 {
+  font-weight: bold;
+}
+
+.löschenButton {
+  height: 27px;
+  width: 27px;
+  margin-left: 8px;
+  margin-top: 4px;
+  border: 2px solid #ccc;
+  border-radius: 20px;
 }
 
 .klausuren-title {
@@ -272,5 +414,22 @@ ion-icon {
 
 .versuch3 {
   background-color: #d32e2e;
+}
+
+ion-modal {
+  --height: 35%;
+  --width: 90%;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+ion-modal::part(backdrop) {
+  background: rgba(209, 213, 219);
+  opacity: 1;
+}
+
+ion-modal ion-toolbar {
+  --background: #8C9900;
+  --color: white;
 }
 </style>

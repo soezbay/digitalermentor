@@ -11,11 +11,7 @@ import Profil from '../profile/Profil.vue';
 const routes = [
   {
     path: '',
-    redirect: '/dashboard'
-  },
-  {
-    path: '/dashboard',
-    component: Dashboard
+    redirect: '/menu/dashboard',
   },
   {
     path: '/menu/dashboard',

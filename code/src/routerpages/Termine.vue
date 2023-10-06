@@ -3,7 +3,7 @@
         <ion-header>
             <ion-toolbar>
                 <ion-title>Termine</ion-title>
-                <ion-buttons slot="start">                
+                <ion-buttons slot="start">
                     <ion-back-button color="primary" router-link="/menu/dashboard"></ion-back-button>
                 </ion-buttons>
                 <ion-buttons slot="end">
