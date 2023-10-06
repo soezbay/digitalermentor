@@ -2,6 +2,11 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button router-link="/menu/dashboard">
+            <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
         <ion-title>Deine Ziele</ion-title>
         <ion-buttons slot="end">
           <ion-menu-button color="primary"></ion-menu-button>

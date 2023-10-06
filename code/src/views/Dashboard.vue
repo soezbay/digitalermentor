@@ -27,14 +27,14 @@
             </div>
             <div class="ziel-container">
                 <ion-list class="drag-drop-containers">
-                    <div v-if="zieleSS.length > 0" class="drag-drop-box-item">
+                    <div v-if="zieleSS.length >= 1" class="drag-drop-box-item">
                         <ion-item lines="none" color="#d2d69e" class="item-container">
                             <ion-label class="card-label">
                                 <h2>{{ zieleSS[0].titel }}</h2>
                                 <p>{{ zieleSS[0].beschreibung }}</p>
                             </ion-label>
                         </ion-item>
-                        <ion-item lines="none" color="#d2d69e" class="item-container">
+                        <ion-item v-if="zieleSS.length > 1" lines="none" color="#d2d69e" class="item-container">
                             <ion-label class="card-label">
                                 <h2>{{ zieleSS[1].titel }}</h2>
                                 <p>{{ zieleSS[1].beschreibung }}</p>
@@ -44,14 +44,14 @@
                 </ion-list>
                 <div class="ziel-separator"></div>
                 <ion-list class="drag-drop-containers">
-                    <div v-if="zieleWS.length > 0" class="drag-drop-box-item">
+                    <div v-if="zieleWS.length >= 1" class="drag-drop-box-item">
                         <ion-item lines="none" color="#d2d69e" class="item-container">
                             <ion-label class="card-label">
                                 <h2>{{ zieleWS[0].titel }}</h2>
                                 <p>{{ zieleWS[0].beschreibung }}</p>
                             </ion-label>
                         </ion-item>
-                        <ion-item lines="none" color="#d2d69e" class="item-container">
+                        <ion-item v-if="zieleWS.length > 1" lines="none" color="#d2d69e" class="item-container">
                             <ion-label class="card-label">
                                 <h2>{{ zieleWS[1].titel }}</h2>
                                 <p>{{ zieleWS[1].beschreibung }}</p>
