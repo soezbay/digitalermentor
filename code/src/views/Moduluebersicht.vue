@@ -26,19 +26,17 @@
 
       <!-- Ion Grid für Semester -->
       <ion-grid>
-        <ion-row v-for="semester in uniqueSemesters" :key="semester">
-          <ion-col>
-            <ion-label>{{ `Semester ${semester}` }}</ion-label>
-          </ion-col>
-          <ion-col>
+        <ion-row class="modulfont" v-for="semester in uniqueSemesters" :key="semester">
+          <ion-list-header class="modulfont">
+            {{ `Semester ${semester}` }}
+          </ion-list-header>
             <!-- Anzeige der ausgewählten Module für das jeweilige Semester -->
-            <ion-list>
-              <ion-item v-for="module in getModulesForSemester(semester)" :key="module.Kuerzel">
-                <ion-label>{{ module.Name }}</ion-label>
-                <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
-              </ion-item>
-            </ion-list>
-          </ion-col>
+          <ion-row class="semesterBlock">
+            <ion-col class="modulBlock" v-for="module in getModulesForSemester(semester)" :key="module.Kuerzel">
+              <ion-label>{{ module.Name }}</ion-label>
+              <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>      
+            </ion-col>
+          </ion-row>
         </ion-row>
       </ion-grid>
     </ion-content>
