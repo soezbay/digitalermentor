@@ -20,9 +20,8 @@
 			<div id="cpInfo">{{ reachedCreditPoints }}/{{ fullCreditPoints }} CP</div>
 			<div id="averageGrade">
 				Dein Notendurchschnitt:
-				{{ calculateAverageGrade().toFixed(2).replace(".", ",") }}
+				{{ calculateAverageGrade().toFixed(2).replace(".", ",") }} <br />
 			</div>
-
 			<ion-grid
 				:fixed="true"
 				v-for="(semesterModules, semester) in groupedModulesWithEmpty"
@@ -35,7 +34,10 @@
 							<ion-icon
 								:icon="remove"
 								id="removeSemesterIcon"
-								v-if="semester > 6 && semester == emptySemesters + 6"
+								v-if="
+									semester > Object.keys(groupedModules).length &&
+									semester == emptySemesters + Object.keys(groupedModules).length
+								"
 								@click="removeEmptySemester"></ion-icon>
 						</ion-row>
 					</ion-col>
@@ -168,6 +170,7 @@ export default {
 			studentID: "test123",
 			studentProgress: [], // Teilgenommene Module des Studierenden
 			emptySemesters: 0, // Anzahl der leeren Semester
+			// standardStudyPeriod: 0, // Regelsemester
 		};
 	},
 	methods: {
