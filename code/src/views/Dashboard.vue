@@ -2,46 +2,99 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
-                <ion-buttons>
+                <ion-buttons slot="start">
+                    <ion-button router-link="/menu/dashboard">
+                        <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+                <ion-title>Dashboard</ion-title>
+                <ion-buttons slot="end">
                     <ion-menu-button color="primary"></ion-menu-button>
-                    <ion-title>Dashboard</ion-title>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
 
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
-            <ion-header router-link="/menu/ziele" id="zieleHeader">Aktive Ziele:</ion-header>
-            <div id="flexbox1">
-                <ion-item lines="none">
-                    <ion-label>EPR</ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                    <ion-label>ADS</ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                    <ion-label>ADS</ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                    <ion-label>ADS</ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                    <ion-label>INP</ion-label>
+            <ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none">
+                <ion-label>
+                    Aktive Ziele
+                </ion-label>
+            </ion-item>
+            <div class="semester-container">
+                <ion-label class="semester-label" style="font-size: larger;">Sommersemester</ion-label>
+                <ion-label class="semester-label" style="font-size: larger;">Wintersemester</ion-label>
+            </div>
+            <div class="ziel-container">
+                <ion-list class="drag-drop-containers">
+                    <div v-if="zieleSS.length >= 1" class="drag-drop-box-item">
+                        <ion-item lines="none" color="#d2d69e" class="item-container">
+                            <ion-label class="card-label">
+                                <h2>{{ zieleSS[0].titel }}</h2>
+                                <p>{{ zieleSS[0].beschreibung }}</p>
+                            </ion-label>
+                        </ion-item>
+                        <ion-item v-if="zieleSS.length > 1" lines="none" color="#d2d69e" class="item-container">
+                            <ion-label class="card-label">
+                                <h2>{{ zieleSS[1].titel }}</h2>
+                                <p>{{ zieleSS[1].beschreibung }}</p>
+                            </ion-label>
+                        </ion-item>
+                    </div>
+                </ion-list>
+                <div class="ziel-separator"></div>
+                <ion-list class="drag-drop-containers">
+                    <div v-if="zieleWS.length >= 1" class="drag-drop-box-item">
+                        <ion-item lines="none" color="#d2d69e" class="item-container">
+                            <ion-label class="card-label">
+                                <h2>{{ zieleWS[0].titel }}</h2>
+                                <p>{{ zieleWS[0].beschreibung }}</p>
+                            </ion-label>
+                        </ion-item>
+                        <ion-item v-if="zieleWS.length > 1" lines="none" color="#d2d69e" class="item-container">
+                            <ion-label class="card-label">
+                                <h2>{{ zieleWS[1].titel }}</h2>
+                                <p>{{ zieleWS[1].beschreibung }}</p>
+                            </ion-label>
+                        </ion-item>
+                    </div>
+                </ion-list>
+            </div>
+            <ion-header style="height: 0.3%;"></ion-header>
+            <ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none">
+                <ion-label>
+                    Termine
+                </ion-label>
+            </ion-item>
+            <div v-if="kommendeTermine.length > 0">
+                <ion-list v-for="termin in kommendeTermine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
+                    <ion-item style="background-color: #3d3e40;">
+                        <ion-label>
+                            <h2>{{ termin.titel }}</h2>
+                            <h3>{{ termin.ort }}</h3>
+                        </ion-label>
+                        <ion-label slot="end">
+                            <h2>{{ formatDate(termin.datum) }} - {{ termin.zeit }}</h2>
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <div v-else>
+                <ion-item style="text-align: center;">
+                    <ion-label>
+                        <h2>Keine Termine für diesen Monat.</h2>
+                    </ion-label>
                 </ion-item>
             </div>
             <br>
-            <ion-header id="zieleHeader">Termine:</ion-header>
-            <div>
-                <ion-item>
-                    <ion-label>xyz</ion-label>
-                </ion-item>
-            </div>
-            <div id="kalender">
-                <ion-datetime size="cover" max="2100-01-01T00:00:00"></ion-datetime>
+            <div class="dateDiv">
+                <ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover"
+                    max="2100-01-01T00:00:00">
+                </ion-datetime>
             </div>
             <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
-            <!-- <ion-list>
-                <div id="module">
+            <ion-list>
+                <div>
                     <ion-item v-for="(item, index) in usersList" :key="index">
                         <ion-label>
                             <p><strong>BewertungsID:</strong> {{ item.BewertungsID }}</p>
@@ -53,15 +106,31 @@
                         </ion-label>
                     </ion-item>
                 </div>
-            </ion-list> -->
+            </ion-list>
         </ion-content>
     </ion-page>
 </template>
             
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonDatetime, IonButtons, IonMenuButton, IonItem, IonLabel, IonList } from '@ionic/vue';
+import {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonDatetime,
+    IonButtons, IonButton,
+    IonMenuButton,
+    IonItem,
+    IonLabel,
+    IonList, IonListHeader,
+    IonIcon
+} from '@ionic/vue';
+
 import axios from 'axios';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
     components: {
@@ -72,26 +141,60 @@ export default {
         IonContent,
         IonDatetime,
         IonItem,
-        IonButtons,
+        IonButtons, IonButton,
         IonMenuButton,
         IonLabel,
-        IonList
+        IonList, IonListHeader,
+        IonIcon
+    },
+    setup() {
+        const store = useStore();
+
+        const termine = computed(() => {
+            const terminArr = store.getters.termine;
+            return terminArr;
+        });
+
+        const highlightedDates = computed(() => {
+            // Generate highlightedDates from your Vuex store data
+            return termine.value.map(termine => {
+                return {
+                    date: termine.datum, // Use the appropriate property from your termine data
+                    textColor: '#000000', // Customize as needed
+                    backgroundColor: '#D7D5D5', // Customize as needed
+                };
+            });
+        });
+
+        const formatDate = (dateString) => {
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                const [year, month, day] = parts;
+                return `${day}.${month}.${year}`;
+            }
+            return dateString; // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+        };
+
+        return {
+            highlightedDates,
+            formatDate
+        };
     },
     data() {
         return {
-            usersList: []
+            usersList: [],
+            selectedDate: new Date().toISOString()
         }
     },
     methods: {
         getData() {
-            axios.get('http://localhost:3000/bewertung').then(Response => {
+            axios.get('http://localhost:8000/bewertung').then(Response => {
                 console.log(Response.data)
                 this.usersList = Response.data.bewertungen;
             }).catch(err => {
                 console.log(err);
             })
         },
-
         getGreeting() {
             const currentTime = new Date();
             const currentHour = currentTime.getHours();
@@ -104,19 +207,82 @@ export default {
                 return 'Schönen Abend';
             }
         },
-
         getUsername() {
             return 'Username' + '!';
 
-        }
+        },
     },
     mounted() {
         this.getData();
-    }
+    },
+    computed: {
+        kommendeTermine() {
+            const currentDate = new Date();
+            const kommendeTermine = this.$store.getters.termine.filter(termin => {
+                const terminDate = new Date(termin.datum);
+                return terminDate >= currentDate;
+            });
+
+            return kommendeTermine.slice(0, 3); // Nur die ersten zwei Termine
+        },
+        zieleSS() {
+            return this.$store.getters.zieleSS;
+        },
+        zieleWS() {
+            return this.$store.getters.zieleWS;
+        },
+
+    },
+
 }
 </script>
 
 <style scoped>
+.drag-drop-containers {
+    width: 50%;
+}
+
+.semester-container {
+    display: flex;
+    padding-top: 10px;
+    background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
+
+.semester-label {
+    width: 50%;
+    font-size: larger;
+    text-align: center;
+    display: inline-block;
+}
+
+.ziel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ziel-separator {
+    border-left: 2px solid #ccc;
+    height: 130px;
+    margin: 0 3px;
+
+}
+
+.drag-drop-box-item {
+    margin: 5px;
+    border-radius: 30px;
+    text-align: left;
+}
+
+.item-container {
+    margin: 5px;
+    border-radius: 30px;
+    text-align: left;
+    background-color: #d2d69e;
+    text-align: center;
+    color: black;
+}
+
 #flexbox1 {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -124,7 +290,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    background-color: #27292b;
 }
 
 #flexbox1 ion-item {
@@ -132,15 +297,6 @@ export default {
     width: 85px;
     text-align: center;
     border-radius: 20px;
-    background-color: #27292b;
-
-}
-
-.ios #flexbox1 ion-item {
-    margin: 1%;
-    width: 85px;
-    text-align: center;
-    background-color: #27292b;
 }
 
 
@@ -150,16 +306,36 @@ export default {
     text-align: center;
 }
 
-#zieleHeader {
-    background-color: #27292b;
-    height: 35px;
+#header {
+    /* height: 35px;
     padding-top: 8px;
-    padding-left: 25px;
+    padding-left: 25px; */
     font-size: larger;
-    text-align: left;
+    text-align: center;
 }
 
-#module {
-    height: 20px;
+#header ion-label {
+    padding-left: 20px;
+}
+
+.ios #header {
+    height: 0;
+    font-size: larger;
+    font-weight: lighter;
+    text-align: center;
+}
+
+.ios #header ion-label {
+    padding-bottom: 0.5%;
+}
+
+.dateDiv {
+    margin: 10px;
+}
+
+ion-datetime {
+    background: var(--ion-item-background, var(--ion-background-color, #d2d69e));
+    color: var(--ion-color #fff);
+    border-radius: 16px;
 }
 </style>

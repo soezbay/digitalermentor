@@ -1,37 +1,75 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
+import Dashboard from '../views/Dashboard.vue';
 import Moduluebersicht from '../views/Moduluebersicht.vue';
+import Termine from '../routerpages/Termine.vue';
+import Studienverlauf from '../views/Studienverlauf.vue';
+import Profil from '../profile/Profil.vue';
+
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
 
 const routes = [
   {
     path: '',
-    redirect: '/dashboard'
-  },
-  {
-    path: '/dashboard',
-    component: () => import ('../views/Dashboard.vue')
+    redirect: '/menu/dashboard',
   },
   {
     path: '/menu/dashboard',
-    component: () => import ('../views/Dashboard.vue')
+    component: Dashboard
   },
   {
-    path: '/Moduluebersicht',
+    path: '/moduluebersicht',
     component: Moduluebersicht
   },
   {
-    path: '/menu/Moduluebersicht',
+    path: '/menu/moduluebersicht',
     component: Moduluebersicht
   },
   {
-    path: '/menu/ziele',
-    component: () => import ('../views/Ziele.vue')
+    path: '/menu/modulbeschreibung',
+    component: () => import ('../views/Modulbeschreibung.vue')
   },
   {
-    path: '/ziele/:id',
-    component: () => import ('../views/Ziele.vue')
-  }
+    path: '/menu/modulbeschreibung/:url_kuerzel',
+    component: () => import ('../views/Modulbeschreibung.vue')
+  },
+  {
+    path: '/termine',
+    component: Termine
+  },
+  {
+    path: '/termine/:id',
+    component: () => import('../routerpages/TermineDetails.vue')
+  },
+  {
+    path: '/menu/dashboard/termine',
+    component: Termine
+  },
+  {
+    path: '/menu/dashboard/termine/add_termin',
+    component: () => import('../routerpages/AddTermin.vue')
+  },
+  {
+    path: '/studienverlauf',
+    component: Studienverlauf
+  },
+  {
+    path: '/menu/studienverlauf',
+    component: Studienverlauf
+  },
+  {
+    path: '/menu/studienziele',
+    component: () => import('../views/DeineZiele.vue')
+  },
+  {
+    path: '/menu/profil',
+    component: Profil
+  },
+  {
+    path: '/menu/profil/changeProfile',
+    component: () => import('../profile/changeProfile.vue')
+  },
+
 ]
 
 const router = createRouter({
