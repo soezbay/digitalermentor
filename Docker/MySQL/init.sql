@@ -218,6 +218,12 @@ Insert Into Pflicht Value("PI", "GMI",1);
 Insert Into Pflicht Value("PI", "TGI",1);
 Insert Into Pflicht Value("PI", "TENI",1);
 
+Insert Into Pflicht Value("TI", "LDS",1);
+Insert Into Pflicht Value("TI", "EPR",1);
+Insert Into Pflicht Value("TI", "GMI",1);
+Insert Into Pflicht Value("TI", "TGI",1);
+Insert Into Pflicht Value("TI", "TENI",1);
+
 Insert Into Pflicht Value("PI", "ADS",2);
 Insert Into Pflicht Value("PI", "OPR",2);
 Insert Into Pflicht Value("PI", "MIN",2);

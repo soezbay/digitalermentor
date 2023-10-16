@@ -33,8 +33,14 @@
             <!-- Anzeige der ausgewählten Module für das jeweilige Semester -->
           <ion-row class="semesterBlock">
             <ion-col class="modulBlock" v-for="module in getModulesForSemester(semester)" :key="module.Kuerzel">
-              <ion-label>{{ module.Name }}</ion-label>
+              <ion-label>{{ module.Kuerzel }}</ion-label>
               <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>      
+            </ion-col>
+          </ion-row>
+<ion-row class="semesterBlock">
+            <ion-col class="modulBlock" v-for="module in modules.wahlpflicht" :key="module.Kuerzel">
+              <ion-label>{{ module.Kuerzel }}</ion-label>
+              <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
             </ion-col>
           </ion-row>
         </ion-row>
@@ -92,10 +98,11 @@ export default {
   data() {
     return {
 
-      selectedStudiengang: "PI",
+      selectedStudiengang: null,
       studiengaenge: [],
       modules: {
-        pflicht: [] // Pflichtmodule initialisieren
+        pflicht: [],// Pflichtmodule initialisieren
+wahlpflicht: []
       }
     };
   },
@@ -117,29 +124,33 @@ export default {
 },
   created() {
   console.log("Wir sind hier");
-  // this.fetchStudiengaenge();
+  this.fetchStudiengaenge();
   console.log("Studiengang= ", this.selectedStudiengang)
+  if(this.selectedStudiengang != null) {
   this.fetchPflichtModule(this.selectedStudiengang);
+this.fetchWahplfichtModule(this.selectedStudiengang);
+  }
   },
   mounted() {
-    // this.fetchStudiengaenge();
+    this.fetchStudiengaenge();
   },
   watch: {
     selectedStudiengang(newStudiengang) {
       this.fetchPflichtModule(newStudiengang);
+this.fetchWahplfichtModule(newStudiengang);
     },
   },
   methods: {
-    // async fetchStudiengaenge() {
-    //   try {
-    //     const response = await axios.get('http://localhost:8000/studiengang');
-    //     this.studiengaenge = response.data.studiengaenge;
-    //     console.log("Test")
-    //     console.log(this.studiengaenge)
-    //   } catch (error) {
-    //     console.error('Error fetching studiengaenge:', error);
-    //   }
-    // },
+    async fetchStudiengaenge() {
+      try {
+        const response = await axios.get('http://localhost:8000/studiengang');
+        this.studiengaenge = response.data.studiengaenge;
+        console.log("Test")
+        console.log(this.studiengaenge)
+      } catch (error) {
+        console.error('Error fetching studiengaenge:', error);
+      }
+    },
     async fetchPflichtModule() {
   try {
     const response = await fetch(`http://localhost:8000/studiengang/pflicht/${this.selectedStudiengang}`);
@@ -159,17 +170,23 @@ export default {
 },
 
 
-    // async fetchWahplfichtModule(selectedStudiengang) {
-    //   try {
-    //     const response = await axios.get('http://localhost:8000/studiengang/${selectedStudiengang}');
-    //     this.wahlpflichtModule = response.data.modules
-    //   } catch (error) {
-    //     console.error('Error fetching wahlpfichtmodule:', error);
-    //   }
-    // },
-    // toggleDescription(semesterIndex, moduleIndex) {
-    //   this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
-    // },
+    async fetchWahplfichtModule(selectedStudiengang) {
+      try {
+        const response = await axios.get(`http://localhost:8000/studiengang/wahlpflicht/${this.selectedStudiengang}`);
+        const data = await response.json();
+        if (data.wahlpflicht) {
+          this.modules.wahlpflicht = data.wahlpflicht;
+          console.log("Pflichtmodule geladen:", this.modules.wahlpflicht);
+        } else {
+          console.error("Fehler beim Laden der Wahlpflichtflichtmodule.");
+        }
+      } catch (error) {
+        console.error("Fehler beim Abrufen der Daten:", error);
+      }
+    },
+    toggleDescription(semesterIndex, moduleIndex) {
+      this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
+    },
 
     // async openModal(selectedModul) {
     //   const modal = await modalController
