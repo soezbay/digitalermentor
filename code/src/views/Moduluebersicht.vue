@@ -38,7 +38,7 @@
             </ion-col>
           <template v-if="istEinWahlpflichtmodulImSemester(semester)">
             <ion-col class="modulBlock" v-for="index in maxWahlpflichtCols(semester)" :key="index">
-            <ion-label>WL {{ index }}</ion-label>
+            <ion-label>WP {{ index }}</ion-label>
           </ion-col>
           </template>
           </ion-row>
