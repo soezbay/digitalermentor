@@ -36,14 +36,22 @@
               <ion-label>{{ module.Kuerzel }}</ion-label>
               <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>      
             </ion-col>
+          <template v-if="istEinWahlpflichtmodulImSemester(semester)">
+            <ion-col class="modulBlock" v-for="index in maxWahlpflichtCols(semester)" :key="index">
+            <ion-label>WL {{ index }}</ion-label>
+          </ion-col>
+          </template>
           </ion-row>
-<ion-row class="semesterBlock">
-            <ion-col class="modulBlock" v-for="module in modules.wahlpflicht" :key="module.Kuerzel">
-              <ion-label>{{ module.Kuerzel }}</ion-label>
-              <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
-            </ion-col>
           </ion-row>
-        </ion-row>
+          <ion-row class="modulfont" v-if="modules.wahlpflicht != 0">
+            <ion-list-header class="modulfont"> Wahlpflichtflichtmodule </ion-list-header>
+          <ion-row class="semesterBlock">
+              <ion-col class="modulBlock" v-for="module in modules.wahlpflicht" :key="module.Kuerzel">
+                <ion-label>{{ module.Kuerzel }}</ion-label>
+                <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
+              </ion-col>
+            </ion-row>
+          </ion-row>
       </ion-grid>
     </ion-content>
   </ion-page>
@@ -102,7 +110,7 @@ export default {
       studiengaenge: [],
       modules: {
         pflicht: [],// Pflichtmodule initialisieren
-wahlpflicht: []
+      wahlpflicht: []
       }
     };
   },
@@ -128,7 +136,7 @@ wahlpflicht: []
   console.log("Studiengang= ", this.selectedStudiengang)
   if(this.selectedStudiengang != null) {
   this.fetchPflichtModule(this.selectedStudiengang);
-this.fetchWahplfichtModule(this.selectedStudiengang);
+  this.fetchWahplfichtModule(this.selectedStudiengang);
   }
   },
   mounted() {
@@ -137,7 +145,7 @@ this.fetchWahplfichtModule(this.selectedStudiengang);
   watch: {
     selectedStudiengang(newStudiengang) {
       this.fetchPflichtModule(newStudiengang);
-this.fetchWahplfichtModule(newStudiengang);
+      this.fetchWahplfichtModule(newStudiengang);
     },
   },
   methods: {
@@ -173,10 +181,10 @@ this.fetchWahplfichtModule(newStudiengang);
     async fetchWahplfichtModule(selectedStudiengang) {
       try {
         const response = await axios.get(`http://localhost:8000/studiengang/wahlpflicht/${this.selectedStudiengang}`);
-        const data = await response.json();
+        const data = await response.data;
         if (data.wahlpflicht) {
           this.modules.wahlpflicht = data.wahlpflicht;
-          console.log("Pflichtmodule geladen:", this.modules.wahlpflicht);
+          console.log("Wahlplichtmodule geladen:", this.modules.wahlpflicht);
         } else {
           console.error("Fehler beim Laden der Wahlpflichtflichtmodule.");
         }
@@ -203,7 +211,27 @@ this.fetchWahplfichtModule(newStudiengang);
     getModulesForSemester(semester) {
       // Filtern Sie die Pflichtmodule basierend auf dem ausgewählten Semester
       return this.modules.pflicht.filter((module) => module.Semester === semester);
+    },
+
+
+
+    istEinWahlpflichtmodulImSemester(semester) {
+      const filteredModules = this.modules.wahlpflicht.filter((module) => module.Semester === semester);
+      return filteredModules.length > 0;
+    },
+
+    AnzahlPflichtmoduleImSemester(semester) {
+      const filteredModules = this.modules.pflicht.filter((module) => module.Semester === semester);
+      return filteredModules.length;
+    },
+
+    maxWahlpflichtCols(semester) {
+      const maxCols = 5;
+      const numPflichtModules = this.getModulesForSemester(semester).length;
+      const remainingCols = maxCols - numPflichtModules;
+      return Math.max(0, remainingCols);
     }
+
   }
 };
 </script>
