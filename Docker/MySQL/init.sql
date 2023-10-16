@@ -218,12 +218,6 @@ Insert Into Pflicht Value("PI", "GMI",1);
 Insert Into Pflicht Value("PI", "TGI",1);
 Insert Into Pflicht Value("PI", "TENI",1);
 
-Insert Into Pflicht Value("TI", "LDS",1);
-Insert Into Pflicht Value("TI", "EPR",1);
-Insert Into Pflicht Value("TI", "GMI",1);
-Insert Into Pflicht Value("TI", "TGI",1);
-Insert Into Pflicht Value("TI", "TENI",1);
-
 Insert Into Pflicht Value("PI", "ADS",2);
 Insert Into Pflicht Value("PI", "OPR",2);
 Insert Into Pflicht Value("PI", "MIN",2);
@@ -247,9 +241,67 @@ Insert Into Pflicht Value("PI", "BAIN",6);
 Insert Into Pflicht Value("PI", "PXP",6);
 Insert Into Pflicht Value("PI", "KBIN",6);
 
+Insert Into Pflicht Value("TI", "LDS",1);
+Insert Into Pflicht Value("TI", "EPR",1);
+Insert Into Pflicht Value("TI", "GMI",1);
+Insert Into Pflicht Value("TI", "TGI",1);
+Insert Into Pflicht Value("TI", "TENI",1);
+
+Insert Into Pflicht Value("TI", "ADS",2);
+Insert Into Pflicht Value("TI", "OPR",2);
+Insert Into Pflicht Value("TI", "MIN",2);
+Insert Into Pflicht Value("TI", "THI",2);
+Insert Into Pflicht Value("TI", "REN",2);
+
+Insert Into Pflicht Value("TI", "DBA",3);
+Insert Into Pflicht Value("TI", "SWT",3);
+Insert Into Pflicht Value("TI", "MCI",3);
+Insert Into Pflicht Value("TI", "BSY",3);
+Insert Into Pflicht Value("TI", "PPR",3);
+
+Insert Into Pflicht Value("TI", "EZS",4);
+Insert Into Pflicht Value("TI", "ROB",4);
+Insert Into Pflicht Value("TI", "SPIN",4);
+
+Insert Into Pflicht Value("TI", "BV",5);
+Insert Into Pflicht Value("TI", "SPIN",5);
+
+Insert Into Pflicht Value("TI", "BAIN",6);
+Insert Into Pflicht Value("TI", "PXP",6);
+Insert Into Pflicht Value("TI", "KBIN",6);
+
 
 Insert Into Wahlpflicht Value("PI", "KI",4);
 Insert Into Wahlpflicht Value("PI", "BKV",4);
+Insert Into Wahlpflicht Value("PI", "BWIN",5);
+Insert Into Wahlpflicht Value("PI", "BV",5);
+Insert Into Wahlpflicht Value("PI", "ITS",5);
+Insert Into Wahlpflicht Value("PI", "ITR",5);
+Insert Into Wahlpflicht Value("PI", "KBE",5);
+Insert Into Wahlpflicht Value("PI", "MOC",4);
+Insert Into Wahlpflicht Value("PI", "MRO",5);
+Insert Into Wahlpflicht Value("PI", "OPC",5);
+Insert Into Wahlpflicht Value("PI", "PAP",4);
+Insert Into Wahlpflicht Value("PI", "PRAX",4);
+Insert Into Wahlpflicht Value("PI", "PRAX",5);
+Insert Into Wahlpflicht Value("PI", "SWD",4);
+
+Insert Into Wahlpflicht Value("TI", "MET",5);
+Insert Into Wahlpflicht Value("TI", "MBE",4);
+Insert Into Wahlpflicht Value("TI", "MBE",5);
+Insert Into Wahlpflicht Value("TI", "BWIN",5);
+Insert Into Wahlpflicht Value("TI", "ITS",5);
+Insert Into Wahlpflicht Value("TI", "ITR",5);
+Insert Into Wahlpflicht Value("TI", "PAP",4);
+Insert Into Wahlpflicht Value("TI", "MRO",5);
+Insert Into Wahlpflicht Value("TI", "OPC",5);
+Insert Into Wahlpflicht Value("TI", "PAP",4);
+Insert Into Wahlpflicht Value("TI", "PRAX",4);
+Insert Into Wahlpflicht Value("TI", "PRAX",5);
+Insert Into Wahlpflicht Value("TI", "SYT",4);
+Insert Into Wahlpflicht Value("TI", "SYT",5);
+Insert Into Wahlpflicht Value("TI", "ZDR",4);
+Insert Into Wahlpflicht Value("TI", "ZDR",5);
 
 INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
 
