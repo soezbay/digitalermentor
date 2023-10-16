@@ -73,6 +73,14 @@ const store = createStore({
             state.zieleSS = state.zieleSS.filter(ziel => ziel.id !== zielId);
             state.zieleWS = state.zieleWS.filter(ziel => ziel.id !== zielId);
         },
+        removeZielFinal(state, zielId) {
+            state.deletedZiele = state.deletedZiele.filter(ziel => ziel.id !== zielId);
+        },
+
+        removeAllGoals(state) {
+            console.log("lösche alle ziele")
+            state.deletedZiele = [];
+        },
 
         // updateZieleOrderForSS(state, updatedZiele) {
         //     state.zieleSS = updatedZiele;
@@ -110,9 +118,14 @@ const store = createStore({
         addZiel(context, zielData) {
             context.commit('addZiel', zielData);
         },
-
         deleteZiel(context, zielId) {
             context.commit('removeZiel', zielId);
+        },
+        deleteZielFinal(context, zielId) {
+            context.commit('removeZielFinal', zielId);
+        },
+        deleteAllGoals(context) {
+            context.commit('removeAllGoals');
         },
     },
 
