@@ -4,9 +4,7 @@
 			<ion-toolbar>
 				<ion-buttons slot="start">
 					<ion-button router-link="/menu/dashboard">
-						<ion-icon
-							style="font-size: 45px"
-							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+						<ion-icon style="font-size: 45px" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
 				<ion-buttons slot="end">
@@ -23,32 +21,21 @@
 				{{ calculateAverageGrade().toFixed(2).replace(".", ",") }}
 			</div>
 
-			<ion-grid
-				:fixed="true"
-				v-for="(semesterModules, semester) in groupedModulesWithEmpty"
-				:key="semester">
+			<ion-grid :fixed="true" v-for="(semesterModules, semester) in groupedModulesWithEmpty" :key="semester">
 				<ion-row :key="semester">
 					<ion-col size="12">
 						<ion-row>
 							<h2>{{ semester }}.Semester</h2>
 							<!-- !! Regelstudienzeit statt hardcoded 6 !! -->
-							<ion-icon
-								:icon="remove"
-								id="removeSemesterIcon"
+							<ion-icon :icon="remove" id="removeSemesterIcon"
 								v-if="semester > 6 && semester == emptySemesters + 6"
 								@click="removeEmptySemester"></ion-icon>
 						</ion-row>
 					</ion-col>
 
 					<ion-row id="moduleRow" :key="`modules-${semester}`">
-						<ion-col
-							size="4"
-							v-for="(module, index) in semesterModules"
-							:key="index">
-							<ion-card
-								id="moduleElement"
-								expand="full"
-								:class="getModuleStatusClass(module)">
+						<ion-col size="4" v-for="(module, index) in semesterModules" :key="index">
+							<ion-card id="moduleElement" expand="full" :class="getModuleStatusClass(module)">
 								<span>{{ module.Kuerzel }}</span> <br />
 								<span id="note">{{ getStudentModuleNoteForPass(module) }}</span>
 							</ion-card>
@@ -60,8 +47,8 @@
 			<ion-buttons id="addSemester">
 				<ion-button @click="addEmptySemester">
 					<ion-icon :icon="add" id="addSemesterIcon"></ion-icon>
-					<h5>Semester hinzufügen</h5></ion-button
-				>
+					<h5>Semester hinzufügen</h5>
+				</ion-button>
 			</ion-buttons>
 			<ion-grid>
 				<ion-row>
@@ -71,10 +58,7 @@
 						</ion-row>
 					</ion-col>
 					<ion-row id="moduleRow">
-						<ion-col
-							size="4"
-							v-for="(module, index) in electiveModules"
-							:key="index">
+						<ion-col size="4" v-for="(module, index) in electiveModules" :key="index">
 							<ion-card id="moduleElement">
 								<span>{{ module.Kuerzel }}</span>
 								<span id="note">{{ getStudentModuleNoteForPass(module) }}</span>
@@ -86,9 +70,7 @@
 
 			<!-- !! Wahlmodule hinzufügen !! -->
 			<div id="legend">
-				<ion-badge id="legendBadge" style="color: var(--ion-color-success)"
-					>&nbsp;</ion-badge
-				>
+				<ion-badge id="legendBadge" style="color: var(--ion-color-success)">&nbsp;</ion-badge>
 				<span> Bestanden </span>
 				<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
 				<span> 1. Versuch </span>
@@ -100,6 +82,9 @@
 </template>
 
 <script>
+import { remove, add, ellipse } from "ionicons/icons";
+import axios from "axios";
+
 import {
 	IonContent,
 	IonHeader,
@@ -123,10 +108,7 @@ import {
 	IonIcon,
 	IonBadge,
 } from "@ionic/vue";
-import { remove, add, ellipse } from "ionicons/icons";
 
-import { defineComponent, ref } from "vue";
-import axios from "axios";
 
 export default {
 	components: {
@@ -162,7 +144,7 @@ export default {
 	data() {
 		return {
 			modules: [], // Alle Module aus der Datenbank
-			groupedModules: {}, // Neues Datenattribut für gruppierte Module
+			groupedModules: [], // Neues Datenattribut für gruppierte Module
 			electiveModules: [], // Wahlpflichtmodule
 			fullCreditPoints: 180, // Zu erreichenden Credit Points
 			studentID: "test123",
@@ -170,36 +152,31 @@ export default {
 			emptySemesters: 0, // Anzahl der leeren Semester
 		};
 	},
+
+	mounted() {
+		try {
+			this.$store.dispatch('fetchData');
+		} catch (error) {
+			console.log(error);
+		}
+		this.getData();
+	},
 	methods: {
 		getData() {
-			axios
-				.get("http://localhost:8000/studiengang/pflicht/pi")
-				.then((Response) => {
-					console.log(Response.data);
-					this.modules = Response.data.pflicht;
-					this.groupModules();
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+			this.modules = this.$store.getters.getObligatoryModules;
+			this.electiveModules = this.$store.getters.getElectiveModules;
+			this.groupModules();
 			axios
 				.get(`http://localhost:8000/modul/status/${this.studentID}`)
 				.then((Response) => {
+					console.log("DIE RESPONSE DATA:");
 					console.log(Response.data);
 					this.studentProgress = Response.data.modul;
 				})
 				.catch((err) => {
 					console.log(err);
 				});
-			axios
-				.get("http://localhost:8000/studiengang/wahlpflicht/pi")
-				.then((Response) => {
-					console.log(Response.data);
-					this.electiveModules = Response.data.wahlpflicht;
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+			// this.studentProgress = this.$store.getters.getStudentProgress;
 		},
 
 		// Methode, um ein leeres Semester hinzuzufügen
@@ -310,7 +287,6 @@ export default {
 					if (matchingModule) {
 						totalCreditPoints += matchingModule.Leistungspunkte;
 					}
-
 					totalGrade +=
 						parseFloat(progressModule.Note) * matchingModule.Leistungspunkte;
 					totalModules++;
@@ -325,11 +301,8 @@ export default {
 		},
 	},
 
-	mounted() {
-		this.getData();
-	},
-
 	computed: {
+
 		// Berechnung der erreichten Credit Points des Studenten
 		reachedCreditPoints() {
 			return this.calculateCreditPoints();
@@ -377,6 +350,7 @@ ion-progress-bar {
 	width: 70%;
 	margin: auto;
 }
+
 .passed {
 	--background: var(--ion-color-success);
 }
