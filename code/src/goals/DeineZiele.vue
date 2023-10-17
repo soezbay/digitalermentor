@@ -54,7 +54,7 @@
       </div>
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
-          <ion-item-sliding v-for="ziel in zieleWS" :key="index" class="drag-drop-box-item">
+          <ion-item-sliding v-for="ziel in zieleWS" :key="ziel.id" class="drag-drop-box-item">
             <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
                 <h2>{{ ziel.titel }}</h2>
@@ -70,6 +70,12 @@
           </ion-item-sliding>
         </ion-reorder-group>
       </ion-list>
+
+      <ion-item color="primary" router-link="/menu/studienziele/deleted" id="header" detail="true" lines="none">
+        <ion-label slot="end">
+          Gelöschte Ziele
+        </ion-label>
+      </ion-item>
 
       <!-- Titel "Diese Klausuren musst du noch schreiben" und grüne Linie -->
       <ion-row class="klausuren-title">
@@ -96,11 +102,11 @@
           <ion-toolbar>
             <ion-title>Erstelle ein Ziel</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="saveZiel" :disabled="!zielName">Speichern</ion-button>
+              <ion-button @click="saveZiel" :disabled="!zielName" color="light">Speichern</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding">
+        <ion-content>
           <ion-item>
             <ion-label position="floating">Zielname</ion-label>
             <ion-input v-model="zielName"></ion-input>

@@ -318,17 +318,6 @@ export default {
     padding-left: 20px;
 }
 
-.ios #header {
-    height: 0;
-    font-size: larger;
-    font-weight: lighter;
-    text-align: center;
-}
-
-.ios #header ion-label {
-    padding-bottom: 0.5%;
-}
-
 .dateDiv {
     margin: 10px;
 }
@@ -338,4 +327,5 @@ ion-datetime {
     color: var(--ion-color #fff);
     border-radius: 16px;
 }
+
 </style>

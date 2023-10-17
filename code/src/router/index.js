@@ -69,7 +69,11 @@ const routes = [
   },
   {
     path: '/menu/studienziele',
-    component: () => import('../views/DeineZiele.vue')
+    component: () => import('../goals/DeineZiele.vue')
+  },
+  {
+    path: '/menu/studienziele/deleted',
+    component: () => import('../goals/deletedGoals.vue')
   },
   {
     path: '/menu/profil',
