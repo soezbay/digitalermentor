@@ -33,6 +33,16 @@ const routes = [
     path: '/menu/modulbeschreibung/:url_kuerzel',
     component: () => import ('../views/Modulbeschreibung.vue')
   },
+  //---
+{
+    path: '/menu/bewertungen',
+  component: () => import ('../views/Bewertungen.vue')
+},
+{
+  path: '/menu/bewertungen/:url_kuerzel',
+  component: () => import ('../views/Bewertungen.vue')
+},
+  //---
   {
     path: '/termine',
     component: Termine
