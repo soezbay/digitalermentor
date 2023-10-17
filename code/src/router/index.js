@@ -4,7 +4,7 @@ import Moduluebersicht from '../views/Moduluebersicht.vue';
 import Termine from '../routerpages/Termine.vue';
 import Studienverlauf from '../views/Studienverlauf.vue';
 import Profil from '../profile/Profil.vue';
-
+import Einstellungen from '../views/Einstellungen.vue';
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
 
@@ -83,7 +83,10 @@ const routes = [
     path: '/menu/profil/changeProfile',
     component: () => import('../profile/changeProfile.vue')
   },
-
+  {
+    path: '/menu/einstellungen',
+    component: Einstellungen
+  },
 ]
 
 const router = createRouter({
