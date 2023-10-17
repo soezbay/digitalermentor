@@ -41,11 +41,16 @@
             </ion-list-header>
           </ion-list-header>
           <ion-row class="semesterBlock">
-            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index"
+            <ion-col class="modulBlock" v-for="(module, index) in semesterModules" :key="index"></ion-col>
+            <ion-card>
+                <ion-card-header>
+                  <ion-card-title>{{ module.name }}</ion-card-title>
+                </ion-card-header>
+            
+              <!-- Kurze Modulbeschreibung 
               @click="openModal(module)">
               <ion-label>{{ module.name }}</ion-label>
-
-              <!-- Kurze Modulbeschreibung -->
+-->
               <!-- <ion-card-content v-if="module.showDescription">{{ module.description }}</ion-card-content> -->
 
               <!-- Anzeige Links zur Modulbeschreibungs- und Bewertungsseiten -->
@@ -53,8 +58,8 @@
                 <a @click="showModuleDetails(module.name)">Modulbeschreibung </a>
                 <a @click="showModuleRating(module.name)"> Bewertung </a>
                 </ion-text> -->
-
-            </ion-col>
+              </ion-card>
+            
           </ion-row>
         </ion-row>
       </ion-grid>
@@ -81,7 +86,9 @@ import {
   IonTitle,
   IonToolbar,
   modalController,
-  IonButton
+  IonButton,
+  IonCard,
+  IonCardTitle
 } from '@ionic/vue';
 import axios from 'axios';
 import Modal from "./Modulbeschreibung.vue";
@@ -104,7 +111,9 @@ export default {
     IonToolbar,
     IonListHeader,
     modalController,
-    IonButton
+    IonButton,
+    IonCard,
+  IonCardTitle
   },
 
   name: "ModulUebersicht",
