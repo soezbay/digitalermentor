@@ -117,7 +117,7 @@ ion-list-header {
 }
 
 ion-menu {
-  --min-width: 70%;
+  --min-width: 80%;
 }
 
 ion-menu ion-content {
