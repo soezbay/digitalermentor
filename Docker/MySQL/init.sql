@@ -43,6 +43,20 @@ Create Table Modul (
 	Inhalt text,
 	Extrakurse text
 	);
+
+Create Table VoraussetzungenPflicht (
+	ModulKuerzel varchar(5),
+	VoraussetzungModulKuerzel varchar(5),
+	FOREIGN KEY (ModulKuerzel) REFERENCES Modul(Kuerzel) On Delete CASCADE,
+	FOREIGN KEY (VoraussetzungModulKuerzel) REFERENCES Modul(Kuerzel)On Delete CASCADE
+);
+
+Create Table VoraussetzungenEmpfohlen (
+	ModulKuerzel varchar(5),
+	VoraussetzungModulKuerzel varchar(5),
+	FOREIGN KEY (ModulKuerzel) REFERENCES Modul(Kuerzel) On Delete CASCADE,
+	FOREIGN KEY (VoraussetzungModulKuerzel) REFERENCES Modul(Kuerzel)On Delete CASCADE
+);
 	
 Create Table Pflicht ( 
 	StudiengangKuerzel VARCHAR(5),
@@ -113,7 +127,14 @@ Create Table Pruefung (
 	Datum datetime,
 	Kuerzel VARCHAR(5),
 	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel)
-    );    
+    );
+
+Create Table Anmeldung(
+	BenutzerID varchar(10),
+	PruefungsID varchar(10),
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE,
+	FOREIGN KEY (PruefungsID) REFERENCES  Pruefung(PruefungsID) On Delete CASCADE
+) 
 	
 Create Table Note (
 	PruefungsID varchar(10),
@@ -303,6 +324,10 @@ Insert Into Wahlpflicht Value("TI", "SYT",5);
 Insert Into Wahlpflicht Value("TI", "ZDR",4);
 Insert Into Wahlpflicht Value("TI", "ZDR",5);
 
+INSERT INTO VoraussetzungenPflicht(ModulKuerzel, VoraussetzungModulKuerzel) VALUES ('INS', 'EPR');
+INSERT INTO VoraussetzungenEmpfohlen(ModulKuerzel, VoraussetzungModulKuerzel) VALUES ('INS', 'OPR');
+
+
 INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
 
 Insert Into Ziel Value("Test1", "ADS", "Test123");
@@ -321,7 +346,9 @@ Insert Into Pruefung Value("PID1", 1, '2023-09-04 12:00:00', "EPR" );
 Insert Into Pruefung Value("PID2", 1, '2023-09-03 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID3", 1, '2023-09-02 12:00:00', "LDS" );
 Insert Into Pruefung Value("PID4", 2, '2023-09-02 12:00:00', "GMI" );
+Insert Into Pruefung Value("PID5", 1, '2023-10-10 12:00:00', "LDS" );
 
+Insert Into Anmeldung Value("Test123", "PID5");
 
 
 Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
