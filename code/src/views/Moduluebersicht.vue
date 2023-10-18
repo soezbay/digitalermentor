@@ -32,7 +32,7 @@
           </ion-list-header>
             <!-- Anzeige der ausgewählten Module für das jeweilige Semester -->
           <ion-row class="semesterBlock">
-            <ion-col class="modulBlock" v-for="module in getModulesForSemester(semester)" :key="module.Kuerzel">
+            <ion-col class="modulBlock" v-for="module in getModulesForSemester(semester)" :key="module.Kuerzel" @click="openModal(module)">
               <ion-label>{{ module.Kuerzel }}</ion-label>
               <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>      
             </ion-col>
@@ -46,7 +46,7 @@
           <ion-row class="modulfont" v-if="modules.wahlpflicht != 0">
             <ion-list-header class="modulfont"> Wahlpflichtflichtmodule </ion-list-header>
           <ion-row class="semesterBlock">
-              <ion-col class="modulBlock" v-for="module in modules.wahlpflicht" :key="module.Kuerzel">
+              <ion-col class="modulBlock" v-for="module in modules.wahlpflicht" :key="module.Kuerzel" @click="openModal(module)">
                 <ion-label>{{ module.Kuerzel }}</ion-label>
                 <ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
               </ion-col>
@@ -200,18 +200,20 @@ export default {
       this.moduleSemesters[semesterIndex][moduleIndex].showDescription = !this.moduleSemesters[semesterIndex][moduleIndex].showDescription;
     },
 
-    // async openModal(selectedModul) {
-    //   const modal = await modalController
-    //     .create({
-    //       component: Modal,
-    //       componentProps: {
-    //         selectedModul: selectedModul,
-    //       },
-    //     })
-    //     .then((modal) => {
-    //       modal.present();
-    //     });
-    // },
+    async openModal(selectedModul) {
+
+      console.log("selectedModul:", selectedModul);
+      const modal = await modalController
+        .create({
+          component: Modal,
+          componentProps: {
+            selectedModul: selectedModul,
+          },
+        })
+        .then((modal) => {
+          modal.present();
+        });
+    },
     getModulesForSemester(semester) {
       // Filtern Sie die Pflichtmodule basierend auf dem ausgewählten Semester
       return this.modules.pflicht.filter((module) => module.Semester === semester);
