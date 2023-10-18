@@ -15,6 +15,17 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content>
+			<draggable
+				class="w-full mt-5 dragArea list-group"
+				:list="modules"
+				@change="log">
+				<div
+					class="max-w-md p-2 mb-5 border cursor-pointer list-styles"
+					v-for="element in list"
+					:key="element.name">
+					{{ element.name }}
+				</div>
+			</draggable>
 			<h3 id="titel">Studienverlaufsübersicht</h3>
 			<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
 			<div id="cpInfo">{{ reachedCreditPoints }}/{{ fullCreditPoints }} CP</div>
@@ -30,31 +41,40 @@
 					<ion-col size="12">
 						<ion-row>
 							<h2>{{ semester }}.Semester</h2>
-							<!-- !! Regelstudienzeit statt hardcoded 6 !! -->
 							<ion-icon
 								:icon="remove"
 								id="removeSemesterIcon"
 								v-if="
 									semester > Object.keys(groupedModules).length &&
-									semester == emptySemesters + Object.keys(groupedModules).length
+									semester ==
+										emptySemesters + Object.keys(groupedModules).length
 								"
 								@click="removeEmptySemester"></ion-icon>
 						</ion-row>
 					</ion-col>
 
 					<ion-row id="moduleRow" :key="`modules-${semester}`">
-						<ion-col
-							size="4"
-							v-for="(module, index) in semesterModules"
-							:key="index">
-							<ion-card
-								id="moduleElement"
-								expand="full"
-								:class="getModuleStatusClass(module)">
-								<span>{{ module.Kuerzel }}</span> <br />
-								<span id="note">{{ getStudentModuleNoteForPass(module) }}</span>
-							</ion-card>
-						</ion-col>
+
+							<ion-col
+								size="4"
+								v-for="(module, index) in semesterModules"
+								:key="index">
+								<draggable
+							class="w-full mt-5 dragArea"
+							:list="semesterModule"
+							@change="log">
+								<ion-card
+									id="moduleElement"
+									expand="full"
+									:class="getModuleStatusClass(module)">
+									<span>{{ module.Kuerzel }}</span> <br />
+									<span id="note">{{
+										getStudentModuleNoteForPass(module)
+									}}</span>
+								</ion-card>
+							</draggable>
+
+							</ion-col>
 					</ion-row>
 				</ion-row>
 			</ion-grid>
@@ -86,7 +106,6 @@
 				</ion-row>
 			</ion-grid>
 
-			<!-- !! Wahlmodule hinzufügen !! -->
 			<div id="legend">
 				<ion-badge id="legendBadge" style="color: var(--ion-color-success)"
 					>&nbsp;</ion-badge
@@ -128,6 +147,7 @@ import {
 import { remove, add, ellipse } from "ionicons/icons";
 
 import { defineComponent, ref } from "vue";
+import { VueDraggableNext } from "vue-draggable-next";
 import axios from "axios";
 
 export default {
@@ -152,6 +172,7 @@ export default {
 		IonProgressBar,
 		IonIcon,
 		IonBadge,
+		draggable: VueDraggableNext,
 	},
 
 	setup() {
@@ -170,10 +191,24 @@ export default {
 			studentID: "test123",
 			studentProgress: [], // Teilgenommene Module des Studierenden
 			emptySemesters: 0, // Anzahl der leeren Semester
-			// standardStudyPeriod: 0, // Regelsemester
+			enabled: true,
+			list: [
+				{ name: "Medical science", id: 1 },
+				{ name: "Allied Medicine", id: 2 },
+				{ name: "Defense Service", id: 3 },
+				{ name: "Education training", id: 4 },
+				{ name: "Economics & Commerce", id: 5 },
+				{ name: "Banking & Finance", id: 6 },
+				{ name: "Enginnering", id: 7 },
+				{ name: "science", id: 8 },
+			],
+			dragging: true,
 		};
 	},
 	methods: {
+		log(event) {
+			console.log(event);
+		},
 		getData() {
 			axios
 				.get("http://localhost:8000/studiengang/pflicht/pi")
@@ -471,5 +506,21 @@ ion-card {
 
 #legendBadge {
 	box-shadow: 1px 1px 7px grey;
+}
+
+.draggable-list {
+	background: #3f51b5;
+	color: #fff;
+	border: 1px solid;
+	height: 50vh;
+}
+.list-item {
+	margin: 10px;
+	padding: 40px;
+	cursor: pointer;
+	font-size: 18px;
+	border-radius: 5px;
+	background: #f44336;
+	display: inline-block;
 }
 </style>
