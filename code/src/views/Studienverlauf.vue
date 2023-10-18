@@ -166,17 +166,7 @@ export default {
 			this.modules = this.$store.getters.getObligatoryModules;
 			this.electiveModules = this.$store.getters.getElectiveModules;
 			this.groupModules();
-			axios
-				.get(`http://localhost:8000/modul/status/${this.studentID}`)
-				.then((Response) => {
-					console.log("DIE RESPONSE DATA:");
-					console.log(Response.data);
-					this.studentProgress = Response.data.modul;
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-			// this.studentProgress = this.$store.getters.getStudentProgress;
+			this.studentProgress = this.$store.getters.getStudentProgress;
 		},
 
 		// Methode, um ein leeres Semester hinzuzufügen

@@ -18,7 +18,7 @@ const store = createStore({
             studentID: "test123",
             obligatoryModules: [],
             electiveModules: [],
-            studentProgress: {},
+            studentProgress: [],
             
 
         }
@@ -129,7 +129,7 @@ const store = createStore({
             context.commit('removeZiel', zielId);
         },
 
-        async fetchData({ commit, studentID }) {
+        async fetchData({ commit }) {
             console.log('--Synchronisiere Daten--');
             try {
                 // const [obligatoryModules, electiveModules, studentProgress] = await Promise.all([
@@ -140,7 +140,7 @@ const store = createStore({
 
                 ]);
 
-                const studentProgressResponse = await axios.get(`http://localhost:8000/modul/status/${studentID}`);
+                const studentProgressResponse = await axios.get(`http://localhost:8000/modul/status/${this.state.studentID}`);
                 const studentProgress = studentProgressResponse.data.modul;
 
                 commit('setObligatoryModules', obligatoryModules.data.pflicht);
