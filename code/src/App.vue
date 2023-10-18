@@ -92,14 +92,14 @@ const selectedIndex = ref(appPages.findIndex(page => page.url === route.path));
 
 <style scoped>
 hr.solid {
-  border-top: 5px solid #757e1b;
+  border-top: 3px solid #757e1b;
 }
 
 .filter {
-  filter: opacity(0.45);
+  filter: opacity(0.25);
   font-size: 275px;
   float: right;
-  padding-top: 10px;
+  padding-top: 0px;
 }
 
 .padding {
