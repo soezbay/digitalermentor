@@ -127,7 +127,14 @@ Create Table Pruefung (
 	Datum datetime,
 	Kuerzel VARCHAR(5),
 	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel)
-    );    
+    );
+
+Create Table Anmeldung(
+	BenutzerID varchar(10),
+	PruefungsID varchar(10),
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE,
+	FOREIGN KEY (PruefungsID) REFERENCES  Pruefung(PruefungsID) On Delete CASCADE
+) 
 	
 Create Table Note (
 	PruefungsID varchar(10),
@@ -339,7 +346,9 @@ Insert Into Pruefung Value("PID1", 1, '2023-09-04 12:00:00', "EPR" );
 Insert Into Pruefung Value("PID2", 1, '2023-09-03 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID3", 1, '2023-09-02 12:00:00', "LDS" );
 Insert Into Pruefung Value("PID4", 2, '2023-09-02 12:00:00', "GMI" );
+Insert Into Pruefung Value("PID5", 1, '2023-10-10 12:00:00', "LDS" );
 
+Insert Into Anmeldung Value("Test123", "PID5");
 
 
 Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
