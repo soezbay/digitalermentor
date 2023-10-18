@@ -47,3 +47,15 @@ exports.getModuleMitStatus = async (req, res, next) => {
          next(error);
      }
 };
+
+exports.getModulVoraussetzungen = async (req, res, next) => {
+    try{
+         let modul1 = req.params.Modul;
+         const [modulPflicht, _1] = await Modul.getModulVoraussetzungenPflicht(modul1);
+         const [modulEmpfohlen, _2] = await Modul.getModulVoraussetzungenPflicht(modul1);
+         res.status(200).json({modulPflicht,modulEmpfohlen});
+     }catch (error) {
+        console.log(error);
+         next(error);
+     }
+};

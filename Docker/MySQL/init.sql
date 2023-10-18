@@ -43,6 +43,20 @@ Create Table Modul (
 	Inhalt text,
 	Extrakurse text
 	);
+
+Create Table VoraussetzungenPflicht (
+	ModulKuerzel varchar(5),
+	VoraussetzungModulKuerzel varchar(5),
+	FOREIGN KEY (ModulKuerzel) REFERENCES Modul(Kuerzel) On Delete CASCADE,
+	FOREIGN KEY (VoraussetzungModulKuerzel) REFERENCES Modul(Kuerzel)On Delete CASCADE
+);
+
+Create Table VoraussetzungenEmpfohlen (
+	ModulKuerzel varchar(5),
+	VoraussetzungModulKuerzel varchar(5),
+	FOREIGN KEY (ModulKuerzel) REFERENCES Modul(Kuerzel) On Delete CASCADE,
+	FOREIGN KEY (VoraussetzungModulKuerzel) REFERENCES Modul(Kuerzel)On Delete CASCADE
+);
 	
 Create Table Pflicht ( 
 	StudiengangKuerzel VARCHAR(5),
@@ -302,6 +316,10 @@ Insert Into Wahlpflicht Value("TI", "SYT",4);
 Insert Into Wahlpflicht Value("TI", "SYT",5);
 Insert Into Wahlpflicht Value("TI", "ZDR",4);
 Insert Into Wahlpflicht Value("TI", "ZDR",5);
+
+INSERT INTO VoraussetzungenPflicht(ModulKuerzel, VoraussetzungModulKuerzel) VALUES ('INS', 'EPR');
+INSERT INTO VoraussetzungenEmpfohlen(ModulKuerzel, VoraussetzungModulKuerzel) VALUES ('INS', 'OPR');
+
 
 INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
 
