@@ -12,6 +12,13 @@ http://ionicframework.com/docs/theming/ */
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Blessing' ;
+  src: url('Blessing.ttf') format('truetype');
+  font-weight: normal;
+  font-weight: normal;
+}
+
 
 
 :root { 
