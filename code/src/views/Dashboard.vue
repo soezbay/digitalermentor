@@ -17,7 +17,7 @@
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
             <ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none">
-                <ion-label>
+                <ion-label class="label-spacing">
                     Aktive Ziele
                 </ion-label>
             </ion-item>
@@ -41,6 +41,7 @@
                             </ion-label>
                         </ion-item>
                     </div>
+
                 </ion-list>
                 <div class="ziel-separator"></div>
                 <ion-list class="drag-drop-containers">
@@ -60,6 +61,7 @@
                     </div>
                 </ion-list>
             </div>
+            <div class="spacer"></div>
             <ion-header style="height: 0.3%;"></ion-header>
             <ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none">
                 <ion-label>
@@ -202,9 +204,9 @@ export default {
             if (currentHour >= 5 && currentHour < 12) {
                 return 'Guten Morgen';
             } else if (currentHour >= 12 && currentHour < 18) {
-                return 'Guten Mittag';
+                return 'Hallo';
             } else {
-                return 'Schönen Abend';
+                return 'Guten Abend';
             }
         },
         getUsername() {
@@ -238,6 +240,22 @@ export default {
 </script>
 
 <style scoped>
+
+
+.spacer {
+    margin-bottom: 15px; 
+}
+
+
+@media (min-width: 1024px) {
+  .dateDiv {
+    max-width: 1400px; 
+    padding-left: 100px; 
+    padding-right: 100px;
+  }
+}
+
+
 .drag-drop-containers {
     width: 50%;
 }
@@ -301,8 +319,9 @@ export default {
 
 
 #displayUsername {
+    font-family: 'Blessing', sans-serif;
     padding: 20px;
-    font-size: x-large;
+    font-size: 45px;
     text-align: center;
 }
 
