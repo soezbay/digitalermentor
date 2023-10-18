@@ -17,7 +17,7 @@
     <ion-icon :icon="star === 'star' ? 'star-outline' : 'star'"></ion-icon>
 </ion-button> -->
 
-<!-- Verwenden des Stern-Icons -->
+<!-- Verwenden des Stern-Icons 
 		<ion-button> <ion-icon :icon="star"></ion-icon></ion-button>
 		<ion-button> <ion-icon :icon="star"></ion-icon></ion-button>
 		<ion-button> <ion-icon :icon="star"></ion-icon></ion-button>
@@ -27,7 +27,7 @@
 
     <p>Durchschnittliche Bewertung: {{ averageRating.toFixed(1) }}</p>
 	<ion-button @click="goToReviewsPage">Bewertungen ansehen</ion-button>
-
+-->
   <!-- M. End -->
 
 			<h4>Modulbeschreibung</h4>
@@ -102,20 +102,20 @@ export default {
         IonButton,
 		IonIcon,
 	},
-	setup(){
+	/*setup(){
 		return {
 			star
 			//stars: ['star', 'star', 'star', 'star', 'star'],
 		};
-	},
+	},*/
 
 	data() {
 		return {
 			modul: [],
 			//Merveille
 			//stars: ['star', 'star', 'star', 'star', 'star'],
-            averageRating: 0, // Hier wird der Durchschnitt der Bewertungen gespeichert
-            selectedRating: 0, // Hier wird die ausgewählte Bewertung gespeichert
+            /*averageRating: 0, // Hier wird der Durchschnitt der Bewertungen gespeichert
+            selectedRating: 0, // Hier wird die ausgewählte Bewertung gespeichert*/
         };
 	},
 
@@ -141,7 +141,7 @@ export default {
 	
 //Merveille
 // Methode, um das Modul zu bewerten
-rateModule(star) {
+/*rateModule(star) {
             if (this.selectedRating === star) {
                 this.selectedRating = 0; // Wenn dieselbe Bewertung erneut geklickt wird, löschen Sie die Auswahl
             } else {
@@ -158,7 +158,7 @@ rateModule(star) {
 		goToReviewsPage() {
         // Hier können Sie zur Bewertungsseite navigieren, z. B.:
         this.$router.push('/bewertungen.vue'); 
-    },
+    },*/
 },
 // End
 	mounted() {
