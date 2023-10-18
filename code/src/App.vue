@@ -92,11 +92,11 @@ const selectedIndex = ref(appPages.findIndex(page => page.url === route.path));
 
 <style scoped>
 hr.solid {
-  border-top: 5px solid #757e1b;
+  border-top: 2px solid #757e1b;
 }
 
 .filter {
-  filter: opacity(0.45);
+  filter: opacity(0.2);
   font-size: 275px;
   float: right;
   padding-top: 10px;
@@ -117,7 +117,7 @@ ion-list-header {
 }
 
 ion-menu {
-  --min-width: 70%;
+  --min-width: 80%;
 }
 
 ion-menu ion-content {
