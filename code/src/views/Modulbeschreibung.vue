@@ -11,7 +11,7 @@
 		
 		<ion-content class="ion-padding">
 			<!-- Merveille -->
-			<h4>Modulbewertungen</h4> 
+			<!-- <h4>Modulbewertungen</h4>  -->
 	 		<!-- Verwenden des Stern-Icons -->
 			<!--  <ion-button v-for="star in stars" :key="star" @click="rateModule(star)">
     <ion-icon :icon="star === 'star' ? 'star-outline' : 'star'"></ion-icon>
@@ -30,7 +30,7 @@
 -->
   <!-- M. End -->
 
-			<h4>Modulbeschreibung</h4>
+			<!-- <h4>Modulbeschreibung</h4> -->
             <ion-list>
 					<ion-item v-for="(item, index) in modul" :key="index">
 						<ion-label>
