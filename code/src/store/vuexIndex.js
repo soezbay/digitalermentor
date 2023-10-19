@@ -7,10 +7,8 @@ const store = createStore({
             userData: [],
             termine: [],
             selectedDate: new Date(),
-            ziele: [],
-            zieleSS: [],
-            zieleWS: [],
-            deletedZiele: [],
+            goals: [],
+            deletedGoals: [],
         }
     },
 
@@ -49,37 +47,28 @@ const store = createStore({
             state.termine = state.termine.filter(termin => termin.id !== terminId);
         },
 
-        addZiel(state, zielData) {
-            const newZiel = {
-                id: zielData.id,
-                titel: zielData.titel,
-                semesterSeason: zielData.semesterSeason,
-                beschreibung: zielData.beschreibung
+        addGoal(state, goalData) {
+            const newGoal= {
+                id: goalData.id,
+                titel: goalData.titel,
+                semesterSeason: goalData.semesterSeason,
+                info: goalData.info
             }
-            state.ziele.push(newZiel);
-
-            // Füge das Ziel sowohl zum zieleSS-Array als auch zum zieleWS-Array hinzu
-            if (zielData.semesterSeason === 'Sommersemester') {
-                state.zieleSS.push(newZiel);
-            } else if (zielData.semesterSeason === 'Wintersemester') {
-                state.zieleWS.push(newZiel);
-            }
+            state.goals.push(newGoal);
         },
 
-        removeZiel(state, zielId) {
-            const targetZiel = state.ziele.find(ziel => ziel.id === zielId);
-            state.deletedZiele.push(targetZiel);
-            state.ziele = state.ziele.filter(ziel => ziel.id !== zielId);
-            state.zieleSS = state.zieleSS.filter(ziel => ziel.id !== zielId);
-            state.zieleWS = state.zieleWS.filter(ziel => ziel.id !== zielId);
+        removeGoal(state, goal_Id) {
+            const targetGoal = state.goals.find(goal => goal.id === goal_Id);
+            state.deletedGoals.push(targetGoal );
+            state.goals = state.goals.filter(goal => goal.id !== goal_Id);
         },
-        removeZielFinal(state, zielId) {
-            state.deletedZiele = state.deletedZiele.filter(ziel => ziel.id !== zielId);
+        removeGoalFinal(state, goal_Id) {
+            state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_Id);
         },
 
         removeAllGoals(state) {
             console.log("lösche alle ziele")
-            state.deletedZiele = [];
+            state.deletedGoals = [];
         },
 
         // updateZieleOrderForSS(state, updatedZiele) {
@@ -89,11 +78,14 @@ const store = createStore({
         //     state.zieleWS = updatedZiele;
         // },
 
-        updateZieleWSOrder(state, updatedZieleWS) {
-            state.zieleWS = updatedZieleWS;
-        },
-        updateZieleSSOrder(state, updatedZieleSS) {
-            state.zieleSS = updatedZieleSS;
+        // updateZieleWSOrder(state, updatedZieleWS) {
+        //     state.zieleWS = updatedZieleWS;
+        // },
+        // updateZieleSSOrder(state, updatedZieleSS) {
+        //     state.zieleSS = updatedZieleSS;
+        // },
+        updateGoals(state, updatedGoals) {
+            state.goals = updatedGoals;
         },
 
     },
@@ -115,16 +107,16 @@ const store = createStore({
             context.commit('removeTermin', terminId);
         },
 
-        addZiel(context, zielData) {
-            context.commit('addZiel', zielData);
+        addGoal(context, goalData) {
+            context.commit('addGoal', goalData);
         },
-        deleteZiel(context, zielId) {
-            context.commit('removeZiel', zielId);
+        deleteGoal(context, goal_id) {
+            context.commit('removeGoal', goal_id);
         },
-        deleteZielFinal(context, zielId) {
-            context.commit('removeZielFinal', zielId);
+        deleteGoalFinal(context, goal_id) {
+            context.commit('removeGoalFinal', goal_id);
         },
-        deleteAllGoals(context) {
+        deleteAlldeletedGoals(context) {
             context.commit('removeAllGoals');
         },
     },
@@ -152,24 +144,16 @@ const store = createStore({
             return state.selectedDate;
         },
 
-        ziele(state) {
-            return state.ziele;
+        getGoals(state) {
+            return state.goals;
         },
 
-        ziel: (state) => (id) => {
-            return state.ziele.find((ziel) => ziel.id === id);
+        getGoal: (state) => (id) => {
+            return state.goals.find((goal) => goal.id === id);
         },
 
-        zieleSS(state) {
-            return state.zieleSS;
-        },
-
-        zieleWS(state) {
-            return state.zieleWS;
-        },
-
-        deletedZiele(state) {
-            return state.deletedZiele;
+        deletedGoals(state) {
+            return state.deletedGoals;
         }
     },
 
