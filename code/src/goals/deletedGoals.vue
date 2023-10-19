@@ -21,16 +21,16 @@
             <div style="height: 20px;"></div>
             <!-- Aktuelles und nicht gewähltes Semester -->
             <ion-list class="drag-drop-containers">
-                <ion-item-sliding v-for="ziel in deletedZiele" :key="ziel.id" class="drag-drop-box-item">
+                <ion-item-sliding v-for="goal in deletedGoals" :key="goal.id" class="drag-drop-box-item">
                     <ion-item color="secondary" class="item-container" lines="none">
                         <ion-label class="card-label">
-                            <h2>{{ ziel.titel }}</h2>
-                            <p>{{ ziel.beschreibung }}</p>
+                            <h2>{{ goal.titel }}</h2>
+                            <p>{{ goal.beschreibung }}</p>
                         </ion-label>
                     </ion-item>
                     <ion-item-options>
                         <ion-item-option color="danger">
-                            <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
+                            <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
                         </ion-item-option>
                     </ion-item-options>
                 </ion-item-sliding>
@@ -80,9 +80,9 @@ export default {
     },
 
     methods: {
-        deleteZielHandler(zielId) {
-            this.$store.dispatch('deleteZielFinal', zielId);
-            console.log('Gelöschte Ziele:', this.deletedZiele);
+        deleteGoalHandler(goal_id) {
+            this.$store.dispatch('deleteGoalFinal', goal_id);
+            console.log('Gelöschte Ziele:', this.deletedGoals);
         },
 
         async deleteAllGoals() {
@@ -97,7 +97,7 @@ export default {
                     {
                         text: 'Löschen',
                         handler: () => {
-                            this.$store.dispatch('deleteAllGoals');
+                            this.$store.dispatch('deleteAlldeletedGoals');
                         }
                     }
                 ]
@@ -107,8 +107,8 @@ export default {
     },
 
     computed: {
-        deletedZiele() {
-            return this.$store.getters.deletedZiele;
+        deletedGoals() {
+            return this.$store.getters.getDeletedGoals;
         }
     }
 };

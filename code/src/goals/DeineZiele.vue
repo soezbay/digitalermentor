@@ -264,14 +264,13 @@ export default {
       }
     },
     deleteGoalHandler(goal_id) {
-      this.$store.dispatch('deleteZiel', goal_id);
-      console.log('Gelöschte Ziele:', this.deletedZiele);
+      this.$store.dispatch('deleteGoal', goal_id);
     },
   },
 
   computed: {
-    studentGoals() {
-      return this.$store.getters.getGoals();
+    goals() {
+      return this.$store.getters.getGoals;
     }
   }
 };

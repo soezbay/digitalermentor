@@ -152,7 +152,7 @@ const store = createStore({
             return state.goals.find((goal) => goal.id === id);
         },
 
-        deletedGoals(state) {
+        getDeletedGoals(state) {
             return state.deletedGoals;
         }
     },
