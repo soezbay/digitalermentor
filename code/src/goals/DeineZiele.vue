@@ -17,57 +17,59 @@
     <ion-content>
       <div style="height: 20px;"></div>
       <!-- Aktuelles und nicht gewähltes Semester -->
-      <div class="semesterHeader">
-        <ion-label class="labelHeader">Sommersemester</ion-label>
-        <ion-buttons slot="end">
-          <ion-button style="padding-right: 15px;" color="primary" id="open-SS-modal" expand="block">
-            <ion-icon :icon="add"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </div>
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
-          <ion-item-sliding v-for="goal in goals" :key="goal.id" class="drag-drop-box-item">
-            <ion-item color="#d2d69e" class="item-container" lines="none">
-              <ion-label class="card-label">
-                <h2>{{ goal.titel }}</h2>
-                <p>{{ goal.beschreibung }}</p>
-              </ion-label>
-              <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
-            </ion-item>
-            <ion-item-options>
-              <ion-item-option color="danger">
-                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-reorder-group>
-      </ion-list>
+          <div class="semesterHeader">
+            <ion-label class="labelHeader">Sommersemester</ion-label>
+            <ion-buttons slot="end">
+              <ion-button style="padding-right: 15px;" color="primary" id="open-SS-modal" expand="block">
+                <ion-icon :icon="add"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </div>
+          <div v-for="goal in items" :key="goal.id">
+            <ion-item-sliding v-if="goal !== null && goal.semesterSeason === 'Sommersemester'" class="drag-drop-box-item">
+              <ion-item color="#d2d69e" class="item-container" lines="none">
+                <ion-label class="card-label">
+                  <h2>{{ goal.titel }}</h2>
+                  <p>{{ goal.info }}</p>
+                </ion-label>
+                <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
+              </ion-item>
+              <ion-item-options>
+                <ion-item-option color="danger">
+                  <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>'
+            </ion-item-sliding>
+          </div>
 
-      <div class="semesterHeader">
-        <ion-label class="labelHeader">Wintersemester</ion-label>
-        <ion-buttons slot="end">
-          <ion-button style="padding-right: 15px;" color="primary" id="open-WS-modal" expand="block">
-            <ion-icon :icon="add"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </div>
-      <ion-list class="drag-drop-containers">
-        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
-          <ion-item-sliding v-for="goal in goals" :key="goal.id" class="drag-drop-box-item">
-            <ion-item color="#d2d69e" class="item-container" lines="none">
-              <ion-label class="card-label">
-                <h2>{{ goal.titel }}</h2>
-                <p>{{ goal.beschreibung }}</p>
-              </ion-label>
-              <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
-            </ion-item>
-            <ion-item-options>
-              <ion-item-option color="danger">
-                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
+          <div class="semesterHeader" id="1">
+            <ion-label class="labelHeader">Wintersemester</ion-label>
+            <ion-buttons slot="end">
+              <ion-button style="padding-right: 15px;" color="primary" id="open-WS-modal" expand="block">
+                <ion-icon :icon="add"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </div>
+
+          <div v-for="goal in items" :key="goal.id">
+            <ion-item-sliding v-if="goal !== null && goal.semesterSeason === 'Wintersemester'" class="drag-drop-box-item">
+              <ion-item color="#d2d69e" class="item-container" lines="none">
+                <ion-label class="card-label">
+                  <h2>{{ goal.titel }}</h2>
+                  <p>{{ goal.info }}</p>
+                </ion-label>
+                <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
+              </ion-item>
+              <ion-item-options>
+                <ion-item-option color="danger">
+                  <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>'
+            </ion-item-sliding>
+          </div>
+
         </ion-reorder-group>
       </ion-list>
 
@@ -84,11 +86,11 @@
 
       <!-- Liste der Semester und Fächer -->
       <ion-list class="ion-padding">
-        <div v-for="(semester, index) in semesterList" :key="index">
+        <div v-for="( semester, index ) in  semesterList " :key="index">
           <ion-label>{{ semester.name }}</ion-label>
           <ion-item>
             <!-- Fächer als kleine runde Blöcke mit Drag & Drop -->
-            <ion-card v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex" @dragstart="onDragStart(fach)"
+            <ion-card v-for="( fach, fachIndex ) in  semester.faecher " :key="fachIndex" @dragstart="onDragStart(fach)"
               draggable="true" class="drag-item" :class="fach.status">
               <ion-label style="color: #000000; font-weight: bolder;">{{ fach.name }}</ion-label>
             </ion-card>
@@ -157,7 +159,6 @@
   
 <script>
 import { add, time, trash } from 'ionicons/icons';
-
 import {
   IonPage,
   IonHeader,
@@ -178,6 +179,8 @@ import {
   IonReorder, IonReorderGroup,
   actionSheetController
 } from '@ionic/vue';
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   components: {
@@ -200,9 +203,36 @@ export default {
     IonSelect, IonSelectOption,
     IonReorder, IonReorderGroup
   },
+  setup() {
+    const store = useStore();
+    // const goals = computed(() => {
+    //   const arr = store.getters.getGoals;
+    //   return arr;
+    // });
+    const goals = store.getters.getGoals;
+    const items = ref([...goals]);
+
+    const handleReorder = (event) => {
+      // Before complete is called with the items they will remain in the
+      // order before the drag
+      console.log('Before complete', items.value);
+      console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
+      // Finish the reorder and position the item in the DOM based on
+      // where the gesture ended. Update the items variable to the
+      // new order of items
+      items.value = event.detail.complete(items.value).filter(goal => goal !== null && goal !== undefined);;
+      store.commit('updateGoals', items.value);
+      // After complete is called the items will be in the new order
+      console.log('After complete', items.value);
+    };
+    return { handleReorder, items};
+  },
   data() {
     return {
-      presentingElement: undefined,
+      // wintersemesterHeaderDisplayed: true,
+      goals1: [],
+      // goals_ss: [],
+      // goals_ws: [],
       goal_name: '',
       semesterSeason: '',
       info: '',
@@ -233,10 +263,55 @@ export default {
   },
 
   methods: {
-    handleReorder(event) {
-      const updatedGoal = event.detail.complete(this.goals);
-      this.$store.commit('updateGoals', updatedGoal);
+    // handleReorder(event) {
+    //   //   console.log("update");
+    //   // const updatedGoalsSS = event.detail.complete(this.goals_ss.filter(goal => goal !== null));
+    //   //   console.log(this.goals_ss)
+    //   // this.$store.commit('updateGoals_ss', updatedGoalsSS);
+
+    //   // const updatedGoalsWS = event.detail.complete(this.goals_ws.filter(goal => goal !== null));;
+    //   //   console.log(this.goals_ws)
+    //   //   this.$store.commit('updateGoals_ws', updatedGoalsWS);\
+    //   // const arrSS = this.goals_ss.map((goal) => {
+    //   //   if (goal.semesterSeason === "Wintersemester") {
+    //   //     return {
+    //   //       ...goal, // Erhalte die anderen Eigenschaften des Objekts
+    //   //       semesterSeason: "Sommersemester", // Ändere die andere Eigenschaft
+    //   //     };
+    //   //   }
+    //   //   return goal; // Behalte Objekte, die nicht Sommersemester sind, unverändert
+    //   // });
+
+    //   // const arrWS = this.goals_ws.map((goal) => {
+    //   //   if (goal.semesterSeason === "Sommersemester") {
+    //   //     return {
+    //   //       ...goal, // Erhalte die anderen Eigenschaften des Objekts
+    //   //       semesterSeason: "Wintersemester", // Ändere die andere Eigenschaft
+    //   //     };
+    //   //   }
+    //   //   return goal; // Behalte Objekte, die nicht Sommersemester sind, unverändert
+    //   // });
+
+    //   // const arr = [...arrSS, ...arrWS];
+    //   // const arrFiltered = arr.filter(goal => goal !== null && goal !== undefined);
+    //   // console.log(arr);
+    //   event.detail.complete();
+    //   console.log("handler wurde betätigt");
+    //   console.log(this.goals);
+    //   this.$store.commit('updateGoals', this.goals);
+    //   // this.$store.dispatch('updateGoalsAction', updatedGoals);
+
+    // },
+    handleReorderForWS(event) {
+      const updatedGoalWS = event.detail.complete(this.goals_ws);
+      this.$store.commit('updateGoalsOrderForWS', updatedGoalWS);
     },
+    handleReorderForSS(event) {
+      const updatedGoalSS = event.detail.complete(this.goals_ss);
+      this.$store.commit('updateGoalsOrderForSS', updatedGoalSS);
+    },
+
+
     dismiss() {
       this.$refs.modal_SS.$el.dismiss();
       this.$refs.modal_WS.$el.dismiss();
@@ -247,10 +322,10 @@ export default {
       if (this.goal_name && selectedOption) {
         console.log('Erstelle Ziel Daten')
         const goalData = {
-          id: this.goal_name + " " + Date.now().toString(),
+          id: Date.now().toString(),
           titel: this.goal_name,
           semesterSeason: selectedOption,
-          beschreibung: this.info
+          info: this.info
         };
         console.log('Dispatche Ziel Daten')
         this.$store.dispatch('addGoal', goalData);
@@ -264,14 +339,31 @@ export default {
       }
     },
     deleteGoalHandler(goal_id) {
+      this.goals = this.goals.filter(goal => goal.id !== goal_id);
       this.$store.dispatch('deleteGoal', goal_id);
     },
   },
+  // mounted() {
+  //   // this.$store.dispatch('deleteAllGoals');
+  //   this.goals = [...this.goals_ss, ...this.goals_ws];
+  //   // this.goals_ss = this.$store.getters.getGoals_ss;
+  //   // this.goals_ws = this.$store.getters.getGoals_ws;
+
+  //   this.wintersemesterRendered = false;
+  // },
 
   computed: {
     goals() {
-      return this.$store.getters.getGoals;
-    }
+      return this.$store.getters.getGoals.filter(goal => goal !== null && goal !== undefined);
+      // return [...this.goals_ss, ...this.goals_ws];
+    },
+    // goals_ss() {
+    //   return this.$store.getters.getGoals_ss;
+    // },
+    // goals_ws() {
+    //   return this.$store.getters.getGoals_ws;
+    // },
+
   }
 };
 </script>

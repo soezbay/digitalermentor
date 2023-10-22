@@ -8,6 +8,9 @@ const store = createStore({
             termine: [],
             selectedDate: new Date(),
             goals: [],
+            restoreGoals: [],
+            goals_ss: [],
+            goals_ws: [],
             deletedGoals: [],
         }
     },
@@ -55,12 +58,24 @@ const store = createStore({
                 info: goalData.info
             }
             state.goals.push(newGoal);
+
+            if (goalData.semesterSeason === 'Sommersemester') {
+                state.goals_ss.push(newGoal);
+            } else if (goalData.semesterSeason === 'Wintersemester') {
+                state.goals_ws.push(newGoal);
+            }
+
+            
+
         },
 
-        removeGoal(state, goal_Id) {
-            const targetGoal = state.goals.find(goal => goal.id === goal_Id);
-            state.deletedGoals.push(targetGoal );
-            state.goals = state.goals.filter(goal => goal.id !== goal_Id);
+        removeGoal(state, goal_ID) {
+            const targetGoal = state.goals.find(goal => goal.id === goal_ID);
+            state.deletedGoals.push(targetGoal);
+            state.goals = state.goals.filter(goal => goal.id !== goal_ID);
+            state.goals_ss = state.goals_ss.filter(goal => goal.id !== goal_ID);
+            state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
+
         },
         removeGoalFinal(state, goal_Id) {
             state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_Id);
@@ -71,21 +86,27 @@ const store = createStore({
             state.deletedGoals = [];
         },
 
-        // updateZieleOrderForSS(state, updatedZiele) {
-        //     state.zieleSS = updatedZiele;
-        // },
-        // updateZieleOrderForWS(state, updatedZiele) {
-        //     state.zieleWS = updatedZiele;
-        // },
+        updateGoalsOrderForSS(state, updatedGoals) {
+            state.goals_ss = updatedGoals;
+        },
+        updateGoalsOrderForWS(state, updatedGoals) {
+            state.goals_ws = updatedGoals;
+        },
 
-        // updateZieleWSOrder(state, updatedZieleWS) {
-        //     state.zieleWS = updatedZieleWS;
-        // },
-        // updateZieleSSOrder(state, updatedZieleSS) {
-        //     state.zieleSS = updatedZieleSS;
-        // },
+        updateGoals_ws(state, updatedGoals_ws) {
+            const filteredGoals = updatedGoals_ws.filter(goal => goal !== null && goal !== undefined);
+            state.goals_ws = filteredGoals;
+        },
+        updateGoals_ss(state, updatedGoals_ss) {
+            const filteredGoals = updatedGoals_ss.filter(goal => goal !== null && goal !== undefined);
+            state.goals_ss = filteredGoals;
+        },
         updateGoals(state, updatedGoals) {
+            console.log("update...");
+            // const filteredGoals = updatedGoals.filter(goal => goal !== null && goal !== undefined);
+            // state.goals = filteredGoals;
             state.goals = updatedGoals;
+            console.log("updated!!!!!!");
         },
 
     },
@@ -119,6 +140,17 @@ const store = createStore({
         deleteAlldeletedGoals(context) {
             context.commit('removeAllGoals');
         },
+
+        deleteAllGoals() {
+            this.state.goals = [];
+            this.state.goals_ws = [];
+            this.state.goals_ss = [];
+        },
+
+        updateGoalsAction(context, updatedGoals) {
+            console.log(context, updatedGoals);
+            context.commit('updateGoals', updatedGoals);
+        }
     },
 
     getters: {
@@ -147,10 +179,20 @@ const store = createStore({
         getGoals(state) {
             return state.goals;
         },
+        getRestoredGoals(state) {
+            return state.restoreGoals;
+        },
+        getGoals_ss(state) {
+            return state.goals_ss;
+        },
+        getGoals_ws(state) {
+            return state.goals_ws;
+        },
 
         getGoal: (state) => (id) => {
             return state.goals.find((goal) => goal.id === id);
         },
+        
 
         getDeletedGoals(state) {
             return state.deletedGoals;
