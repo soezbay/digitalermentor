@@ -15,7 +15,7 @@
     </ion-header>
 
     <ion-content>
-      <div style="height: 20px;"></div>
+      <div style="height: 20px; background-color: rgb(30, 30, 30)"></div>
       <!-- Aktuelles und nicht gewähltes Semester -->
       <div class="semesterHeader">
         <ion-label class="labelHeader">Sommersemester</ion-label>
@@ -27,17 +27,20 @@
       </div>
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
-          <ion-item-sliding v-for="ziel in zieleSS" :key="ziel.id" class="drag-drop-box-item">
+          <ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="drag-drop-box-item">
             <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
-                <h2>{{ ziel.titel }}</h2>
-                <p>{{ ziel.beschreibung }}</p>
+                <h2>{{ goal.titel }}</h2>
+                <p>{{ goal.info }}</p>
               </ion-label>
-              <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
+              <ion-label slot="end" class="card-label">
+                <h5>{{ goal.date }}</h5>
+              </ion-label>
+              <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
             <ion-item-options>
               <ion-item-option color="danger">
-                <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
+                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
@@ -54,17 +57,20 @@
       </div>
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
-          <ion-item-sliding v-for="ziel in zieleWS" :key="index" class="drag-drop-box-item">
+          <ion-item-sliding v-for="goal in goals_ws" :key="index" class="drag-drop-box-item">
             <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
-                <h2>{{ ziel.titel }}</h2>
-                <p>{{ ziel.beschreibung }}</p>
+                <h2>{{ goal.titel }}</h2>
+                <p>{{ goal.info }}</p>
               </ion-label>
-              <ion-reorder slot="end" style="color: #000000;"></ion-reorder>
+              <ion-label slot="end" class="card-label">
+                <h5>{{ goal.date }}</h5>
+              </ion-label>
+              <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
             <ion-item-options>
               <ion-item-option color="danger">
-                <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
+                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
@@ -102,14 +108,14 @@
           <ion-toolbar>
             <ion-title>Erstelle ein Ziel</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="saveZiel" :disabled="!zielName" color="light">Speichern</ion-button>
+              <ion-button @click="saveGoal" :disabled="!goal_name" color="light">Speichern</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
         <ion-content>
           <ion-item>
             <ion-label position="floating">Zielname</ion-label>
-            <ion-input v-model="zielName"></ion-input>
+            <ion-input v-model="goal_name"></ion-input>
           </ion-item>
           <ion-item>
             <ion-select ref="semesterSelect" label="Season" placeholder="Semesterseason" value="Sommersemester">
@@ -129,14 +135,14 @@
           <ion-toolbar>
             <ion-title>Erstelle ein Ziel</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="saveZiel" :disabled="!zielName">Speichern</ion-button>
+              <ion-button @click="saveGoal" :disabled="!goal_name">Speichern</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
           <ion-item>
             <ion-label position="floating">Zielname</ion-label>
-            <ion-input v-model="zielName" required></ion-input>
+            <ion-input v-model="goal_name" required></ion-input>
           </ion-item>
           <ion-item>
             <ion-select ref="semesterSelect" label="Season" placeholder="Semesterseason" value="Wintersemester">
@@ -176,7 +182,6 @@ import {
   IonModal,
   IonSelect, IonSelectOption,
   IonReorder, IonReorderGroup,
-  actionSheetController
 } from '@ionic/vue';
 
 export default {
@@ -203,7 +208,7 @@ export default {
   data() {
     return {
       presentingElement: undefined,
-      zielName: '',
+      goal_name: '',
       semesterSeason: '',
       info: '',
       add, trash,
@@ -234,49 +239,32 @@ export default {
 
   methods: {
     handleReorderForWS(event) {
-      const updatedZieleWS = event.detail.complete(this.zieleWS);
-      this.$store.commit('updateZieleWSOrder', updatedZieleWS);
+      const updatedGoalsWS = event.detail.complete(this.goals_ws);
+      this.$store.commit('updateGoalsOrderForWS', updatedGoalsWS);
     },
     handleReorderForSS(event) {
-      const updatedZieleSS = event.detail.complete(this.zieleSS);
-      this.$store.commit('updateZieleSSOrder', updatedZieleSS);
+      const updatedGoalsSS = event.detail.complete(this.goals_ss);
+      this.$store.commit('updateGoalsOrderForSS', updatedGoalsSS);
     },
     dismiss() {
       this.$refs.modal_SS.$el.dismiss();
       this.$refs.modal_WS.$el.dismiss();
     },
-    // async canDismiss() {
-    //   const actionSheet = await actionSheetController.create({
-    //     header: 'Fenster schließen und kein Ziel hinzufügen?',
-    //     buttons: [
-    //       {
-    //         text: 'Ja',
-    //         role: 'confirm',
-    //       },
-    //       {
-    //         text: 'Nein',
-    //         role: 'cancel',
-    //       },
-    //     ],
-    //   });
-    //   actionSheet.present();
-    //   const { role } = await actionSheet.onWillDismiss();
-    //   return role === 'confirm';
-    // },
-    saveZiel() {
+    saveGoal() {
       const selectedOption = this.$refs.semesterSelect.value;
-      if (this.zielName && selectedOption) {
+      if (this.goal_name && selectedOption) {
         console.log('Erstelle Ziel Daten')
-        const zielData = {
+        const goal_data = {
           id: Date.now(),
-          titel: this.zielName,
+          date: new Date().toLocaleDateString(),
+          titel: this.goal_name,
           semesterSeason: selectedOption,
-          beschreibung: this.info
+          info: this.info
         };
         console.log('Dispatche Ziel Daten')
-        this.$store.dispatch('addZiel', zielData);
+        this.$store.dispatch('addGoal', goal_data);
         console.log('Schließe Modal')
-        this.zielName = '';
+        this.goal_name = '';
         this.semesterSeason = '';
         this.info = '';
         this.dismiss(); // Schließe das Modal nach dem Speichern
@@ -284,14 +272,14 @@ export default {
         console.log('Fehlgeschlagen Daten zu generienen')
       }
     },
-    deleteZielHandler(zielId) {
-      this.$store.dispatch('deleteZiel', zielId);
-      console.log('Gelöschte Ziele:', this.deletedZiele);
+    deleteGoalHandler(goal_ID) {
+      this.$store.dispatch('deleteGoal', goal_ID);
+      console.log('Gelöschte Ziele:', this.deletedGoals);
     },
 
     filteredZiele(semester) {
       // Filtere die Ziele basierend auf dem übergebenen Semester
-      return this.ziele.filter(ziel => ziel.semesterSeason === semester);
+      return this.goals.filter(goal => goal.semesterSeason === semester);
     },
   },
   // mounted() {
@@ -299,18 +287,18 @@ export default {
   // },
 
   computed: {
-    ziele() {
-      return this.$store.getters.ziele;
+    goals() {
+      return this.$store.getters.getGoal;
     },
-    zieleSS() {
-      return this.$store.getters.zieleSS;
+    goals_ss() {
+      return this.$store.getters.getGoals_ss;
     },
 
-    zieleWS() {
-      return this.$store.getters.zieleWS;
+    goals_ws() {
+      return this.$store.getters.getGoals_ws;
     },
-    deletedZiele() {
-      return this.$store.getters.deletedZiele;
+    deletedGoals() {
+      return this.$store.getters.getDeletedGoals;
     }
   }
 };
@@ -326,6 +314,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  background-color: rgb(30, 30, 30);
   /* Platzierung für den Inhalt */
 }
 
