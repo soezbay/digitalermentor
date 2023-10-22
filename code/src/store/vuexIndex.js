@@ -66,7 +66,16 @@ const store = createStore({
                 state.goals_ws.push(newGoal);
             }
         },
-
+        switchToWS(state, goal_ID) {
+            const targetGoal = state.goals_ss.find(goal => goal.id === goal_ID);
+            state.goals_ws.unshift(targetGoal);
+            state.goals_ss = state.goals_ss.filter(goal => goal.id !== goal_ID);
+        },
+        switchToSS(state, goal_ID) {
+            const targetGoal = state.goals_ws.find(goal => goal.id === goal_ID);
+            state.goals_ss.unshift(targetGoal);
+            state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
+        },
         removeGoal(state, goal_ID) {
             const targetGoal = state.goals.find(goal => goal.id === goal_ID);
             state.deletedGoals.push(targetGoal);
@@ -82,7 +91,6 @@ const store = createStore({
             console.log("lösche alle ziele")
             state.deletedGoals = [];
         },
-
         updateGoalsOrderForWS(state, updatedGoals_ws) {
             state.goals_ws = updatedGoals_ws;
         },

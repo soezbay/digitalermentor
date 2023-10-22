@@ -18,7 +18,6 @@
                     <ion-button color="danger" @click="deleteAllGoals()">Alle löschen</ion-button>
                 </ion-buttons>
             </ion-toolbar>
-            <div style="height: 20px;"></div>
             <!-- Aktuelles und nicht gewähltes Semester -->
             <ion-list class="drag-drop-containers">
                 <ion-item-sliding v-for="goal in deletedGoals" :key="goal.id" class="drag-drop-box-item">

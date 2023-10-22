@@ -28,6 +28,12 @@
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
           <ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="drag-drop-box-item">
+            <ion-item-options side="start">
+              <ion-item-option color="success" @click="switchToWS(goal.id)">
+                <ion-label>Nach Unten</ion-label>
+              </ion-item-option>
+            </ion-item-options>
+
             <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
                 <h2>{{ goal.titel }}</h2>
@@ -38,9 +44,10 @@
               </ion-label>
               <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
-            <ion-item-options>
-              <ion-item-option color="danger">
-                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
+
+            <ion-item-options side="end">
+              <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
+                <ion-icon slot="icon-only" :icon="trash"></ion-icon>
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
@@ -58,6 +65,12 @@
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
           <ion-item-sliding v-for="goal in goals_ws" :key="index" class="drag-drop-box-item">
+            <ion-item-options side="start">
+              <ion-item-option color="success" @click="switchToSS(goal.id)">
+                <ion-label>Nach Oben</ion-label>
+              </ion-item-option>
+            </ion-item-options>
+
             <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
                 <h2>{{ goal.titel }}</h2>
@@ -68,9 +81,10 @@
               </ion-label>
               <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
-            <ion-item-options>
-              <ion-item-option color="danger">
-                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
+            
+            <ion-item-options side="end">
+              <ion-item-option color="danger"  @click="deleteGoalHandler(goal.id)">
+                <ion-icon slot="icon-only" :icon="trash"></ion-icon>
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
@@ -275,6 +289,12 @@ export default {
     deleteGoalHandler(goal_ID) {
       this.$store.dispatch('deleteGoal', goal_ID);
       console.log('Gelöschte Ziele:', this.deletedGoals);
+    },
+    switchToWS(goal_ID) {
+      this.$store.commit('switchToWS', goal_ID);
+    },
+    switchToSS(goal_ID) {
+      this.$store.commit('switchToSS', goal_ID);
     },
 
     filteredZiele(semester) {
