@@ -90,6 +90,7 @@ const store = createStore({
         },
         removeGoalFinal(state, goal_ID) {
             state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
+            state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID )
         },
 
         removeAllGoals(state) {
@@ -122,6 +123,19 @@ const store = createStore({
                 state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
             }
         },
+        restoreCheckedGoal(state, goal_ID) {
+            const targetGoal = state.checkedGoals.find(goal => goal.id === goal_ID);
+            if (targetGoal.semesterSeason === "Sommersemester") {
+                state.goals.push(targetGoal);
+                state.goals_ss.push(targetGoal);
+                state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);                
+            } else {
+                state.goals.push(targetGoal);
+                state.goals_ws.push(targetGoal);
+                state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);
+            }
+        },
+
 
     },
 
@@ -200,7 +214,11 @@ const store = createStore({
 
         getDeletedGoals(state) {
             return state.deletedGoals;
-        }
+        },
+        getCheckedGoals(state) {
+            return state.checkedGoals;
+        },
+
     },
 
     plugins: [createPersistedState()]

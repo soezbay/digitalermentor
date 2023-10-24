@@ -15,7 +15,7 @@
     </ion-header>
 
     <ion-content>
-      <div style="height: 20px"></div>
+      <!-- <div style="height: 20px; background-color: var(--ion-color-light);"></div> -->
       <!-- Aktuelles und nicht gewähltes Semester -->
       <div class="semesterHeader">
         <ion-label class="labelHeader">Sommersemester</ion-label>
@@ -86,15 +86,23 @@
             </ion-item>
             
             <ion-item-options side="end">
-              <ion-item-option color="danger"  @click="deleteGoalHandler(goal.id)">
+              <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
                 <ion-icon slot="icon-only" :icon="trash"></ion-icon>
+              </ion-item-option>
+              <ion-item-option color="success" @click="checkGoal(goal.id)">
+                <ion-icon slot="icon-only" :icon="checkmarkDone"></ion-icon>
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
         </ion-reorder-group>
       </ion-list>
 
-      <ion-item color="primary" router-link="/menu/studienziele/deleted" id="header" detail="true" lines="none">
+      <ion-item color="primary" router-link="/menu/studienziele/checked" id="header" detail="true" lines="none">
+        <ion-label slot="end">
+          Abgeschlossene Ziele
+        </ion-label>
+      </ion-item>
+      <ion-item color="light" router-link="/menu/studienziele/deleted" id="header" detail="true" lines="none">
         <ion-label slot="end">
           Gelöschte Ziele
         </ion-label>
@@ -296,8 +304,7 @@ export default {
       console.log('Gelöschte Ziele:', this.deletedGoals);
     },
     checkGoal(goal_ID) {
-      this.$store.dispatch('deleteGoal', goal_ID);
-      console.log('Gelöschte Ziele:', this.deletedGoals);
+      this.$store.commit('checkGoal', goal_ID);
     },
     switchToWS(goal_ID) {
       this.$store.commit('switchToWS', goal_ID);
@@ -337,13 +344,13 @@ export default {
   
 <style scoped>
 .semesterHeader {
-  height: 30px;
+  height: 50px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: var(rgb(30, 30, 30));
+  background-color: var(--ion-color-light);
   /* Platzierung für den Inhalt */
 }
 

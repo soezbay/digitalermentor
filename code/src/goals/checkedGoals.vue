@@ -26,7 +26,7 @@
                 <div v-for="goal in checkedGoals" :key="goal.id">
                     <ion-item-sliding v-if="goal.semesterSeason === 'Sommersemester'" class="drag-drop-box-item">
                         <ion-item-options side="start">
-                            <ion-item-option color="success" @click="restoreGoal(goal.id)">
+                            <ion-item-option color="success" @click="restoreCheckedGoal(goal.id)">
                                 <ion-label>Wiederherstellen</ion-label>
                             </ion-item-option>
                         </ion-item-options>
@@ -55,7 +55,7 @@
                 <div v-for="goal in checkedGoals" :key="goal.id">
                     <ion-item-sliding v-if="goal.semesterSeason === 'Wintersemester'" class="drag-drop-box-item">
                         <ion-item-options side="start">
-                            <ion-item-option color="success" @click="restoreGoal(goal.id)">
+                            <ion-item-option color="success" @click="restoreCheckedGoal(goal.id)">
                                 <ion-label>Wiederherstellen</ion-label>
                             </ion-item-option>
                         </ion-item-options>
@@ -125,8 +125,11 @@ export default {
             this.$store.dispatch('deleteGoalFinal', goal_ID);
             console.log('Gelöschte Ziele:', this.checkedGoals);
         },
-        restoreGoal(goal_ID) {
-            this.$store.dispatch('restoreGoal', goal_ID);
+        restoreCheckedGoal(goal_ID) {
+            this.$store.commit('restoreCheckedGoal', goal_ID);
+        },
+        checkGoal(goal_ID) {
+            this.$store.commit('restoreGoal', goal_ID);
         },
         async deleteAllGoals() {
             const alert = await alertController.create({
