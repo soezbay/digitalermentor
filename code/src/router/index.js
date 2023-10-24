@@ -72,6 +72,10 @@ const routes = [
     component: () => import('../goals/Goals.vue')
   },
   {
+    path: '/menu/studienziele/checked',
+    component: () => import('../goals/checkedGoals.vue')
+  },
+  {
     path: '/menu/studienziele/deleted',
     component: () => import('../goals/deletedGoals.vue')
   },
