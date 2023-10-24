@@ -15,7 +15,7 @@
     </ion-header>
 
     <ion-content>
-      <div style="height: 20px; background-color: rgb(30, 30, 30)"></div>
+      <div style="height: 20px"></div>
       <!-- Aktuelles und nicht gewähltes Semester -->
       <div class="semesterHeader">
         <ion-label class="labelHeader">Sommersemester</ion-label>
@@ -49,6 +49,9 @@
               <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
                 <ion-icon slot="icon-only" :icon="trash"></ion-icon>
               </ion-item-option>
+              <ion-item-option color="success" @click="checkGoal(goal.id)">
+                <ion-icon slot="icon-only" :icon="checkmarkDone"></ion-icon>
+              </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
         </ion-reorder-group>
@@ -64,7 +67,7 @@
       </div>
       <ion-list class="drag-drop-containers">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
-          <ion-item-sliding v-for="goal in goals_ws" :key="index" class="drag-drop-box-item">
+          <ion-item-sliding v-for="goal in goals_ws" :key="goal.id" class="drag-drop-box-item">
             <ion-item-options side="start">
               <ion-item-option color="success" @click="switchToSS(goal.id)">
                 <ion-label>Nach Oben</ion-label>
@@ -176,7 +179,7 @@
 </template>
   
 <script>
-import { add, trash } from 'ionicons/icons';
+import { add, trash, checkmarkDone } from 'ionicons/icons';
 
 import {
   IonPage,
@@ -225,7 +228,7 @@ export default {
       goal_name: '',
       semesterSeason: '',
       info: '',
-      add, trash,
+      add, trash, checkmarkDone,
       semesterList: [
         {
           name: '1. Semester',
@@ -254,10 +257,12 @@ export default {
   methods: {
     handleReorderForWS(event) {
       const updatedGoalsWS = event.detail.complete(this.goals_ws);
+      console.log(updatedGoalsWS);
       this.$store.commit('updateGoalsOrderForWS', updatedGoalsWS);
     },
     handleReorderForSS(event) {
       const updatedGoalsSS = event.detail.complete(this.goals_ss);
+      console.log(updatedGoalsSS);
       this.$store.commit('updateGoalsOrderForSS', updatedGoalsSS);
     },
     dismiss() {
@@ -287,6 +292,10 @@ export default {
       }
     },
     deleteGoalHandler(goal_ID) {
+      this.$store.dispatch('deleteGoal', goal_ID);
+      console.log('Gelöschte Ziele:', this.deletedGoals);
+    },
+    checkGoal(goal_ID) {
       this.$store.dispatch('deleteGoal', goal_ID);
       console.log('Gelöschte Ziele:', this.deletedGoals);
     },
@@ -334,7 +343,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: rgb(30, 30, 30);
+  background-color: var(rgb(30, 30, 30));
   /* Platzierung für den Inhalt */
 }
 

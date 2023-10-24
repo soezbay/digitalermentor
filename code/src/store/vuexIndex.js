@@ -11,6 +11,7 @@ const store = createStore({
             goals_ss: [],
             goals_ws: [],
             deletedGoals: [],
+            checkedGoals: []
         }
     },
 
@@ -68,11 +69,13 @@ const store = createStore({
         },
         switchToWS(state, goal_ID) {
             const targetGoal = state.goals_ss.find(goal => goal.id === goal_ID);
+            targetGoal.semesterSeason = 'Wintersemester';
             state.goals_ws.unshift(targetGoal);
             state.goals_ss = state.goals_ss.filter(goal => goal.id !== goal_ID);
         },
         switchToSS(state, goal_ID) {
             const targetGoal = state.goals_ws.find(goal => goal.id === goal_ID);
+            targetGoal.semesterSeason = 'Sommersemester';
             state.goals_ss.unshift(targetGoal);
             state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
         },
@@ -82,6 +85,8 @@ const store = createStore({
             state.goals = state.goals.filter(goal => goal.id !== goal_ID);
             state.goals_ss = state.goals_ss.filter(goal => goal.id !== goal_ID);
             state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
+            state.deletedGoals = state.deletedGoals.filter(goal => goal !== null && goal !== undefined);
+
         },
         removeGoalFinal(state, goal_ID) {
             state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
@@ -91,11 +96,31 @@ const store = createStore({
             console.log("lösche alle ziele")
             state.deletedGoals = [];
         },
+        checkGoal(state, goal_ID) {
+            const targetGoal = state.goals.find(goal => goal.id === goal_ID);
+            state.checkedGoals.push(targetGoal);
+            state.goals = state.goals.filter(goal => goal.id !== goal_ID);
+            state.goals_ss = state.goals_ss.filter(goal => goal.id !== goal_ID);
+            state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
+            state.checkedGoals = state.checkedGoals.filter(goal => goal !== null && goal !== undefined);
+        },
         updateGoalsOrderForWS(state, updatedGoals_ws) {
             state.goals_ws = updatedGoals_ws;
         },
         updateGoalsOrderForSS(state, updatedGoals_ss) {
             state.goals_ss = updatedGoals_ss;
+        },
+        restoreGoal(state, goal_ID) {
+            const targetGoal = state.deletedGoals.find(goal => goal.id === goal_ID);
+            if (targetGoal.semesterSeason === "Sommersemester") {
+                state.goals.push(targetGoal);
+                state.goals_ss.push(targetGoal);
+                state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);                
+            } else {
+                state.goals.push(targetGoal);
+                state.goals_ws.push(targetGoal);
+                state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
+            }
         },
 
     },
@@ -128,6 +153,9 @@ const store = createStore({
         },
         deleteAllGoals(context) {
             context.commit('removeAllGoals');
+        },
+        restoreGoal(context, goal_ID) {
+            context.commit('restoreGoal', goal_ID);
         },
     },
 

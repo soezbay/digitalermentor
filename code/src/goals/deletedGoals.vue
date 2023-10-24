@@ -19,24 +19,62 @@
                 </ion-buttons>
             </ion-toolbar>
             <!-- Aktuelles und nicht gewähltes Semester -->
+            <div class="semesterHeader">
+                <ion-label class="labelHeader">Sommersemester</ion-label>
+            </div>
             <ion-list class="drag-drop-containers">
-                <ion-item-sliding v-for="goal in deletedGoals" :key="goal.id" class="drag-drop-box-item">
-                    <ion-item color="secondary" class="item-container" lines="none">
-                        <ion-label class="card-label">
-                            <h2>{{ goal.titel }}</h2>
-                            <p>{{ goal.info }}</p>
-                            <p>{{ goal.date }}</p>
-                        </ion-label>
-                        <ion-label slot="end">
-                            <p>{{ goal.date }}</p>
-                        </ion-label>
-                    </ion-item>
-                    <ion-item-options>
-                        <ion-item-option color="danger">
-                            <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
-                        </ion-item-option>
-                    </ion-item-options>
-                </ion-item-sliding>
+                <div v-for="goal in deletedGoals" :key="goal.id">
+                    <ion-item-sliding v-if="goal.semesterSeason === 'Sommersemester'" class="drag-drop-box-item">
+                        <ion-item-options side="start">
+                            <ion-item-option color="success" @click="restoreGoal(goal.id)">
+                                <ion-label>Wiederherstellen</ion-label>
+                            </ion-item-option>
+                        </ion-item-options>
+                        <ion-item color="secondary" class="item-container" lines="none">
+                            <ion-label class="card-label">
+                                <h2>{{ goal.titel }}</h2>
+                                <p>{{ goal.info }}</p>
+                            </ion-label>
+                            <ion-label slot="end">
+                                <p>{{ goal.date }}</p>
+                            </ion-label>
+                        </ion-item>ion
+                        <ion-item-options>
+                            <ion-item-option color="danger">
+                                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </div>
+            </ion-list>
+
+            <div class="semesterHeader">
+                <ion-label class="labelHeader">Wintersemester</ion-label>
+            </div>
+            <ion-list class="drag-drop-containers">
+                <div v-for="goal in deletedGoals" :key="goal.id">
+                    <ion-item-sliding v-if="goal.semesterSeason === 'Wintersemester'" class="drag-drop-box-item">
+                        <ion-item-options side="start">
+                            <ion-item-option color="success" @click="restoreGoal(goal.id)">
+                                <ion-label>Wiederherstellen</ion-label>
+                            </ion-item-option>
+                        </ion-item-options>
+                        <ion-item color="secondary" class="item-container" lines="none">
+                            <ion-label class="card-label">
+                                <h2>{{ goal.titel }}</h2>
+                                <p>{{ goal.info }}</p>
+                            </ion-label>
+                            <ion-label slot="end">
+                                <p>{{ goal.date }}</p>
+                            </ion-label>
+                        </ion-item>ion
+                        <ion-item-options>
+                            <ion-item-option color="danger">
+                                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </div>
             </ion-list>
 
         </ion-content>
@@ -87,7 +125,9 @@ export default {
             this.$store.dispatch('deleteGoalFinal', goal_ID);
             console.log('Gelöschte Ziele:', this.deletedGoals);
         },
-
+        restoreGoal(goal_ID) {
+            this.$store.dispatch('restoreGoal', goal_ID);
+        },
         async deleteAllGoals() {
             const alert = await alertController.create({
                 header: 'Bestätigung',
@@ -159,5 +199,20 @@ export default {
     margin-top: 4px;
     border: 2px solid #ccc;
     border-radius: 20px;
+}
+
+.semesterHeader {
+    height: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(30, 30, 30);
+    /* Platzierung für den Inhalt */
+}
+
+.labelHeader {
+    padding-left: 25px;
 }
 </style>
