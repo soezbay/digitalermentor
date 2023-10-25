@@ -16,12 +16,16 @@
 
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
-            <ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none">
-                <ion-label class="label-spacing">
-                    Aktive Ziele
+
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="12" size-md="6" class="ion-padding-horizontal ion-padding-top">
+            <ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none" class="rounded-item ion-margin-horizontal">
+                <ion-label class="custom-label">
+                    Deine Ziele
                 </ion-label>
             </ion-item>
-            <div class="semester-container">
+            <div class="semester-container ion-padding-bottom">
                 <ion-label class="semester-label" style="font-size: larger;">Sommersemester</ion-label>
                 <ion-label class="semester-label" style="font-size: larger;">Wintersemester</ion-label>
             </div>
@@ -41,6 +45,7 @@
                             </ion-label>
                         </ion-item>
                     </div>
+                
 
                 </ion-list>
                 <div class="ziel-separator"></div>
@@ -61,11 +66,15 @@
                     </div>
                 </ion-list>
             </div>
-            <div class="spacer"></div>
+        </ion-col>
+
+            
             <ion-header style="height: 0.3%;"></ion-header>
-            <ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none">
-                <ion-label>
-                    Termine
+
+            <ion-col size="12" size-md="6" class="ion-padding-horizontal ion-padding-top">
+            <ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none" class="rounded-item ion-margin-horizontal">
+                <ion-label class="custom-label">
+                    Deine Termine
                 </ion-label>
             </ion-item>
             <div v-if="kommendeTermine.length > 0">
@@ -83,7 +92,7 @@
             </div>
             <div v-else>
                 <ion-item style="text-align: center;">
-                    <ion-label>
+                    <ion-label class="custom-text ion-padding">
                         <h2>Keine Termine für diesen Monat.</h2>
                     </ion-label>
                 </ion-item>
@@ -108,7 +117,11 @@
                         </ion-label>
                     </ion-item>
                 </div>
-            </ion-list>
+                </ion-list>
+            </ion-col>
+                </ion-row>
+            </ion-grid>
+           
         </ion-content>
     </ion-page>
 </template>
@@ -239,22 +252,46 @@ export default {
 }
 </script>
 
+
 <style scoped>
-
-
-.spacer {
-    margin-bottom: 15px; 
+.custom-text {
+    color: #555;
+}
+.custom-label {
+    color: white;
+    font-size: 20px;
+    
 }
 
+
+    
+    @media screen and (min-width: 992px) {
+.ion-padding-horizontal {
+    padding: 20px;
+}
+    }
+
+.rounded-item {
+  border-radius: 15px; 
+  overflow: hidden; 
+  width: auto;
+  justify-content: center;
+}
+
+@media screen and (min-width:992px) {
+.ion-margin-horizontal {
+    margin-left: 10px;
+    margin-right: 40px;
+}
+}
 
 @media (min-width: 1024px) {
   .dateDiv {
     max-width: 1400px; 
-    padding-left: 100px; 
-    padding-right: 100px;
+    padding-left: 50px; 
+    padding-right: 50px;
   }
 }
-
 
 .drag-drop-containers {
     width: 50%;
@@ -317,24 +354,20 @@ export default {
     border-radius: 20px;
 }
 
-
 #displayUsername {
     font-family: 'Blessing', sans-serif;
     padding: 20px;
     font-size: 45px;
     text-align: center;
-}
+    }
 
 #header {
-    /* height: 35px;
-    padding-top: 8px;
-    padding-left: 25px; */
     font-size: larger;
     text-align: center;
 }
 
 #header ion-label {
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .dateDiv {
