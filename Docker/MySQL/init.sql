@@ -134,7 +134,7 @@ Create Table Anmeldung(
 	PruefungsID varchar(10),
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE,
 	FOREIGN KEY (PruefungsID) REFERENCES  Pruefung(PruefungsID) On Delete CASCADE
-) 
+);
 	
 Create Table Note (
 	PruefungsID varchar(10),
