@@ -88,13 +88,14 @@
 			</ion-grid>
 
 			<!-- !! Wahlmodule hinzufügen !! -->
+			<!-- !! Versuche von 1. und 2. Versuch zu 2. und 3. geändert !! -->
 			<div id="legend">
-				<ion-badge id="legendBadge" color="success">&nbsp;</ion-badge>
+				<ion-badge id="legendBadge" color="primary">&nbsp;</ion-badge>
 				<span> Bestanden </span>
 				<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
-				<span> 1. Versuch </span>
-				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
 				<span> 2. Versuch </span>
+				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
+				<span> 3. Versuch </span>
 			</div>
 		</ion-content>
 	</ion-page>
@@ -382,7 +383,7 @@ ion-progress-bar {
 	margin-top: 30px;
 }
 .passed {
-	--background: var(--ion-color-success);
+	--background: var(--ion-color-primary);
 }
 
 .secondTry {
@@ -409,11 +410,12 @@ ion-card {
 	text-align: center;
 }
 
+/* Farbe angepasst*/
 #moduleRow {
 	width: 100%;
 	margin-left: 5px;
 	margin-right: 5px;
-	background-color: var(--ion-color-primary);
+	background-color: #d2d69e;
 	border-radius: 10px;
 }
 
