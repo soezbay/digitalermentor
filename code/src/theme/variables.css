@@ -12,6 +12,13 @@ http://ionicframework.com/docs/theming/ */
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Blessing' ;
+  src: url('Blessing.ttf') format('truetype');
+  font-weight: normal;
+  font-weight: normal;
+}
+
 
 
 :root { 
@@ -49,12 +56,12 @@ http://ionicframework.com/docs/theming/ */
  
 
   /** success **/ 
-  --ion-color-success: #8C9900; 
+  --ion-color-success: #BBCC00; 
 --ion-color-success-rgb: 140,153,0; 
 --ion-color-success-contrast: #000000; 
 --ion-color-success-contrast-rgb: 0,0,0; 
---ion-color-success-shade: #7b8700; 
---ion-color-success-tint: #98a31a; 
+--ion-color-success-shade: #6C9435; 
+--ion-color-success-tint: #9ED94B; 
 
  
 
@@ -171,7 +178,7 @@ http://ionicframework.com/docs/theming/ */
 
  
 
-    --ion-color-success: #2fdf75; 
+    --ion-color-success: #8C9900; 
 
     --ion-color-success-rgb: 47,223,117; 
 
@@ -269,7 +276,7 @@ http://ionicframework.com/docs/theming/ */
 
   .ios body { 
 
-    --ion-background-color: #0f1b15; 
+    --ion-background-color: #121212; 
 
     --ion-background-color-rgb: 15,27,21; 
 

@@ -48,5 +48,28 @@ class Modul {
 
         return database.execute(sql);
     }
+
+    static getModulVoraussetzungenPflicht(ModulKuerzel) {
+        let sql = `SELECT Modul.Name, Modul.Kuerzel
+        FROM Modul
+        JOIN VoraussetzungenPflicht ON Modul.Kuerzel = VoraussetzungenPflicht.VoraussetzungModulKuerzel
+        WHERE VoraussetzungenPflicht.ModulKuerzel = '${ModulKuerzel}';
+        `;
+
+        return database.execute(sql);
+    }
+
+    static getModulVoraussetzungenEmpfohlen(ModulKuerzel) {
+        let sql = `SELECT Modul.Name, Modul.Kuerzel
+        FROM Modul
+        JOIN VoraussetzungenEmpfohlen ON Modul.Kuerzel = VoraussetzungenEmpfohlen.VoraussetzungModulKuerzel
+        WHERE VoraussetzungenEmpfohlen.ModulKuerzel = '${ModulKuerzel}';
+        `;
+
+        console.log("SQL Query:", sql); // Protokollierung der SQL-Anweisung
+
+        return database.execute(sql);
+    }
 }
+
 module.exports = Modul;

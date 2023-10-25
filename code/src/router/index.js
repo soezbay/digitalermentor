@@ -4,7 +4,7 @@ import Moduluebersicht from '../views/Moduluebersicht.vue';
 import Termine from '../routerpages/Termine.vue';
 import Studienverlauf from '../views/Studienverlauf.vue';
 import Profil from '../profile/Profil.vue';
-
+import Einstellungen from '../views/Einstellungen.vue';
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
 
@@ -33,6 +33,16 @@ const routes = [
     path: '/menu/modulbeschreibung/:url_kuerzel',
     component: () => import ('../views/Modulbeschreibung.vue')
   },
+  //---
+{
+    path: '/menu/bewertungen',
+  component: () => import ('../views/Bewertungen.vue')
+},
+{
+  path: '/menu/bewertungen/:url_kuerzel',
+  component: () => import ('../views/Bewertungen.vue')
+},
+  //---
   {
     path: '/termine',
     component: Termine
@@ -59,7 +69,11 @@ const routes = [
   },
   {
     path: '/menu/studienziele',
-    component: () => import('../views/DeineZiele.vue')
+    component: () => import('../goals/DeineZiele.vue')
+  },
+  {
+    path: '/menu/studienziele/deleted',
+    component: () => import('../goals/deletedGoals.vue')
   },
   {
     path: '/menu/profil',
@@ -69,7 +83,10 @@ const routes = [
     path: '/menu/profil/changeProfile',
     component: () => import('../profile/changeProfile.vue')
   },
-
+  {
+    path: '/menu/einstellungen',
+    component: Einstellungen
+  },
 ]
 
 const router = createRouter({

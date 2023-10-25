@@ -9,6 +9,7 @@
 							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
+				<ion-title>Studienverlauf</ion-title>
 				<ion-buttons slot="end">
 					<ion-menu-button color="primary"></ion-menu-button>
 				</ion-buttons>
@@ -106,15 +107,15 @@
 				</ion-row>
 			</ion-grid>
 
+			<!-- !! Wahlmodule hinzufügen !! -->
+			<!-- !! Versuche von 1. und 2. Versuch zu 2. und 3. geändert !! -->
 			<div id="legend">
-				<ion-badge id="legendBadge" style="color: var(--ion-color-success)"
-					>&nbsp;</ion-badge
-				>
+				<ion-badge id="legendBadge" color="primary">&nbsp;</ion-badge>
 				<span> Bestanden </span>
 				<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
-				<span> 1. Versuch </span>
-				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
 				<span> 2. Versuch </span>
+				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
+				<span> 3. Versuch </span>
 			</div>
 		</ion-content>
 	</ion-page>
@@ -413,10 +414,12 @@ ion-progress-bar {
 	--progress-background: var(--ion-color-primary);
 	height: 20px;
 	width: 70%;
-	margin: auto;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 30px;
 }
 .passed {
-	--background: var(--ion-color-success);
+	--background: var(--ion-color-primary);
 }
 
 .secondTry {
@@ -443,11 +446,12 @@ ion-card {
 	text-align: center;
 }
 
+/* Farbe angepasst*/
 #moduleRow {
 	width: 100%;
 	margin-left: 5px;
 	margin-right: 5px;
-	background-color: var(--ion-color-success-tint);
+	background-color: #d2d69e;
 	border-radius: 10px;
 }
 
@@ -468,7 +472,7 @@ ion-card {
 }
 
 #removeSemesterIcon {
-	background-color: var(--ion-color-success-tint);
+	background-color: var(--ion-color-primary);
 	text-align: center;
 	margin-top: 23px;
 	border-radius: 15px;
@@ -486,7 +490,7 @@ ion-card {
 }
 
 #addSemesterIcon {
-	background-color: var(--ion-color-success-tint);
+	background-color: var(--ion-color-primary);
 	text-align: center;
 	border-radius: 15px;
 	width: 30px;

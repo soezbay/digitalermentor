@@ -5,33 +5,20 @@
 				<ion-buttons slot="start">
 					<ion-button color="medium" @click="cancel">Zurück</ion-button>
 				</ion-buttons>
-				<ion-title> {{ selectedModul.name }} </ion-title>
 			</ion-toolbar>
 		</ion-header>
+
 		<ion-content class="ion-padding">
-            <ion-list>
-					<ion-item v-for="(item, index) in modul" :key="index">
-						<ion-label>
-							<p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
-							<p><strong>Name:</strong> {{ item.Name }}</p>
-							<p>
-								<strong>Verantwortliche/r:</strong> {{ item.Verantwortliche }}
-							</p>
-							<p><strong>Dozent/in:</strong> {{ item.Dozent }}</p>
-							<p><strong>Sprache:</strong> {{ item.Sprache }}</p>
-							<p><strong>Turnus:</strong> {{ item.Turnus }}</p>
-							<p>
-								<strong>Leistungspunkte:</strong> {{ item.Leistungspunkte }}
-							</p>
-                            <p><strong>Arbeitsaufwand:</strong> {{ item.Arbeitsaufwand }}</p>
-							<p><strong>Teilnehmerzahl:</strong> {{ item.Teilnehmerzahl }}</p>
-							<p>
-								<strong>Voraussetzungen (Pflicht):</strong> {{ item.VoraussetzungenPflicht }}
-							</p>
-							<p><strong>Voraussetzungen (Empfohlen):</strong> {{ item.VoraussetzungenEmpfohlen }}</p>
-							<p><strong>Prüfungsleistung:</strong> {{ item.Pruefungsleistung }}</p>
-						</ion-label>
-					</ion-item>
+			<h4>
+				Modulbeschreibung <strong> {{ selectedModul.Kuerzel }} </strong>
+			</h4>
+			<ion-list>
+				<ion-item v-for="(item, key) in filteredList" :key="key">
+					<ion-text>
+						<strong>{{ insertSpaceBetweenLowerAndUpper(key) }}: </strong> <br />
+						{{ item }}
+					</ion-text>
+				</ion-item>
 			</ion-list>
 		</ion-content>
 	</ion-page>
@@ -53,7 +40,8 @@ import {
 	IonMenuButton,
 	IonBackButton,
 	IonModal,
-    IonButton,
+	IonButton,
+	IonIcon,
 } from "@ionic/vue";
 
 import { defineComponent, ref } from "vue";
@@ -75,15 +63,18 @@ export default {
 		IonList,
 		IonBackButton,
 		IonModal,
-        IonButton,
+		IonButton,
+		IonIcon,
 	},
+
 	data() {
 		return {
 			modul: [],
+			filteredList: this.filteredList(),
 		};
 	},
 
-    props: {
+	props: {
 		selectedModul: Object,
 	},
 
@@ -99,20 +90,39 @@ export default {
 					console.log(err);
 				});
 		},
+		// Schließen des Modals
 		cancel() {
 			modalController.dismiss(null, "cancel");
+		},
+
+		// selectedModul nach items filtern, die ein Value besitzen
+		filteredList() {
+			const filtered = {};
+			for (const key in this.selectedModul) {
+				if (this.selectedModul[key] !== null) {
+					filtered[key] = this.selectedModul[key];
+				}
+			}
+			return filtered;
+		},
+
+		// Setzt ein Leerzeichen ein bei Keys die aus mehr als einem Wort bestehen
+		insertSpaceBetweenLowerAndUpper(text) {
+			return text.replace(/([a-z])([A-Z])/g, "$1 $2");
 		},
 	},
 	mounted() {
 		this.getData();
 	},
-
 };
 </script>
 
 <style scoped>
-    ion-toolbar {
-        --background: none;
-    }
+ion-toolbar {
+	--background: none;
+}
 
+.centered-text {
+	text-align: center; /* Horizontal zentrieren */
+}
 </style>
