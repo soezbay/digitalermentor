@@ -32,7 +32,7 @@
 
 			<!-- <h4>Modulbeschreibung</h4> -->
             <ion-list>
-					<ion-item v-for="(item, index) in modul" :key="index">
+					<ion-item v-for="(item, index) in selectedModul" :key="index">
 						<ion-label>
 							<p><strong>Kuerzel:</strong> {{ item.Kuerzel }}</p>
 							<p><strong>Name:</strong> {{ item.Name }}</p>
