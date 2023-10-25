@@ -15,8 +15,6 @@
     </ion-header>
 
     <ion-content>
-      <!-- <div style="height: 20px; background-color: var(--ion-color-light);"></div> -->
-      <!-- Aktuelles und nicht gewähltes Semester -->
       <div class="semesterHeader">
         <ion-label class="labelHeader">Sommersemester</ion-label>
         <ion-buttons slot="end">
@@ -25,7 +23,7 @@
           </ion-button>
         </ion-buttons>
       </div>
-      <ion-list class="drag-drop-containers">
+      <ion-list class="drag-drop-containers" v-if="goals_ss.length > 0">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
           <ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="drag-drop-box-item">
             <ion-item-options side="start">
@@ -56,6 +54,15 @@
           </ion-item-sliding>
         </ion-reorder-group>
       </ion-list>
+      <div v-else class="ion-padding">
+        <div class="ion-text-center">
+          <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
+          <br>
+          <ion-label>
+            Erleichtere dein Studienverlauf indem du Ziele mit "+" definierst und nach Priorität sortierst!
+          </ion-label>
+        </div>
+      </div>
 
       <div class="semesterHeader">
         <ion-label class="labelHeader">Wintersemester</ion-label>
@@ -65,7 +72,7 @@
           </ion-button>
         </ion-buttons>
       </div>
-      <ion-list class="drag-drop-containers">
+      <ion-list class="drag-drop-containers" v-if="goals_ws.length > 0">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
           <ion-item-sliding v-for="goal in goals_ws" :key="goal.id" class="drag-drop-box-item">
             <ion-item-options side="start">
@@ -84,7 +91,7 @@
               </ion-label>
               <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
-            
+
             <ion-item-options side="end">
               <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
                 <ion-icon slot="icon-only" :icon="trash"></ion-icon>
@@ -96,6 +103,11 @@
           </ion-item-sliding>
         </ion-reorder-group>
       </ion-list>
+      <div v-else class="ion-padding">
+        <div class="ion-text-center">
+          <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
+        </div>
+      </div>
 
       <ion-item color="primary" router-link="/menu/studienziele/checked" id="header" detail="true" lines="none">
         <ion-label slot="end">
@@ -369,10 +381,10 @@ export default {
 .drag-drop-containers {
   display: block;
   justify-content: space-between;
-  padding: 10px;
-  padding-top: 0;
-  padding-left: 20px;
-  padding-right: 45px;
+  padding-top: 5px;
+  padding-left: 8px;
+  padding-right: 25px;
+  padding-bottom: 5px;
 }
 
 .drag-drop-box-item {
