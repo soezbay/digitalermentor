@@ -131,6 +131,7 @@ import {
 import axios from 'axios';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import NotificationList from './Notification.vue';
 
 export default {
     components: {
@@ -145,7 +146,8 @@ export default {
         IonMenuButton,
         IonLabel,
         IonList, IonListHeader,
-        IonIcon
+        IonIcon,
+        NotificationList
     },
     setup() {
         const store = useStore();
