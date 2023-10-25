@@ -200,6 +200,7 @@
   
 <script>
 import { add, trash, checkmarkDone } from 'ionicons/icons';
+import axios from "axios";
 
 import {
   IonPage,
@@ -244,11 +245,15 @@ export default {
   },
   data() {
     return {
+      add, trash, checkmarkDone,
       presentingElement: undefined,
       goal_name: '',
       semesterSeason: '',
       info: '',
-      add, trash, checkmarkDone,
+      studentID: "test123",
+      modules: [], // Alle Module aus der Datenbank
+      studentProgress: [], // Teilgenommene Module des Studierenden
+      electiveModules: [],
       semesterList: [
         {
           name: '1. Semester',
@@ -267,9 +272,66 @@ export default {
             { name: 'Fach 1', status: 'versuch3' },
             { name: 'Fach 2', status: 'versuch2' },
             { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+
           ],
         },
-        // Weitere Semester und Fächer hier hinzufügen
+        {
+          name: '3. Semester',
+          faecher: [
+            { name: 'Fach 1', status: 'versuch3' },
+            { name: 'Fach 2', status: 'versuch2' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+
+          ],
+        },
+        {
+          name: '4. Semester',
+          faecher: [
+            { name: 'Fach 1', status: 'versuch3' },
+            { name: 'Fach 2', status: 'versuch2' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+
+          ],
+        },
+        {
+          name: '5. Semester',
+          faecher: [
+            { name: 'Fach 1', status: 'versuch3' },
+            { name: 'Fach 2', status: 'versuch2' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+
+          ],
+        },
+        {
+          name: '6. Semester',
+          faecher: [
+            { name: 'Fach 1', status: 'versuch3' },
+            { name: 'Fach 2', status: 'versuch2' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+
+          ],
+        },
+        {
+          name: 'Wahlpflichtmodule',
+          faecher: [
+            { name: 'Fach 1', status: 'versuch3' },
+            { name: 'Fach 2', status: 'versuch2' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+            { name: 'Fach 3', status: 'versuch1' },
+
+          ],
+        },
       ],
     };
   },
@@ -329,10 +391,77 @@ export default {
       // Filtere die Ziele basierend auf dem übergebenen Semester
       return this.goals.filter(goal => goal.semesterSeason === semester);
     },
+    getData() {
+      axios.get("http://localhost:8000/studiengang/pflicht/pi")
+        .then((response) => {
+          const pflichtModule = response.data.pflicht;
+
+          // Gruppiere Module nach Semester
+          const groupedModules = {};
+          pflichtModule.forEach((modul) => {
+            const semester = modul.Semester;
+            if (!groupedModules[semester]) {
+              groupedModules[semester] = [];
+            }
+            groupedModules[semester].push(modul);
+          });
+
+          // Fülle das semesterList-Array mit den gruppierten Modulen
+          this.semesterList.forEach((semester, index) => {
+            const semesterIndex = index + 1;
+            if (groupedModules[semesterIndex]) {
+              semester.faecher = groupedModules[semesterIndex].map((modul) => {
+                return { name: modul.Kuerzel, status: 'versuch1' }; // Status nach Bedarf einfügen
+              });
+            }
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      axios.get("http://localhost:8000/studiengang/wahlpflicht/pi")
+        .then((Response) => {
+          console.log(Response.data);
+          this.electiveModules = Response.data.wahlpflicht;
+
+          // Füge die Wahlpflichtmodule zur entsprechenden Semesterliste in semesterList hinzu
+          const wahlpflichtSemesterIndex = this.semesterList.findIndex(item => item.name === 'Wahlpflichtmodule');
+          if (wahlpflichtSemesterIndex !== -1) {
+            this.semesterList[wahlpflichtSemesterIndex].faecher = this.electiveModules.map((modul) => {
+              return { name: modul.Kuerzel, status: 'versuch1' }; // Status nach Bedarf einfügen
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      axios.get(`http://localhost:8000/modul/status/${this.studentID}`)
+        .then((Response) => {
+          console.log(Response.data);
+          const studentModules = Response.data.modul;
+
+          // Iteriere durch die Studentenmodule und aktualisiere den Status in semesterList
+          this.semesterList.forEach((semester) => {
+            semester.faecher.forEach((fach) => {
+              const matchingModule = studentModules.find((modul) => modul.Kuerzel === fach.name);
+              if (matchingModule) {
+                fach.status = matchingModule.Status;
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+
   },
-  // mounted() {
-  //   this.presentingElement = this.$refs.page.$el;
-  // },
+  mounted() {
+    this.getData();
+  },
 
   computed: {
     goals() {
@@ -447,7 +576,10 @@ export default {
   cursor: pointer;
 }
 
-.versuch1 {
+.Bestanden {
+  background-color: var(--ion-color-primary);
+}
+. {
   background-color: gray;
 }
 
