@@ -16,17 +16,6 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content>
-			<draggable
-				class="w-full mt-5 dragArea list-group"
-				:list="modules"
-				@change="log">
-				<div
-					class="max-w-md p-2 mb-5 border cursor-pointer list-styles"
-					v-for="element in list"
-					:key="element.name">
-					{{ element.name }}
-				</div>
-			</draggable>
 			<h3 id="titel">Studienverlaufsübersicht</h3>
 			<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
 			<div id="cpInfo">{{ reachedCreditPoints }}/{{ fullCreditPoints }} CP</div>
@@ -39,44 +28,48 @@
 				v-for="(semesterModules, semester) in groupedModulesWithEmpty"
 				:key="semester">
 				<ion-row :key="semester">
-					<ion-col size="12">
-						<ion-row>
-							<h2>{{ semester }}.Semester</h2>
-							<ion-icon
-								:icon="remove"
-								id="removeSemesterIcon"
-								v-if="
-									semester > Object.keys(groupedModules).length &&
-									semester ==
-										emptySemesters + Object.keys(groupedModules).length
-								"
-								@click="removeEmptySemester"></ion-icon>
-						</ion-row>
-					</ion-col>
-
-					<ion-row id="moduleRow" :key="`modules-${semester}`">
-
+					<div
+						class="modulesContainer"
+						@dragenter="dragEnter"
+						@dragleave="dragLeave"
+						@dragover="dragOver">
+						<ion-col size="12">
+							<ion-row>
+								<h2>{{ semester }}.Semester</h2>
+								<ion-icon
+									:icon="remove"
+									id="removeSemesterIcon"
+									v-if="
+										semester > Object.keys(groupedModules).length &&
+										semester ==
+											emptySemesters + Object.keys(groupedModules).length
+									"
+									@click="removeEmptySemester"></ion-icon>
+							</ion-row>
+						</ion-col>
+						<ion-row
+							:key="`modules-${semester}`"
+							class="moduleRow"
+							:data-semester="semester"
+							@drop="drop">
 							<ion-col
 								size="4"
 								v-for="(module, index) in semesterModules"
 								:key="index">
-								<draggable
-							class="w-full mt-5 dragArea"
-							:list="semesterModule"
-							@change="log">
 								<ion-card
-									id="moduleElement"
+									class="pflichtModuleElement"
 									expand="full"
-									:class="getModuleStatusClass(module)">
+									draggable="true"
+									@dragstart="(e) => dragStart(e, module.Kuerzel, semester)"
+									:id="module.Kuerzel">
 									<span>{{ module.Kuerzel }}</span> <br />
 									<span id="note">{{
 										getStudentModuleNoteForPass(module)
 									}}</span>
 								</ion-card>
-							</draggable>
-
 							</ion-col>
-					</ion-row>
+						</ion-row>
+					</div>
 				</ion-row>
 			</ion-grid>
 
@@ -93,17 +86,25 @@
 							<h2>Wahlpflichtmodule</h2>
 						</ion-row>
 					</ion-col>
-					<ion-row id="moduleRow">
-						<ion-col
-							size="4"
-							v-for="(module, index) in electiveModules"
-							:key="index">
-							<ion-card id="moduleElement">
-								<span>{{ module.Kuerzel }}</span>
-								<span id="note">{{ getStudentModuleNoteForPass(module) }}</span>
-							</ion-card>
-						</ion-col>
-					</ion-row>
+					<div class="modulesContainer">
+						<ion-row class="moduleRow">
+							<ion-col
+								size="4"
+								v-for="(module, index) in electiveModules"
+								:key="index">
+								<ion-card
+									class="pflichtModuleElement"
+									draggable="true"
+									@dragstart="(e) => dragStart(e, module.Kuerzel)"
+									:id="module.Kuerzel">
+									<span>{{ module.Kuerzel }}</span>
+									<span id="note">{{
+										getStudentModuleNoteForPass(module)
+									}}</span>
+								</ion-card>
+							</ion-col>
+						</ion-row>
+					</div>
 				</ion-row>
 			</ion-grid>
 
@@ -148,7 +149,6 @@ import {
 import { remove, add, ellipse } from "ionicons/icons";
 
 import { defineComponent, ref } from "vue";
-import { VueDraggableNext } from "vue-draggable-next";
 import axios from "axios";
 
 export default {
@@ -173,7 +173,6 @@ export default {
 		IonProgressBar,
 		IonIcon,
 		IonBadge,
-		draggable: VueDraggableNext,
 	},
 
 	setup() {
@@ -193,17 +192,7 @@ export default {
 			studentProgress: [], // Teilgenommene Module des Studierenden
 			emptySemesters: 0, // Anzahl der leeren Semester
 			enabled: true,
-			list: [
-				{ name: "Medical science", id: 1 },
-				{ name: "Allied Medicine", id: 2 },
-				{ name: "Defense Service", id: 3 },
-				{ name: "Education training", id: 4 },
-				{ name: "Economics & Commerce", id: 5 },
-				{ name: "Banking & Finance", id: 6 },
-				{ name: "Enginnering", id: 7 },
-				{ name: "science", id: 8 },
-			],
-			dragging: true,
+			targetSemesterModules: [],
 		};
 	},
 	methods: {
@@ -362,10 +351,97 @@ export default {
 
 			return totalGrade / totalCreditPoints;
 		},
+		dragStart(event, moduleKuerzel, semester) {
+			event.dataTransfer.setData(
+				"text/plain",
+				JSON.stringify({ moduleKuerzel, semester })
+			);
+			setTimeout(() => {
+				event.target.classList.add("hide");
+			}, 0);
+			console.log("dragStart");
+		},
+
+		dragEnter(e) {
+			e.preventDefault();
+			e.target.classList.add("drag-over");
+			console.log("dragEnter");
+		},
+
+		dragOver(e) {
+			e.preventDefault();
+			e.target.classList.add("drag-over");
+			console.log("dragOver");
+		},
+
+		dragLeave(e) {
+			e.target.classList.remove("drag-over");
+			console.log("dragLeave");
+		},
+
+		drop(e) {
+			e.target.classList.remove("drag-over");
+
+			// Holen Sie sich die gezogenen Daten
+			const data = e.dataTransfer.getData("text/plain");
+			const { moduleKuerzel, semester } = JSON.parse(data);
+
+			// Finden Sie das richtige Semester-Element basierend auf dem benutzerdefinierten Data-Attribut
+			const targetSemester = e.target.dataset.semester;
+			const updatedSemester = this.groupedModules[targetSemester];
+			console.log("Target Semester: " + updatedSemester);
+			console.log("Grouped Semester: " + this.groupedModules[semester][2]);
+			this.groupedModules[targetSemester].push(data);
+			console.log("Spliced: " + this.groupedModules[targetSemester]);
+
+			// if (targetSemester === semester) {
+			// 	// Suchen Sie das richtige Array anhand des ausgewählten Semesters
+			// 	const targetSemesterModules =
+			// 		this.groupedModulesWithEmpty[targetSemester];
+
+			// 	// Finden Sie das Modul, das verschoben wurde
+			// 	const draggedModule = targetSemesterModules.find(
+			// 		(module) => module.Kuerzel === moduleKuerzel
+			// 	);
+
+			// 	// Fügen Sie das Modul dem ausgewählten Semester hinzu
+			// 	if (draggedModule) {
+			// 		// Entfernen Sie das Modul aus dem ursprünglichen Semester
+			// 		const sourceSemesterModules = this.groupedModulesWithEmpty[semester];
+			// 		const index = sourceSemesterModules.indexOf(draggedModule);
+			// 		if (index !== -1) {
+			// 			sourceSemesterModules.splice(index, 1);
+			// 		}
+
+			// 		// Fügen Sie das Modul zum Ziel-Semester hinzu
+			// 		targetSemesterModules.push(draggedModule);
+
+			// 		// Aktualisieren Sie die Daten im Vue-Datenmodell
+			// 		// Sie müssen sicherstellen, dass Ihre Datenstruktur korrekt aktualisiert wird
+			// 		// z.B. this.$set(this.groupedModulesWithEmpty, targetSemester, targetSemesterModules);
+			// 	}
+			// }
+			console.log(data);
+			console.log("dragDrop");
+			console.log(targetSemester);
+		},
 	},
 
 	mounted() {
 		this.getData();
+		const items = document.querySelectorAll(".pflichtModuleElement");
+		items.forEach((item) => {
+			item.addEventListener("start", this.dragStart);
+			item.addEventListener("dragend", this.dragEnd);
+		});
+
+		const boxes = document.querySelectorAll(".modulesContainer");
+		boxes.forEach((box) => {
+			box.addEventListener("dragenter", this.dragEnter);
+			box.addEventListener("dragover", this.dragOver);
+			box.addEventListener("dragleave", this.dragLeave);
+			box.addEventListener("drop", this.drop);
+		});
 	},
 
 	computed: {
@@ -446,16 +522,21 @@ ion-card {
 	text-align: center;
 }
 
+.drag-over {
+	--background: blue;
+}
+
 /* Farbe angepasst*/
-#moduleRow {
-	width: 100%;
-	margin-left: 5px;
-	margin-right: 5px;
+.moduleRow {
 	background-color: #d2d69e;
 	border-radius: 10px;
 }
-
-#moduleElement {
+.modulesContainer {
+	width: 100%;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+.pflichtModuleElement {
 	height: 50px;
 	margin: 0px;
 	box-shadow: 5px 5px 10px grey;
@@ -510,13 +591,6 @@ ion-card {
 
 #legendBadge {
 	box-shadow: 1px 1px 7px grey;
-}
-
-.draggable-list {
-	background: #3f51b5;
-	color: #fff;
-	border: 1px solid;
-	height: 50vh;
 }
 .list-item {
 	margin: 10px;
