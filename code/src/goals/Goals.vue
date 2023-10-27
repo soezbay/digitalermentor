@@ -139,6 +139,13 @@
           <br>
         </div>
       </ion-list>
+      <p style="text-align: center;">Legende:</p>
+      <div class="legend">
+        <div class="legend-item Bestanden">Bestanden</div>
+        <div class="legend-item versuch1">Versuch 1</div>
+        <div class="legend-item versuch2">Versuch 2</div>
+        <div class="legend-item versuch3">Versuch 3</div>
+      </div>
 
       <ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
         <ion-header>
@@ -199,7 +206,7 @@
 </template>
   
 <script>
-import { add, trash, checkmarkDone } from 'ionicons/icons';
+import { add, trash, checkmarkDone, sadOutline } from 'ionicons/icons';
 import axios from "axios";
 
 import {
@@ -258,78 +265,45 @@ export default {
         {
           name: '1. Semester',
           faecher: [
-            { name: 'Fach 1', status: 'versuch3' },
-            { name: 'Fach 2', status: 'versuch2' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-
+            { name: '', status: '' },
           ],
         },
         {
           name: '2. Semester',
           faecher: [
-            { name: 'Fach 1', status: 'versuch3' },
-            { name: 'Fach 2', status: 'versuch2' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-
+            { name: '', status: '' },
           ],
         },
         {
           name: '3. Semester',
           faecher: [
-            { name: 'Fach 1', status: 'versuch3' },
-            { name: 'Fach 2', status: 'versuch2' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
+            { name: '', status: '' },
 
           ],
         },
         {
           name: '4. Semester',
           faecher: [
-            { name: 'Fach 1', status: 'versuch3' },
-            { name: 'Fach 2', status: 'versuch2' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
+            { name: '', status: '' },
 
           ],
         },
         {
           name: '5. Semester',
           faecher: [
-            { name: 'Fach 1', status: 'versuch3' },
-            { name: 'Fach 2', status: 'versuch2' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-
+            { name: '', status: '' },
           ],
         },
         {
           name: '6. Semester',
           faecher: [
-            { name: 'Fach 1', status: 'versuch3' },
-            { name: 'Fach 2', status: 'versuch2' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-
+            { name: '', status: '' },
           ],
         },
         {
           name: 'Wahlpflichtmodule',
           faecher: [
-            { name: 'Fach 1', status: 'versuch3' },
-            { name: 'Fach 2', status: 'versuch2' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-            { name: 'Fach 3', status: 'versuch1' },
-
+            { name: '', status: '' },
           ],
         },
       ],
@@ -441,13 +415,22 @@ export default {
         .then((Response) => {
           console.log(Response.data);
           const studentModules = Response.data.modul;
-
+          const passedModules = studentModules.filter((modul) => modul.Status === 'Bestanden');
+          const notPassedModules = studentModules.filter((modul) => modul.Status === 'Nicht Bestanden');
           // Iteriere durch die Studentenmodule und aktualisiere den Status in semesterList
           this.semesterList.forEach((semester) => {
             semester.faecher.forEach((fach) => {
-              const matchingModule = studentModules.find((modul) => modul.Kuerzel === fach.name);
-              if (matchingModule) {
-                fach.status = matchingModule.Status;
+              const matchingModule1 = notPassedModules.find((modul) => modul.Kuerzel === fach.name);
+              if (matchingModule1) {
+                if (matchingModule1.Versuch < 3) {
+                  fach.status = "versuch" + (parseInt(matchingModule1.Versuch) + 1);
+                } else {
+                  fach.status = parseInt(matchingModule1.Versuch);
+                }
+              }
+              const matchingModule2 = passedModules.find((modul) => modul.Kuerzel === fach.name);
+              if (matchingModule2) {
+                fach.status = "Bestanden";
               }
             });
           });
@@ -456,8 +439,6 @@ export default {
           console.log(err);
         });
     },
-
-
   },
   mounted() {
     this.getData();
@@ -576,10 +557,33 @@ export default {
   cursor: pointer;
 }
 
+.legend {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  flex-direction: row;
+  /* Legt die Ausrichtung auf horizontal fest */
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  height: 30px;
+  width: 120px;
+  border-radius: 20px;
+  color: black;
+}
+
 .Bestanden {
   background-color: var(--ion-color-primary);
 }
-. {
+
+.versuch1 {
   background-color: gray;
 }
 

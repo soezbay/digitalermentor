@@ -5,6 +5,7 @@ import Termine from '../routerpages/Termine.vue';
 import Studienverlauf from '../views/Studienverlauf.vue';
 import Profil from '../profile/Profil.vue';
 import Einstellungen from '../views/Einstellungen.vue';
+import Studienziele from '../goals/Goals.vue'
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
 
@@ -27,21 +28,21 @@ const routes = [
   },
   {
     path: '/menu/modulbeschreibung',
-    component: () => import ('../views/Modulbeschreibung.vue')
+    component: () => import('../views/Modulbeschreibung.vue')
   },
   {
     path: '/menu/modulbeschreibung/:url_kuerzel',
-    component: () => import ('../views/Modulbeschreibung.vue')
+    component: () => import('../views/Modulbeschreibung.vue')
   },
   //---
-{
+  {
     path: '/menu/bewertungen',
-  component: () => import ('../views/Bewertungen.vue')
-},
-{
-  path: '/menu/bewertungen/:url_kuerzel',
-  component: () => import ('../views/Bewertungen.vue')
-},
+    component: () => import('../views/Bewertungen.vue')
+  },
+  {
+    path: '/menu/bewertungen/:url_kuerzel',
+    component: () => import('../views/Bewertungen.vue')
+  },
   //---
   {
     path: '/termine',
@@ -69,7 +70,7 @@ const routes = [
   },
   {
     path: '/menu/studienziele',
-    component: () => import('../goals/Goals.vue')
+    component: Studienziele
   },
   {
     path: '/menu/studienziele/checked',

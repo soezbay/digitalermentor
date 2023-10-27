@@ -18,7 +18,14 @@
                     <ion-button color="danger" @click="deleteAllGoals()">Alle löschen</ion-button>
                 </ion-buttons>
             </ion-toolbar>
+
             <!-- Aktuelles und nicht gewähltes Semester -->
+            <div class="ion-padding" v-if="checkedGoals == 0">
+                <ion-header class="ion-text-center">
+                    <ion-label>Keine Erreichten Ziele</ion-label>
+                </ion-header>
+            </div>
+            
             <div class="semesterHeader">
                 <ion-label class="labelHeader">Sommersemester</ion-label>
             </div>
