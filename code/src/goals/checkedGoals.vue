@@ -8,7 +8,7 @@
                 <ion-buttons slot="end">
                     <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>
-                <ion-title>Gelöschte Ziele</ion-title>
+                <ion-title>Erreichte Ziele</ion-title>
             </ion-toolbar>
         </ion-header>
 
@@ -20,20 +20,20 @@
             </ion-toolbar>
 
             <!-- Aktuelles und nicht gewähltes Semester -->
-            <div class="ion-padding" v-if="deletedGoals == 0">
+            <div class="ion-padding" v-if="checkedGoals == 0">
                 <ion-header class="ion-text-center">
-                    <ion-label>Keine Gelöschten Ziele im Papierkorb</ion-label>
+                    <ion-label>Keine Erreichten Ziele</ion-label>
                 </ion-header>
             </div>
-
+            
             <div class="semesterHeader">
                 <ion-label class="labelHeader">Sommersemester</ion-label>
             </div>
             <ion-list class="drag-drop-containers">
-                <div v-for="goal in deletedGoals" :key="goal.id">
+                <div v-for="goal in checkedGoals" :key="goal.id">
                     <ion-item-sliding v-if="goal.semesterSeason === 'Sommersemester'" class="drag-drop-box-item">
                         <ion-item-options side="start">
-                            <ion-item-option color="success" @click="restoreGoal(goal.id)">
+                            <ion-item-option color="success" @click="restoreCheckedGoal(goal.id)">
                                 <ion-label>Wiederherstellen</ion-label>
                             </ion-item-option>
                         </ion-item-options>
@@ -59,10 +59,10 @@
                 <ion-label class="labelHeader">Wintersemester</ion-label>
             </div>
             <ion-list class="drag-drop-containers">
-                <div v-for="goal in deletedGoals" :key="goal.id">
+                <div v-for="goal in checkedGoals" :key="goal.id">
                     <ion-item-sliding v-if="goal.semesterSeason === 'Wintersemester'" class="drag-drop-box-item">
                         <ion-item-options side="start">
-                            <ion-item-option color="success" @click="restoreGoal(goal.id)">
+                            <ion-item-option color="success" @click="restoreCheckedGoal(goal.id)">
                                 <ion-label>Wiederherstellen</ion-label>
                             </ion-item-option>
                         </ion-item-options>
@@ -130,10 +130,13 @@ export default {
     methods: {
         deleteGoalHandler(goal_ID) {
             this.$store.dispatch('deleteGoalFinal', goal_ID);
-            console.log('Gelöschte Ziele:', this.deletedGoals);
+            console.log('Gelöschte Ziele:', this.checkedGoals);
         },
-        restoreGoal(goal_ID) {
-            this.$store.dispatch('restoreGoal', goal_ID);
+        restoreCheckedGoal(goal_ID) {
+            this.$store.commit('restoreCheckedGoal', goal_ID);
+        },
+        checkGoal(goal_ID) {
+            this.$store.commit('restoreGoal', goal_ID);
         },
         async deleteAllGoals() {
             const alert = await alertController.create({
@@ -157,8 +160,8 @@ export default {
     },
 
     computed: {
-        deletedGoals() {
-            return this.$store.getters.getDeletedGoals;
+        checkedGoals() {
+            return this.$store.getters.getCheckedGoals;
         }
     }
 };

@@ -31,17 +31,17 @@
             </div>
             <div class="ziel-container">
                 <ion-list class="drag-drop-containers">
-                    <div v-if="zieleSS.length >= 1" class="drag-drop-box-item">
+                    <div v-if="goals_ss.length >= 1" class="drag-drop-box-item">
                         <ion-item lines="none" color="#d2d69e" class="item-container">
                             <ion-label class="card-label">
-                                <h2>{{ zieleSS[0].titel }}</h2>
-                                <p>{{ zieleSS[0].beschreibung }}</p>
+                                <h2>{{ goals_ss[0].titel }}</h2>
+                                <p>{{ goals_ss[0].beschreibung }}</p>
                             </ion-label>
                         </ion-item>
-                        <ion-item v-if="zieleSS.length > 1" lines="none" color="#d2d69e" class="item-container">
+                        <ion-item v-if="goals_ss.length > 1" lines="none" color="#d2d69e" class="item-container">
                             <ion-label class="card-label">
-                                <h2>{{ zieleSS[1].titel }}</h2>
-                                <p>{{ zieleSS[1].beschreibung }}</p>
+                                <h2>{{ goals_ss[1].titel }}</h2>
+                                <p>{{ goals_ss[1].beschreibung }}</p>
                             </ion-label>
                         </ion-item>
                     </div>
@@ -50,17 +50,17 @@
                 </ion-list>
                 <div class="ziel-separator"></div>
                 <ion-list class="drag-drop-containers">
-                    <div v-if="zieleWS.length >= 1" class="drag-drop-box-item">
+                    <div v-if="goals_ws.length >= 1" class="drag-drop-box-item">
                         <ion-item lines="none" color="#d2d69e" class="item-container">
                             <ion-label class="card-label">
-                                <h2>{{ zieleWS[0].titel }}</h2>
-                                <p>{{ zieleWS[0].beschreibung }}</p>
+                                <h2>{{ goals_ws[0].titel }}</h2>
+                                <p>{{ goals_ws[0].beschreibung }}</p>
                             </ion-label>
                         </ion-item>
-                        <ion-item v-if="zieleWS.length > 1" lines="none" color="#d2d69e" class="item-container">
+                        <ion-item v-if="goals_ws.length > 1" lines="none" color="#d2d69e" class="item-container">
                             <ion-label class="card-label">
-                                <h2>{{ zieleWS[1].titel }}</h2>
-                                <p>{{ zieleWS[1].beschreibung }}</p>
+                                <h2>{{ goals_ws[1].titel }}</h2>
+                                <p>{{ goals_ws[1].beschreibung }}</p>
                             </ion-label>
                         </ion-item>
                     </div>
@@ -240,11 +240,11 @@ export default {
 
             return kommendeTermine.slice(0, 3); // Nur die ersten zwei Termine
         },
-        zieleSS() {
-            return this.$store.getters.zieleSS;
+        goals_ss() {
+            return this.$store.getters.getGoals_ss;
         },
-        zieleWS() {
-            return this.$store.getters.zieleWS;
+        goals_ws() {
+            return this.$store.getters.getGoals_ws;
         },
 
     },
