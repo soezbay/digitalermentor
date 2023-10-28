@@ -108,6 +108,9 @@
                                 size="cover" max="2100-01-01T00:00:00">
                             </ion-datetime>
                         </div>
+                        <div>
+                            test
+                        </div>
                         <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN
             <ion-list>
                 <div>
