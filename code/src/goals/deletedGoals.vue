@@ -19,7 +19,7 @@
                 </ion-buttons>
             </ion-toolbar>
 
-            <!-- Aktuelles und nicht gewähltes Semester -->
+            <!-- Displayed if there is no deleted Goals -->
             <div class="ion-padding" v-if="deletedGoals == 0">
                 <ion-header class="ion-text-center">
                     <ion-label>Keine Gelöschten Ziele im Papierkorb</ion-label>
@@ -29,14 +29,17 @@
             <div class="semesterHeader">
                 <ion-label class="labelHeader">Sommersemester</ion-label>
             </div>
+            <!--Iterate through deleted goals and display them-->
             <ion-list class="drag-drop-containers">
                 <div v-for="goal in deletedGoals" :key="goal.id">
                     <ion-item-sliding v-if="goal.semesterSeason === 'Sommersemester'" class="drag-drop-box-item">
                         <ion-item-options side="start">
+                            <!--Option for restoring goal-->                            
                             <ion-item-option color="success" @click="restoreGoal(goal.id)">
                                 <ion-label>Wiederherstellen</ion-label>
                             </ion-item-option>
                         </ion-item-options>
+                        <!--Diplay goals Properties-->
                         <ion-item color="secondary" class="item-container" lines="none">
                             <ion-label class="card-label">
                                 <h2>{{ goal.titel }}</h2>
@@ -45,7 +48,8 @@
                             <ion-label slot="end">
                                 <p>{{ goal.date }}</p>
                             </ion-label>
-                        </ion-item>ion
+                        </ion-item>
+                        <!--Handler for deleting goal finally-->
                         <ion-item-options>
                             <ion-item-option color="danger">
                                 <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
@@ -58,14 +62,17 @@
             <div class="semesterHeader">
                 <ion-label class="labelHeader">Wintersemester</ion-label>
             </div>
+            <!--Iterate through deleted goals and display them-->
             <ion-list class="drag-drop-containers">
                 <div v-for="goal in deletedGoals" :key="goal.id">
                     <ion-item-sliding v-if="goal.semesterSeason === 'Wintersemester'" class="drag-drop-box-item">
                         <ion-item-options side="start">
+                            <!--Option for restoring goal-->
                             <ion-item-option color="success" @click="restoreGoal(goal.id)">
                                 <ion-label>Wiederherstellen</ion-label>
                             </ion-item-option>
                         </ion-item-options>
+                        <!--Diplay goals Properties-->
                         <ion-item color="secondary" class="item-container" lines="none">
                             <ion-label class="card-label">
                                 <h2>{{ goal.titel }}</h2>
@@ -74,7 +81,8 @@
                             <ion-label slot="end">
                                 <p>{{ goal.date }}</p>
                             </ion-label>
-                        </ion-item>ion
+                        </ion-item>
+                        <!--Handler for deleting goal finally-->
                         <ion-item-options>
                             <ion-item-option color="danger">
                                 <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
@@ -128,6 +136,7 @@ export default {
     },
 
     methods: {
+        //Handler for deleting goals finally and handler for restoring goal
         deleteGoalHandler(goal_ID) {
             this.$store.dispatch('deleteGoalFinal', goal_ID);
             console.log('Gelöschte Ziele:', this.deletedGoals);
@@ -135,6 +144,7 @@ export default {
         restoreGoal(goal_ID) {
             this.$store.dispatch('restoreGoal', goal_ID);
         },
+        //button handler for deleting AllGoals finally
         async deleteAllGoals() {
             const alert = await alertController.create({
                 header: 'Bestätigung',
@@ -157,6 +167,7 @@ export default {
     },
 
     computed: {
+        //Vuex-Getters
         deletedGoals() {
             return this.$store.getters.getDeletedGoals;
         }

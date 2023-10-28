@@ -23,6 +23,7 @@
           </ion-button>
         </ion-buttons>
       </div>
+      <!-- Getting Sommersemester-Array of vuex and displaying all elements -->
       <ion-list class="drag-drop-containers" v-if="goals_ss.length > 0">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
           <ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="drag-drop-box-item">
@@ -31,7 +32,7 @@
                 <ion-label>Nach Unten</ion-label>
               </ion-item-option>
             </ion-item-options>
-
+            <!--Displayin Goal-Element properties-->
             <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
                 <h2>{{ goal.titel }}</h2>
@@ -42,7 +43,7 @@
               </ion-label>
               <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
-
+            <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
             <ion-item-options side="end">
               <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
                 <ion-icon slot="icon-only" :icon="trash"></ion-icon>
@@ -54,6 +55,7 @@
           </ion-item-sliding>
         </ion-reorder-group>
       </ion-list>
+      <!--Only getting displayed when Array is empty-->
       <div v-else class="ion-padding">
         <div class="ion-text-center">
           <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
@@ -72,6 +74,7 @@
           </ion-button>
         </ion-buttons>
       </div>
+      <!-- Getting Sommersemester-Array of vuex and displaying all elements -->
       <ion-list class="drag-drop-containers" v-if="goals_ws.length > 0">
         <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
           <ion-item-sliding v-for="goal in goals_ws" :key="goal.id" class="drag-drop-box-item">
@@ -80,7 +83,7 @@
                 <ion-label>Nach Oben</ion-label>
               </ion-item-option>
             </ion-item-options>
-
+            <!--Displayin Goal-Element properties-->
             <ion-item color="#d2d69e" class="item-container" lines="none">
               <ion-label class="card-label">
                 <h2>{{ goal.titel }}</h2>
@@ -91,7 +94,7 @@
               </ion-label>
               <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
-
+            <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
             <ion-item-options side="end">
               <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
                 <ion-icon slot="icon-only" :icon="trash"></ion-icon>
@@ -103,12 +106,14 @@
           </ion-item-sliding>
         </ion-reorder-group>
       </ion-list>
+      <!--Only getting displayed when Array is empty-->
       <div v-else class="ion-padding">
         <div class="ion-text-center">
           <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
         </div>
       </div>
 
+      <!--Item-Elements routing to checked Goals and deleted Goals-->
       <ion-item color="primary" router-link="/menu/studienziele/checked" id="header" detail="true" lines="none">
         <ion-label slot="end">
           Abgeschlossene Ziele
@@ -120,17 +125,16 @@
         </ion-label>
       </ion-item>
 
-      <!-- Titel "Diese Klausuren musst du noch schreiben" und grüne Linie -->
       <ion-row class="klausuren-title">
         <ion-label class="underline">Diese Klausuren musst du noch schreiben</ion-label>
       </ion-row>
 
-      <!-- Liste der Semester und Fächer -->
+      <!-- List of Semester and modules -->
       <ion-list class="ion-padding">
         <div v-for="(semester, index) in semesterList" :key="index">
           <ion-label>{{ semester.name }}</ion-label>
           <ion-item>
-            <!-- Fächer als kleine runde Blöcke mit Drag & Drop -->
+            <!-- Displying the module-elements, with drag&drop property -->
             <ion-card v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex" @dragstart="onDragStart(fach)"
               draggable="true" class="drag-item" :class="fach.status">
               <ion-label style="color: #000000; font-weight: bolder;">{{ fach.name }}</ion-label>
@@ -139,6 +143,7 @@
           <br>
         </div>
       </ion-list>
+      <!--Color Legend-->
       <p style="text-align: center;">Legende:</p>
       <div class="legend">
         <div class="legend-item Bestanden">Bestanden</div>
@@ -147,6 +152,7 @@
         <div class="legend-item versuch3">Versuch 3</div>
       </div>
 
+      <!-- Modals for adding a goal (Sommersemester)-->
       <ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
         <ion-header>
           <ion-toolbar>
@@ -174,6 +180,7 @@
         </ion-content>
       </ion-modal>
 
+      <!-- Modals for adding a goal (Wintersemester)-->
       <ion-modal ref="modal_WS" trigger="open-WS-modal" :presenting-element="presentingElement">
         <ion-header>
           <ion-toolbar>
@@ -210,15 +217,9 @@ import { add, trash, checkmarkDone, sadOutline } from 'ionicons/icons';
 import axios from "axios";
 
 import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButtons,
-  IonMenuButton, IonButton,
-  IonItem,
-  IonLabel, IonInput,
+  IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
+  IonButtons, IonMenuButton, IonButton,
+  IonItem, IonLabel, IonInput,
   IonList, IonListHeader,
   IonCard,
   IonRow,
@@ -231,29 +232,23 @@ import {
 
 export default {
   components: {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonItem,
-    IonButtons,
-    IonMenuButton,
-    IonLabel, IonInput,
+    IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
+    IonButtons, IonMenuButton, IonButton,
+    IonItem, IonLabel, IonInput,
     IonList, IonListHeader,
     IonCard,
-    IonButton,
     IonRow,
     IonIcon,
     IonItemSliding, IonItemOptions, IonItemOption,
     IonModal,
     IonSelect, IonSelectOption,
-    IonReorder, IonReorderGroup
+    IonReorder, IonReorderGroup,
   },
   data() {
     return {
-      add, trash, checkmarkDone,
+      add, trash, checkmarkDone, //Icons
       presentingElement: undefined,
+      //Goal properties
       goal_name: '',
       semesterSeason: '',
       info: '',
@@ -261,56 +256,21 @@ export default {
       modules: [], // Alle Module aus der Datenbank
       studentProgress: [], // Teilgenommene Module des Studierenden
       electiveModules: [],
+      //Array with Modules
       semesterList: [
-        {
-          name: '1. Semester',
-          faecher: [
-            { name: '', status: '' },
-          ],
-        },
-        {
-          name: '2. Semester',
-          faecher: [
-            { name: '', status: '' },
-          ],
-        },
-        {
-          name: '3. Semester',
-          faecher: [
-            { name: '', status: '' },
-
-          ],
-        },
-        {
-          name: '4. Semester',
-          faecher: [
-            { name: '', status: '' },
-
-          ],
-        },
-        {
-          name: '5. Semester',
-          faecher: [
-            { name: '', status: '' },
-          ],
-        },
-        {
-          name: '6. Semester',
-          faecher: [
-            { name: '', status: '' },
-          ],
-        },
-        {
-          name: 'Wahlpflichtmodule',
-          faecher: [
-            { name: '', status: '' },
-          ],
-        },
+        { name: '1. Semester', },
+        { name: '2. Semester', },
+        { name: '3. Semester', },
+        { name: '4. Semester', },
+        { name: '5. Semester', },
+        { name: '6. Semester', },
+        { name: 'Wahlpflichtmodule', },
       ],
     };
   },
 
   methods: {
+    //Reorder Handler which commits to Vuex-Store
     handleReorderForWS(event) {
       const updatedGoalsWS = event.detail.complete(this.goals_ws);
       console.log(updatedGoalsWS);
@@ -321,14 +281,17 @@ export default {
       console.log(updatedGoalsSS);
       this.$store.commit('updateGoalsOrderForSS', updatedGoalsSS);
     },
+    //Dissmis-Methode for Modals
     dismiss() {
       this.$refs.modal_SS.$el.dismiss();
       this.$refs.modal_WS.$el.dismiss();
     },
+    //Logik for saving a new Goal to Vuex-Store
     saveGoal() {
-      const selectedOption = this.$refs.semesterSelect.value;
+      const selectedOption = this.$refs.semesterSelect.value; //get selected Semester in Modal
       if (this.goal_name && selectedOption) {
         console.log('Erstelle Ziel Daten')
+        //Set Properties from input
         const goal_data = {
           id: Date.now(),
           date: new Date().toLocaleDateString(),
@@ -339,14 +302,16 @@ export default {
         console.log('Dispatche Ziel Daten')
         this.$store.dispatch('addGoal', goal_data);
         console.log('Schließe Modal')
+        //Set propeties to Default
         this.goal_name = '';
         this.semesterSeason = '';
         this.info = '';
-        this.dismiss(); // Schließe das Modal nach dem Speichern
+        this.dismiss();
       } else {
         console.log('Fehlgeschlagen Daten zu generienen')
       }
     },
+    //Handler for deleting and checking goals and commiting it to the store
     deleteGoalHandler(goal_ID) {
       this.$store.dispatch('deleteGoal', goal_ID);
       console.log('Gelöschte Ziele:', this.deletedGoals);
@@ -354,6 +319,7 @@ export default {
     checkGoal(goal_ID) {
       this.$store.commit('checkGoal', goal_ID);
     },
+    //Methodes moves goals from one to another array in vuex store
     switchToWS(goal_ID) {
       this.$store.commit('switchToWS', goal_ID);
     },
@@ -361,16 +327,13 @@ export default {
       this.$store.commit('switchToSS', goal_ID);
     },
 
-    filteredZiele(semester) {
-      // Filtere die Ziele basierend auf dem übergebenen Semester
-      return this.goals.filter(goal => goal.semesterSeason === semester);
-    },
+    //Get Modules- and User-Data from Server
     getData() {
       axios.get("http://localhost:8000/studiengang/pflicht/pi")
         .then((response) => {
           const pflichtModule = response.data.pflicht;
 
-          // Gruppiere Module nach Semester
+          // Group Modules by Semester
           const groupedModules = {};
           pflichtModule.forEach((modul) => {
             const semester = modul.Semester;
@@ -380,12 +343,13 @@ export default {
             groupedModules[semester].push(modul);
           });
 
-          // Fülle das semesterList-Array mit den gruppierten Modulen
+          // Fill semesterList-Array with the grouped Modules
           this.semesterList.forEach((semester, index) => {
             const semesterIndex = index + 1;
             if (groupedModules[semesterIndex]) {
               semester.faecher = groupedModules[semesterIndex].map((modul) => {
-                return { name: modul.Kuerzel, status: 'versuch1' }; // Status nach Bedarf einfügen
+                //Put Module in array
+                return { name: modul.Kuerzel, status: 'versuch1' };
               });
             }
           });
@@ -399,11 +363,11 @@ export default {
           console.log(Response.data);
           this.electiveModules = Response.data.wahlpflicht;
 
-          // Füge die Wahlpflichtmodule zur entsprechenden Semesterliste in semesterList hinzu
+          // Put electiveModules in belonging SemesterArray
           const wahlpflichtSemesterIndex = this.semesterList.findIndex(item => item.name === 'Wahlpflichtmodule');
           if (wahlpflichtSemesterIndex !== -1) {
             this.semesterList[wahlpflichtSemesterIndex].faecher = this.electiveModules.map((modul) => {
-              return { name: modul.Kuerzel, status: 'versuch1' }; // Status nach Bedarf einfügen
+              return { name: modul.Kuerzel, status: 'versuch1' };
             });
           }
         })
@@ -414,10 +378,11 @@ export default {
       axios.get(`http://localhost:8000/modul/status/${this.studentID}`)
         .then((Response) => {
           console.log(Response.data);
+          //get user data containing modules which are passed or not
           const studentModules = Response.data.modul;
           const passedModules = studentModules.filter((modul) => modul.Status === 'Bestanden');
           const notPassedModules = studentModules.filter((modul) => modul.Status === 'Nicht Bestanden');
-          // Iteriere durch die Studentenmodule und aktualisiere den Status in semesterList
+          // Iterate through Studentmodules and update Status
           this.semesterList.forEach((semester) => {
             semester.faecher.forEach((fach) => {
               const matchingModule1 = notPassedModules.find((modul) => modul.Kuerzel === fach.name);
@@ -440,18 +405,19 @@ export default {
         });
     },
   },
+  //Display when data is fetched
   mounted() {
     this.getData();
   },
 
   computed: {
+    //Vuex-Getters
     goals() {
       return this.$store.getters.getGoal;
     },
     goals_ss() {
       return this.$store.getters.getGoals_ss;
     },
-
     goals_ws() {
       return this.$store.getters.getGoals_ws;
     },
