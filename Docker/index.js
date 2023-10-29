@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer');
 const express = require("express");
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -11,11 +12,13 @@ const modulRoutes = require('./routes/modulroutes');
 const bewertungsRoutes = require('./routes/bewetungroutes');
 const studiengangRoutes = require('./routes/studiengangroutes');
 const modulZielRoutes = require('./routes/modulZielroutes');
+const notificationsRoutes = require('./routes/notificationsroutes');
 
 app.use('/modul', modulRoutes);
 app.use('/bewertung', bewertungsRoutes);
 app.use('/studiengang', studiengangRoutes);
 app.use('/modulZiel', modulZielRoutes);
+app.use('/notifications', notificationsRoutes);
 
 //Global Error Handler
 app.use((err,req,res,next) => {
@@ -31,3 +34,4 @@ app.use((err,req,res,next) => {
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
