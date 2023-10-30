@@ -11,7 +11,9 @@ const store = createStore({
             goals_ss: [],
             goals_ws: [],
             deletedGoals: [],
-            checkedGoals: []
+            checkedGoals: [],
+            moduleOverviewData: [],
+            
         }
     },
 
@@ -135,6 +137,11 @@ const store = createStore({
                 state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);
             }
         },
+        saveSettingsModuleOverview(state, lastSettings) {
+            console.log("Last Settings:")
+            console.log(lastSettings);
+            state.moduleOverviewData = lastSettings;
+        }
 
 
     },
@@ -218,7 +225,9 @@ const store = createStore({
         getCheckedGoals(state) {
             return state.checkedGoals;
         },
-
+        getModuleOverviewData(state) {
+            return state.moduleOverviewData;
+        } 
     },
 
     plugins: [createPersistedState()]
