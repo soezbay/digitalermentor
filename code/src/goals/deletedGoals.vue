@@ -226,7 +226,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: rgb(30, 30, 30);
+    background-color: var(--ion-color-light);
     /* Platzierung für den Inhalt */
 }
 
