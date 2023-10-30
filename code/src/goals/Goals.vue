@@ -15,142 +15,150 @@
     </ion-header>
 
     <ion-content>
-      <div class="semesterHeader">
-        <ion-label class="labelHeader">Sommersemester</ion-label>
-        <ion-buttons slot="end">
-          <ion-button style="padding-right: 15px;" color="primary" id="open-SS-modal" expand="block">
-            <ion-icon :icon="add"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </div>
-      <!-- Getting Sommersemester-Array of vuex and displaying all elements -->
-      <ion-list class="drag-drop-containers" v-if="goals_ss.length > 0">
-        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
-          <ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="drag-drop-box-item">
-            <ion-item-options side="start">
-              <ion-item-option color="success" @click="switchToWS(goal.id)">
-                <ion-label>Nach Unten</ion-label>
-              </ion-item-option>
-            </ion-item-options>
-            <!--Displayin Goal-Element properties-->
-            <ion-item color="#d2d69e" class="item-container" lines="none">
-              <ion-label class="card-label">
-                <h2>{{ goal.titel }}</h2>
-                <p>{{ goal.info }}</p>
+      <ion-grid class="grid">
+        <ion-row>
+          <ion-col size="12" size-md="6" class="col">
+            <div class="semesterHeader">
+              <ion-label class="labelHeader">Sommersemester</ion-label>
+              <ion-buttons slot="end">
+                <ion-button style="padding-right: 15px;" color="primary" id="open-SS-modal" expand="block">
+                  <ion-icon :icon="add"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </div>
+            <!-- Getting Sommersemester-Array of vuex and displaying all elements -->
+            <ion-list class="drag-drop-containers" v-if="goals_ss.length > 0">
+              <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
+                <ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="drag-drop-box-item">
+                  <ion-item-options side="start">
+                    <ion-item-option color="success" @click="switchToWS(goal.id)">
+                      <ion-label>Nach Unten</ion-label>
+                    </ion-item-option>
+                  </ion-item-options>
+                  <!--Displayin Goal-Element properties-->
+                  <ion-item color="#d2d69e" class="item-container" lines="none">
+                    <ion-label class="card-label">
+                      <h2>{{ goal.titel }}</h2>
+                      <p>{{ goal.info }}</p>
+                    </ion-label>
+                    <ion-label slot="end" class="card-label">
+                      <h5>{{ goal.date }}</h5>
+                    </ion-label>
+                    <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
+                  </ion-item>
+                  <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
+                  <ion-item-options side="end">
+                    <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
+                      <ion-icon slot="icon-only" :icon="trash"></ion-icon>
+                    </ion-item-option>
+                    <ion-item-option color="success" @click="checkGoal(goal.id)">
+                      <ion-icon slot="icon-only" :icon="checkmarkDone"></ion-icon>
+                    </ion-item-option>
+                  </ion-item-options>
+                </ion-item-sliding>
+              </ion-reorder-group>
+            </ion-list>
+            <!--Only getting displayed when Array is empty-->
+            <div v-else class="ion-padding">
+              <div class="ion-text-center">
+                <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
+                <br>
+                <ion-label>
+                  Erleichtere dein Studienverlauf indem du Ziele mit "+" definierst und nach Priorität sortierst!
+                </ion-label>
+              </div>
+            </div>
+
+            <div class="semesterHeader">
+              <ion-label class="labelHeader">Wintersemester</ion-label>
+              <ion-buttons slot="end">
+                <ion-button style="padding-right: 15px;" color="primary" id="open-WS-modal" expand="block">
+                  <ion-icon :icon="add"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </div>
+            <!-- Getting Sommersemester-Array of vuex and displaying all elements -->
+            <ion-list class="drag-drop-containers" v-if="goals_ws.length > 0">
+              <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
+                <ion-item-sliding v-for="goal in goals_ws" :key="goal.id" class="drag-drop-box-item">
+                  <ion-item-options side="start">
+                    <ion-item-option color="success" @click="switchToSS(goal.id)">
+                      <ion-label>Nach Oben</ion-label>
+                    </ion-item-option>
+                  </ion-item-options>
+                  <!--Displayin Goal-Element properties-->
+                  <ion-item color="#d2d69e" class="item-container" lines="none">
+                    <ion-label class="card-label">
+                      <h2>{{ goal.titel }}</h2>
+                      <p>{{ goal.info }}</p>
+                    </ion-label>
+                    <ion-label slot="end" class="card-label">
+                      <h5>{{ goal.date }}</h5>
+                    </ion-label>
+                    <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
+                  </ion-item>
+                  <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
+                  <ion-item-options side="end">
+                    <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
+                      <ion-icon slot="icon-only" :icon="trash"></ion-icon>
+                    </ion-item-option>
+                    <ion-item-option color="success" @click="checkGoal(goal.id)">
+                      <ion-icon slot="icon-only" :icon="checkmarkDone"></ion-icon>
+                    </ion-item-option>
+                  </ion-item-options>
+                </ion-item-sliding>
+              </ion-reorder-group>
+            </ion-list>
+            <!--Only getting displayed when Array is empty-->
+            <div v-else class="ion-padding">
+              <div class="ion-text-center">
+                <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
+              </div>
+            </div>
+
+            <!--Item-Elements routing to checked Goals and deleted Goals-->
+            <ion-item color="primary" router-link="/menu/studienziele/checked" id="header" detail="true" lines="none">
+              <ion-label slot="end">
+                Abgeschlossene Ziele
               </ion-label>
-              <ion-label slot="end" class="card-label">
-                <h5>{{ goal.date }}</h5>
-              </ion-label>
-              <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
-            <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
-            <ion-item-options side="end">
-              <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
-                <ion-icon slot="icon-only" :icon="trash"></ion-icon>
-              </ion-item-option>
-              <ion-item-option color="success" @click="checkGoal(goal.id)">
-                <ion-icon slot="icon-only" :icon="checkmarkDone"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-reorder-group>
-      </ion-list>
-      <!--Only getting displayed when Array is empty-->
-      <div v-else class="ion-padding">
-        <div class="ion-text-center">
-          <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
-          <br>
-          <ion-label>
-            Erleichtere dein Studienverlauf indem du Ziele mit "+" definierst und nach Priorität sortierst!
-          </ion-label>
-        </div>
-      </div>
-
-      <div class="semesterHeader">
-        <ion-label class="labelHeader">Wintersemester</ion-label>
-        <ion-buttons slot="end">
-          <ion-button style="padding-right: 15px;" color="primary" id="open-WS-modal" expand="block">
-            <ion-icon :icon="add"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </div>
-      <!-- Getting Sommersemester-Array of vuex and displaying all elements -->
-      <ion-list class="drag-drop-containers" v-if="goals_ws.length > 0">
-        <ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
-          <ion-item-sliding v-for="goal in goals_ws" :key="goal.id" class="drag-drop-box-item">
-            <ion-item-options side="start">
-              <ion-item-option color="success" @click="switchToSS(goal.id)">
-                <ion-label>Nach Oben</ion-label>
-              </ion-item-option>
-            </ion-item-options>
-            <!--Displayin Goal-Element properties-->
-            <ion-item color="#d2d69e" class="item-container" lines="none">
-              <ion-label class="card-label">
-                <h2>{{ goal.titel }}</h2>
-                <p>{{ goal.info }}</p>
+            <ion-item color="light" router-link="/menu/studienziele/deleted" id="header" detail="true" lines="none">
+              <ion-label slot="end">
+                Gelöschte Ziele
               </ion-label>
-              <ion-label slot="end" class="card-label">
-                <h5>{{ goal.date }}</h5>
-              </ion-label>
-              <ion-reorder slot="end" style="color: #000000; margin: 0px; padding-left: 5px;"></ion-reorder>
             </ion-item>
-            <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
-            <ion-item-options side="end">
-              <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
-                <ion-icon slot="icon-only" :icon="trash"></ion-icon>
-              </ion-item-option>
-              <ion-item-option color="success" @click="checkGoal(goal.id)">
-                <ion-icon slot="icon-only" :icon="checkmarkDone"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-reorder-group>
-      </ion-list>
-      <!--Only getting displayed when Array is empty-->
-      <div v-else class="ion-padding">
-        <div class="ion-text-center">
-          <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
-        </div>
-      </div>
+          </ion-col>
+          
+          <ion-col size="12" size-md="6" class="col">
+            <ion-row class="klausuren-title">
+              <ion-label class="underline">Diese Klausuren musst du noch schreiben</ion-label>
+            </ion-row>
 
-      <!--Item-Elements routing to checked Goals and deleted Goals-->
-      <ion-item color="primary" router-link="/menu/studienziele/checked" id="header" detail="true" lines="none">
-        <ion-label slot="end">
-          Abgeschlossene Ziele
-        </ion-label>
-      </ion-item>
-      <ion-item color="light" router-link="/menu/studienziele/deleted" id="header" detail="true" lines="none">
-        <ion-label slot="end">
-          Gelöschte Ziele
-        </ion-label>
-      </ion-item>
-
-      <ion-row class="klausuren-title">
-        <ion-label class="underline">Diese Klausuren musst du noch schreiben</ion-label>
-      </ion-row>
-
-      <!-- List of Semester and modules -->
-      <ion-list class="ion-padding">
-        <div v-for="(semester, index) in semesterList" :key="index">
-          <ion-label>{{ semester.name }}</ion-label>
-          <ion-item>
-            <!-- Displying the module-elements, with drag&drop property -->
-            <ion-card v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex" @dragstart="onDragStart(fach)"
-              draggable="true" class="drag-item" :class="fach.status">
-              <ion-label style="color: #000000; font-weight: bolder;">{{ fach.name }}</ion-label>
-            </ion-card>
-          </ion-item>
-          <br>
-        </div>
-      </ion-list>
-      <!--Color Legend-->
-      <p style="text-align: center;">Legende:</p>
-      <div class="legend">
-        <div class="legend-item Bestanden">Bestanden</div>
-        <div class="legend-item versuch1">Versuch 1</div>
-        <div class="legend-item versuch2">Versuch 2</div>
-        <div class="legend-item versuch3">Versuch 3</div>
-      </div>
+            <!-- List of Semester and modules -->
+            <ion-list class="ion-padding">
+              <div v-for="(semester, index) in semesterList" :key="index">
+                <ion-label>{{ semester.name }}</ion-label>
+                <ion-item>
+                  <!-- Displying the module-elements, with drag&drop property -->
+                  <ion-card v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex" @dragstart="onDragStart(fach)"
+                    draggable="true" class="drag-item" :class="fach.status">
+                    <ion-label style="color: #000000; font-weight: bolder;">{{ fach.name }}</ion-label>
+                  </ion-card>
+                </ion-item>
+                <br>
+              </div>
+            </ion-list>
+            <!--Color Legend-->
+            <p style="text-align: center;">Legende:</p>
+            <div class="legend">
+              <div class="legend-item Bestanden">Bestanden</div>
+              <div class="legend-item versuch1">Versuch 1</div>
+              <div class="legend-item versuch2">Versuch 2</div>
+              <div class="legend-item versuch3">Versuch 3</div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
       <!-- Modals for adding a goal (Sommersemester)-->
       <ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
@@ -168,7 +176,7 @@
             <ion-input v-model="goal_name"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-select ref="semesterSelect" label="Season" placeholder="Semesterseason" value="Sommersemester">
+            <ion-select ref="semesterSelect" label="Semester" placeholder="Semesterseason" value="Sommersemester">
               <ion-select-option value="Sommersemester">Sommersemester</ion-select-option>
               <ion-select-option value="Wintersemester">Wintersemester</ion-select-option>
             </ion-select>
@@ -186,17 +194,17 @@
           <ion-toolbar>
             <ion-title>Erstelle ein Ziel</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="saveGoal" :disabled="!goal_name">Speichern</ion-button>
+              <ion-button @click="saveGoal" :disabled="!goal_name" color="light">Speichern</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding">
+        <ion-content>
           <ion-item>
             <ion-label position="floating">Zielname</ion-label>
-            <ion-input v-model="goal_name" required></ion-input>
+            <ion-input v-model="goal_name"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-select ref="semesterSelect" label="Season" placeholder="Semesterseason" value="Wintersemester">
+            <ion-select ref="semesterSelect" label="Semester" placeholder="Semesterseason" value="Wintersemester">
               <ion-select-option value="Sommersemester">Sommersemester</ion-select-option>
               <ion-select-option value="Wintersemester">Wintersemester</ion-select-option>
             </ion-select>
@@ -431,6 +439,15 @@ export default {
 
   
 <style scoped>
+.grid {
+  margin: 0;
+  padding: 0;
+}
+
+.col {
+  margin: 0;
+  padding: 0;
+}
 .semesterHeader {
   height: 50px;
   width: 100%;
@@ -566,6 +583,12 @@ ion-modal {
   --width: 90%;
   --border-radius: 16px;
   --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+@media (min-width: 768px) {
+  ion-modal {
+    --width: 50%; /* Breite für breitere Bildschirme anpassen */
+  }
 }
 
 ion-modal::part(backdrop) {
