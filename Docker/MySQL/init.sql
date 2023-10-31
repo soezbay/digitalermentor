@@ -25,6 +25,14 @@ Create Table Benutzer (
 	Kuerzel varchar(5),
 	FOREIGN KEY (Kuerzel) REFERENCES Studiengang(Kuerzel)
 	);
+
+CREATE TABLE BenutzerCache (
+    BenutzerID varchar(10) PRIMARY KEY,
+    CacheDaten TEXT,
+	Datum datetime,
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
+);
+ 
     
 Create Table Modul ( 
 	Kuerzel varchar(5) Primary Key,
@@ -85,41 +93,41 @@ Create Table Bewertung (
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE
 	);
 	
-Create TABLE Kalendereintrag (
-	Datum datetime,
-	Eintrag text,
-	BenutzerID varchar(10),
-	CONSTRAINT KalendereintragsID PRIMARY KEY (Datum, BenutzerID),
-	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
-	);
+-- Create TABLE Kalendereintrag (
+-- 	Datum datetime,
+-- 	Eintrag text,
+-- 	BenutzerID varchar(10),
+-- 	CONSTRAINT KalendereintragsID PRIMARY KEY (Datum, BenutzerID),
+-- 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
+-- 	);
 	
-Create TABLE Ziel (
-	ZielID varchar(20) PRIMARY KEY,
-	Titel varchar(50),
-	BenutzerID varchar(10),
-	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
-	);
+-- Create TABLE Ziel (
+-- 	ZielID varchar(20) PRIMARY KEY,
+-- 	Titel varchar(50),
+-- 	BenutzerID varchar(10),
+-- 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
+-- 	);
 
-Create TABLE CPZiel (
-	ZielID varchar(20) PRIMARY Key,
-	Titel varchar(50),
-	Semester varchar(20),
-	CPAnzahl smallint,
-	BenutzerID varchar(10),
-	FOREIGN KEY (ZielID) REFERENCES Ziel(ZielID) On DELETE CASCADE,
-	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
-	);
+-- Create TABLE CPZiel (
+-- 	ZielID varchar(20) PRIMARY Key,
+-- 	Titel varchar(50),
+-- 	Semester varchar(20),
+-- 	CPAnzahl smallint,
+-- 	BenutzerID varchar(10),
+-- 	FOREIGN KEY (ZielID) REFERENCES Ziel(ZielID) On DELETE CASCADE,
+-- 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
+-- 	);
 	
-Create TABLE ModulZiel (
-	ZielID varchar(20) PRIMARY Key,
-	Titel varchar(50),
-	Semester smallint,
-	BenutzerID varchar(10),
-	Kuerzel VARCHAR(5),
-	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel) On DELETE CASCADE,
-	FOREIGN KEY (ZielID) REFERENCES Ziel(ZielID) On DELETE CASCADE,
-	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
-	);
+-- Create TABLE ModulZiel (
+-- 	ZielID varchar(20) PRIMARY Key,
+-- 	Titel varchar(50),
+-- 	Semester smallint,
+-- 	BenutzerID varchar(10),
+-- 	Kuerzel VARCHAR(5),
+-- 	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel) On DELETE CASCADE,
+-- 	FOREIGN KEY (ZielID) REFERENCES Ziel(ZielID) On DELETE CASCADE,
+-- 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
+-- 	);
     
 Create Table Pruefung (
 	PruefungsID varchar(10) Primary Key,
@@ -134,7 +142,7 @@ Create Table Anmeldung(
 	PruefungsID varchar(10),
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE,
 	FOREIGN KEY (PruefungsID) REFERENCES  Pruefung(PruefungsID) On Delete CASCADE
-) 
+);
 	
 Create Table Note (
 	PruefungsID varchar(10),
@@ -330,17 +338,17 @@ INSERT INTO VoraussetzungenEmpfohlen(ModulKuerzel, VoraussetzungModulKuerzel) VA
 
 INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
 
-Insert Into Ziel Value("Test1", "ADS", "Test123");
-Insert Into Ziel Value("Test2", "MIN", "Test123");
-Insert Into Ziel Value("Test3", "OPR", "Test123");
-Insert Into Ziel Value("Test4", "THI", "Test123");
-Insert Into Ziel Value("Test5", "REN", "Test123");
+-- Insert Into Ziel Value("Test1", "ADS", "Test123");
+-- Insert Into Ziel Value("Test2", "MIN", "Test123");
+-- Insert Into Ziel Value("Test3", "OPR", "Test123");
+-- Insert Into Ziel Value("Test4", "THI", "Test123");
+-- Insert Into Ziel Value("Test5", "REN", "Test123");
 
-Insert Into ModulZiel Value("Test1", "ADS", 2, "Test123", "ADS");
-Insert Into ModulZiel Value("Test2", "MIN", 2, "Test123", "MIN");
-Insert Into ModulZiel Value("Test3", "OPR", 2, "Test123", "OPR");
-Insert Into ModulZiel Value("Test4", "THI", 2, "Test123", "THI");
-Insert Into ModulZiel Value("Test5", "REN", 2, "Test123", "REN");
+-- Insert Into ModulZiel Value("Test1", "ADS", 2, "Test123", "ADS");
+-- Insert Into ModulZiel Value("Test2", "MIN", 2, "Test123", "MIN");
+-- Insert Into ModulZiel Value("Test3", "OPR", 2, "Test123", "OPR");
+-- Insert Into ModulZiel Value("Test4", "THI", 2, "Test123", "THI");
+-- Insert Into ModulZiel Value("Test5", "REN", 2, "Test123", "REN");
 
 Insert Into Pruefung Value("PID1", 1, '2023-09-04 12:00:00', "EPR" );
 Insert Into Pruefung Value("PID2", 1, '2023-09-03 12:00:00', "GMI" );

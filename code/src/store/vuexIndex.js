@@ -11,9 +11,11 @@ const store = createStore({
             zieleSS: [],
             zieleWS: [],
             deletedZiele: [],
+            TestDaten: {
+                BenutzerID: 'Test123',
+            }
         }
     },
-
     mutations: {
         setSelectedDate(state, date) {
             state.selectedDate = date;
@@ -42,6 +44,7 @@ const store = createStore({
             if (index !== -1) {
                 // Wenn der Termin gefunden wurde, aktualisieren Sie ihn
                 state.termine[index] = updatedTermin;
+                updateAPI();
             }
         },
 
@@ -170,6 +173,65 @@ const store = createStore({
 
         deletedZiele(state) {
             return state.deletedZiele;
+        }
+    },
+    functions: {
+        async getLastUpdateTime() {
+            try {
+                const response = await axios.get(`/cache/Timestamp/${this.BenutzerID}`);
+                return response.data.TimeStamp;
+            } catch (error) {
+                console.error('Fehler beim Abrufen des letzten Aktualisierungszeitpunkts:', error);
+                return 0;
+            }
+        }
+    },
+    methods: {
+        async checkAndUpdateCache() {
+            try {
+                const jetztigeZeit = new Date().getTime();
+                const letzerCacheUpdate = getLastUpdateTime().getTime();
+
+                if (jetztigeZeit < letzerCacheUpdate) {
+
+                    this.state = this.getAPIData();
+                    console.log('Cache wurde aktualisiert.');
+                } else {
+                    console.log('Cache ist noch aktuell.');
+                }
+            } catch (error) {
+                console.error('Fehler beim Aktualisieren des Caches:', error);
+            }
+        },
+
+        async getAPIData() {
+            const response = await fetch(`http://localhost:8000/cache/${this.TestDaten.BenutzerID}`);
+            const data = await response.json();
+            const cacheDatenString = data.Daten.CacheDaten;
+            const cacheDatenObjekt = JSON.parse(cacheDatenString);
+            return cacheDatenObjekt;
+        },
+
+        async updateAPI() {
+            try {
+                const updatedData = this.state;
+                await axios.put(`localhost:8000/cache/`, updatedData);
+                console.log('Daten wurden erfolgreich aktualisiert.');
+            } catch (error) {
+                console.error('Fehler beim Aktualisieren der API-Daten:', error);
+                throw error; 
+            }
+        },
+
+        async createCacheAPI() {
+            try {
+                const updatedData = this.state;
+                await axios.post(`localhost:8000/cache/`, updatedData);
+                console.log('Daten wurden erfolgreich erstellt.');
+            } catch (error) {
+                console.error('Fehler beim Erstellen der API-Daten:', error);
+                throw error; 
+            }
         }
     },
 
