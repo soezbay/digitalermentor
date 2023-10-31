@@ -16,85 +16,99 @@
 
         <ion-content>
             <ion-header id="displayUsername">{{ getGreeting() }}, {{ getUsername() }}</ion-header>
-            <ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none">
-                <ion-label class="label-spacing">
-                    Aktive Ziele
-                </ion-label>
-            </ion-item>
-            <div class="semester-container">
-                <ion-label class="semester-label" style="font-size: larger;">Sommersemester</ion-label>
-                <ion-label class="semester-label" style="font-size: larger;">Wintersemester</ion-label>
-            </div>
-            <div class="ziel-container">
-                <ion-list class="drag-drop-containers">
-                    <div v-if="zieleSS.length >= 1" class="drag-drop-box-item">
-                        <ion-item lines="none" color="#d2d69e" class="item-container">
-                            <ion-label class="card-label">
-                                <h2>{{ zieleSS[0].titel }}</h2>
-                                <p>{{ zieleSS[0].beschreibung }}</p>
-                            </ion-label>
-                        </ion-item>
-                        <ion-item v-if="zieleSS.length > 1" lines="none" color="#d2d69e" class="item-container">
-                            <ion-label class="card-label">
-                                <h2>{{ zieleSS[1].titel }}</h2>
-                                <p>{{ zieleSS[1].beschreibung }}</p>
-                            </ion-label>
-                        </ion-item>
-                    </div>
 
-                </ion-list>
-                <div class="ziel-separator"></div>
-                <ion-list class="drag-drop-containers">
-                    <div v-if="zieleWS.length >= 1" class="drag-drop-box-item">
-                        <ion-item lines="none" color="#d2d69e" class="item-container">
-                            <ion-label class="card-label">
-                                <h2>{{ zieleWS[0].titel }}</h2>
-                                <p>{{ zieleWS[0].beschreibung }}</p>
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="12" size-md="6" class="ion-padding-horizontal ion-padding-top">
+                        <ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none"
+                            class="rounded-item ion-margin-horizontal">
+                            <ion-label class="custom-label">
+                                Deine Ziele
                             </ion-label>
                         </ion-item>
-                        <ion-item v-if="zieleWS.length > 1" lines="none" color="#d2d69e" class="item-container">
-                            <ion-label class="card-label">
-                                <h2>{{ zieleWS[1].titel }}</h2>
-                                <p>{{ zieleWS[1].beschreibung }}</p>
+                        <div class="semester-container ion-padding-bottom">
+                            <ion-label class="semester-label" style="font-size: larger;">Sommersemester</ion-label>
+                            <ion-label class="semester-label" style="font-size: larger;">Wintersemester</ion-label>
+                        </div>
+                        <div class="ziel-container">
+                            <ion-list class="drag-drop-containers">
+                                <div v-if="goals_ss.length >= 1" class="drag-drop-box-item">
+                                    <ion-item lines="none" color="#d2d69e" class="item-container">
+                                        <ion-label class="card-label">
+                                            <h2>{{ goals_ss[0].titel }}</h2>
+                                            <p>{{ goals_ss[0].beschreibung }}</p>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item v-if="goals_ss.length > 1" lines="none" color="#d2d69e"
+                                        class="item-container">
+                                        <ion-label class="card-label">
+                                            <h2>{{ goals_ss[1].titel }}</h2>
+                                            <p>{{ goals_ss[1].beschreibung }}</p>
+                                        </ion-label>
+                                    </ion-item>
+                                </div>
+
+
+                            </ion-list>
+                            <div class="ziel-separator"></div>
+                            <ion-list class="drag-drop-containers">
+                                <div v-if="goals_ws.length >= 1" class="drag-drop-box-item">
+                                    <ion-item lines="none" color="#d2d69e" class="item-container">
+                                        <ion-label class="card-label">
+                                            <h2>{{ goals_ws[0].titel }}</h2>
+                                            <p>{{ goals_ws[0].beschreibung }}</p>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item v-if="goals_ws.length > 1" lines="none" color="#d2d69e"
+                                        class="item-container">
+                                        <ion-label class="card-label">
+                                            <h2>{{ goals_ws[1].titel }}</h2>
+                                            <p>{{ goals_ws[1].beschreibung }}</p>
+                                        </ion-label>
+                                    </ion-item>
+                                </div>
+                            </ion-list>
+                        </div>
+                    </ion-col>
+
+
+                    <ion-header style="height: 0.3%;"></ion-header>
+
+                    <ion-col size="12" size-md="6" class="ion-padding-horizontal ion-padding-top">
+                        <ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none"
+                            class="rounded-item ion-margin-horizontal">
+                            <ion-label class="custom-label">
+                                Deine Termine
                             </ion-label>
                         </ion-item>
-                    </div>
-                </ion-list>
-            </div>
-            <div class="spacer"></div>
-            <ion-header style="height: 0.3%;"></ion-header>
-            <ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none">
-                <ion-label>
-                    Termine
-                </ion-label>
-            </ion-item>
-            <div v-if="kommendeTermine.length > 0">
-                <ion-list v-for="termin in kommendeTermine" :router-link="`/termine/${termin.id}`" style="padding: 0%;">
-                    <ion-item style="background-color: #3d3e40;">
-                        <ion-label>
-                            <h2>{{ termin.titel }}</h2>
-                            <h3>{{ termin.ort }}</h3>
-                        </ion-label>
-                        <ion-label slot="end">
-                            <h2>{{ formatDate(termin.datum) }} - {{ termin.zeit }}</h2>
-                        </ion-label>
-                    </ion-item>
-                </ion-list>
-            </div>
-            <div v-else>
-                <ion-item style="text-align: center;">
-                    <ion-label>
-                        <h2>Keine Termine für diesen Monat.</h2>
-                    </ion-label>
-                </ion-item>
-            </div>
-            <br>
-            <div class="dateDiv">
-                <ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates" size="cover"
-                    max="2100-01-01T00:00:00">
-                </ion-datetime>
-            </div>
-            <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN -->
+                        <div v-if="kommendeTermine.length > 0">
+                            <ion-list v-for="termin in kommendeTermine" :router-link="`/termine/${termin.id}`"
+                                style="padding: 0%;">
+                                <ion-item style="background-color: #3d3e40;">
+                                    <ion-label>
+                                        <h2>{{ termin.titel }}</h2>
+                                        <h3>{{ termin.ort }}</h3>
+                                    </ion-label>
+                                    <ion-label slot="end">
+                                        <h2>{{ formatDate(termin.datum) }} - {{ termin.zeit }}</h2>
+                                    </ion-label>
+                                </ion-item>
+                            </ion-list>
+                        </div>
+                        <div v-else>
+                            <ion-item style="text-align: center;">
+                                <ion-label class="custom-text ion-padding">
+                                    <h2>Keine Termine für diesen Monat.</h2>
+                                </ion-label>
+                            </ion-item>
+                        </div>
+                        <br>
+                        <div class="dateDiv">
+                            <ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates"
+                                size="cover" max="2100-01-01T00:00:00">
+                            </ion-datetime>
+                        </div>
+                        <!-- HIER ERSTMAL NUR KONZEPT WIE MODULE MÖGLICHERWEISE AUS DEM SERVER GEHOLT WERDEN
             <ion-list>
                 <div>
                     <ion-item v-for="(item, index) in usersList" :key="index">
@@ -108,7 +122,11 @@
                         </ion-label>
                     </ion-item>
                 </div>
-            </ion-list>
+                </ion-list> -->
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
         </ion-content>
     </ion-page>
 </template>
@@ -116,18 +134,13 @@
 
 <script>
 import {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonDatetime,
-    IonButtons, IonButton,
-    IonMenuButton,
-    IonItem,
-    IonLabel,
+    IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
+    IonGrid, IonRow, IonCol,
+    IonButtons, IonButton, IonMenuButton,
+    IonItem, IonLabel,
     IonList, IonListHeader,
-    IonIcon
+    IonIcon,
+    IonDatetime,
 } from '@ionic/vue';
 
 import axios from 'axios';
@@ -136,18 +149,13 @@ import { useStore } from 'vuex';
 
 export default {
     components: {
-        IonPage,
-        IonHeader,
-        IonToolbar,
-        IonTitle,
-        IonContent,
-        IonDatetime,
-        IonItem,
-        IonButtons, IonButton,
-        IonMenuButton,
-        IonLabel,
+        IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
+        IonGrid, IonRow, IonCol,
+        IonButtons, IonButton, IonMenuButton,
+        IonItem, IonLabel,
         IonList, IonListHeader,
-        IonIcon
+        IonIcon,
+        IonDatetime,
     },
     setup() {
         const store = useStore();
@@ -227,11 +235,11 @@ export default {
 
             return kommendeTermine.slice(0, 3); // Nur die ersten zwei Termine
         },
-        zieleSS() {
-            return this.$store.getters.zieleSS;
+        goals_ss() {
+            return this.$store.getters.getGoals_ss;
         },
-        zieleWS() {
-            return this.$store.getters.zieleWS;
+        goals_ws() {
+            return this.$store.getters.getGoals_ws;
         },
 
     },
@@ -239,22 +247,47 @@ export default {
 }
 </script>
 
+
 <style scoped>
-
-
-.spacer {
-    margin-bottom: 15px; 
+.custom-text {
+    color: #555;
 }
 
+.custom-label {
+    color: white;
+    font-size: 20px;
+
+}
+
+
+
+@media screen and (min-width: 992px) {
+    .ion-padding-horizontal {
+        padding: 20px;
+    }
+}
+
+.rounded-item {
+    border-radius: 15px;
+    overflow: hidden;
+    width: auto;
+    justify-content: center;
+}
+
+@media screen and (min-width:992px) {
+    .ion-margin-horizontal {
+        margin-left: 10px;
+        margin-right: 40px;
+    }
+}
 
 @media (min-width: 1024px) {
-  .dateDiv {
-    max-width: 1400px; 
-    padding-left: 100px; 
-    padding-right: 100px;
-  }
+    .dateDiv {
+        max-width: 1400px;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
 }
-
 
 .drag-drop-containers {
     width: 50%;
@@ -317,7 +350,6 @@ export default {
     border-radius: 20px;
 }
 
-
 #displayUsername {
     font-family: 'Blessing', sans-serif;
     padding: 20px;
@@ -326,15 +358,12 @@ export default {
 }
 
 #header {
-    /* height: 35px;
-    padding-top: 8px;
-    padding-left: 25px; */
     font-size: larger;
     text-align: center;
 }
 
 #header ion-label {
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .dateDiv {
@@ -346,5 +375,4 @@ ion-datetime {
     color: var(--ion-color #fff);
     border-radius: 16px;
 }
-
 </style>

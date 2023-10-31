@@ -18,22 +18,78 @@
                     <ion-button color="danger" @click="deleteAllGoals()">Alle löschen</ion-button>
                 </ion-buttons>
             </ion-toolbar>
-            <div style="height: 20px;"></div>
-            <!-- Aktuelles und nicht gewähltes Semester -->
+
+            <!-- Displayed if there is no deleted Goals -->
+            <div class="ion-padding" v-if="deletedGoals == 0">
+                <ion-header class="ion-text-center">
+                    <ion-label>Keine Gelöschten Ziele im Papierkorb</ion-label>
+                </ion-header>
+            </div>
+
+            <div class="semesterHeader">
+                <ion-label class="labelHeader">Sommersemester</ion-label>
+            </div>
+            <!--Iterate through deleted goals and display them-->
             <ion-list class="drag-drop-containers">
-                <ion-item-sliding v-for="ziel in deletedZiele" :key="ziel.id" class="drag-drop-box-item">
-                    <ion-item color="secondary" class="item-container" lines="none">
-                        <ion-label class="card-label">
-                            <h2>{{ ziel.titel }}</h2>
-                            <p>{{ ziel.beschreibung }}</p>
-                        </ion-label>
-                    </ion-item>
-                    <ion-item-options>
-                        <ion-item-option color="danger">
-                            <ion-icon slot="icon-only" :icon="trash" @click="deleteZielHandler(ziel.id)"></ion-icon>
-                        </ion-item-option>
-                    </ion-item-options>
-                </ion-item-sliding>
+                <div v-for="goal in deletedGoals" :key="goal.id">
+                    <ion-item-sliding v-if="goal.semesterSeason === 'Sommersemester'" class="drag-drop-box-item">
+                        <ion-item-options side="start">
+                            <!--Option for restoring goal-->                            
+                            <ion-item-option color="success" @click="restoreGoal(goal.id)">
+                                <ion-label>Wiederherstellen</ion-label>
+                            </ion-item-option>
+                        </ion-item-options>
+                        <!--Diplay goals Properties-->
+                        <ion-item color="secondary" class="item-container" lines="none">
+                            <ion-label class="card-label">
+                                <h2>{{ goal.titel }}</h2>
+                                <p>{{ goal.info }}</p>
+                            </ion-label>
+                            <ion-label slot="end">
+                                <p>{{ goal.date }}</p>
+                            </ion-label>
+                        </ion-item>
+                        <!--Handler for deleting goal finally-->
+                        <ion-item-options>
+                            <ion-item-option color="danger">
+                                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </div>
+            </ion-list>
+
+            <div class="semesterHeader">
+                <ion-label class="labelHeader">Wintersemester</ion-label>
+            </div>
+            <!--Iterate through deleted goals and display them-->
+            <ion-list class="drag-drop-containers">
+                <div v-for="goal in deletedGoals" :key="goal.id">
+                    <ion-item-sliding v-if="goal.semesterSeason === 'Wintersemester'" class="drag-drop-box-item">
+                        <ion-item-options side="start">
+                            <!--Option for restoring goal-->
+                            <ion-item-option color="success" @click="restoreGoal(goal.id)">
+                                <ion-label>Wiederherstellen</ion-label>
+                            </ion-item-option>
+                        </ion-item-options>
+                        <!--Diplay goals Properties-->
+                        <ion-item color="secondary" class="item-container" lines="none">
+                            <ion-label class="card-label">
+                                <h2>{{ goal.titel }}</h2>
+                                <p>{{ goal.info }}</p>
+                            </ion-label>
+                            <ion-label slot="end">
+                                <p>{{ goal.date }}</p>
+                            </ion-label>
+                        </ion-item>
+                        <!--Handler for deleting goal finally-->
+                        <ion-item-options>
+                            <ion-item-option color="danger">
+                                <ion-icon slot="icon-only" :icon="trash" @click="deleteGoalHandler(goal.id)"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </div>
             </ion-list>
 
         </ion-content>
@@ -80,11 +136,15 @@ export default {
     },
 
     methods: {
-        deleteZielHandler(zielId) {
-            this.$store.dispatch('deleteZielFinal', zielId);
-            console.log('Gelöschte Ziele:', this.deletedZiele);
+        //Handler for deleting goals finally and handler for restoring goal
+        deleteGoalHandler(goal_ID) {
+            this.$store.dispatch('deleteGoalFinal', goal_ID);
+            console.log('Gelöschte Ziele:', this.deletedGoals);
         },
-
+        restoreGoal(goal_ID) {
+            this.$store.dispatch('restoreGoal', goal_ID);
+        },
+        //button handler for deleting AllGoals finally
         async deleteAllGoals() {
             const alert = await alertController.create({
                 header: 'Bestätigung',
@@ -107,8 +167,9 @@ export default {
     },
 
     computed: {
-        deletedZiele() {
-            return this.$store.getters.deletedZiele;
+        //Vuex-Getters
+        deletedGoals() {
+            return this.$store.getters.getDeletedGoals;
         }
     }
 };
@@ -156,5 +217,20 @@ export default {
     margin-top: 4px;
     border: 2px solid #ccc;
     border-radius: 20px;
+}
+
+.semesterHeader {
+    height: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--ion-color-light);
+    /* Platzierung für den Inhalt */
+}
+
+.labelHeader {
+    padding-left: 25px;
 }
 </style>
