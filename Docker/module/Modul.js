@@ -39,7 +39,7 @@ class Modul {
     }
 
     static findModuleMitStatus(BenutzerID) {
-        let sql = `SELECT Modul.Kuerzel, Modul.Name, Note.Note, Note.Status
+        let sql = `SELECT Modul.Kuerzel, Modul.Name, Note.Note, Note.Status, Note.Versuch
         FROM Modul
         Left JOIN Pruefung ON Pruefung.Kuerzel = Modul.Kuerzel
         LEFT JOIN Note ON Pruefung.PruefungsID = Note.PruefungsID
