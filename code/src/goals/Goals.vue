@@ -128,24 +128,30 @@
               </ion-label>
             </ion-item>
           </ion-col>
-          
+
           <ion-col size="12" size-md="6" class="col">
             <ion-row class="klausuren-title">
-              <ion-label class="underline">Diese Klausuren musst du noch schreiben</ion-label>
+              <ion-label>Dein Fortschritt:</ion-label>
             </ion-row>
 
             <!-- List of Semester and modules -->
             <ion-list class="ion-padding">
               <div v-for="(semester, index) in semesterList" :key="index">
-                <ion-label>{{ semester.name }}</ion-label>
-                <ion-item>
-                  <!-- Displying the module-elements, with drag&drop property -->
-                  <ion-card v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex" @dragstart="onDragStart(fach)"
-                    draggable="true" class="drag-item" :class="fach.status">
-                    <ion-label style="color: #000000; font-weight: bolder;">{{ fach.name }}</ion-label>
-                  </ion-card>
-                </ion-item>
-                <br>
+                <div v-if="semester.faecher !== undefined">
+                  <ion-label>{{ semester.name }}</ion-label>
+                  <ion-item>
+                    <!-- Displying the module-elements, with drag&drop property -->
+                    <ion-card v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex"
+                      @dragstart="onDragStart(fach)" draggable="true" class="card-items" :class="fach.status">
+                      <ion-label style="color: #000000; font-weight: bolder;">
+                        {{ fach.name }}
+                      </ion-label>
+                    </ion-card>
+                  </ion-item>
+                  <br>
+                </div>
+                <div v-else>
+                </div>
               </div>
             </ion-list>
             <!--Color Legend-->
@@ -272,6 +278,8 @@ export default {
         { name: '4. Semester', },
         { name: '5. Semester', },
         { name: '6. Semester', },
+        { name: '7. Semester', },
+        { name: '8. Semester', },
         { name: 'Wahlpflichtmodule', },
       ],
     };
@@ -333,6 +341,9 @@ export default {
     },
     switchToSS(goal_ID) {
       this.$store.commit('switchToSS', goal_ID);
+    },
+    hasModules(semester) {
+      return semester.faecher && semester.faecher.length > 0;
     },
 
     //Get Modules- and User-Data from Server
@@ -448,6 +459,7 @@ export default {
   margin: 0;
   padding: 0;
 }
+
 .semesterHeader {
   height: 50px;
   width: 100%;
@@ -523,13 +535,9 @@ export default {
   margin-top: 20px;
 }
 
-.underline {
-  border-bottom: 2px solid green;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
 
-.drag-item {
+
+.card-items {
   width: 100px;
   height: 30px;
   display: flex;
@@ -567,7 +575,7 @@ export default {
 }
 
 .versuch1 {
-  background-color: gray;
+  background-color: darkgrey;
 }
 
 .versuch2 {
@@ -587,7 +595,8 @@ ion-modal {
 
 @media (min-width: 768px) {
   ion-modal {
-    --width: 50%; /* Breite für breitere Bildschirme anpassen */
+    --width: 50%;
+    /* Breite für breitere Bildschirme anpassen */
   }
 }
 
