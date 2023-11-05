@@ -37,41 +37,38 @@
 								id="removeSemesterIcon"
 								v-if="
 									semester > Object.keys(groupedModules).length &&
-									semester == groupedModulesWithEmpty.length - 1 && 
-									groupedModulesWithEmpty[semester].length < 1 
+									semester == groupedModulesWithEmpty.length - 1 &&
+									groupedModulesWithEmpty[semester].length < 1
 								"
 								@click="removeEmptySemester"></ion-icon>
 						</ion-row>
 					</ion-col>
-					<span
-						class="modulesRow"
-						@dragover="dragOver"
-						@dragenter="dragEnter"
-						@dragleave="dragLeave"
-						@drop="drop" >
+					<span class="modulesRow" @drop="drop" @dragover="dragOver">
 						<!-- Zeige nur Semester ab 1. Semester (da 0. Semester Wahlmodule sind)-->
 						<ion-row
 							class="modulesContainer"
+							id="parentContainer"
 							:key="`modules-${semester}`"
 							v-if="semester >= 1"
-							:data-semester="semester">
-							<ion-col 
+							:data-semester="semester"
+							@dragenter="dragEnter"
+							@dragleave="dragLeave">
+							<ion-col
 								size="4"
 								v-for="(module, index) in semesterModules"
 								:key="index">
-								<div>
-									<ion-card
-										class="pflichtModuleElement"
-										draggable="true"
-										:data-semester="semester"
-										:id="module.Kuerzel"
-										@dragstart="(e) => dragStart(e, module.Kuerzel, semester)" 
-										:class="getModuleStatusClass(module)" >
-										<span>{{ module.Kuerzel }}</span> <br/>
-										<span id="note">
-											{{ getStudentModuleNoteForPass(module) }}</span>
-									</ion-card>
-								</div>
+								<ion-card
+									class="pflichtModuleElement"
+									:draggable="!isPassedModules(module)"
+									:data-semester="semester"
+									:id="module.Kuerzel"
+									@dragstart="(e) => dragStart(e, module.Kuerzel, semester)"
+									:class="getModuleStatusClass(module)">
+									<span>{{ module.Kuerzel }}</span> <br />
+									<span id="note">
+										{{ getStudentModuleNoteForPass(module) }}</span
+									>
+								</ion-card>
 							</ion-col>
 						</ion-row>
 					</span>
@@ -81,7 +78,8 @@
 			<ion-buttons id="addSemester">
 				<ion-button @click="addEmptySemester">
 					<ion-icon :icon="add" id="addSemesterIcon"></ion-icon>
-					<h5>Semester hinzufügen</h5></ion-button>
+					<h5>Semester hinzufügen</h5></ion-button
+				>
 			</ion-buttons>
 			<ion-grid
 				v-for="(semesterModules, semester) in groupedModulesWithEmpty"
@@ -114,7 +112,7 @@
 									@dragstart="(e) => dragStart(e, module.Kuerzel, semester)"
 									:id="module.Kuerzel"
 									:class="getModuleStatusClass(module)">
-									<span>{{ module.Kuerzel }}</span> <br/>
+									<span>{{ module.Kuerzel }}</span> <br />
 									<span id="note">{{
 										getStudentModuleNoteForPass(module)
 									}}</span>
@@ -369,22 +367,28 @@ export default {
 			return totalGrade / totalCreditPoints;
 		},
 		dragStart(event, moduleKuerzel, semester) {
-			event.dataTransfer.setData(
-				"text/plain",
-				JSON.stringify({ moduleKuerzel, semester })
+			// Überprüft, ob das ausgewählte Modul Bestanden ist
+			const passedCheck = this.studentProgress.some(
+				(module) =>
+					module.Kuerzel === moduleKuerzel && module.Status === "Bestanden"
 			);
 
-			event.target.classList.add("drag-start");
-
-			setTimeout(() => {
-				event.target.classList.add("hide");
-			}, 0);
-			console.log("dragStart");
+			// Wenn ja, dann soll es nicht draggable sein
+			if (!passedCheck) {
+				event.dataTransfer.setData(
+					"text/plain",
+					JSON.stringify({ moduleKuerzel, semester })
+				);
+				event.target.classList.add("drag-start");
+				console.log("dragStart");
+			} else {
+				event.target.setAttribute("draggable", false);
+			}
 		},
 
 		dragEnter(e) {
 			e.preventDefault();
-			e.target.classList.add("drag-over");
+			e.target.classList.add("drag-enter");
 			console.log("dragEnter");
 		},
 
@@ -395,41 +399,53 @@ export default {
 		},
 
 		dragLeave(e) {
-			e.target.classList.remove("drag-over");
+			e.target.classList.remove("drag-enter");
 			console.log("dragLeave");
-			this.groupedModulesWithEmpty[semester].pop();
+			e.target.classList.remove("drag-over");
 		},
 
 		drop(e) {
 			e.target.classList.remove("drag-over");
 			e.target.classList.remove("drag-start");
-
+			e.target.classList.remove("drag-enter");
 
 			// Holen Sie sich die gezogenen Daten
 			const data = e.dataTransfer.getData("text/plain");
 			const { moduleKuerzel, semester } = JSON.parse(data);
 
 			const targetSemester = e.target.dataset.semester;
-
-			// Zugriff auf die Semester-Arrays
-			const sourceSemesterArray = this.groupedModulesWithEmpty[semester];
-			const targetSemesterArray = this.groupedModulesWithEmpty[targetSemester];
-
-			// Finde das Index des Moduls im Quellsemester-Array
-			const moduleIndex = sourceSemesterArray.findIndex(
-				(module) => module.Kuerzel === moduleKuerzel
+			// const elevticeModuleCheck =  this.electiveModules.some((electiveModule) => electiveModule.Kuerzel === moduleKuerzel);
+			console.log(
+				"target semester: " + targetSemester + "semester: " + semester
 			);
+			// console.log(elevticeModuleCheck)
 
-			if (moduleIndex !== -1) {
-				// Entferne das Modul aus dem Quellsemester-Array
-				const removedModule = sourceSemesterArray.splice(moduleIndex, 1)[0];
+			if (targetSemester != semester && targetSemester != 0) {
+				// Zugriff auf die Semester-Arrays
+				const sourceSemesterArray = this.groupedModulesWithEmpty[semester];
+				const targetSemesterArray =
+					this.groupedModulesWithEmpty[targetSemester];
 
-				// Füge das Modul zum Zielsemester-Array hinzu
-				targetSemesterArray.push(removedModule);
+				// Finde das Index des Moduls im Quellsemester-Array
+				const moduleIndex = sourceSemesterArray.findIndex(
+					(module) => module.Kuerzel === moduleKuerzel
+				);
 
-				// Führe eine Aktualisierung der Vue.js-Ansicht durch
-				this.$forceUpdate();
+				if (moduleIndex !== -1) {
+					// Entferne das Modul aus dem Quellsemester-Array
+					const removedModule = sourceSemesterArray.splice(moduleIndex, 1)[0];
+
+					// Füge das Modul zum Zielsemester-Array hinzu
+					targetSemesterArray.push(removedModule);
+
+					// Führe eine Aktualisierung der Vue.js-Ansicht durch
+					this.$forceUpdate();
+				}
 			}
+		},
+
+		isPassedModules(module) {
+			return this.getModuleStatusClass(module) === 'passed';
 		},
 	},
 
@@ -518,18 +534,10 @@ ion-card {
 	text-align: center;
 }
 
-.drag-over {
-	--background: blue;
+.drag-start:active {
+	transform: rotate(5deg);
 }
 
-.drag-enter {
-	--background: red;
-	border: black;
-}
-
-.drag-start {
-	transform: rotate(8deg);
-}
 .modulesRow {
 	width: 100%;
 	margin-left: 5px;
@@ -544,6 +552,7 @@ ion-card {
 	margin-right: 5px;
 	border-radius: 10px;
 }
+
 .pflichtModuleElement {
 	height: 50px;
 	margin: 0px;
