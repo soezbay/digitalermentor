@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
+import axios from 'axios';
 
 const store = createStore({
     state() {
@@ -13,6 +14,9 @@ const store = createStore({
             deletedGoals: [],
             checkedGoals: [],
             moduleOverviewData: [],
+            courses: [],
+            obligatoryModules: [],
+            electiveModules: [],
             TestDaten: {
                 BenutzerID: 'Test123',
             }
@@ -94,7 +98,7 @@ const store = createStore({
         },
         removeGoalFinal(state, goal_ID) {
             state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
-            state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID )
+            state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID)
         },
 
         removeAllGoals(state) {
@@ -120,7 +124,7 @@ const store = createStore({
             if (targetGoal.semesterSeason === "Sommersemester") {
                 state.goals.push(targetGoal);
                 state.goals_ss.push(targetGoal);
-                state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);                
+                state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
             } else {
                 state.goals.push(targetGoal);
                 state.goals_ws.push(targetGoal);
@@ -132,7 +136,7 @@ const store = createStore({
             if (targetGoal.semesterSeason === "Sommersemester") {
                 state.goals.push(targetGoal);
                 state.goals_ss.push(targetGoal);
-                state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);                
+                state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);
             } else {
                 state.goals.push(targetGoal);
                 state.goals_ws.push(targetGoal);
@@ -143,12 +147,69 @@ const store = createStore({
             console.log("Last Settings:")
             console.log(lastSettings);
             state.moduleOverviewData = lastSettings;
+        },
+
+        pushFetchedCourses(state, fetchedCourses) {
+            if (fetchedCourses) {
+                state.courses = fetchedCourses;
+                console.log("Courses: " , state.courses);
+            } else {
+                console.log("Konnte keine Kurse fetchen!");
+            }
+            
         }
-
-
     },
 
     actions: {
+        async fetchCoursesData(context) {
+
+            let courses = '';
+            try {
+                const response = await axios.get('http://localhost:8000/studiengang');
+                courses = response.data.studiengaenge;
+            } catch (error) {
+                console.error('Error fetching studiengaenge:', error);
+            }
+
+            context.commit('pushFetchedCourses', courses);
+        },
+
+        async fetchCourseModuleData(context, course) {
+            const obligatoryModules = '';
+            const electiveModules = '';
+            try {
+                const response = await fetch(`http://localhost:8000/studiengang/pflicht/${this.course}`);
+                const data = await response.json();
+                console.log(data);
+
+                // Überprüfen Sie, ob die Daten in der Antwort vorhanden sind
+                if (data.pflicht) {
+                    obligatoryModules = data.pflicht;
+                    console.log("Pflichtmodule geladen:", this.obligatoryModules);
+                } else {
+                    console.error("Fehler beim Laden der Pflichtmodule.");
+                }
+            } catch (error) {
+                console.error("Fehler beim Abrufen der Daten:", error);
+            }
+
+            try {
+                const response = await axios.get(`http://localhost:8000/studiengang/wahlpflicht/${this.course}`);
+                const data = await response.data;
+                if (data.wahlpflicht) {
+                  electiveModules = data.wahlpflicht;
+                  console.log("Wahlplichtmodule geladen:", this.modules.wahlpflicht);
+                } else {
+                  console.error("Fehler beim Laden der Wahlpflichtflichtmodule.");
+                }
+              } catch (error) {
+                console.error("Fehler beim Abrufen der Daten:", error);
+              }
+
+              context.commit('pushFetchedModules', obligatoryModules, electiveModules);
+
+        },
+
         saveSelectedDate({ commit }, date) {
             commit('setSelectedDate', date);
         },
@@ -229,7 +290,7 @@ const store = createStore({
         },
         getModuleOverviewData(state) {
             return state.moduleOverviewData;
-        } 
+        }
     },
     functions: {
         async getLastUpdateTime() {
@@ -275,7 +336,7 @@ const store = createStore({
                 console.log('Daten wurden erfolgreich aktualisiert.');
             } catch (error) {
                 console.error('Fehler beim Aktualisieren der API-Daten:', error);
-                throw error; 
+                throw error;
             }
         },
 
@@ -286,7 +347,7 @@ const store = createStore({
                 console.log('Daten wurden erfolgreich erstellt.');
             } catch (error) {
                 console.error('Fehler beim Erstellen der API-Daten:', error);
-                throw error; 
+                throw error;
             }
         }
     },

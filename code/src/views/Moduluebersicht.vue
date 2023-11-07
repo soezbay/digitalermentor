@@ -111,8 +111,8 @@
 </template>
 
 <script>
-
-
+import axios from 'axios';
+import Modal from "./Modulbeschreibung.vue";
 import {
   IonPage, IonContent, IonHeader, IonTitle, IonToolbar,
   IonButtons, IonMenuButton, IonButton,
@@ -123,8 +123,6 @@ import {
   IonCard, IonCardTitle,
   modalController, IonModal
 } from '@ionic/vue';
-import axios from 'axios';
-import Modal from "./Modulbeschreibung.vue";
 
 export default {
   components: {
@@ -173,27 +171,28 @@ export default {
 
   created() {
     // console.log("Wir sind hier");
-    this.fetchStudiengaenge();
+    this.$store.dispatch('fetchCoursesData');
+    // this.fetchStudiengaenge();
     // console.log("Studiengang= ", this.selectedStudiengang)
-    if (this.selectedStudiengang != null) {
-      this.fetchPflichtModule(this.selectedStudiengang);
-      this.fetchWahplfichtModule(this.selectedStudiengang);
-    }
+    // if (this.selectedStudiengang != null) {
+    //   this.fetchPflichtModule(this.selectedStudiengang);
+    //   this.fetchWahplfichtModule(this.selectedStudiengang);
+    // }
   },
 
   mounted() {
-    this.fetchStudiengaenge();
-    console.log("Mounte Settings:");
-    console.log(this.settings);
-    const lastSetup = this.settings;
+    // this.fetchStudiengaenge();
+    // console.log("Mounte Settings:");
+    // console.log(this.settings);
+    // const lastSetup = this.settings;
 
-    if (lastSetup.selectedStudiengang !== undefined && lastSetup.selectedStudiengang !== null) {
-      this.selectedStudiengang = lastSetup.selectedStudiengang;
-    }
-    if (lastSetup.showAsList !== undefined && lastSetup.showAsList !== null) {
-      this.showAsList = lastSetup.showAsList;
-      console.log("Settings Geladen");
-    }
+    // if (lastSetup.selectedStudiengang !== undefined && lastSetup.selectedStudiengang !== null) {
+    //   this.selectedStudiengang = lastSetup.selectedStudiengang;
+    // }
+    // if (lastSetup.showAsList !== undefined && lastSetup.showAsList !== null) {
+    //   this.showAsList = lastSetup.showAsList;
+    //   console.log("Settings Geladen");
+    // }
   },
 
   watch: {
@@ -205,15 +204,8 @@ export default {
   },
 
   methods: {
-    async fetchStudiengaenge() {
-      try {
-        const response = await axios.get('http://localhost:8000/studiengang');
-        this.studiengaenge = response.data.studiengaenge;
-        console.log("Test")
-        console.log(this.studiengaenge)
-      } catch (error) {
-        console.error('Error fetching studiengaenge:', error);
-      }
+    fetchStudiengaenge() {
+      
     },
 
     async fetchPflichtModule() {
