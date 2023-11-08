@@ -507,7 +507,7 @@ ion-progress-bar {
 	margin-top: 30px;
 }
 .passed {
-	--background: var(--ion-color-primary);
+	--background: var(--ion-color-success);
 }
 
 .secondTry {
@@ -542,14 +542,7 @@ ion-card {
 	width: 100%;
 	margin-left: 5px;
 	margin-right: 5px;
-}
-.modulesContainer {
-	height: auto;
-	min-height: 50px;
-	background-color: #d2d69e;
-	width: 100%;
-	margin-left: 5px;
-	margin-right: 5px;
+	background-color: var(--ion-color-secondary);
 	border-radius: 10px;
 }
 
