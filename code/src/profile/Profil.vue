@@ -18,13 +18,15 @@
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
-
+        
         <ion-content>
             <div id="imageContainer">
-                <img style="border-radius: 25px;" alt="" src="resources/KoalaSleeping.jpg" />
+                <img style="border-bottom-left-radius: 25px; 
+                border-bottom-right-radius: 25px;" 
+                alt="" src="resources/Tafel.png" class="platzhalter" />
                 <div id="pb">
                     <ion-avatar>
-                        <img alt="" src="resources/icon.png" />
+                        <img alt="" src="resources/Platzhalter_Digitaler_Mentor.png" />
                     </ion-avatar>
                 </div>
             </div>
@@ -92,9 +94,10 @@ export default {
 
 <style scoped>
 #imageContainer {
-    position: relative;
-    margin: 5px;
-    margin-top: 10px;
+    position: relative; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #pb {
@@ -113,12 +116,10 @@ ion-content ion-header {
 }
 
 ion-avatar {
-    width: 170px;
-    height: 170px;
-}
-
-ion-avatar img {
-    border: 5px solid #ffffff;
+    width: 200px;
+    height: 200px;
+    border: 5px solid white;
+    
 }
 
 h1 {
@@ -128,5 +129,15 @@ h1 {
 h4 {
     margin: -7px;
     margin-bottom: 30px;
+}
+
+@media screen and (min-width: 768px) {
+    .platzhalter {
+        width: 760px;
+        height: 300px;
+       
+
+    }
+
 }
 </style>

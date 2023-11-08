@@ -7,13 +7,17 @@ const store = createStore({
             userData: [],
             termine: [],
             selectedDate: new Date(),
-            ziele: [],
-            zieleSS: [],
-            zieleWS: [],
-            deletedZiele: [],
+            goals: [],
+            goals_ss: [],
+            goals_ws: [],
+            deletedGoals: [],
+            checkedGoals: [],
+            moduleOverviewData: [],
+            TestDaten: {
+                BenutzerID: 'Test123',
+            }
         }
     },
-
     mutations: {
         setSelectedDate(state, date) {
             state.selectedDate = date;
@@ -42,6 +46,7 @@ const store = createStore({
             if (index !== -1) {
                 // Wenn der Termin gefunden wurde, aktualisieren Sie ihn
                 state.termine[index] = updatedTermin;
+                updateAPI();
             }
         },
 
@@ -49,52 +54,97 @@ const store = createStore({
             state.termine = state.termine.filter(termin => termin.id !== terminId);
         },
 
-        addZiel(state, zielData) {
-            const newZiel = {
-                id: zielData.id,
-                titel: zielData.titel,
-                semesterSeason: zielData.semesterSeason,
-                beschreibung: zielData.beschreibung
+        addGoal(state, goal_data) {
+            const newGoal = {
+                id: goal_data.id,
+                date: goal_data.date,
+                titel: goal_data.titel,
+                semesterSeason: goal_data.semesterSeason,
+                info: goal_data.info
             }
-            state.ziele.push(newZiel);
+            state.goals.push(newGoal);
 
             // Füge das Ziel sowohl zum zieleSS-Array als auch zum zieleWS-Array hinzu
-            if (zielData.semesterSeason === 'Sommersemester') {
-                state.zieleSS.push(newZiel);
-            } else if (zielData.semesterSeason === 'Wintersemester') {
-                state.zieleWS.push(newZiel);
+            if (goal_data.semesterSeason === 'Sommersemester') {
+                state.goals_ss.push(newGoal);
+            } else if (goal_data.semesterSeason === 'Wintersemester') {
+                state.goals_ws.push(newGoal);
             }
         },
-
-        removeZiel(state, zielId) {
-            const targetZiel = state.ziele.find(ziel => ziel.id === zielId);
-            state.deletedZiele.push(targetZiel);
-            state.ziele = state.ziele.filter(ziel => ziel.id !== zielId);
-            state.zieleSS = state.zieleSS.filter(ziel => ziel.id !== zielId);
-            state.zieleWS = state.zieleWS.filter(ziel => ziel.id !== zielId);
+        switchToWS(state, goal_ID) {
+            const targetGoal = state.goals_ss.find(goal => goal.id === goal_ID);
+            targetGoal.semesterSeason = 'Wintersemester';
+            state.goals_ws.unshift(targetGoal);
+            state.goals_ss = state.goals_ss.filter(goal => goal.id !== goal_ID);
         },
-        removeZielFinal(state, zielId) {
-            state.deletedZiele = state.deletedZiele.filter(ziel => ziel.id !== zielId);
+        switchToSS(state, goal_ID) {
+            const targetGoal = state.goals_ws.find(goal => goal.id === goal_ID);
+            targetGoal.semesterSeason = 'Sommersemester';
+            state.goals_ss.unshift(targetGoal);
+            state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
+        },
+        removeGoal(state, goal_ID) {
+            const targetGoal = state.goals.find(goal => goal.id === goal_ID);
+            state.deletedGoals.push(targetGoal);
+            state.goals = state.goals.filter(goal => goal.id !== goal_ID);
+            state.goals_ss = state.goals_ss.filter(goal => goal.id !== goal_ID);
+            state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
+            state.deletedGoals = state.deletedGoals.filter(goal => goal !== null && goal !== undefined);
+
+        },
+        removeGoalFinal(state, goal_ID) {
+            state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
+            state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID )
         },
 
         removeAllGoals(state) {
             console.log("lösche alle ziele")
-            state.deletedZiele = [];
+            state.deletedGoals = [];
         },
+        checkGoal(state, goal_ID) {
+            const targetGoal = state.goals.find(goal => goal.id === goal_ID);
+            state.checkedGoals.push(targetGoal);
+            state.goals = state.goals.filter(goal => goal.id !== goal_ID);
+            state.goals_ss = state.goals_ss.filter(goal => goal.id !== goal_ID);
+            state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
+            state.checkedGoals = state.checkedGoals.filter(goal => goal !== null && goal !== undefined);
+        },
+        updateGoalsOrderForWS(state, updatedGoals_ws) {
+            state.goals_ws = updatedGoals_ws;
+        },
+        updateGoalsOrderForSS(state, updatedGoals_ss) {
+            state.goals_ss = updatedGoals_ss;
+        },
+        restoreGoal(state, goal_ID) {
+            const targetGoal = state.deletedGoals.find(goal => goal.id === goal_ID);
+            if (targetGoal.semesterSeason === "Sommersemester") {
+                state.goals.push(targetGoal);
+                state.goals_ss.push(targetGoal);
+                state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);                
+            } else {
+                state.goals.push(targetGoal);
+                state.goals_ws.push(targetGoal);
+                state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
+            }
+        },
+        restoreCheckedGoal(state, goal_ID) {
+            const targetGoal = state.checkedGoals.find(goal => goal.id === goal_ID);
+            if (targetGoal.semesterSeason === "Sommersemester") {
+                state.goals.push(targetGoal);
+                state.goals_ss.push(targetGoal);
+                state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);                
+            } else {
+                state.goals.push(targetGoal);
+                state.goals_ws.push(targetGoal);
+                state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);
+            }
+        },
+        saveSettingsModuleOverview(state, lastSettings) {
+            console.log("Last Settings:")
+            console.log(lastSettings);
+            state.moduleOverviewData = lastSettings;
+        }
 
-        // updateZieleOrderForSS(state, updatedZiele) {
-        //     state.zieleSS = updatedZiele;
-        // },
-        // updateZieleOrderForWS(state, updatedZiele) {
-        //     state.zieleWS = updatedZiele;
-        // },
-
-        updateZieleWSOrder(state, updatedZieleWS) {
-            state.zieleWS = updatedZieleWS;
-        },
-        updateZieleSSOrder(state, updatedZieleSS) {
-            state.zieleSS = updatedZieleSS;
-        },
 
     },
 
@@ -115,17 +165,20 @@ const store = createStore({
             context.commit('removeTermin', terminId);
         },
 
-        addZiel(context, zielData) {
-            context.commit('addZiel', zielData);
+        addGoal(context, goal_data) {
+            context.commit('addGoal', goal_data);
         },
-        deleteZiel(context, zielId) {
-            context.commit('removeZiel', zielId);
+        deleteGoal(context, goal_ID) {
+            context.commit('removeGoal', goal_ID);
         },
-        deleteZielFinal(context, zielId) {
-            context.commit('removeZielFinal', zielId);
+        deleteGoalFinal(context, goal_ID) {
+            context.commit('removeGoalFinal', goal_ID);
         },
         deleteAllGoals(context) {
             context.commit('removeAllGoals');
+        },
+        restoreGoal(context, goal_ID) {
+            context.commit('restoreGoal', goal_ID);
         },
     },
 
@@ -152,24 +205,89 @@ const store = createStore({
             return state.selectedDate;
         },
 
-        ziele(state) {
-            return state.ziele;
+        getGoals(state) {
+            return state.goals;
         },
 
-        ziel: (state) => (id) => {
-            return state.ziele.find((ziel) => ziel.id === id);
+        getGoal: (state) => (id) => {
+            return state.goals.find((goal) => goal.id === id);
         },
 
-        zieleSS(state) {
-            return state.zieleSS;
+        getGoals_ss(state) {
+            return state.goals_ss;
         },
 
-        zieleWS(state) {
-            return state.zieleWS;
+        getGoals_ws(state) {
+            return state.goals_ws;
         },
 
-        deletedZiele(state) {
-            return state.deletedZiele;
+        getDeletedGoals(state) {
+            return state.deletedGoals;
+        },
+        getCheckedGoals(state) {
+            return state.checkedGoals;
+        },
+        getModuleOverviewData(state) {
+            return state.moduleOverviewData;
+        } 
+    },
+    functions: {
+        async getLastUpdateTime() {
+            try {
+                const response = await axios.get(`/cache/Timestamp/${this.BenutzerID}`);
+                return response.data.TimeStamp;
+            } catch (error) {
+                console.error('Fehler beim Abrufen des letzten Aktualisierungszeitpunkts:', error);
+                return 0;
+            }
+        }
+    },
+    methods: {
+        async checkAndUpdateCache() {
+            try {
+                const jetztigeZeit = new Date().getTime();
+                const letzerCacheUpdate = getLastUpdateTime().getTime();
+
+                if (jetztigeZeit < letzerCacheUpdate) {
+
+                    this.state = this.getAPIData();
+                    console.log('Cache wurde aktualisiert.');
+                } else {
+                    console.log('Cache ist noch aktuell.');
+                }
+            } catch (error) {
+                console.error('Fehler beim Aktualisieren des Caches:', error);
+            }
+        },
+
+        async getAPIData() {
+            const response = await fetch(`http://localhost:8000/cache/${this.TestDaten.BenutzerID}`);
+            const data = await response.json();
+            const cacheDatenString = data.Daten.CacheDaten;
+            const cacheDatenObjekt = JSON.parse(cacheDatenString);
+            return cacheDatenObjekt;
+        },
+
+        async updateAPI() {
+            try {
+                const updatedData = this.state;
+                await axios.put(`localhost:8000/cache/`, updatedData);
+                console.log('Daten wurden erfolgreich aktualisiert.');
+            } catch (error) {
+                console.error('Fehler beim Aktualisieren der API-Daten:', error);
+                throw error; 
+            }
+        },
+
+        async createCacheAPI() {
+            try {
+                const updatedData = this.state;
+                await axios.post(`localhost:8000/cache/`, updatedData);
+                console.log('Daten wurden erfolgreich erstellt.');
+            } catch (error) {
+                console.error('Fehler beim Erstellen der API-Daten:', error);
+                throw error; 
+            }
         }
     },
 

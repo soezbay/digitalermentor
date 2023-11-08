@@ -16,7 +16,7 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content>
-			
+			<h3 id="titel">Studienverlaufsübersicht</h3>
 			<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
 			<div id="cpInfo">{{ reachedCreditPoints }}/{{ fullCreditPoints }} CP</div>
 			<div id="averageGrade">
@@ -29,34 +29,49 @@
 				:key="semester">
 				<ion-row :key="semester">
 					<ion-col size="12">
-						<ion-row>
+						<!-- Zeige nur Semester ab 1. Semester (da 0. Semester Wahlmodule sind)-->
+						<ion-row v-if="semester >= 1">
 							<h2>{{ semester }}.Semester</h2>
-							<!-- !! Regelstudienzeit statt hardcoded 6 !! -->
 							<ion-icon
 								:icon="remove"
 								id="removeSemesterIcon"
 								v-if="
 									semester > Object.keys(groupedModules).length &&
-									semester == emptySemesters + Object.keys(groupedModules).length
+									semester == groupedModulesWithEmpty.length - 1 &&
+									groupedModulesWithEmpty[semester].length < 1
 								"
 								@click="removeEmptySemester"></ion-icon>
 						</ion-row>
 					</ion-col>
-
-					<ion-row id="moduleRow" :key="`modules-${semester}`">
-						<ion-col
-							size="4"
-							v-for="(module, index) in semesterModules"
-							:key="index">
-							<ion-card
-								id="moduleElement"
-								expand="full"
-								:class="getModuleStatusClass(module)">
-								<span>{{ module.Kuerzel }}</span> <br />
-								<span id="note">{{ getStudentModuleNoteForPass(module) }}</span>
-							</ion-card>
-						</ion-col>
-					</ion-row>
+					<span class="modulesRow" @drop="drop" @dragover="dragOver">
+						<!-- Zeige nur Semester ab 1. Semester (da 0. Semester Wahlmodule sind)-->
+						<ion-row
+							class="modulesContainer"
+							id="parentContainer"
+							:key="`modules-${semester}`"
+							v-if="semester >= 1"
+							:data-semester="semester"
+							@dragenter="dragEnter"
+							@dragleave="dragLeave">
+							<ion-col
+								size="4"
+								v-for="(module, index) in semesterModules"
+								:key="index">
+								<ion-card
+									class="pflichtModuleElement"
+									:draggable="!isPassedModules(module)"
+									:data-semester="semester"
+									:id="module.Kuerzel"
+									@dragstart="(e) => dragStart(e, module.Kuerzel, semester)"
+									:class="getModuleStatusClass(module)">
+									<span>{{ module.Kuerzel }}</span> <br />
+									<span id="note">
+										{{ getStudentModuleNoteForPass(module) }}</span
+									>
+								</ion-card>
+							</ion-col>
+						</ion-row>
+					</span>
 				</ion-row>
 			</ion-grid>
 
@@ -66,28 +81,48 @@
 					<h5>Semester hinzufügen</h5></ion-button
 				>
 			</ion-buttons>
-			<ion-grid>
+			<ion-grid
+				v-for="(semesterModules, semester) in groupedModulesWithEmpty"
+				:key="semester">
 				<ion-row>
 					<ion-col size="12">
 						<ion-row>
-							<h2>Wahlpflichtmodule</h2>
+							<h2 v-if="semester == 0">Wahlpflichtmodule</h2>
 						</ion-row>
 					</ion-col>
-					<ion-row id="moduleRow">
-						<ion-col
-							size="4"
-							v-for="(module, index) in electiveModules"
-							:key="index">
-							<ion-card id="moduleElement">
-								<span>{{ module.Kuerzel }}</span>
-								<span id="note">{{ getStudentModuleNoteForPass(module) }}</span>
-							</ion-card>
-						</ion-col>
-					</ion-row>
+					<div
+						class="modulesRow"
+						@dragenter="dragEnter"
+						@dragleave="dragLeave"
+						@drop="drop"
+						@dragover="dragOver">
+						<ion-row
+							:key="`modules-${semester}`"
+							class="modulesContainer"
+							v-if="semester == 0"
+							:data-semester="semester">
+							<ion-col
+								size="4"
+								v-for="(module, index) in semesterModules"
+								:key="index">
+								<ion-card
+									class="pflichtModuleElement"
+									draggable="true"
+									:data-semester="semester"
+									@dragstart="(e) => dragStart(e, module.Kuerzel, semester)"
+									:id="module.Kuerzel"
+									:class="getModuleStatusClass(module)">
+									<span>{{ module.Kuerzel }}</span> <br />
+									<span id="note">{{
+										getStudentModuleNoteForPass(module)
+									}}</span>
+								</ion-card>
+							</ion-col>
+						</ion-row>
+					</div>
 				</ion-row>
 			</ion-grid>
 
-			<!-- !! Wahlmodule hinzufügen !! -->
 			<!-- !! Versuche von 1. und 2. Versuch zu 2. und 3. geändert !! -->
 			<div id="legend">
 				<ion-badge id="legendBadge" color="primary">&nbsp;</ion-badge>
@@ -164,16 +199,20 @@ export default {
 	data() {
 		return {
 			modules: [], // Alle Module aus der Datenbank
-			groupedModules: {}, // Neues Datenattribut für gruppierte Module
+			groupedModules: [], // Neues Datenattribut für gruppierte Module
 			electiveModules: [], // Wahlpflichtmodule
 			fullCreditPoints: 180, // Zu erreichenden Credit Points
 			studentID: "test123",
 			studentProgress: [], // Teilgenommene Module des Studierenden
 			emptySemesters: 0, // Anzahl der leeren Semester
-			// standardStudyPeriod: 0, // Regelsemester
+			enabled: true,
+			targetSemesterModules: [],
 		};
 	},
 	methods: {
+		log(event) {
+			console.log(event);
+		},
 		getData() {
 			axios
 				.get("http://localhost:8000/studiengang/pflicht/pi")
@@ -219,7 +258,7 @@ export default {
 
 		// Funktion zum Gruppieren der Module nach Semestern
 		groupModulesBySemester(modules) {
-			const groupedModules = {};
+			const groupedModules = [];
 
 			modules.forEach((module) => {
 				const semester = module.Semester;
@@ -298,6 +337,7 @@ export default {
 				return "Note: " + passedModules[0].Note;
 			}
 		},
+
 		// Durchschnittsnote berechnen
 		calculateAverageGrade() {
 			let totalGrade = 0;
@@ -326,6 +366,87 @@ export default {
 
 			return totalGrade / totalCreditPoints;
 		},
+		dragStart(event, moduleKuerzel, semester) {
+			// Überprüft, ob das ausgewählte Modul Bestanden ist
+			const passedCheck = this.studentProgress.some(
+				(module) =>
+					module.Kuerzel === moduleKuerzel && module.Status === "Bestanden"
+			);
+
+			// Wenn ja, dann soll es nicht draggable sein
+			if (!passedCheck) {
+				event.dataTransfer.setData(
+					"text/plain",
+					JSON.stringify({ moduleKuerzel, semester })
+				);
+				event.target.classList.add("drag-start");
+				console.log("dragStart");
+			} else {
+				event.target.setAttribute("draggable", false);
+			}
+		},
+
+		dragEnter(e) {
+			e.preventDefault();
+			e.target.classList.add("drag-enter");
+			console.log("dragEnter");
+		},
+
+		dragOver(e) {
+			e.preventDefault();
+			e.target.classList.add("drag-over");
+			console.log("dragOver");
+		},
+
+		dragLeave(e) {
+			e.target.classList.remove("drag-enter");
+			console.log("dragLeave");
+			e.target.classList.remove("drag-over");
+		},
+
+		drop(e) {
+			e.target.classList.remove("drag-over");
+			e.target.classList.remove("drag-start");
+			e.target.classList.remove("drag-enter");
+
+			// Holen Sie sich die gezogenen Daten
+			const data = e.dataTransfer.getData("text/plain");
+			const { moduleKuerzel, semester } = JSON.parse(data);
+
+			const targetSemester = e.target.dataset.semester;
+			// const elevticeModuleCheck =  this.electiveModules.some((electiveModule) => electiveModule.Kuerzel === moduleKuerzel);
+			console.log(
+				"target semester: " + targetSemester + "semester: " + semester
+			);
+			// console.log(elevticeModuleCheck)
+
+			if (targetSemester != semester && targetSemester != 0) {
+				// Zugriff auf die Semester-Arrays
+				const sourceSemesterArray = this.groupedModulesWithEmpty[semester];
+				const targetSemesterArray =
+					this.groupedModulesWithEmpty[targetSemester];
+
+				// Finde das Index des Moduls im Quellsemester-Array
+				const moduleIndex = sourceSemesterArray.findIndex(
+					(module) => module.Kuerzel === moduleKuerzel
+				);
+
+				if (moduleIndex !== -1) {
+					// Entferne das Modul aus dem Quellsemester-Array
+					const removedModule = sourceSemesterArray.splice(moduleIndex, 1)[0];
+
+					// Füge das Modul zum Zielsemester-Array hinzu
+					targetSemesterArray.push(removedModule);
+
+					// Führe eine Aktualisierung der Vue.js-Ansicht durch
+					this.$forceUpdate();
+				}
+			}
+		},
+
+		isPassedModules(module) {
+			return this.getModuleStatusClass(module) === 'passed';
+		},
 	},
 
 	mounted() {
@@ -345,11 +466,14 @@ export default {
 
 		// Berechnete Eigenschaft, die die Semester einschließlich der leeren Semester zurückgibt
 		groupedModulesWithEmpty() {
-			const groupedModulesWithEmpty = { ...this.groupedModules };
+			const groupedModulesWithEmpty = [
+				this.electiveModules,
+				...this.groupedModules.filter(Array),
+			];
 
 			// Füge leere Semester basierend auf this.emptySemesters hinzu
 			for (let i = 1; i <= this.emptySemesters; i++) {
-				const semesterNumber = Object.keys(groupedModulesWithEmpty).length + 1;
+				const semesterNumber = Object.keys(groupedModulesWithEmpty).length;
 				groupedModulesWithEmpty[semesterNumber] = [];
 			}
 
@@ -410,8 +534,11 @@ ion-card {
 	text-align: center;
 }
 
-/* Farbe angepasst*/
-#moduleRow {
+.drag-start:active {
+	transform: rotate(5deg);
+}
+
+.modulesRow {
 	width: 100%;
 	margin-left: 5px;
 	margin-right: 5px;
@@ -419,7 +546,7 @@ ion-card {
 	border-radius: 10px;
 }
 
-#moduleElement {
+.pflichtModuleElement {
 	height: 50px;
 	margin: 0px;
 	box-shadow: 5px 5px 10px grey;
@@ -474,5 +601,19 @@ ion-card {
 
 #legendBadge {
 	box-shadow: 1px 1px 7px grey;
+}
+.list-item {
+	margin: 10px;
+	padding: 40px;
+	cursor: pointer;
+	font-size: 18px;
+	border-radius: 5px;
+	background: #f44336;
+	display: inline-block;
+}
+
+.emptySemesterRow {
+	height: 50px;
+	background: #d2d69e;
 }
 </style>
