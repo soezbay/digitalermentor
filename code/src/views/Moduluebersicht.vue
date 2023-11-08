@@ -252,7 +252,7 @@ export default {
 
 .modulBlock {
   margin: 1%;
-  width: 85px;
+  width: 100px;
   text-align: center;
   border-radius: 15px;
   background: #fff;
@@ -270,7 +270,7 @@ export default {
 
 .semesterBlock {
   border-radius: 15px;
-  background: #8C99004D;
+  background: var(--ion-color-secondary);
 }
 
 ion-col {
