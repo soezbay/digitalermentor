@@ -586,6 +586,15 @@ ion-card {
 	border-radius: 10px;
 }
 
+.modulesContainer{
+	height: auto;
+	min-height: 50px;
+	background-color: #d2d69e;
+	width: 100%;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
 .pflichtModuleElement {
 	height: 50px;
 	margin: 0px;
