@@ -25,22 +25,37 @@
 			</div>
 			<ion-grid
 				:fixed="true"
-				v-for="(semesterModules, semester) in groupedModulesWithEmpty"
+				v-for="(semesterModules, semester) in groupedModules"
 				:key="semester">
 				<ion-row :key="semester">
 					<ion-col size="12">
 						<!-- Zeige nur Semester ab 1. Semester (da 0. Semester Wahlmodule sind)-->
 						<ion-row v-if="semester >= 1">
 							<h2>{{ semester }}.Semester</h2>
+							<!-- Remove Button wird nur angezeigt für das letzte Semester und nur, wenn es leer ist -->
 							<ion-icon
 								:icon="remove"
 								id="removeSemesterIcon"
 								v-if="
-									semester > Object.keys(groupedModules).length &&
-									semester == groupedModulesWithEmpty.length - 1 &&
-									groupedModulesWithEmpty[semester].length < 1
+									semester === Object.keys(groupedModules).length - 1 &&
+									emptySemesters != 0 &&
+									groupedModules[semester].length === 0
 								"
 								@click="removeEmptySemester"></ion-icon>
+							<ion-icon
+								:icon="remove"
+								id="removeSemesterIconUnabled"
+								v-else-if="
+									semester === Object.keys(groupedModules).length - 1 &&
+									emptySemesters != 0
+								"
+								@click="setOpen(true)"></ion-icon>
+
+							<ion-toast
+								:is-open="isOpen"
+								message="Entferne alle Module um das Semester zu löschen."
+								:duration="4000"
+								@didDismiss="setOpen(false)"></ion-toast>
 						</ion-row>
 					</ion-col>
 					<span class="modulesRow" @drop="drop" @dragover="dragOver">
@@ -75,27 +90,23 @@
 				</ion-row>
 			</ion-grid>
 
-			<ion-buttons id="addSemester">
-				<ion-button @click="addEmptySemester">
-					<ion-icon :icon="add" id="addSemesterIcon"></ion-icon>
-					<h5>Semester hinzufügen</h5></ion-button
-				>
-			</ion-buttons>
 			<ion-grid
-				v-for="(semesterModules, semester) in groupedModulesWithEmpty"
+				:fixed="true"
+				v-for="(semesterModules, semester) in groupedModules"
 				:key="semester">
 				<ion-row>
 					<ion-col size="12">
+						<ion-buttons v-if="semester == 0" id="addSemester">
+							<ion-button @click="addEmptySemester">
+								<ion-icon :icon="add" id="addSemesterIcon"></ion-icon>
+								<h5>Semester hinzufügen</h5></ion-button
+							>
+						</ion-buttons>
 						<ion-row>
 							<h2 v-if="semester == 0">Wahlpflichtmodule</h2>
 						</ion-row>
 					</ion-col>
-					<div
-						class="modulesRow"
-						@dragenter="dragEnter"
-						@dragleave="dragLeave"
-						@drop="drop"
-						@dragover="dragOver">
+					<div class="modulesRow" @drop="drop" @dragover="dragOver">
 						<ion-row
 							:key="`modules-${semester}`"
 							class="modulesContainer"
@@ -123,7 +134,6 @@
 				</ion-row>
 			</ion-grid>
 
-			<!-- !! Versuche von 1. und 2. Versuch zu 2. und 3. geändert !! -->
 			<div id="legend">
 				<ion-badge id="legendBadge" color="primary">&nbsp;</ion-badge>
 				<span> Bestanden </span>
@@ -159,13 +169,15 @@ import {
 	IonProgressBar,
 	IonIcon,
 	IonBadge,
+	IonCard,
+	IonToast,
 } from "@ionic/vue";
 import { remove, add, ellipse } from "ionicons/icons";
 
 import { defineComponent, ref } from "vue";
 import axios from "axios";
 
-export default {
+export default defineComponent({
 	components: {
 		IonPage,
 		IonHeader,
@@ -187,13 +199,28 @@ export default {
 		IonProgressBar,
 		IonIcon,
 		IonBadge,
+		IonCard,
+		IonToast,
 	},
 
 	setup() {
+		const isOpen = ref(false);
+
+		const setOpen = (state) => {
+			isOpen.value = state;
+		};
+
+		const showToast = () => {
+			isOpen.value = true;
+		};
+
 		return {
 			remove,
 			add,
 			ellipse,
+			isOpen,
+			setOpen,
+			showToast,
 		};
 	},
 	data() {
@@ -238,6 +265,7 @@ export default {
 				.then((Response) => {
 					console.log(Response.data);
 					this.electiveModules = Response.data.wahlpflicht;
+					this.groupModules();
 				})
 				.catch((err) => {
 					console.log(err);
@@ -247,35 +275,45 @@ export default {
 		// Methode, um ein leeres Semester hinzuzufügen
 		addEmptySemester() {
 			this.emptySemesters++;
+			// Fügen Sie dann ein leeres Array für das neue Semester hinzu
+			this.groupedModules.push([]);
 		},
 
 		// Methode, um ein leeres Semester zu entfernen
 		removeEmptySemester() {
 			if (this.emptySemesters > 0) {
 				this.emptySemesters--;
+				this.groupedModules.pop([]);
 			}
 		},
 
 		// Funktion zum Gruppieren der Module nach Semestern
 		groupModulesBySemester(modules) {
-			const groupedModules = [];
+			const groupedObliModules = [];
 
 			modules.forEach((module) => {
 				const semester = module.Semester;
 
-				if (!groupedModules[semester]) {
-					groupedModules[semester] = [];
+				if (!groupedObliModules[semester]) {
+					groupedObliModules[semester] = [];
 				}
 
-				groupedModules[semester].push(module);
+				groupedObliModules[semester].push(module);
 			});
 
-			return groupedModules;
+			return groupedObliModules;
 		},
 
 		// Rufen Sie diese Methode auf, um die Module zu gruppieren
 		groupModules() {
-			this.groupedModules = this.groupModulesBySemester(this.modules);
+			// Erstellen Sie eine tiefe Kopie von electiveModules
+			const clonedElectiveModules = JSON.parse(
+				JSON.stringify(this.electiveModules)
+			);
+			this.groupedModules = [
+				clonedElectiveModules,
+				...this.groupModulesBySemester(this.modules).filter(Array),
+			];
 		},
 
 		// Status des Moduls herausfinden (Bestanden oder nicht Bestanden)
@@ -414,17 +452,23 @@ export default {
 			const { moduleKuerzel, semester } = JSON.parse(data);
 
 			const targetSemester = e.target.dataset.semester;
-			// const elevticeModuleCheck =  this.electiveModules.some((electiveModule) => electiveModule.Kuerzel === moduleKuerzel);
+			let electiveModuleCheck = this.electiveModules.some(
+				(electiveModule) => electiveModule.Kuerzel === moduleKuerzel
+			);
+
+			if(targetSemester != 0) {
+				electiveModuleCheck = true;
+			}
+
 			console.log(
 				"target semester: " + targetSemester + "semester: " + semester
 			);
-			// console.log(elevticeModuleCheck)
+			console.log(electiveModuleCheck);
 
-			if (targetSemester != semester && targetSemester != 0) {
+			if (targetSemester != semester && electiveModuleCheck) {
 				// Zugriff auf die Semester-Arrays
-				const sourceSemesterArray = this.groupedModulesWithEmpty[semester];
-				const targetSemesterArray =
-					this.groupedModulesWithEmpty[targetSemester];
+				const sourceSemesterArray = this.groupedModules[semester];
+				const targetSemesterArray = this.groupedModules[targetSemester];
 
 				// Finde das Index des Moduls im Quellsemester-Array
 				const moduleIndex = sourceSemesterArray.findIndex(
@@ -445,7 +489,7 @@ export default {
 		},
 
 		isPassedModules(module) {
-			return this.getModuleStatusClass(module) === 'passed';
+			return this.getModuleStatusClass(module) === "passed";
 		},
 	},
 
@@ -465,22 +509,18 @@ export default {
 		},
 
 		// Berechnete Eigenschaft, die die Semester einschließlich der leeren Semester zurückgibt
-		groupedModulesWithEmpty() {
-			const groupedModulesWithEmpty = [
-				this.electiveModules,
-				...this.groupedModules.filter(Array),
-			];
-
+		addEmptySemesters() {
 			// Füge leere Semester basierend auf this.emptySemesters hinzu
 			for (let i = 1; i <= this.emptySemesters; i++) {
-				const semesterNumber = Object.keys(groupedModulesWithEmpty).length;
-				groupedModulesWithEmpty[semesterNumber] = [];
+				const semesterNumber = Object.keys(this.groupedModules).length;
+				this.groupedModules[semesterNumber] = [];
+				this.$forceUpdate();
 			}
 
-			return groupedModulesWithEmpty;
+			return groupedModules;
 		},
 	},
-};
+});
 </script>
 
 <style scoped>
@@ -534,9 +574,9 @@ ion-card {
 	text-align: center;
 }
 
-.drag-start:active {
+/* .drag-start:active {
 	transform: rotate(5deg);
-}
+} */
 
 .modulesRow {
 	width: 100%;
@@ -582,8 +622,28 @@ ion-card {
 	box-shadow: 1px 1px 7px grey;
 }
 
+#removeSemesterIconUnabled {
+	background-color: var(--ion-color-primary);
+	text-align: center;
+	margin-top: 23px;
+	border-radius: 15px;
+	width: 30px;
+	margin-left: 10px;
+	--ionicon-stroke-width: 80px;
+	padding: 3px;
+	color: var(--ion-color-light);
+	box-shadow: 1px 1px 7px grey;
+	opacity: 0.5;
+}
+
+ion-toast {
+	--background: var(--ion-color-warning);
+	--box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+	--color: #000000;
+}
+
 #addSemester {
-	margin-left: 15px;
+	margin-left: 0px;
 	background-color: transparent;
 }
 
