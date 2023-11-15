@@ -53,7 +53,7 @@
                   </ion-item>
                   <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
                   <ion-item-options side="end">
-                    <ion-item-option  color="yellow" id="open-edit-modal">
+                    <ion-item-option  color="none">
                     <ion-icon slot="icon-only" :icon="create"></ion-icon>
                   </ion-item-option>
                     <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
@@ -107,6 +107,9 @@
                   </ion-item>
                   <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
                   <ion-item-options side="end">
+                    <ion-item-option  color="none">
+                    <ion-icon slot="icon-only" :icon="create"></ion-icon>
+                  </ion-item-option>
                     <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
                       <ion-icon slot="icon-only" :icon="trash"></ion-icon>
                     </ion-item-option>
@@ -231,37 +234,6 @@
           </ion-item>
         </ion-content>
       </ion-modal>
-
-  
-
-<ion-modal ref="editModal" trigger="open-edit-modal" :presenting-element="presentingElement">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Bearbeite dein Ziel</ion-title>
-            <ion-buttons slot="end">
-              <ion-button @click="saveGoal" :disabled="!goal_name" color="light">Aktualisieren</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <ion-item>
-            <ion-label position="floating">Zielname</ion-label>
-            <ion-input v-model="goal.name"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-select ref="semesterSelect" label="Semester" placeholder="Semesterseason" value="Wintersemester">
-              <ion-select-option value="Sommersemester">Sommersemester</ion-select-option>
-              <ion-select-option value="Wintersemester">Wintersemester</ion-select-option>
-            </ion-select>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating">Info</ion-label>
-            <ion-input v-model="goal.info"></ion-input>
-          </ion-item>
-        </ion-content>
-      </ion-modal>
-
-
     </ion-content>
   </ion-page>
 </template>
@@ -324,36 +296,6 @@ export default {
   },
 
   methods: {
-
-    openEditModal(goal_ID) {
-      const selectedGoal = this.goals.find(goal => goal.id === goal_ID);
-      if (selectedGoal) {
-         // Setze die Werte im Bearbeitungsmodal auf die des ausgewählten Ziels
-         this.goal_name = selectedGoal.titel;
-         this.info = selectedGoal.info;
-         // Setze weitere Eigenschaften je nach Bedarf
-         // ...
-         // Öffne das Bearbeitungsmodal
-         this.$refs.editModal.$el.present();
-      }
-   },
-   updateGoal() {
-      const selectedOption = this.$refs.semesterSelect.value;
-      if (this.goal_name && selectedOption) {
-         // Ähnlich wie beim Hinzufügen, füge hier Logik für die Aktualisierung hinzu
-         // ...
-         // Schließe das Bearbeitungsmodal
-         this.dismissEditModal();
-      } else {
-         console.log('Fehlgeschlagen Daten zu generieren');
-      }
-   },
-   dismissEditModal() {
-      this.$refs.editModal.$el.dismiss();
-      // Setze die Eingabefelder auf die Standardwerte zurück
-      this.goal_name = '';
-      this.info = '';
-   },
 
 
     //Reorder Handler which commits to Vuex-Store
