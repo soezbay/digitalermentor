@@ -1,7 +1,7 @@
 <template>
   <ion-app>
     <!--Navigation-Umbruch width in split-pane-->
-    <ion-split-pane when= "(min-width: 1200px)" content-id="main-content">
+    <ion-split-pane when= "(min-width: 1300px)" content-id="main-content">
       <ion-menu side="end" content-id="main-content" type="overlay">
         <ion-content class="no-scroll">
           <ion-list class="padding">
