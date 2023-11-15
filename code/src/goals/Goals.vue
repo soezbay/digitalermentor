@@ -325,14 +325,14 @@ export default {
       console.log('Gelöschte Ziele:', this.deletedGoals);
     },
     checkGoal(goal_ID) {
-      this.$store.commit('checkGoal', goal_ID);
+      this.$store.dispatch('checkGoal', goal_ID);
     },
     //Methodes moves goals from one to another array in vuex store
     switchToWS(goal_ID) {
-      this.$store.commit('switchToWS', goal_ID);
+      this.$store.dispatch('switchToWS', goal_ID);
     },
     switchToSS(goal_ID) {
-      this.$store.commit('switchToSS', goal_ID);
+      this.$store.dispatch('switchToSS', goal_ID);
     },
 
     //Get Modules- and User-Data from Server

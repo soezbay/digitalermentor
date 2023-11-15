@@ -156,7 +156,7 @@ export default {
                     {
                         text: 'Löschen',
                         handler: () => {
-                            this.$store.dispatch('deleteAllGoals');
+                            this.$store.dispatch('deleteAllCompletedGoals');
                         }
                     }
                 ]
