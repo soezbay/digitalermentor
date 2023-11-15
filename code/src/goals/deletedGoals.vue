@@ -21,9 +21,8 @@
 
             <!-- Displayed if there is no deleted Goals -->
             <div class="ion-padding" v-if="deletedGoals == 0">
-                <ion-header class="ion-text-center">
-                    <ion-label>Keine Gelöschten Ziele im Papierkorb</ion-label>
-                </ion-header>
+                    <ion-label class="explanatory-text">Keine gelöschten Ziele im Papierkorb</ion-label>
+               
             </div>
 
             <div class="semesterHeader">
@@ -226,11 +225,14 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: var(--ion-color-light);
-    /* Platzierung für den Inhalt */
 }
 
 .labelHeader {
     padding-left: 25px;
+}
+
+.explanatory-text {
+    color: grey;
+    padding-left: 20px;
 }
 </style>
