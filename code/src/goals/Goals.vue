@@ -163,13 +163,6 @@
                 <br>
               </div>
             </ion-list>
-            <!--Color Legend-->
-            <p style="text-align: center;">Legende:</p>
-            <div class="legend">
-              <div class="legend-item Bestanden">Bestanden</div>
-              <div class="legend-item versuch2">Versuch 2</div>
-              <div class="legend-item versuch3">Versuch 3</div>
-            </div>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -402,41 +395,50 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-
-      axios.get(`http://localhost:8000/modul/status/${this.studentID}`)
+        
+        // Methode, die nicht bestandene Module ausgibt
+        axios.get(`http://localhost:8000/modul/status/${this.studentID}`)
         .then((Response) => {
-          console.log(Response.data);
-          //get user data containing modules which are passed or not
-          const studentModules = Response.data.modul;
-          const passedModules = studentModules.filter((modul) => modul.Status === 'Bestanden');
-          const notPassedModules = studentModules.filter((modul) => modul.Status === 'Nicht Bestanden');
-          // Iterate through Studentmodules and update Status
-          this.semesterList.forEach((semester) => {
-            semester.faecher.forEach((fach) => {
-              const matchingModule1 = notPassedModules.find((modul) => modul.Kuerzel === fach.name);
-              if (matchingModule1) {
-                if (matchingModule1.Versuch < 3) {
-                  fach.status = "versuch" + (parseInt(matchingModule1.Versuch) + 1);
-                } else {
-                  fach.status = parseInt(matchingModule1.Versuch);
-                }
+           console.log(Response.data);
+
+            const studentModules = Response.data.modul;
+            const passedModuleKuerzel = studentModules
+        .filter((modul) => modul.Status === 'Bestanden')
+        .map((modul) => modul.Kuerzel);
+
+         this.semesterList.forEach((semester) => {
+         semester.faecher = semester.faecher.filter((fach) => {
+         if (passedModuleKuerzel.includes(fach.name)) {
+             return false;
+        }
+
+        const matchingModule = studentModules.find((modul) => modul.Kuerzel === fach.name);
+
+          if (matchingModule) {
+            if (matchingModule.Status === 'Nicht Bestanden') {
+             if (matchingModule.Versuch < 3) {
+                fach.status = "versuch" + (parseInt(matchingModule.Versuch) + 1);
+              } else {
+               fach.status = parseInt(matchingModule.Versuch);
               }
-              const matchingModule2 = passedModules.find((modul) => modul.Kuerzel === fach.name);
-              if (matchingModule2) {
-                fach.status = "Bestanden";
-              }
-            });
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+            }
+          return true; 
+        }
+        return true;
+      });
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+  },
   },
   //Display when data is fetched
   mounted() {
     this.getData();
   },
+  
 
   computed: {
     //Vuex-Getters
@@ -464,10 +466,11 @@ export default {
 
 .goals-container{
   background-color: #8C9900;
-  border-radius: 20px;
+  border-radius: 15px;
+  height: 50px;
   text-align: center;
   font-size: larger;
-  padding: 18px;
+  padding: 15px;
 }
 .explanatory-text {
   color: grey;
@@ -490,7 +493,8 @@ export default {
 }
 
 .background{
-  border-radius: 20px;
+  border-radius: 15px;
+  height: 50px;
   
 }
 
@@ -508,13 +512,13 @@ export default {
   padding: 10px;
   padding-top: 30px;
   padding-bottom: 20px;
-  border-radius: 20px;
+  border-radius: 15px;
   /* Platzierung für den Inhalt */
 }
 
 .labelHeader {
   text-align: center;
-  padding: 8px;
+  padding: 5px;
   font-size: larger;
   
 }
