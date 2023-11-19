@@ -29,16 +29,48 @@
           <ion-label>Push-Benachrichtigungen</ion-label>
           <ion-toggle v-model="pushNotifications"></ion-toggle>
         </ion-item>
+        <ion-item>
+        <ion-button id="Delete_Cache" @click="showAlert">Cache Löschen</ion-button>
+        <ion-alert
+          trigger="Delete_Cache"
+          v-show="showAlertModal"
+          class="custom-alert"
+          header="Wollen sie wirklich den Cache Löschen"
+          :buttons="alertButtons"
+        ></ion-alert>
+      </ion-item>
       </ion-content>
     </ion-page>
   </template>
   
   <script>
+
+  import { IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonButton, IonIcon, IonLabel, IonToggle, IonItem, IonAlert } from '@ionic/vue';
+  import axios from 'axios';
+
   export default {
+    components: {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonContent,
+    IonButton,
+    IonIcon,
+    IonLabel,
+    IonToggle,
+    IonItem,
+    IonAlert,
+  },
     data() {
       return {
         emailNotifications: false, // Hier werden die E-Mail-Benachrichtigungen gespeichert
         pushNotifications: false, // Hier werden die Push-Benachrichtigungen gespeichert
+        showAlertModal: false,
+        alertButtons: [],
+
       };
     },
     methods: {
@@ -46,9 +78,38 @@
     // Speichern Sie die Einstellungen auf dem Server und behandeln Sie die entsprechenden Aktionen.
     // Hier könnte eine Axios-Anfrage oder eine andere Methode zum Speichern von Einstellungen verwendet werden.
   },
+  showAlert() {
+    this.showAlertModal = true; // Set the property to true to show the alert
+    },
+  async deleteCache() {
+    // const BenutzerID = this.$store.dispatch('getTestBenutzer');
+    // await axios.delete(`http://localhost:8000/cache/${BenutzerID}`);
+    this.$store.dispatch('deleteCache');
+    console.log('Cache deleted!');
+  }
+  },
+  mounted() {
+    const alert = document.querySelector('ion-alert');
+
+    alert.buttons = [
+      {
+        text: 'Nein',
+        // cssClass: 'alert-button-cancel',
+        handler: () => {
+            this.showAlertModal = false; // Close the alert
+          },
+      },
+      {
+        text: 'Ja',
+        // cssClass: 'alert-button-confirm',
+        handler: () => {
+            this.deleteCache(); // Execute the deleteCache method
+            this.showAlertModal = false; // Close the alert
+          },
+      },
+    ];
+  },
 }
-  };
-  
   </script>
 
 <style scoped>
