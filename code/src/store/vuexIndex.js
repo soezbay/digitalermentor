@@ -45,8 +45,7 @@ const store = createStore({
                     BenutzerID: state.TestDaten.BenutzerID,
                     CacheDaten: JSON.stringify(state),
                   };
-                await axios.put(`http://localhost:8000/cache/`, updatedData);
-                
+                await axios.put(`http://localhost:8000/cache/`, updatedData)
                 console.log('Daten wurden erfolgreich aktualisiert.');
             } catch (error) {
                 console.error('Fehler beim Aktualisieren der API-Daten:', error);
@@ -58,6 +57,22 @@ const store = createStore({
             Object.assign(state, data);
             console.info('setAPIData wurde ausgeführt');
             console.info(state)
+        },
+
+        deleteCache(state) {
+            state.userData = [],
+            state.termine = [],
+            state.selectedDate =  new Date(),
+            state.goals = [],
+            state.goals_ss = [],
+            state.goals_ws = [],
+            state.deletedGoals = [],
+            state.checkedGoals = [],
+            state.moduleOverviewData = [],
+            state.TestDaten = {
+                BenutzerID: 'Test123',
+            },
+            state.letzterCacheUpdate = new Date(0)
         },
 
         setSelectedDate(state, date) {
@@ -196,20 +211,6 @@ const store = createStore({
         async fetchCacheFromAPI(context) {
             try {
                 const BenutzerID = context.state.TestDaten.BenutzerID;
-                const localCacheDate = new Date(context.state.letzterCacheUpdate);
-                let APICacheDate = new Date(0);
-                try {
-                    const response = await axios.get(`http://localhost:8000/cache/Timestamp/${BenutzerID}`);
-                    const apiData = response.data;
-                    const apiDateString = apiData.TimeStamp[0].Datum;           
-                    APICacheDate = new Date(apiDateString);
-                } catch (error) {
-                    console.error('Fehler beim Abrufen des Zeitstempels von der API:', error);
-                }
-                const letzerCacheUpdateTimestamp = APICacheDate.getTime();
-                const localCacheTime = localCacheDate.getTime();
-
-                if (localCacheTime < letzerCacheUpdateTimestamp) {
                 // Überprüfen, ob bereits ein Cache-Eintrag vorhanden ist
                 const response = await axios.get('http://localhost:8000/cache/' + BenutzerID);
                 const data = response.data;
@@ -217,6 +218,19 @@ const store = createStore({
                 if (data.Daten.length === 0) {
                     context.commit('createCacheAPI');
                 } else {
+                    const localCacheDate = new Date(context.state.letzterCacheUpdate);
+                let APICacheDate = new Date(0);
+                try {
+                    const response = await axios.get(`http://localhost:8000/cache/Timestamp/${BenutzerID}`);
+                    const apiData = response.data;
+                    const apiDateString = apiData.TimeStamp[0].Datum;
+                    APICacheDate = new Date(apiDateString);      
+                } catch (error) {
+                    console.error('Fehler beim Abrufen des Zeitstempels von der API:', error);
+                }
+                const letzerCacheUpdateTimestamp = APICacheDate.getTime();
+                const localCacheTime = localCacheDate.getTime();
+                    if (localCacheTime < letzerCacheUpdateTimestamp) {
                     const innerJsonString = data.Daten[0].CacheDaten;
                     try {
                         const cachedData = JSON.parse(innerJsonString);
@@ -226,10 +240,14 @@ const store = createStore({
                         console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
                     }
                 }
-            }
+                }
             } catch (error) {
                 console.error('Fehler beim Abrufen des Caches von der API:', error);
             }
+        },
+        async deleteCache(context) {
+            context.commit('deleteCache');
+            context.commit('updateAPI',context);
         },
         async saveSelectedDate({ commit }, date) {
             commit('setSelectedDate', date);
@@ -340,6 +358,9 @@ const store = createStore({
         },
         getLetzerCacheUpdate(state) {
             return state.letzterCacheUpdate;
+        },
+        getTestBenutzer(state) {
+            return state.TestDaten.BenutzerID;
         }
     },
     setters:{

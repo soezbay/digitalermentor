@@ -36,6 +36,17 @@ exports.createNewCache = async (req, res, next) => {
     }
 }
 
+exports.deleteCache1 = async (req, res, next) => {
+    try {
+        let BenutzerID = req.params.BenutzerID;
+        const [Daten, _] = await Cache.deleteCache(BenutzerID);
+        res.status(200).json({ Daten });
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
 exports.updateCache = async (req, res, next) => {
         try {
             let { BenutzerID, CacheDaten } = req.body;
