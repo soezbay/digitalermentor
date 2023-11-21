@@ -1,19 +1,22 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button router-link="/menu/dashboard">
-            <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title>Studienziele</ion-title>
-        <ion-buttons slot="end">
-          <ion-menu-button color="primary"></ion-menu-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-item-divider class="spacer"></ion-item-divider>
+ <ion-page>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button router-link="/menu/dashboard">
+          <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>Studienziele</ion-title>
+      <ion-buttons slot="end" style="display: flex; align-items: center;">
+        <ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
+          <ion-icon :icon="helpCircleOutline"></ion-icon>
+        </ion-button>
+        <ion-menu-button color="primary"></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
     <ion-content>
       <ion-grid class="grid">
         <ion-row>
@@ -21,8 +24,6 @@
             <div class="goals-container">
               <ion-label>Deine Ziele</ion-label>
             </div>
-          
-            
             <div class="semesterHeader">
               <ion-label class="labelHeader">Sommersemester</ion-label>
               <ion-buttons slot="end">
@@ -69,11 +70,7 @@
             <!--Only getting displayed when Array is empty-->
             <div v-else class="ion-padding">
               <div class="explanatory-text">
-                <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
-                <br>
-                <ion-label class="explanatory-text">
-                  Erleichtere dein Studienverlauf indem du Ziele mit "+" definierst und nach Priorität sortierst!
-                </ion-label>
+                <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>  
               </div>
             </div>
 
@@ -168,10 +165,6 @@
       </ion-grid>
 
 
-
-
-      
-
       <!-- Modals for adding a goal (Sommersemester)-->
       <ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
         <ion-header>
@@ -229,10 +222,40 @@
       </ion-modal>
     </ion-content>
   </ion-page>
+
+  <ion-modal ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
+  
+  <ion-content>
+    <p>
+      Hier kannst du deine Studienziele verwalten und organisieren.
+    </p>
+
+    <p><strong>Studienziele hinzufügen:</strong> Klicke auf den Plus-Button unten, um neue Ziele hinzuzufügen.</p>
+
+    <p><strong>Studienziele bearbeiten:</strong></p>
+    <ul>
+      <li>Swipe nach links, um ein Ziel als "geschafft" zu markieren.</li>
+      <li>Swipe nach rechts, um ein Ziel in ein anderes Semester zu verschieben.</li>
+      <li>Swipe nach links, um ein Ziel zu löschen.</li>
+    </ul>
+
+    <p>
+      DIe Modulübersicht soll dir dabei helfen, deine Ziele leichter festzulegen. Dir werden dort alle Module 
+      angezeigt, die du noch bestehen musst, um dein Studium abzuschließen. 
+    </p>
+
+    <p>Viel Erfolg!</p>
+  </ion-content>
+  </ion-modal>
+
+
+
+
+
 </template>
   
 <script>
-import { add, trash, checkmarkDone, create, sadOutline } from 'ionicons/icons';
+import { add, trash, checkmarkDone, create, helpCircleOutline, sadOutline } from 'ionicons/icons';
 import axios from "axios";
 
 import {
@@ -265,7 +288,7 @@ export default {
   },
   data() {
     return {
-      add, trash, checkmarkDone, create, //Icons
+      add, trash, checkmarkDone, create, helpCircleOutline, //Icons
       presentingElement: undefined,
       //Goal properties
       goal_name: '',
@@ -291,6 +314,7 @@ export default {
   methods: {
 
 
+   
     //Reorder Handler which commits to Vuex-Store
     handleReorderForWS(event) {
       const updatedGoalsWS = event.detail.complete(this.goals_ws);
@@ -395,8 +419,7 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-        
-        // Methode, die nicht bestandene Module ausgibt
+
         axios.get(`http://localhost:8000/modul/status/${this.studentID}`)
         .then((Response) => {
            console.log(Response.data);
@@ -463,7 +486,9 @@ export default {
 
   
 <style scoped>
-
+.infoButton{
+  font-size: 28px;
+}
 .goals-container{
   background-color: #8C9900;
   border-radius: 15px;
@@ -478,19 +503,16 @@ export default {
 
 }
 
-@media screen and (min-width:992px){
+
 .grid {
-  margin: 10px;
+  margin-left: 8px;
+  margin-right: 8px;
   padding: 9px;;
-}
+  margin-top: 15px;
 }
 
-@media screen and (min-width:992px){
-.col {
-  margin: 0;
-  padding: 20px;
-}
-}
+
+
 
 .background{
   border-radius: 15px;
