@@ -7,17 +7,22 @@
             <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
           </ion-button>
         </ion-buttons>
-        <ion-title>Deine Ziele</ion-title>
+        <ion-title>Studienziele</ion-title>
         <ion-buttons slot="end">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-
+    <ion-item-divider class="spacer"></ion-item-divider>
     <ion-content>
       <ion-grid class="grid">
         <ion-row>
           <ion-col size="12" size-md="6" class="col">
+            <div class="goals-container">
+              <ion-label>Deine Ziele</ion-label>
+            </div>
+          
+            
             <div class="semesterHeader">
               <ion-label class="labelHeader">Sommersemester</ion-label>
               <ion-buttons slot="end">
@@ -48,6 +53,9 @@
                   </ion-item>
                   <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
                   <ion-item-options side="end">
+                    <ion-item-option  color="none">
+                    <ion-icon slot="icon-only" :icon="create"></ion-icon>
+                  </ion-item-option>
                     <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
                       <ion-icon slot="icon-only" :icon="trash"></ion-icon>
                     </ion-item-option>
@@ -60,10 +68,10 @@
             </ion-list>
             <!--Only getting displayed when Array is empty-->
             <div v-else class="ion-padding">
-              <div class="ion-text-center">
+              <div class="explanatory-text">
                 <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
                 <br>
-                <ion-label>
+                <ion-label class="explanatory-text">
                   Erleichtere dein Studienverlauf indem du Ziele mit "+" definierst und nach Priorität sortierst!
                 </ion-label>
               </div>
@@ -99,6 +107,9 @@
                   </ion-item>
                   <!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
                   <ion-item-options side="end">
+                    <ion-item-option  color="none">
+                    <ion-icon slot="icon-only" :icon="create"></ion-icon>
+                  </ion-item-option>
                     <ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
                       <ion-icon slot="icon-only" :icon="trash"></ion-icon>
                     </ion-item-option>
@@ -111,31 +122,35 @@
             </ion-list>
             <!--Only getting displayed when Array is empty-->
             <div v-else class="ion-padding">
-              <div class="ion-text-center">
+              <div class="explanatory-text">
                 <ion-label style="font-size: large;">Keine Ziele definiert.</ion-label>
               </div>
             </div>
+          </ion-col>
 
             <!--Item-Elements routing to checked Goals and deleted Goals-->
-            <ion-item color="primary" router-link="/menu/studienziele/checked" id="header" detail="true" lines="none">
-              <ion-label slot="end">
-                Abgeschlossene Ziele
+            <ion-col size="12" size-md="6" class="col">
+            <ion-item class= "background" color="primary" router-link="/menu/studienziele/checked" id="header" detail="true" lines="none">
+              <ion-label class="labelHeader">
+                Erreichte Ziele
               </ion-label>
             </ion-item>
-            <ion-item color="light" router-link="/menu/studienziele/deleted" id="header" detail="true" lines="none">
-              <ion-label slot="end">
+            <ion-item-divider class="spacer"></ion-item-divider>
+            <ion-item class="background" color="light" router-link="/menu/studienziele/deleted" id="header" detail="true" lines="none">
+              <ion-label class="labelHeader">
                 Gelöschte Ziele
               </ion-label>
             </ion-item>
-          </ion-col>
+         
+            <ion-item-divider class="spacer"></ion-item-divider>
           
-          <ion-col size="12" size-md="6" class="col">
             <ion-row class="klausuren-title">
-              <ion-label class="underline">Diese Klausuren musst du noch schreiben</ion-label>
+              <ion-label class="underline">Diese Module musst du noch bestehen: </ion-label>
             </ion-row>
 
-            <!-- List of Semester and modules -->
-            <ion-list class="ion-padding">
+            
+<!-- List of Semester and modules -->
+<ion-list class="ion-padding">
               <div v-for="(semester, index) in semesterList" :key="index">
                 <ion-label>{{ semester.name }}</ion-label>
                 <ion-item>
@@ -148,17 +163,14 @@
                 <br>
               </div>
             </ion-list>
-            <!--Color Legend-->
-            <p style="text-align: center;">Legende:</p>
-            <div class="legend">
-              <div class="legend-item Bestanden">Bestanden</div>
-              <div class="legend-item versuch1">Versuch 1</div>
-              <div class="legend-item versuch2">Versuch 2</div>
-              <div class="legend-item versuch3">Versuch 3</div>
-            </div>
           </ion-col>
         </ion-row>
       </ion-grid>
+
+
+
+
+      
 
       <!-- Modals for adding a goal (Sommersemester)-->
       <ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
@@ -215,13 +227,12 @@
           </ion-item>
         </ion-content>
       </ion-modal>
-
     </ion-content>
   </ion-page>
 </template>
   
 <script>
-import { add, trash, checkmarkDone, sadOutline } from 'ionicons/icons';
+import { add, trash, checkmarkDone, create, sadOutline } from 'ionicons/icons';
 import axios from "axios";
 
 import {
@@ -254,7 +265,7 @@ export default {
   },
   data() {
     return {
-      add, trash, checkmarkDone, //Icons
+      add, trash, checkmarkDone, create, //Icons
       presentingElement: undefined,
       //Goal properties
       goal_name: '',
@@ -278,6 +289,8 @@ export default {
   },
 
   methods: {
+
+
     //Reorder Handler which commits to Vuex-Store
     handleReorderForWS(event) {
       const updatedGoalsWS = event.detail.complete(this.goals_ws);
@@ -325,14 +338,14 @@ export default {
       console.log('Gelöschte Ziele:', this.deletedGoals);
     },
     checkGoal(goal_ID) {
-      this.$store.commit('checkGoal', goal_ID);
+      this.$store.dispatch('checkGoal', goal_ID);
     },
     //Methodes moves goals from one to another array in vuex store
     switchToWS(goal_ID) {
-      this.$store.commit('switchToWS', goal_ID);
+      this.$store.dispatch('switchToWS', goal_ID);
     },
     switchToSS(goal_ID) {
-      this.$store.commit('switchToSS', goal_ID);
+      this.$store.dispatch('switchToSS', goal_ID);
     },
 
     //Get Modules- and User-Data from Server
@@ -382,41 +395,50 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-
-      axios.get(`http://localhost:8000/modul/status/${this.studentID}`)
+        
+        // Methode, die nicht bestandene Module ausgibt
+        axios.get(`http://localhost:8000/modul/status/${this.studentID}`)
         .then((Response) => {
-          console.log(Response.data);
-          //get user data containing modules which are passed or not
-          const studentModules = Response.data.modul;
-          const passedModules = studentModules.filter((modul) => modul.Status === 'Bestanden');
-          const notPassedModules = studentModules.filter((modul) => modul.Status === 'Nicht Bestanden');
-          // Iterate through Studentmodules and update Status
-          this.semesterList.forEach((semester) => {
-            semester.faecher.forEach((fach) => {
-              const matchingModule1 = notPassedModules.find((modul) => modul.Kuerzel === fach.name);
-              if (matchingModule1) {
-                if (matchingModule1.Versuch < 3) {
-                  fach.status = "versuch" + (parseInt(matchingModule1.Versuch) + 1);
-                } else {
-                  fach.status = parseInt(matchingModule1.Versuch);
-                }
+           console.log(Response.data);
+
+            const studentModules = Response.data.modul;
+            const passedModuleKuerzel = studentModules
+        .filter((modul) => modul.Status === 'Bestanden')
+        .map((modul) => modul.Kuerzel);
+
+         this.semesterList.forEach((semester) => {
+         semester.faecher = semester.faecher.filter((fach) => {
+         if (passedModuleKuerzel.includes(fach.name)) {
+             return false;
+        }
+
+        const matchingModule = studentModules.find((modul) => modul.Kuerzel === fach.name);
+
+          if (matchingModule) {
+            if (matchingModule.Status === 'Nicht Bestanden') {
+             if (matchingModule.Versuch < 3) {
+                fach.status = "versuch" + (parseInt(matchingModule.Versuch) + 1);
+              } else {
+               fach.status = parseInt(matchingModule.Versuch);
               }
-              const matchingModule2 = passedModules.find((modul) => modul.Kuerzel === fach.name);
-              if (matchingModule2) {
-                fach.status = "Bestanden";
-              }
-            });
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+            }
+          return true; 
+        }
+        return true;
+      });
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+  },
   },
   //Display when data is fetched
   mounted() {
     this.getData();
   },
+  
 
   computed: {
     //Vuex-Getters
@@ -431,23 +453,56 @@ export default {
     },
     deletedGoals() {
       return this.$store.getters.getDeletedGoals;
-    }
-  }
+    },
+  },
 };
+
+
 </script>
 
 
   
 <style scoped>
-.grid {
-  margin: 0;
-  padding: 0;
+
+.goals-container{
+  background-color: #8C9900;
+  border-radius: 15px;
+  height: 50px;
+  text-align: center;
+  font-size: larger;
+  padding: 15px;
+}
+.explanatory-text {
+  color: grey;
+  text-align: center;
+
 }
 
+@media screen and (min-width:992px){
+.grid {
+  margin: 10px;
+  padding: 9px;;
+}
+}
+
+@media screen and (min-width:992px){
 .col {
   margin: 0;
-  padding: 0;
+  padding: 20px;
 }
+}
+
+.background{
+  border-radius: 15px;
+  height: 50px;
+  
+}
+
+.spacer{
+  margin: 1px;
+  border: none;
+}
+
 .semesterHeader {
   height: 50px;
   width: 100%;
@@ -455,12 +510,17 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: var(--ion-color-light);
+  padding-top: 30px;
+  padding-bottom: 20px;
+  border-radius: 15px;
   /* Platzierung für den Inhalt */
 }
 
 .labelHeader {
-  padding-left: 25px;
+  text-align: center;
+  padding: 5px;
+  font-size: larger;
+  
 }
 
 .semesterHeader ion-icon {
@@ -513,7 +573,7 @@ export default {
   margin-left: 8px;
   margin-top: 4px;
   border: 2px solid #ccc;
-  border-radius: 20px;
+  border-radius: 0px;
 }
 
 .klausuren-title {
@@ -524,7 +584,8 @@ export default {
 }
 
 .underline {
-  border-bottom: 2px solid green;
+
+  border-bottom: 2px solid #8C9900 ;
   padding-bottom: 5px;
   margin-bottom: 10px;
 }
@@ -566,16 +627,13 @@ export default {
   background-color: var(--ion-color-primary);
 }
 
-.versuch1 {
-  background-color: gray;
-}
-
 .versuch2 {
-  background-color: sandybrown;
+  background-color: var(--ion-color-warning);
+
 }
 
 .versuch3 {
-  background-color: #d32e2e;
+  background-color: var(--ion-color-danger);
 }
 
 ion-modal {

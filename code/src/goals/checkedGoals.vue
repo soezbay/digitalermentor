@@ -21,9 +21,7 @@
 
             <!-- Diplayed if there is no checked Goal -->
             <div class="ion-padding" v-if="checkedGoals == 0">
-                <ion-header class="ion-text-center">
-                    <ion-label>Keine Erreichten Ziele</ion-label>
-                </ion-header>
+                    <ion-label class="explanatory-text">Keine erreichten Ziele</ion-label>
             </div>
 
             <div class="semesterHeader">
@@ -156,7 +154,7 @@ export default {
                     {
                         text: 'Löschen',
                         handler: () => {
-                            this.$store.dispatch('deleteAllGoals');
+                            this.$store.dispatch('deleteAllCompletedGoals');
                         }
                     }
                 ]
@@ -184,6 +182,7 @@ export default {
     padding-top: 0;
     padding-left: 20px;
     padding-right: 45px;
+    
 }
 
 .drag-drop-box-item {
@@ -225,11 +224,16 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: var(--ion-color-light);
-    /* Platzierung für den Inhalt */
+    
 }
 
 .labelHeader {
     padding-left: 25px;
+}
+
+.explanatory-text {
+    color: grey;
+    padding-left: 20px;
+
 }
 </style>
