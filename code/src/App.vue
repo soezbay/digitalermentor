@@ -1,8 +1,8 @@
 <template>
   <ion-app>
     <!--Navigation-Umbruch width in split-pane-->
-    <ion-split-pane when= "(min-width: 1300px)" content-id="main-content">
-      <ion-menu side="end" content-id="main-content" type="overlay">
+    <ion-split-pane when= "(min-width: 1000px)" content-id="main-content">
+      <ion-menu side="end" content-id="main-content" >
         <ion-content class="no-scroll">
           <ion-list class="padding">
             <ion-list-header>Digitaler Mentor</ion-list-header>
@@ -89,6 +89,7 @@ const appPages = [
 const route = useRoute();
 const selectedIndex = ref(appPages.findIndex(page => page.url === route.path));
 
+
 </script>
 
 <style scoped>
@@ -149,8 +150,8 @@ ion-menu ion-item.selected {
 
 /* Breite der Navigation anpassen: schmaler*/
 .split-pane-visible >.split-pane-side {
-    min-width: 350px!important;
-    max-width: 350px!important;
+    min-width: 280px!important;
+    max-width: 280px!important;
   }
 
 /* Navigation nicht mehr scrollbar machen, in ion-content class="no-scroll" hinzugefügt */
