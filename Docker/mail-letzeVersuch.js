@@ -7,12 +7,12 @@ async function sendVersuchEmails() {
     // Get users on their 2nd exam trial
     const usersOnSecondTrial = await Note.findAll({
       where: {
-        versuchNummer: 2, // Assuming 2 is the code for the 2nd trial
+        versuchNummer: 2, 
       },
       include: [
         {
           model: Benutzer,
-          attributes: ['email', 'name'], // Add other user attributes you need
+          attributes: ['email', 'name'], 
         },
       ],
     });
