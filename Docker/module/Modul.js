@@ -19,7 +19,7 @@ class Modul {
         this.Extrakurse = Extrakurse;
 
     }
-
+    
     static findAll() {
         let sql = "Select * From Modul;";
 
@@ -49,4 +49,6 @@ class Modul {
         return database.execute(sql);
     }
 }
+
+
 module.exports = Modul;

@@ -23,6 +23,7 @@ Create Table Benutzer (
 	Bild BLOB,
 	Einstellung varchar(10),
 	Kuerzel varchar(5),
+	Credits int,
 	FOREIGN KEY (Kuerzel) REFERENCES Studiengang(Kuerzel)
 	);
     
@@ -125,6 +126,17 @@ Create Table Note (
 	FOREIGN KEY (PruefungsID) REFERENCES Pruefung(PruefungsID),
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
 	);
+
+CREATE TABLE AlertesCredits (
+    AlerteID INT AUTO_INCREMENT PRIMARY KEY,
+    BenutzerID VARCHAR(10),
+    TypeAlerte ENUM('DebutSemestre', 'ResultatEpreuve', 'EnregistrementMatiere') NOT NULL,
+    Message TEXT,
+    DateEnvoi DATETIME,
+    FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) ON DELETE CASCADE
+);
+
+
 
 INSERT INTO Modul (Kuerzel, Name, Verantwortlicher, Dozent, Sprache, Turnus, Leistungspunkte, Arbeitsaufwand, Teilnehmerzahl, VoraussetzungenPflicht, VoraussetzungenEmpfohlen, Pruefungsleistung, Lernergebnisse, Inhalt, Extrakurse) 
 VALUES ("ADS", "Algorithmen und Datenstrukturen", "Prof. Dr. Wolfram Conen", "Prof. Dr. Wolfram Conen", "Deutsch", "Sommersemester", 6, 180, NULL, NULL, "Logik und diskrete Strukturen, Einführung in die Programmierung", "Klausur", NULL, NULL, NULL);
@@ -245,7 +257,10 @@ Insert Into Pflicht Value("PI", "KBIN",6);
 Insert Into Wahlpflicht Value("PI", "KI",4);
 Insert Into Wahlpflicht Value("PI", "BKV",4);
 
-INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
+INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 1, "kmerkmer112@gmail.com", Null, Null, "PI", Null, 15);
+INSERT INTO Benutzer Value("User-S2", 21345678, "Merveille", "Fogueng", 2, "foguengmerveille@gmail.com", Null, Null, Null, "PI",20);
+INSERT INTO Benutzer Value("User-S3", 31345678, "Marc", "Aurele", 4, "merveille.fogueng@yahoo.com", Null, Null, Null, "PI",90);
+INSERT INTO Benutzer Value("User-S5", 51345678, "Max", "Mustemann", 3, "wirtschaftsinformatikerin@gmail.com", Null, Null, Null, "PI",30);
 
 Insert Into Ziel Value("Test1", "ADS", "Test123");
 Insert Into Ziel Value("Test2", "MIN", "Test123");
@@ -263,8 +278,6 @@ Insert Into Pruefung Value("PID1", 1, '2023-09-04 12:00:00', "EPR" );
 Insert Into Pruefung Value("PID2", 1, '2023-09-03 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID3", 1, '2023-09-02 12:00:00', "LDS" );
 Insert Into Pruefung Value("PID4", 2, '2023-09-02 12:00:00', "GMI" );
-
-
 
 Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
 Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 1);
