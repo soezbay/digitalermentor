@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
+import axios from 'axios';
 
 const store = createStore({
     state() {
@@ -15,10 +16,65 @@ const store = createStore({
             moduleOverviewData: [],
             TestDaten: {
                 BenutzerID: 'Test123',
-            }
+            },
+            letzterCacheUpdate: new Date(0)
         }
     },
     mutations: {
+        async createCacheAPI(state) {
+            try {
+                console.info('Erhaltener JSON-String1:', JSON.stringify(state));
+                const requestData = {
+                  BenutzerID: state.TestDaten.BenutzerID,
+                  CacheDaten: JSON.stringify(state),
+                };
+                await axios.post('http://localhost:8000/cache/', requestData);
+                console.log('Daten wurden erfolgreich erstellt.');
+                console.info('createCacheAPI wurde ausgeführt');
+              } catch (error) {
+                console.error('Fehler beim Erstellen der API-Daten:', error);
+                throw error;
+              }
+        },
+        async updateAPI(state) {
+            try {
+                
+                console.info('Erhaltener JSON-String:', JSON.stringify(state));
+                state.letzterCacheUpdate = new Date();
+                const updatedData = {
+                    BenutzerID: state.TestDaten.BenutzerID,
+                    CacheDaten: JSON.stringify(state),
+                  };
+                await axios.put(`http://localhost:8000/cache/`, updatedData)
+                console.log('Daten wurden erfolgreich aktualisiert.');
+            } catch (error) {
+                console.error('Fehler beim Aktualisieren der API-Daten:', error);
+                throw error; 
+            }
+        },
+
+        setAPIData(state, data) {
+            Object.assign(state, data);
+            console.info('setAPIData wurde ausgeführt');
+            console.info(state)
+        },
+
+        deleteCache(state) {
+            state.userData = [],
+            state.termine = [],
+            state.selectedDate =  new Date(),
+            state.goals = [],
+            state.goals_ss = [],
+            state.goals_ws = [],
+            state.deletedGoals = [],
+            state.checkedGoals = [],
+            state.moduleOverviewData = [],
+            state.TestDaten = {
+                BenutzerID: 'Test123',
+            },
+            state.letzterCacheUpdate = new Date(0)
+        },
+
         setSelectedDate(state, date) {
             state.selectedDate = date;
         },
@@ -46,7 +102,6 @@ const store = createStore({
             if (index !== -1) {
                 // Wenn der Termin gefunden wurde, aktualisieren Sie ihn
                 state.termine[index] = updatedTermin;
-                updateAPI();
             }
         },
 
@@ -101,6 +156,10 @@ const store = createStore({
             console.log("lösche alle ziele")
             state.deletedGoals = [];
         },
+        removeAllCompletedGoals(state) {
+            console.log("lösche alle Erreichten ziele")
+            state.checkedGoals = [];
+        },
         checkGoal(state, goal_ID) {
             const targetGoal = state.goals.find(goal => goal.id === goal_ID);
             state.checkedGoals.push(targetGoal);
@@ -109,12 +168,12 @@ const store = createStore({
             state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
             state.checkedGoals = state.checkedGoals.filter(goal => goal !== null && goal !== undefined);
         },
-        updateGoalsOrderForWS(state, updatedGoals_ws) {
-            state.goals_ws = updatedGoals_ws;
-        },
-        updateGoalsOrderForSS(state, updatedGoals_ss) {
-            state.goals_ss = updatedGoals_ss;
-        },
+        // updateGoalsOrderForWS(state, updatedGoals_ws) {
+        //     state.goals_ws = updatedGoals_ws;
+        // },
+        // updateGoalsOrderForSS(state, updatedGoals_ss) {
+        //     state.goals_ss = updatedGoals_ss;
+        // },
         restoreGoal(state, goal_ID) {
             const targetGoal = state.deletedGoals.find(goal => goal.id === goal_ID);
             if (targetGoal.semesterSeason === "Sommersemester") {
@@ -149,37 +208,104 @@ const store = createStore({
     },
 
     actions: {
-        saveSelectedDate({ commit }, date) {
+        async fetchCacheFromAPI(context) {
+            try {
+                const BenutzerID = context.state.TestDaten.BenutzerID;
+                // Überprüfen, ob bereits ein Cache-Eintrag vorhanden ist
+                const response = await axios.get('http://localhost:8000/cache/' + BenutzerID);
+                const data = response.data;
+                
+                if (data.Daten.length === 0) {
+                    context.commit('createCacheAPI');
+                } else {
+                    const localCacheDate = new Date(context.state.letzterCacheUpdate);
+                let APICacheDate = new Date(0);
+                try {
+                    const response = await axios.get(`http://localhost:8000/cache/Timestamp/${BenutzerID}`);
+                    const apiData = response.data;
+                    const apiDateString = apiData.TimeStamp[0].Datum;
+                    APICacheDate = new Date(apiDateString);      
+                } catch (error) {
+                    console.error('Fehler beim Abrufen des Zeitstempels von der API:', error);
+                }
+                const letzerCacheUpdateTimestamp = APICacheDate.getTime();
+                const localCacheTime = localCacheDate.getTime();
+                    if (localCacheTime < letzerCacheUpdateTimestamp) {
+                    const innerJsonString = data.Daten[0].CacheDaten;
+                    try {
+                        const cachedData = JSON.parse(innerJsonString);
+                        console.info("Cache geupdated");
+                        context.commit('setAPIData', cachedData);
+                    } catch (error) {
+                        console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
+                    }
+                }
+                }
+            } catch (error) {
+                console.error('Fehler beim Abrufen des Caches von der API:', error);
+            }
+        },
+        async deleteCache(context) {
+            context.commit('deleteCache');
+            context.commit('updateAPI',context);
+        },
+        async saveSelectedDate({ commit }, date) {
             commit('setSelectedDate', date);
+            commit('updateAPI',context);
         },
 
-        addTermin(context, terminData) {
+        async addTermin(context, terminData) {
             context.commit('addTermin', terminData);
+            context.commit('updateAPI',context);
         },
 
-        updateTermin({ commit }, updatedTermin) {
+        async updateTermin({ commit }, updatedTermin) {
             commit('updateTermin', updatedTermin);
+            commit('updateAPI',context);
         },
 
-        deleteTermin(context, terminId) {
+        async deleteTermin(context, terminId) {
             context.commit('removeTermin', terminId);
+            context.commit('updateAPI',context);
         },
 
-        addGoal(context, goal_data) {
+        async addGoal(context, goal_data) {
+            console.log(context.state);
             context.commit('addGoal', goal_data);
+            context.commit('updateAPI');
         },
-        deleteGoal(context, goal_ID) {
+        async deleteGoal(context, goal_ID) {
             context.commit('removeGoal', goal_ID);
+            context.commit('updateAPI',context);
         },
-        deleteGoalFinal(context, goal_ID) {
+        async deleteGoalFinal(context, goal_ID) {
             context.commit('removeGoalFinal', goal_ID);
+            context.commit('updateAPI',context);
         },
-        deleteAllGoals(context) {
+        async deleteAllGoals(context) {
             context.commit('removeAllGoals');
+            context.commit('updateAPI',context);
         },
-        restoreGoal(context, goal_ID) {
+        async deleteAllCompletedGoals(context) {
+            context.commit('removeAllCompletedGoals');
+            context.commit('updateAPI',context);
+        },
+        async restoreGoal(context, goal_ID) {
             context.commit('restoreGoal', goal_ID);
+            context.commit('updateAPI',context);
         },
+        async switchToWS(context,goal_ID) {
+            context.commit('switchToWS',goal_ID);
+            context.commit('updateAPI',context);
+        },
+        async switchToSS(context,goal_ID) {
+            context.commit('switchToSS',goal_ID);
+            context.commit('updateAPI',context);
+        },
+        async checkGoal(context, goal_ID) {
+            context.commit('checkGoal', goal_ID);
+            context.commit('updateAPI',context);
+        }
     },
 
     getters: {
@@ -229,69 +355,20 @@ const store = createStore({
         },
         getModuleOverviewData(state) {
             return state.moduleOverviewData;
-        } 
-    },
-    functions: {
-        async getLastUpdateTime() {
-            try {
-                const response = await axios.get(`/cache/Timestamp/${this.BenutzerID}`);
-                return response.data.TimeStamp;
-            } catch (error) {
-                console.error('Fehler beim Abrufen des letzten Aktualisierungszeitpunkts:', error);
-                return 0;
-            }
+        },
+        getLetzerCacheUpdate(state) {
+            return state.letzterCacheUpdate;
+        },
+        getTestBenutzer(state) {
+            return state.TestDaten.BenutzerID;
         }
     },
-    methods: {
-        async checkAndUpdateCache() {
-            try {
-                const jetztigeZeit = new Date().getTime();
-                const letzerCacheUpdate = getLastUpdateTime().getTime();
-
-                if (jetztigeZeit < letzerCacheUpdate) {
-
-                    this.state = this.getAPIData();
-                    console.log('Cache wurde aktualisiert.');
-                } else {
-                    console.log('Cache ist noch aktuell.');
-                }
-            } catch (error) {
-                console.error('Fehler beim Aktualisieren des Caches:', error);
-            }
-        },
-
-        async getAPIData() {
-            const response = await fetch(`http://localhost:8000/cache/${this.TestDaten.BenutzerID}`);
-            const data = await response.json();
-            const cacheDatenString = data.Daten.CacheDaten;
-            const cacheDatenObjekt = JSON.parse(cacheDatenString);
-            return cacheDatenObjekt;
-        },
-
-        async updateAPI() {
-            try {
-                const updatedData = this.state;
-                await axios.put(`localhost:8000/cache/`, updatedData);
-                console.log('Daten wurden erfolgreich aktualisiert.');
-            } catch (error) {
-                console.error('Fehler beim Aktualisieren der API-Daten:', error);
-                throw error; 
-            }
-        },
-
-        async createCacheAPI() {
-            try {
-                const updatedData = this.state;
-                await axios.post(`localhost:8000/cache/`, updatedData);
-                console.log('Daten wurden erfolgreich erstellt.');
-            } catch (error) {
-                console.error('Fehler beim Erstellen der API-Daten:', error);
-                throw error; 
-            }
-        }
+    setters:{
     },
 
     plugins: [createPersistedState()]
 });
+
+store.dispatch('fetchCacheFromAPI');
 
 export default store;
