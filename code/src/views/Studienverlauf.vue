@@ -9,7 +9,7 @@
 							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
-				<ion-title>{{ texts.pageTitle.studienverlauf }}</ion-title>
+				<ion-title>{{ texts.titel.studienverlauf }}</ion-title>
 				<ion-buttons slot="end">
 					<ion-menu-button color="primary"></ion-menu-button>
 				</ion-buttons>
@@ -18,7 +18,15 @@
 		<ion-content>
 			<!-- CP Progress bar mit Notendurchschnitt -->
 			<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
-			<div id="cpInfo">{{ reachedCreditPoints }}/{{ fullCreditPoints }} CP</div>
+			<div id="cpInfo">
+				{{
+					reachedCreditPoints +
+					'\/' +
+					fullCreditPoints +
+					' ' +
+					texts.studium.leistungspunkteKurz
+				}}
+			</div>
 			<div id="averageGrade">
 				{{ texts.studienverlauf.deinNotendurchschnitt }}
 				{{ calculateAverageGrade().toFixed(2).replace('.', ',') }} <br />
@@ -54,7 +62,7 @@
 								@click="setOpen(true)"></ion-icon>
 							<ion-toast
 								:is-open="isOpen"
-								:message= "texts.studienverlauf.toastSemesterEntfernen"
+								:message="texts.studienverlauf.toastSemesterEntfernen"
 								:duration="3000"
 								@didDismiss="setOpen(false)"></ion-toast>
 						</ion-row>
@@ -142,7 +150,7 @@
 					</ion-col>
 				</ion-row>
 			</ion-grid>
-
+			<!-- Legende -->
 			<div id="legend">
 				<ion-badge id="legendBadge" color="primary">&nbsp;</ion-badge>
 				<span>{{ texts.studium.klausurStatus.bestanden }}</span>
@@ -519,50 +527,50 @@ export default defineComponent({
 
 		// Funktion zum Sortieren der Module nach 'Kürzel' in jedem Semester
 		sortModulesAlphabetically() {
-        for (let i = 0; i < this.groupedModules.length; i++) {
-            const semesterModules = this.groupedModules[i];
+			for (let i = 0; i < this.groupedModules.length; i++) {
+				const semesterModules = this.groupedModules[i]
 
-            // Unterteile die Module in bestandene und nicht bestandene
-            const passedModules = semesterModules.filter(module =>
-                this.isPassedModules(module)
-            );
-            const remainingModules = semesterModules.filter(
-                module => !this.isPassedModules(module)
-            );
+				// Unterteile die Module in bestandene und nicht bestandene
+				const passedModules = semesterModules.filter(module =>
+					this.isPassedModules(module)
+				)
+				const remainingModules = semesterModules.filter(
+					module => !this.isPassedModules(module)
+				)
 
-            // Sortiere die bestandenen Module zuerst nach 'Kürzel'
-            passedModules.sort((a, b) => {
-                const kuerzelA = a.Kuerzel.toUpperCase();
-                const kuerzelB = b.Kuerzel.toUpperCase();
+				// Sortiere die bestandenen Module zuerst nach 'Kürzel'
+				passedModules.sort((a, b) => {
+					const kuerzelA = a.Kuerzel.toUpperCase()
+					const kuerzelB = b.Kuerzel.toUpperCase()
 
-                if (kuerzelA < kuerzelB) {
-                    return -1;
-                }
-                if (kuerzelA > kuerzelB) {
-                    return 1;
-                }
-                return 0;
-            });
+					if (kuerzelA < kuerzelB) {
+						return -1
+					}
+					if (kuerzelA > kuerzelB) {
+						return 1
+					}
+					return 0
+				})
 
-            // Sortiere die restlichen Module nach 'Kürzel'
-            remainingModules.sort((a, b) => {
-                const kuerzelA = a.Kuerzel.toUpperCase();
-                const kuerzelB = b.Kuerzel.toUpperCase();
+				// Sortiere die restlichen Module nach 'Kürzel'
+				remainingModules.sort((a, b) => {
+					const kuerzelA = a.Kuerzel.toUpperCase()
+					const kuerzelB = b.Kuerzel.toUpperCase()
 
-                if (kuerzelA < kuerzelB) {
-                    return -1;
-                }
-                if (kuerzelA > kuerzelB) {
-                    return 1;
-                }
-                return 0;
-            });
+					if (kuerzelA < kuerzelB) {
+						return -1
+					}
+					if (kuerzelA > kuerzelB) {
+						return 1
+					}
+					return 0
+				})
 
-            // Kombiniere die beiden sortierten Arrays
-            this.groupedModules[i] = passedModules.concat(remainingModules);
-        }
-    },
-},
+				// Kombiniere die beiden sortierten Arrays
+				this.groupedModules[i] = passedModules.concat(remainingModules)
+			}
+		},
+	},
 
 	mounted() {
 		this.getData()

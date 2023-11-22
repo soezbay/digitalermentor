@@ -8,13 +8,16 @@ export const texts = {
         sommersemester: "Sommersemester",
         wintersemester: "Wintersemester",
         wahlpflichtmodule: "Wahlpflichtmodule",
+        wahlpflichtmoduleKurz: "WP",
         klausur: "Klausur",
         pruefung: "Prüfung",
         klausurStatus: {
             bestanden: "Bestanden",
             zweiterVersuch: "2. Versuch",
             dritterVersuch: "3. Versuch",
-        }
+        },
+        leistungspunkte: "Leistungspunkte",
+        leistungspunkteKurz: "LP",
     },
 
     allgemein: {
@@ -22,13 +25,24 @@ export const texts = {
         info: "Info",
     },
 
-    pageTitle: {
+    moduluebersicht: {
+        studiengangAuswaehlen: "Studiengang auswählen",
+        listenansicht: "Listenansicht",
+    },
+
+    dashboard: {
+        deineTermine: "Deine Termine",
+        keineTermine: "Keine Termine für diesen Monat.",
+    },
+
+    titel: {
         dashboard: "Dashboard",
         moduluebersicht: "Modulübersicht",
         studienverlauf: "Studienverlauf",
         studienziele: "Studienziele",
         profil: "Profil",
         einstellungen: "Einstellungen",
+        modulbeschreibung: "Modulbeschreibung",
     },
     ziele: {
         zielname: "Zielname",

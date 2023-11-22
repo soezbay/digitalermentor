@@ -9,7 +9,7 @@
 							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
-				<ion-title>{{ texts.pageTitle.studienziele }}</ion-title>
+				<ion-title>{{ texts.titel.studienziele }}</ion-title>
 				<ion-buttons slot="end" style="display: flex; align-items: center">
 					<ion-button
 						class="infoButton"
