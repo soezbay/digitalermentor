@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const Benutzer = require('./module/Benutzer');
 
 // Funktion, um die erforderlichen Credits für ein Semester zu erhalten
 function getRequiredCreditsForSemester(nextSemester) {
