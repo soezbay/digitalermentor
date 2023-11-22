@@ -23,16 +23,9 @@ Create Table Benutzer (
 	Bild BLOB,
 	Einstellung varchar(10),
 	Kuerzel varchar(5),
+	Credits int,
 	FOREIGN KEY (Kuerzel) REFERENCES Studiengang(Kuerzel)
 	);
-
-CREATE TABLE BenutzerCache (
-    BenutzerID varchar(10) PRIMARY KEY,
-    CacheDaten TEXT,
-	Datum datetime,
-	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
-);
- 
     
 Create Table Modul ( 
 	Kuerzel varchar(5) Primary Key,
@@ -51,20 +44,6 @@ Create Table Modul (
 	Inhalt text,
 	Extrakurse text
 	);
-
-Create Table VoraussetzungenPflicht (
-	ModulKuerzel varchar(5),
-	VoraussetzungModulKuerzel varchar(5),
-	FOREIGN KEY (ModulKuerzel) REFERENCES Modul(Kuerzel) On Delete CASCADE,
-	FOREIGN KEY (VoraussetzungModulKuerzel) REFERENCES Modul(Kuerzel)On Delete CASCADE
-);
-
-Create Table VoraussetzungenEmpfohlen (
-	ModulKuerzel varchar(5),
-	VoraussetzungModulKuerzel varchar(5),
-	FOREIGN KEY (ModulKuerzel) REFERENCES Modul(Kuerzel) On Delete CASCADE,
-	FOREIGN KEY (VoraussetzungModulKuerzel) REFERENCES Modul(Kuerzel)On Delete CASCADE
-);
 	
 Create Table Pflicht ( 
 	StudiengangKuerzel VARCHAR(5),
@@ -93,41 +72,41 @@ Create Table Bewertung (
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE
 	);
 	
--- Create TABLE Kalendereintrag (
--- 	Datum datetime,
--- 	Eintrag text,
--- 	BenutzerID varchar(10),
--- 	CONSTRAINT KalendereintragsID PRIMARY KEY (Datum, BenutzerID),
--- 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
--- 	);
+Create TABLE Kalendereintrag (
+	Datum datetime,
+	Eintrag text,
+	BenutzerID varchar(10),
+	CONSTRAINT KalendereintragsID PRIMARY KEY (Datum, BenutzerID),
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
+	);
 	
--- Create TABLE Ziel (
--- 	ZielID varchar(20) PRIMARY KEY,
--- 	Titel varchar(50),
--- 	BenutzerID varchar(10),
--- 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
--- 	);
+Create TABLE Ziel (
+	ZielID varchar(20) PRIMARY KEY,
+	Titel varchar(50),
+	BenutzerID varchar(10),
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
+	);
 
--- Create TABLE CPZiel (
--- 	ZielID varchar(20) PRIMARY Key,
--- 	Titel varchar(50),
--- 	Semester varchar(20),
--- 	CPAnzahl smallint,
--- 	BenutzerID varchar(10),
--- 	FOREIGN KEY (ZielID) REFERENCES Ziel(ZielID) On DELETE CASCADE,
--- 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
--- 	);
+Create TABLE CPZiel (
+	ZielID varchar(20) PRIMARY Key,
+	Titel varchar(50),
+	Semester varchar(20),
+	CPAnzahl smallint,
+	BenutzerID varchar(10),
+	FOREIGN KEY (ZielID) REFERENCES Ziel(ZielID) On DELETE CASCADE,
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
+	);
 	
--- Create TABLE ModulZiel (
--- 	ZielID varchar(20) PRIMARY Key,
--- 	Titel varchar(50),
--- 	Semester smallint,
--- 	BenutzerID varchar(10),
--- 	Kuerzel VARCHAR(5),
--- 	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel) On DELETE CASCADE,
--- 	FOREIGN KEY (ZielID) REFERENCES Ziel(ZielID) On DELETE CASCADE,
--- 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
--- 	);
+Create TABLE ModulZiel (
+	ZielID varchar(20) PRIMARY Key,
+	Titel varchar(50),
+	Semester smallint,
+	BenutzerID varchar(10),
+	Kuerzel VARCHAR(5),
+	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel) On DELETE CASCADE,
+	FOREIGN KEY (ZielID) REFERENCES Ziel(ZielID) On DELETE CASCADE,
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On DELETE CASCADE
+	);
     
 Create Table Pruefung (
 	PruefungsID varchar(10) Primary Key,
@@ -135,14 +114,7 @@ Create Table Pruefung (
 	Datum datetime,
 	Kuerzel VARCHAR(5),
 	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel)
-    );
-
-Create Table Anmeldung(
-	BenutzerID varchar(10),
-	PruefungsID varchar(10),
-	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE,
-	FOREIGN KEY (PruefungsID) REFERENCES  Pruefung(PruefungsID) On Delete CASCADE
-);
+    );    
 	
 Create Table Note (
 	PruefungsID varchar(10),
@@ -154,6 +126,17 @@ Create Table Note (
 	FOREIGN KEY (PruefungsID) REFERENCES Pruefung(PruefungsID),
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
 	);
+
+CREATE TABLE AlertesCredits (
+    AlerteID INT AUTO_INCREMENT PRIMARY KEY,
+    BenutzerID VARCHAR(10),
+    TypeAlerte ENUM('DebutSemestre', 'ResultatEpreuve', 'EnregistrementMatiere') NOT NULL,
+    Message TEXT,
+    DateEnvoi DATETIME,
+    FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) ON DELETE CASCADE
+);
+
+
 
 INSERT INTO Modul (Kuerzel, Name, Verantwortlicher, Dozent, Sprache, Turnus, Leistungspunkte, Arbeitsaufwand, Teilnehmerzahl, VoraussetzungenPflicht, VoraussetzungenEmpfohlen, Pruefungsleistung, Lernergebnisse, Inhalt, Extrakurse) 
 VALUES ("ADS", "Algorithmen und Datenstrukturen", "Prof. Dr. Wolfram Conen", "Prof. Dr. Wolfram Conen", "Deutsch", "Sommersemester", 6, 180, NULL, NULL, "Logik und diskrete Strukturen, Einführung in die Programmierung", "Klausur", NULL, NULL, NULL);
@@ -270,94 +253,31 @@ Insert Into Pflicht Value("PI", "BAIN",6);
 Insert Into Pflicht Value("PI", "PXP",6);
 Insert Into Pflicht Value("PI", "KBIN",6);
 
-Insert Into Pflicht Value("TI", "LDS",1);
-Insert Into Pflicht Value("TI", "EPR",1);
-Insert Into Pflicht Value("TI", "GMI",1);
-Insert Into Pflicht Value("TI", "TGI",1);
-Insert Into Pflicht Value("TI", "TENI",1);
-
-Insert Into Pflicht Value("TI", "ADS",2);
-Insert Into Pflicht Value("TI", "OPR",2);
-Insert Into Pflicht Value("TI", "MIN",2);
-Insert Into Pflicht Value("TI", "THI",2);
-Insert Into Pflicht Value("TI", "REN",2);
-
-Insert Into Pflicht Value("TI", "DBA",3);
-Insert Into Pflicht Value("TI", "SWT",3);
-Insert Into Pflicht Value("TI", "MCI",3);
-Insert Into Pflicht Value("TI", "BSY",3);
-Insert Into Pflicht Value("TI", "PPR",3);
-
-Insert Into Pflicht Value("TI", "EZS",4);
-Insert Into Pflicht Value("TI", "ROB",4);
-Insert Into Pflicht Value("TI", "SPIN",4);
-
-Insert Into Pflicht Value("TI", "BV",5);
-Insert Into Pflicht Value("TI", "SPIN",5);
-
-Insert Into Pflicht Value("TI", "BAIN",6);
-Insert Into Pflicht Value("TI", "PXP",6);
-Insert Into Pflicht Value("TI", "KBIN",6);
-
 
 Insert Into Wahlpflicht Value("PI", "KI",4);
 Insert Into Wahlpflicht Value("PI", "BKV",4);
-Insert Into Wahlpflicht Value("PI", "BWIN",5);
-Insert Into Wahlpflicht Value("PI", "BV",5);
-Insert Into Wahlpflicht Value("PI", "ITS",5);
-Insert Into Wahlpflicht Value("PI", "ITR",5);
-Insert Into Wahlpflicht Value("PI", "KBE",5);
-Insert Into Wahlpflicht Value("PI", "MOC",4);
-Insert Into Wahlpflicht Value("PI", "MRO",5);
-Insert Into Wahlpflicht Value("PI", "OPC",5);
-Insert Into Wahlpflicht Value("PI", "PAP",4);
-Insert Into Wahlpflicht Value("PI", "PRAX",4);
-Insert Into Wahlpflicht Value("PI", "PRAX",5);
-Insert Into Wahlpflicht Value("PI", "SWD",4);
 
-Insert Into Wahlpflicht Value("TI", "MET",5);
-Insert Into Wahlpflicht Value("TI", "MBE",4);
-Insert Into Wahlpflicht Value("TI", "MBE",5);
-Insert Into Wahlpflicht Value("TI", "BWIN",5);
-Insert Into Wahlpflicht Value("TI", "ITS",5);
-Insert Into Wahlpflicht Value("TI", "ITR",5);
-Insert Into Wahlpflicht Value("TI", "PAP",4);
-Insert Into Wahlpflicht Value("TI", "MRO",5);
-Insert Into Wahlpflicht Value("TI", "OPC",5);
-Insert Into Wahlpflicht Value("TI", "PAP",4);
-Insert Into Wahlpflicht Value("TI", "PRAX",4);
-Insert Into Wahlpflicht Value("TI", "PRAX",5);
-Insert Into Wahlpflicht Value("TI", "SYT",4);
-Insert Into Wahlpflicht Value("TI", "SYT",5);
-Insert Into Wahlpflicht Value("TI", "ZDR",4);
-Insert Into Wahlpflicht Value("TI", "ZDR",5);
+INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 1, "kmerkmer112@gmail.com", Null, Null, "PI", Null, 15);
+INSERT INTO Benutzer Value("User-S2", 21345678, "Merveille", "Fogueng", 2, "foguengmerveille@gmail.com", Null, Null, Null, "PI",20);
+INSERT INTO Benutzer Value("User-S3", 31345678, "Marc", "Aurele", 4, "merveille.fogueng@yahoo.com", Null, Null, Null, "PI",90);
+INSERT INTO Benutzer Value("User-S5", 51345678, "Max", "Mustemann", 3, "wirtschaftsinformatikerin@gmail.com", Null, Null, Null, "PI",30);
 
-INSERT INTO VoraussetzungenPflicht(ModulKuerzel, VoraussetzungModulKuerzel) VALUES ('INS', 'EPR');
-INSERT INTO VoraussetzungenEmpfohlen(ModulKuerzel, VoraussetzungModulKuerzel) VALUES ('INS', 'OPR');
+Insert Into Ziel Value("Test1", "ADS", "Test123");
+Insert Into Ziel Value("Test2", "MIN", "Test123");
+Insert Into Ziel Value("Test3", "OPR", "Test123");
+Insert Into Ziel Value("Test4", "THI", "Test123");
+Insert Into Ziel Value("Test5", "REN", "Test123");
 
-
-INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
-
--- Insert Into Ziel Value("Test1", "ADS", "Test123");
--- Insert Into Ziel Value("Test2", "MIN", "Test123");
--- Insert Into Ziel Value("Test3", "OPR", "Test123");
--- Insert Into Ziel Value("Test4", "THI", "Test123");
--- Insert Into Ziel Value("Test5", "REN", "Test123");
-
--- Insert Into ModulZiel Value("Test1", "ADS", 2, "Test123", "ADS");
--- Insert Into ModulZiel Value("Test2", "MIN", 2, "Test123", "MIN");
--- Insert Into ModulZiel Value("Test3", "OPR", 2, "Test123", "OPR");
--- Insert Into ModulZiel Value("Test4", "THI", 2, "Test123", "THI");
--- Insert Into ModulZiel Value("Test5", "REN", 2, "Test123", "REN");
+Insert Into ModulZiel Value("Test1", "ADS", 2, "Test123", "ADS");
+Insert Into ModulZiel Value("Test2", "MIN", 2, "Test123", "MIN");
+Insert Into ModulZiel Value("Test3", "OPR", 2, "Test123", "OPR");
+Insert Into ModulZiel Value("Test4", "THI", 2, "Test123", "THI");
+Insert Into ModulZiel Value("Test5", "REN", 2, "Test123", "REN");
 
 Insert Into Pruefung Value("PID1", 1, '2023-09-04 12:00:00', "EPR" );
 Insert Into Pruefung Value("PID2", 1, '2023-09-03 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID3", 1, '2023-09-02 12:00:00', "LDS" );
 Insert Into Pruefung Value("PID4", 2, '2023-09-02 12:00:00', "GMI" );
-Insert Into Pruefung Value("PID5", 1, '2023-10-10 12:00:00', "LDS" );
-
-Insert Into Anmeldung Value("Test123", "PID5");
-
 
 Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
 Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 1);
