@@ -71,7 +71,8 @@
 								<ion-col
 									size="4"
 									v-for="(module, index) in semesterModules"
-									:key="index">
+									:key="index"
+									:data-semester="semester">
 									<!-- Bestandene Module können nicht verschoben werden -->
 									<ion-card
 										class="moduleElement"
@@ -121,7 +122,8 @@
 								<ion-col
 									size="4"
 									v-for="(module, index) in semesterModules"
-									:key="index">
+									:key="index"
+									:data-semester="semester">
 									<ion-card
 										class="moduleElement"
 										draggable="true"
@@ -308,6 +310,7 @@ export default defineComponent({
 				}
 
 				groupedObliModules[semester].push(module)
+				groupedObliModules[semester].sort()
 			})
 
 			return groupedObliModules
@@ -503,6 +506,8 @@ export default defineComponent({
 					// Füge das Modul zum Zielsemester-Array hinzu
 					targetSemesterArray.push(removedModule)
 
+					this.sortModulesAlphabetically()
+
 					// Führe eine Aktualisierung der Vue.js-Ansicht durch
 					this.$forceUpdate()
 				}
@@ -512,10 +517,57 @@ export default defineComponent({
 		isPassedModules(module) {
 			return this.getModuleStatusClass(module) === 'passed'
 		},
-	},
+
+		// Funktion zum Sortieren der Module nach 'Kürzel' in jedem Semester
+		sortModulesAlphabetically() {
+        for (let i = 0; i < this.groupedModules.length; i++) {
+            const semesterModules = this.groupedModules[i];
+
+            // Unterteile die Module in bestandene und nicht bestandene
+            const passedModules = semesterModules.filter(module =>
+                this.isPassedModules(module)
+            );
+            const remainingModules = semesterModules.filter(
+                module => !this.isPassedModules(module)
+            );
+
+            // Sortiere die bestandenen Module zuerst nach 'Kürzel'
+            passedModules.sort((a, b) => {
+                const kuerzelA = a.Kuerzel.toUpperCase();
+                const kuerzelB = b.Kuerzel.toUpperCase();
+
+                if (kuerzelA < kuerzelB) {
+                    return -1;
+                }
+                if (kuerzelA > kuerzelB) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            // Sortiere die restlichen Module nach 'Kürzel'
+            remainingModules.sort((a, b) => {
+                const kuerzelA = a.Kuerzel.toUpperCase();
+                const kuerzelB = b.Kuerzel.toUpperCase();
+
+                if (kuerzelA < kuerzelB) {
+                    return -1;
+                }
+                if (kuerzelA > kuerzelB) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            // Kombiniere die beiden sortierten Arrays
+            this.groupedModules[i] = passedModules.concat(remainingModules);
+        }
+    },
+},
 
 	mounted() {
 		this.getData()
+		this.sortModulesAlphabetically()
 	},
 
 	computed: {
