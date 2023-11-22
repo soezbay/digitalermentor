@@ -223,33 +223,51 @@
     </ion-content>
   </ion-page>
 
+<!-- Modal für Benutzerhinweise-->
   <ion-modal ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
-  
-  <ion-content>
-    <p>
-      Hier kannst du deine Studienziele verwalten und organisieren.
-    </p>
+    <ion-content>
+  <ion-grid>
+    <ion-row justify-content-center align-items-center>
+      <ion-col size="12">
+        <div class="ion-text-center">
+        <p style="font-size: 22px;">
+          <strong>Studienziele verwalten und organisieren</strong> 
+        </p>
+        <p>
+        <ion-button color="primary" shape="round">
+              <ion-icon :icon="add" style="font-size: 30px; color: white;"></ion-icon>
+            </ion-button>
+        </p>
+        <p><strong>Ziele hinzufügen</strong></p> 
+        <p>Klicke auf den Button, um neue Ziele hinzuzufügen.</p>
 
-    <p><strong>Studienziele hinzufügen:</strong> Klicke auf den Plus-Button unten, um neue Ziele hinzuzufügen.</p>
+        <ion-icon :icon="trash" style="font-size: 35px; color: #f07181;"></ion-icon>
+        <p><strong>Ziel löschen </strong></p>
+        <p>Swipe nach links und klicke auf den Button, um dein Ziel zu löschen.</p>
 
-    <p><strong>Studienziele bearbeiten:</strong></p>
-    <ul>
-      <li>Swipe nach links, um ein Ziel als "geschafft" zu markieren.</li>
-      <li>Swipe nach rechts, um ein Ziel in ein anderes Semester zu verschieben.</li>
-      <li>Swipe nach links, um ein Ziel zu löschen.</li>
-    </ul>
+        <ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #BBCC00"></ion-icon>
+        <p><strong>Ziel erreicht</strong></p>
+        <p>Swipe nach links und klicke auf den Button, um dein Ziel als erreicht zu markieren.</p>
 
-    <p>
-      DIe Modulübersicht soll dir dabei helfen, deine Ziele leichter festzulegen. Dir werden dort alle Module 
-      angezeigt, die du noch bestehen musst, um dein Studium abzuschließen. 
-    </p>
+        <ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon>
+        <p><strong>Ziel bearbeiten</strong></p>
+        <p>Swipe nach links und klicke auf den Button, um deine Ziele zu bearbeiten.</p>
 
-    <p>Viel Erfolg!</p>
-  </ion-content>
+
+        <p><br><strong>Modulübersicht</strong></p>
+        <p>
+          Die Modulübersicht soll dir dabei helfen, deine Ziele leichter festzulegen. <br> Dort werden dir alle Module 
+          angezeigt, die du noch bestehen musst. 
+        </p>
+
+        <p>Viel Erfolg!</p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
   </ion-modal>
-
-
-
 
 
 </template>
