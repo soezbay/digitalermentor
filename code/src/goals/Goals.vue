@@ -9,7 +9,7 @@
 							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
-				<ion-title>Studienziele</ion-title>
+				<ion-title>{{ texts.pageTitle.studienziele }}</ion-title>
 				<ion-buttons slot="end" style="display: flex; align-items: center">
 					<ion-button
 						class="infoButton"
@@ -28,10 +28,10 @@
 				<ion-row>
 					<ion-col size="12" size-md="6" class="col">
 						<div class="goals-container">
-							<ion-label>Deine Ziele</ion-label>
+							<ion-label>{{ texts.ziele.deineZiele }}</ion-label>
 						</div>
 						<div class="semesterHeader">
-							<ion-label class="labelHeader">Sommersemester</ion-label>
+							<ion-label class="labelHeader">{{ texts.studium.sommersemester }}</ion-label>
 							<ion-buttons slot="end">
 								<ion-button
 									style="padding-right: 15px"
@@ -55,7 +55,7 @@
 										<ion-item-option
 											color="success"
 											@click="switchToWS(goal.id)">
-											<ion-label>Nach Unten</ion-label>
+											<ion-label>{{ texts.ziele.nachUnten }}</ion-label>
 										</ion-item-option>
 									</ion-item-options>
 									<!--Displayin Goal-Element properties-->
@@ -100,13 +100,13 @@
 						<div v-else class="ion-padding">
 							<div class="explanatory-text">
 								<ion-label style="font-size: large"
-									>Keine Ziele definiert.</ion-label
+									>{{ texts.ziele.keineZieleDefiniert }}</ion-label
 								>
 							</div>
 						</div>
 
 						<div class="semesterHeader">
-							<ion-label class="labelHeader">Wintersemester</ion-label>
+							<ion-label class="labelHeader">{{ texts.studium.wintersemester }}</ion-label>
 							<ion-buttons slot="end">
 								<ion-button
 									style="padding-right: 15px"
@@ -130,7 +130,7 @@
 										<ion-item-option
 											color="success"
 											@click="switchToSS(goal.id)">
-											<ion-label>Nach Oben</ion-label>
+											<ion-label>{{ texts.ziele.nachOben }}</ion-label>
 										</ion-item-option>
 									</ion-item-options>
 									<!--Displayin Goal-Element properties-->
@@ -175,7 +175,7 @@
 						<div v-else class="ion-padding">
 							<div class="explanatory-text">
 								<ion-label style="font-size: large"
-									>Keine Ziele definiert.</ion-label
+									>{{ texts.ziele.keineZieleDefiniert }}</ion-label
 								>
 							</div>
 						</div>
@@ -190,7 +190,7 @@
 							id="header"
 							detail="true"
 							lines="none">
-							<ion-label class="labelHeader"> Erreichte Ziele </ion-label>
+							<ion-label class="labelHeader">{{ texts.ziele.erreichteZiele }}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
 						<ion-item
@@ -200,22 +200,22 @@
 							id="header"
 							detail="true"
 							lines="none">
-							<ion-label class="labelHeader"> Gelöschte Ziele </ion-label>
+							<ion-label class="labelHeader">{{ texts.ziele.geloeschteZiele }}</ion-label>
 						</ion-item>
 
 						<ion-item-divider class="spacer"></ion-item-divider>
 
 						<ion-row class="klausuren-title">
 							<ion-label class="underline"
-								>Diese Module musst du noch bestehen:
+								>{{ texts.ziele.zuBestehendeModule }}
 							</ion-label>
 						</ion-row>
 
 						<!-- List of Semester and modules -->
             <ion-grid v-for="(semester, index) in semesterList" :key="index">
               <ion-row>
-                <label v-if="(index + 1 < semesterList.length)"> {{ index + 1 }}. Semester </label>
-                <label v-else-if="(index + 1 === semesterList.length)"> Wahlpflichtmodule </label>
+                <label v-if="(index + 1 < semesterList.length)"> {{ index + 1 }}. {{ texts.studium.semester }} </label>
+                <label v-else-if="(index + 1 === semesterList.length)"> {{ texts.studium.wahlpflichtmodule }} </label>
               </ion-row>
               <ion-row>
                 <ion-col size="2" v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex">
@@ -231,59 +231,110 @@
 				</ion-row>
 			</ion-grid>
 
-<!-- Modal für Benutzerhinweise-->
-  <ion-modal ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
-    <ion-content>
-  <ion-grid>
-    <ion-row justify-content-center align-items-center>
-      <ion-col size="12">
-        <div class="ion-text-center">
-        <p style="font-size: 22px;">
-          <strong>Studienziele verwalten und organisieren</strong> 
-        </p>
-        <p>
-        <ion-button color="primary" shape="round">
-              <ion-icon :icon="add" style="font-size: 30px; color: white;"></ion-icon>
-            </ion-button>
-        </p>
-        <p><strong>Ziele hinzufügen</strong></p> 
-        <p>Klicke auf den Button, um neue Ziele hinzuzufügen.</p>
+			<!-- Modals for adding a goal (Sommersemester)-->
+			<ion-modal
+				ref="modal_SS"
+				trigger="open-SS-modal"
+				:presenting-element="presentingElement">
+				<ion-header>
+					<ion-toolbar>
+						<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
+						<ion-buttons slot="end">
+							<ion-button @click="saveGoal" :disabled="!goal_name" color="light"
+								>{{ texts.allgemein.speichern }}</ion-button
+							>
+						</ion-buttons>
+					</ion-toolbar>
+				</ion-header>
+				<ion-content>
+					<ion-item>
+						<ion-label position="floating">{{ texts.ziele.zielname }}</ion-label>
+						<ion-input v-model="goal_name"></ion-input>
+					</ion-item>
+					<ion-item>
+						<ion-select
+							ref="semesterSelect"
+							label="Semester"
+							placeholder="Semesterseason"
+							value="Sommersemester">
+							<ion-select-option value="Sommersemester"
+								>{{ texts.studium.sommersemester }}</ion-select-option
+							>
+							<ion-select-option value="Wintersemester"
+								>{{ texts.studium.wintersemester }}</ion-select-option
+							>
+						</ion-select>
+					</ion-item>
+					<ion-item>
+						<ion-label position="floating">{{ texts.allgemein.info }}</ion-label>
+						<ion-input v-model="info"></ion-input>
+					</ion-item>
+				</ion-content>
+			</ion-modal>
 
-        <ion-icon :icon="trash" style="font-size: 35px; color: #f07181;"></ion-icon>
-        <p><strong>Ziel löschen </strong></p>
-        <p>Swipe nach links und klicke auf den Button, um dein Ziel zu löschen.</p>
-
-        <ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #BBCC00"></ion-icon>
-        <p><strong>Ziel erreicht</strong></p>
-        <p>Swipe nach links und klicke auf den Button, um dein Ziel als erreicht zu markieren.</p>
-
-        <ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon>
-        <p><strong>Ziel bearbeiten</strong></p>
-        <p>Swipe nach links und klicke auf den Button, um deine Ziele zu bearbeiten.</p>
-
-
-        <p><br><strong>Modulübersicht</strong></p>
-        <p>
-          Die Modulübersicht soll dir dabei helfen, deine Ziele leichter festzulegen. <br> Dort werden dir alle Module 
-          angezeigt, die du noch bestehen musst. 
-        </p>
-
-        <p>Viel Erfolg!</p>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
-
-  </ion-modal>
+			<!-- Modals for adding a goal (Wintersemester)-->
+			<ion-modal
+				ref="modal_WS"
+				trigger="open-WS-modal"
+				:presenting-element="presentingElement">
+				<ion-header>
+					<ion-toolbar>
+						<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
+						<ion-buttons slot="end">
+							<ion-button @click="saveGoal" :disabled="!goal_name" color="light"
+								>{{ texts.allgemein.speichern }}</ion-button
+							>
+						</ion-buttons>
+					</ion-toolbar>
+				</ion-header>
+				<ion-content>
+					<ion-item>
+						<ion-label position="floating">{{ texts.ziele.zielname }}</ion-label>
+						<ion-input v-model="goal_name"></ion-input>
+					</ion-item>
+					<ion-item>
+						<ion-select
+							ref="semesterSelect"
+							label="Semester"
+							placeholder="Semesterseason"
+							value="Wintersemester">
+							<ion-select-option value="Sommersemester"
+								>{{ texts.studium.sommersemester }}</ion-select-option
+							>
+							<ion-select-option value="Wintersemester"
+								>{{ texts.studium.wintersemester }}</ion-select-option
+							>
+						</ion-select>
+					</ion-item>
+					<ion-item>
+						<ion-label position="floating">{{ texts.allgemein.info }}</ion-label>
+						<ion-input v-model="info"></ion-input>
+					</ion-item>
+				</ion-content>
+			</ion-modal>
+		</ion-content>
 
 		<ion-modal
 			ref="modal_info"
 			trigger="open-info-modal"
 			:presenting-element="presentingElement">
 			<ion-content>
-				<p>Hier kannst du deine Studienziele verwalten und organisieren.</p>
-
+				<p>{{ texts.ziele.erklaerung.p1 }}</p>
+				<p>
+					<strong>{{ texts.ziele.erklaerung.p2strong1 }}</strong>
+          {{ texts.ziele.erklaerung.p2 }}
+				</p>
+				<p><strong>{{ texts.ziele.erklaerung.p3strong1 }}</strong></p>
+				<ul>
+					<li>{{ texts.ziele.erklaerung.li1 }}</li>
+					<li>{{ texts.ziele.erklaerung.li2 }}</li>
+					<li>{{ texts.ziele.erklaerung.li3 }}</li>
+				</ul>
+				<p>{{ texts.ziele.erklaerung.p4 }}</p>
+				<p>{{ texts.ziele.erklaerung.p5 }}</p>
+			</ion-content>
+		</ion-modal>
+	</ion-page>
 </template>
 
 <script>
@@ -296,6 +347,7 @@ import {
 	sadOutline,
 } from 'ionicons/icons'
 import axios from 'axios'
+import { texts } from "../texts.js";
 
 import {
 	IonPage,
@@ -377,6 +429,7 @@ export default {
 				{ name: '6. Semester' },
 				{ name: 'Wahlpflichtmodule' },
 			],
+      texts,
 		}
 	},
 
