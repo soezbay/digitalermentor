@@ -23,6 +23,7 @@ export const texts = {
     allgemein: {
         speicher: "Speichern",
         info: "Info",
+        zurueck: "Zurück",
     },
 
     moduluebersicht: {
@@ -36,6 +37,7 @@ export const texts = {
     },
 
     titel: {
+        digitalerMentor: "Digitaler Mentor",
         dashboard: "Dashboard",
         moduluebersicht: "Modulübersicht",
         studienverlauf: "Studienverlauf",
@@ -43,7 +45,9 @@ export const texts = {
         profil: "Profil",
         einstellungen: "Einstellungen",
         modulbeschreibung: "Modulbeschreibung",
+        einstellungen: "Einstellungen",
     },
+
     ziele: {
         zielname: "Zielname",
         deineZiele: "Deine Ziele",
@@ -72,5 +76,21 @@ export const texts = {
         semesterHinzufuegen: "Semester hinzufügen",
         toastSemesterEntfernen: "Entferne alle Module um das Semester zu löschen.",
         toastWahlmodule: "Pflichtmodule können nicht in Wahlpflichtmodule verschoben werden.",
+    },
+
+    einstellungen: {
+        mitteilungen: "Mitteilungen",
+        email: "E-Mail-Benachrichtigungen",
+        push: "Push-Benachrichtigungen",
+        loeschen: "Cache löschen",
+        loeschenBestaetigung: "Wollen sie wirklich den Cache löschen?",
+    },
+
+    profil: {
+        name: "Name",
+        matrikel: "Matrikel Nr.",
+        studiengang: "Studiengang",
+        fachsemester: "Fachsemester",
+        email: "E-Mail Adresse",
     }
   };

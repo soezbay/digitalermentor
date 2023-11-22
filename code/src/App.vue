@@ -5,7 +5,7 @@
       <ion-menu side="end" content-id="main-content" type="overlay">
         <ion-content class="no-scroll">
           <ion-list class="padding">
-            <ion-list-header>Digitaler Mentor</ion-list-header>
+            <ion-list-header>{{ texts.titel.digitalerMentor }}</ion-list-header>
             <hr class="solid">
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
@@ -25,8 +25,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { texts } from './texts.js'
 import {
   IonApp,
   IonContent,
@@ -50,32 +51,32 @@ import {
 // const selectedIndex = ref(0);
 const appPages = [
   {
-    title: 'Dashbord',
+    title: texts.titel.dashboard,
     url: '/menu/dashboard',
     mdIcon: desktopOutline,
   },
   {
-    title: 'Modulübersicht',
+    title: texts.titel.moduluebersicht,
     url: '/menu/moduluebersicht',
     mdIcon: bookOutline,
   },
   {
-    title: 'Studienverlauf',
+    title: texts.titel.studienverlauf,
     url: '/menu/studienverlauf',
     mdIcon: schoolOutline,
   },
   {
-    title: 'Studienziele',
+    title: texts.titel.studienziele,
     url: '/menu/studienziele',
     mdIcon: rocketOutline,
   },
   {
-    title: 'Profil',
+    title: texts.titel.profil,
     url: '/menu/profil',
     mdIcon: personOutline,
   },
   {
-    title: 'Einstellungen',
+    title: texts.titel.einstellungen,
     url: '/menu/einstellungen',
     mdIcon: settingsOutline,
   },

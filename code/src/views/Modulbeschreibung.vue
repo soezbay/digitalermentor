@@ -3,14 +3,14 @@
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-button color="medium" @click="cancel">Zurück</ion-button>
+					<ion-button color="medium" @click="cancel">{{ texts.allgemein.zurueck }}</ion-button>
 				</ion-buttons>
 			</ion-toolbar>
 		</ion-header>
 
 		<ion-content class="ion-padding">
 			<h4>
-				Modulbeschreibung <strong> {{ selectedModul.Kuerzel }} </strong>
+				{{ texts.titel.modulbeschreibung + " " }}<strong>{{ selectedModul.Kuerzel }} </strong>
 			</h4>
 			<ion-list>
 				<ion-item v-for="(item, key) in filteredList" :key="key">
@@ -47,6 +47,7 @@ import {
 import { defineComponent, ref } from "vue";
 import axios from "axios";
 import Moduluebersicht from "./Moduluebersicht.vue";
+import { texts } from '../texts.js';
 
 export default {
 	components: {
@@ -71,6 +72,7 @@ export default {
 		return {
 			modul: [],
 			filteredList: this.filteredList(),
+			texts,
 		};
 	},
 
