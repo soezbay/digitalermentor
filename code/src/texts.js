@@ -1,13 +1,20 @@
 // texts.js
 export const texts = {
     studium: {
-        semeter: "Semester",
+        semester: "Semester",
         module: "Module",
         modul: "Modul",
         studiengang: "Studiengang",
         sommersemester: "Sommersemester",
         wintersemester: "Wintersemester",
         wahlpflichtmodule: "Wahlpflichtmodule",
+        klausur: "Klausur",
+        pruefung: "Prüfung",
+        klausurStatus: {
+            bestanden: "Bestanden",
+            zweiterVersuch: "2. Versuch",
+            dritterVersuch: "3. Versuch",
+        }
     },
 
     allgemein: {
@@ -44,5 +51,12 @@ export const texts = {
         },
         nachUnten: "Nach unten",
         nachOben: "Nach oben",
+    },
+
+    studienverlauf: {
+        deinNotendurchschnitt: "Dein Notendurchschnitt: ",
+        semesterHinzufuegen: "Semester hinzufügen",
+        toastSemesterEntfernen: "Entferne alle Module um das Semester zu löschen.",
+        toastWahlmodule: "Pflichtmodule können nicht in Wahlpflichtmodule verschoben werden.",
     }
   };
