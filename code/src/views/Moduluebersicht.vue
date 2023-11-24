@@ -197,7 +197,7 @@ export default {
 
   watch: {
     selectedStudiengang(newStudiengang) {
-      this.fetchPflichtModule(newStudiengang);
+      this.fetch0PflichtModule(newStudiengang);
       this.fetchWahplfichtModule(newStudiengang);
       this.onStudiengangChange();
     },

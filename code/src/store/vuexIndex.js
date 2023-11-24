@@ -152,11 +152,26 @@ const store = createStore({
         pushFetchedCourses(state, fetchedCourses) {
             if (fetchedCourses) {
                 state.courses = fetchedCourses;
-                console.log("Courses: " , state.courses);
+                console.log("Courses: ", state.courses);
             } else {
                 console.log("Konnte keine Kurse fetchen!");
             }
-            
+        },
+        commitFetchedObligatoryModules(state, fetchedModules) {
+            if (fetchedModules) {
+                state.obligatoryModules = fetchedModules;
+                console.log("Courses: ", state.courses);
+            } else {
+                console.log("Konnte keine Kurse fetchen!");
+            }
+        },
+        commitFetchedElectiveModules(state, fetchedModules) {
+            if (fetchedModules) {
+                state.electiveModules = fetchedModules;
+                console.log("Courses: ", state.courses);
+            } else {
+                console.log("Konnte keine Kurse fetchen!");
+            }
         }
     },
 
@@ -175,17 +190,17 @@ const store = createStore({
         },
 
         async fetchCourseModuleData(context, course) {
-            const obligatoryModules = '';
-            const electiveModules = '';
+       
             try {
-                const response = await fetch(`http://localhost:8000/studiengang/pflicht/${this.course}`);
+                const response = await fetch(`http://localhost:8000/studiengang/pflicht/${course}`);
                 const data = await response.json();
                 console.log(data);
 
                 // Überprüfen Sie, ob die Daten in der Antwort vorhanden sind
                 if (data.pflicht) {
-                    obligatoryModules = data.pflicht;
-                    console.log("Pflichtmodule geladen:", this.obligatoryModules);
+                    const obligatoryModules = data.pflicht;
+                    console.log("Pflichtmodule geladen:", obligatoryModules);
+                    context.commit('commitFetchedObligatoryModules', obligatoryModules);
                 } else {
                     console.error("Fehler beim Laden der Pflichtmodule.");
                 }
@@ -194,19 +209,18 @@ const store = createStore({
             }
 
             try {
-                const response = await axios.get(`http://localhost:8000/studiengang/wahlpflicht/${this.course}`);
+                const response = await axios.get(`http://localhost:8000/studiengang/wahlpflicht/${course}`);
                 const data = await response.data;
                 if (data.wahlpflicht) {
-                  electiveModules = data.wahlpflicht;
-                  console.log("Wahlplichtmodule geladen:", this.modules.wahlpflicht);
+                    const electiveModules = data.wahlpflicht;
+                    console.log("Wahlplichtmodule geladen:", this.modules.wahlpflicht);
+                    context.commit('commitFetchedElectiveModules', electiveModules);
                 } else {
-                  console.error("Fehler beim Laden der Wahlpflichtflichtmodule.");
+                    console.error("Fehler beim Laden der Wahlpflichtflichtmodule.");
                 }
-              } catch (error) {
+            } catch (error) {
                 console.error("Fehler beim Abrufen der Daten:", error);
-              }
-
-              context.commit('pushFetchedModules', obligatoryModules, electiveModules);
+            }
 
         },
 
