@@ -54,7 +54,7 @@ export const texts = {
         erreichteZiele: "Erreichte Ziele",
         geloeschteZiele: "Gelöschte Ziele",
         keineZieleDefiniert: "Keine Ziele definiert",
-        zuBestehendeModule: "Diese Module musst du noch Bestehen",
+        zuBestehendeModule: "Diese Module musst du noch bestehen",
         erstelleZiel: "Erstelle ein Ziel",
         erklaerung: {
             p1strong: "Hier kannst du deine Studienziele verwalten und organisieren.",
