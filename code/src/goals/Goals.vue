@@ -314,24 +314,42 @@
 			</ion-modal>
 		</ion-content>
 
+        <!-- Modal für Benutzerhhinweis-->
 		<ion-modal
 			ref="modal_info"
 			trigger="open-info-modal"
 			:presenting-element="presentingElement">
 			<ion-content>
-				<p>{{ texts.ziele.erklaerung.p1 }}</p>
-				<p>
-					<strong>{{ texts.ziele.erklaerung.p2strong1 }}</strong>
-          {{ texts.ziele.erklaerung.p2 }}
-				</p>
-				<p><strong>{{ texts.ziele.erklaerung.p3strong1 }}</strong></p>
-				<ul>
-					<li>{{ texts.ziele.erklaerung.li1 }}</li>
-					<li>{{ texts.ziele.erklaerung.li2 }}</li>
-					<li>{{ texts.ziele.erklaerung.li3 }}</li>
-				</ul>
-				<p>{{ texts.ziele.erklaerung.p4 }}</p>
-				<p>{{ texts.ziele.erklaerung.p5 }}</p>
+				<ion-grid>
+					<ion-row justify-content-center align-items-center>
+						<ion-col size="12">
+							<div class="ion-text-center">
+        					<p style="font-size: 22px;">
+								<strong>{{ texts.ziele.erklaerung.p1strong }}</strong>
+							</p>
+							<p>
+								<ion-button color="primary" shape="round">
+									<ion-icon :icon="add" style="font-size: 30px; color:white"></ion-icon>
+								</ion-button>
+							</p>
+							<p><strong>{{ texts.ziele.erklaerung.p2strong }}</strong></p>
+							<p>{{ texts.ziele.erklaerung.p2 }}</p>
+							<p><ion-icon :icon="trash" style="font-size: 35px; color: #f07181;"></ion-icon></p>
+							<p><strong>{{ texts.ziele.erklaerung.p3strong }}</strong></p>
+							<p>{{ texts.ziele.erklaerung.p3 }}</p>
+							<p><ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #BBCC00"></ion-icon></p>
+							<p><strong>{{ texts.ziele.erklaerung.p4strong }}</strong></p>
+							<p>{{ texts.ziele.erklaerung.p4 }}</p>
+							<p><ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon></p>
+							<p><strong>{{ texts.ziele.erklaerung.p5strong }}</strong></p>
+							<p>{{ texts.ziele.erklaerung.p5 }}</p>
+							<p><strong>{{ texts.ziele.erklaerung.p6strong }}</strong></p>
+							<p>{{ texts.ziele.erklaerung.p6 }}</p>
+							<p>{{ texts.ziele.erklaerung.p7 }}</p>
+							</div>
+						</ion-col>
+					</ion-row>
+				 </ion-grid>
 			</ion-content>
 		</ion-modal>
 	</ion-page>
