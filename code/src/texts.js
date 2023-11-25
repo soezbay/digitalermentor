@@ -57,7 +57,7 @@ export const texts = {
         zuBestehendeModule: "Diese Module musst du noch bestehen",
         erstelleZiel: "Erstelle ein Ziel",
         erklaerung: {
-            p1strong: "Hier kannst du deine Studienziele verwalten und organisieren.",
+            p1strong: "Studienziele verwalten und organisieren.",
             p2strong:"Ziele hinzufügen: ",
             p2: "Klicke auf den Button, um neue Ziele hinzuzufügen.",
             p3strong: "Ziele löschen",
