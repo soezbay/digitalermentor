@@ -737,6 +737,8 @@ ion-toast {
 
 #legendBadge {
 	box-shadow: 1px 1px 7px grey;
+	margin-right: 7px;
+	margin-left: 7px;
 }
 .list-item {
 	margin: 10px;

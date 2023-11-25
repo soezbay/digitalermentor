@@ -224,12 +224,22 @@
 											fach.name
 										}}</ion-label>
                 </ion-card>
+				<!-- Legende -->
                 </ion-col>
               </ion-row>
             </ion-grid>
 					</ion-col>
 				</ion-row>
+				<!-- Legende -->
+			<div id="legend">
+
+				<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
+				<span>{{ texts.studium.klausurStatus.zweiterVersuch }}</span>
+				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
+				<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
+			</div>
 			</ion-grid>
+			
 
 			<!-- Modals for adding a goal (Sommersemester)-->
 			<ion-modal
@@ -314,7 +324,7 @@
 			</ion-modal>
 		</ion-content>
 
-        <!-- Modal für Benutzerhhinweis-->
+        <!-- Hilfe-Modal für Benutzer-->
 		<ion-modal
 			ref="modal_info"
 			trigger="open-info-modal"
@@ -643,10 +653,10 @@ export default {
 }
 
 .grid {
-	margin-left: 8px;
-	margin-right: 8px;
-	padding: 9px;
-	margin-top: 15px;
+	margin-left: 16px;
+	margin-right: 16px;
+	padding: 16px;
+	margin-top: 10px;
 }
 
 .modules {
@@ -816,5 +826,17 @@ ion-modal::part(backdrop) {
 ion-modal ion-toolbar {
 	--background: #8c9900;
 	--color: white;
+}
+
+#legend {
+	text-align: right;
+	padding-right: 16px;
+	font-size: large;
+	margin-top: 25px;
+}
+#legendBadge {
+	box-shadow: 1px 1px 7px grey;
+	margin-right: 5px;
+	margin-left: 5px;
 }
 </style>
