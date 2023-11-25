@@ -326,6 +326,7 @@
 
         <!-- Hilfe-Modal für Benutzer-->
 		<ion-modal
+		class="info-modal"
 			ref="modal_info"
 			trigger="open-info-modal"
 			:presenting-element="presentingElement">
@@ -339,7 +340,7 @@
 							</p>
 							<p>
 								<ion-button color="primary" shape="round">
-									<ion-icon :icon="add" style="font-size: 30px; color:white"></ion-icon>
+									<ion-icon :icon="add" style="font-size: 20px; color:white"></ion-icon>
 								</ion-button>
 							</p>
 							<p><strong>{{ texts.ziele.erklaerung.p2strong }}</strong></p>
@@ -653,16 +654,31 @@ export default {
 }
 
 .grid {
-	margin-left: 16px;
-	margin-right: 16px;
+	
 	padding: 16px;
-	margin-top: 10px;
+	
+}
+@media (min-width:915px) {
+.modules {
+  height: 35px;
+  width: auto;
+  margin: 1px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 15px;
+}
+}
+@media (max-width:915px) {
+.modules {
+  height: 25px;
+  width: auto;
+  margin: 1px;
+  text-align: center;
+  border-radius: 15px;
+  padding: 5px;
+}
 }
 
-.modules {
-  height: 20px;
-  margin: 0px;
-}
 
 .background {
 	border-radius: 15px;
@@ -770,38 +786,24 @@ export default {
 	cursor: pointer;
 }
 
-.legend {
-	margin-left: 10px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-bottom: 10px;
-	flex-direction: row;
-	/* Legt die Ausrichtung auf horizontal fest */
+@media (max-width:950px) {
+.info-modal{
+	--height: 75%;
+	--width: 75%;
+	--border-radius: 16px;
+	--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+		0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
 }
 
-.legend-item {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-right: 10px;
-	margin-bottom: 20px;
-	height: 30px;
-	width: 120px;
-	border-radius: 20px;
-	color: black;
+@media (min-width:950px) {
+.info-modal{
+	--height: 80%;
+	--width: 45%;
+	--border-radius: 16px;
+	--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+		0 4px 6px -4px rgb(0 0 0 / 0.1)
 }
-
-.Bestanden {
-	background-color: var(--ion-color-primary);
-}
-
-.versuch2 {
-	background-color: var(--ion-color-warning);
-}
-
-.versuch3 {
-	background-color: var(--ion-color-danger);
 }
 
 ion-modal {
