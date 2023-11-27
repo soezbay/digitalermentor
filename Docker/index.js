@@ -13,6 +13,7 @@ const studiengangRoutes = require('./routes/studiengangroutes');
 const modulZielRoutes = require('./routes/modulZielroutes');
 const cacheRoutes = require('./routes/cacheroutes');
 const benutzerRoutes = require ('./routes/benutzerroutes');
+const emailRoutes = require ('./routes/emailroutes');
 
 app.use('/modul', modulRoutes);
 app.use('/bewertung', bewertungsRoutes);
@@ -20,6 +21,7 @@ app.use('/studiengang', studiengangRoutes);
 app.use('/modulZiel', modulZielRoutes);
 app.use('/cache', cacheRoutes);
 app.use('/benutzer', benutzerRoutes);
+app.use('/email', emailRoutes);
 
 //Global Error Handler
 app.use((err,req,res,next) => {

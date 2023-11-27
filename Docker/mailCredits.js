@@ -1,9 +1,12 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const axios = require('axios');
 
-let benutzer = [];
+// Assuming your backend API endpoint for fetching user information is 'http://localhost:8000/benutzer'
+const API_BASE_URL = 'http://localhost:8000';
+const BENUTZER_API_ENDPOINT = '/benutzer';
 
-// Funktion, um die erforderlichen Credits für ein Semester zu erhalten
+// Function, um die erforderlichen Credits für ein Semester zu erhalten
 function getRequiredCreditsForSemester(nextSemester) {
   switch (nextSemester) {
     case 3:
@@ -17,59 +20,41 @@ function getRequiredCreditsForSemester(nextSemester) {
   }
 }
 
-  // Function to get current semester based on the date
-function getCurrentSemester() {
-  const now = new Date();
-  const currentMonth = now.getMonth() + 1; // JavaScript months are 0-indexed
-
-  // Semester start dates (you might need to adjust these)
-  const winterSemesterStart = new Date(now.getFullYear(), 9 - 1, 1); // October 1
-  const summerSemesterStart = new Date(now.getFullYear(), 4 - 1, 1); // April 1
-
-  if (now >= winterSemesterStart && currentMonth <= 3) {
-    return 1; // Winter semester
-  } else if (now >= summerSemesterStart && currentMonth <= 9) {
-    return 2; // Summer semester
-  } else {
-    return 0; // No active semester
-  }
-}
-
-  async function sendEmails() {
+async function sendEmails() {
   try {
     // Get users' information from the database
-    
-    const usersInfo = await Benutzer.findAll();
-
-// Annahme: Semesterbeginn-Daten aus der Datenbank abrufen
-const nextSemester = benutzerData.Fachsemester + 1;
-const requiredCredits = getRequiredCreditsForSemester(nextSemester);
-
-// Überprüfung, ob ausreichend Credits vorhanden sind
-const message = benutzerData.Credits >= requiredCredits
-  ? `Herzlichen Glückwunsch! Du hast genügend Credits für das kommende Semester (${nextSemester}).`
-  : `Achtung! Du benötigst mindestens ${requiredCredits} Credits für das kommende Semester (${nextSemester}).`;
-
+    const response = await axios.get(API_BASE_URL + BENUTZER_API_ENDPOINT);
+    const usersInfo = response.data.benutzer;
 
     // Create a Nodemailer transporter
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-        auth: {
-          user: 'digitalermentor@gmail.com',
-          pass: 'ofgcyulfkcnvbdnw',
+      service: process.env.EMAIL_SERVICE,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     // Loop through the users and send emails
     usersInfo.forEach(async (user) => {
-      const { EMail, Vorname, Nachname } = user;
+      const { EMail, Vorname, Nachname, Credits, Fachsemester } = user;
+
+      // Annahme: Semesterbeginn-Daten aus der Datenbank abrufen
+      const nextSemester = Fachsemester + 1;
+      const requiredCredits = getRequiredCreditsForSemester(nextSemester);
+
+      // Überprüfung, ob ausreichend Credits vorhanden sind
+      const message =
+        Credits >= requiredCredits
+          ? `Herzlichen Glückwunsch! Du hast genügend Credits für das kommende Semester (${nextSemester}).`
+          : `Achtung! Du benötigst mindestens ${requiredCredits} Credits für das kommende Semester (${nextSemester}).`;
 
       // Email content
       const mailOptions = {
-        from: 'digitalermentor@gmail.com',
+        from: process.env.EMAIL_USER,
         to: EMail,
         subject: 'Subject of the email',
-        text: `Hi ${Vorname} ${Nachname}, This is the content of your email.` , message,
+        text: `Hi ${Vorname} ${Nachname}, ${message}`,
       };
 
       // Send the email
@@ -85,20 +70,8 @@ const message = benutzerData.Credits >= requiredCredits
   }
 }
 
-async function fetchBenutzer() {
-  try {
-    const response = await axios.get('http://localhost:8000/benutzer');
-    this.benutzer = response.data.benutzer;
-    console.log(this.benutzer)
-  } catch (error) {
-    console.error('Error fetching studiengaenge:', error);
-  }
-}
-
 // Call the function to send emails
-//sendEmails();
-fetchBenutzer();
-
+sendEmails();
 
 
 

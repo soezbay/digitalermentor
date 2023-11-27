@@ -257,10 +257,10 @@ Insert Into Pflicht Value("PI", "KBIN",6);
 Insert Into Wahlpflicht Value("PI", "KI",4);
 Insert Into Wahlpflicht Value("PI", "BKV",4);
 
-INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 1, "kmerkmer112@gmail.com", Null, Null, "PI", Null, 15);
+-- INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 1, Null, Null, Null, "PI", Null, 15);
 INSERT INTO Benutzer Value("User-S2", 21345678, "Merveille", "Fogueng", 2, "foguengmerveille@gmail.com", Null, Null, Null, "PI",20);
-INSERT INTO Benutzer Value("User-S3", 31345678, "Marc", "Aurele", 4, "merveille.fogueng@yahoo.com", Null, Null, Null, "PI",90);
-INSERT INTO Benutzer Value("User-S5", 51345678, "Max", "Mustemann", 3, "wirtschaftsinformatikerin@gmail.com", Null, Null, Null, "PI",30);
+-- INSERT INTO Benutzer Value("User-S3", 31345678, "Marc", "Aurele", 4, "merveille.fogueng@yahoo.com", Null, Null, Null, "PI",90);
+INSERT INTO Benutzer Value("User-S5", 51345678, "Max", "Mustemann", 3, "mariemerveille.foguengmaka@studmail.w-hs.de", Null, Null, Null, "PI",30);
 
 Insert Into Ziel Value("Test1", "ADS", "Test123");
 Insert Into Ziel Value("Test2", "MIN", "Test123");
