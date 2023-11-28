@@ -688,6 +688,7 @@ export default {
 .spacer {
 	margin: 1px;
 	border: none;
+	background-color: var(--ion-background);
 }
 
 .semesterHeader {
@@ -841,4 +842,6 @@ ion-modal ion-toolbar {
 	margin-right: 5px;
 	margin-left: 5px;
 }
+
+
 </style>
