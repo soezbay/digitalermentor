@@ -31,6 +31,11 @@ export const texts = {
         listenansicht: "Listenansicht",
     },
 
+    modulbeschreibung: {
+        bewertungen: "Weitere Bewertungen"
+
+    },
+
     dashboard: {
         deineTermine: "Deine Termine",
         keineTermine: "Keine Termine für diesen Monat.",
