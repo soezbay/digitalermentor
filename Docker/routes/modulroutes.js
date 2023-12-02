@@ -6,6 +6,8 @@ const router = express.Router();
 router.route("/").get(modulControllers.getAlleModule);
 // Beispiel localhost:8000/modul/Status/Test123
 router.route("/Status/:BenutzerID").get(modulControllers.getModuleMitStatus);
+// Beispiel: localhost:8000/modul/Voraussetzungen/ADS
+router.route("/Voraussetzungen/:Modul").get(modulControllers.getModulVoraussetzungen)
 // Beispiel: localhost:8000/modul/ADS
 router.route("/:Modul").get(modulControllers.getAlleBewertungenVonModul);
 // Beispiel: localhost:8000/modul/PI/ADS

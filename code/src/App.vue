@@ -1,10 +1,11 @@
 <template>
   <ion-app>
-    <ion-split-pane content-id="main-content">
-      <ion-menu side="end" content-id="main-content" type="overlay">
-        <ion-content>
+    <!--Navigation-Umbruch width in split-pane-->
+    <ion-split-pane when= "(min-width: 1000px)" content-id="main-content">
+      <ion-menu side="end" content-id="main-content" >
+        <ion-content class="no-scroll">
           <ion-list class="padding">
-            <ion-list-header>Digitaler Mentor</ion-list-header>
+            <ion-list-header>{{ texts.titel.digitalerMentor }}</ion-list-header>
             <hr class="solid">
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
@@ -24,8 +25,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { texts } from './texts.js'
 import {
   IonApp,
   IonContent,
@@ -49,32 +51,32 @@ import {
 // const selectedIndex = ref(0);
 const appPages = [
   {
-    title: 'Dashbord',
+    title: texts.titel.dashboard,
     url: '/menu/dashboard',
     mdIcon: desktopOutline,
   },
   {
-    title: 'Modulübersicht',
+    title: texts.titel.moduluebersicht,
     url: '/menu/moduluebersicht',
     mdIcon: bookOutline,
   },
   {
-    title: 'Studienverlauf',
+    title: texts.titel.studienverlauf,
     url: '/menu/studienverlauf',
     mdIcon: schoolOutline,
   },
   {
-    title: 'Studienziele',
+    title: texts.titel.studienziele,
     url: '/menu/studienziele',
     mdIcon: rocketOutline,
   },
   {
-    title: 'Profil',
+    title: texts.titel.profil,
     url: '/menu/profil',
     mdIcon: personOutline,
   },
   {
-    title: 'Einstellungen',
+    title: texts.titel.einstellungen,
     url: '/menu/einstellungen',
     mdIcon: settingsOutline,
   },
@@ -88,18 +90,21 @@ const appPages = [
 const route = useRoute();
 const selectedIndex = ref(appPages.findIndex(page => page.url === route.path));
 
+
 </script>
 
 <style scoped>
 hr.solid {
-  border-top: 5px solid #757e1b;
+  border-top: 2.5px solid #757e1b;
+  /* Breite der Trennstriche angepasst */
+  max-width: 95%;
 }
 
 .filter {
-  filter: opacity(0.45);
+  filter: opacity(0.25);
   font-size: 275px;
   float: right;
-  padding-top: 10px;
+  padding-top: 0px;
 }
 
 .padding {
@@ -111,13 +116,13 @@ ion-list-header {
   --background: var(--ion-color-primary);
   text-align: left;
   padding: 5px;
-  padding-left: 45px;
+  padding-left: 20px;
   font-size: x-large;
   color: var(--ion-color-light);
 }
 
 ion-menu {
-  --min-width: 70%;
+  --min-width: 10%;
 }
 
 ion-menu ion-content {
@@ -134,7 +139,7 @@ ion-menu ion-item {
   border-radius: 25px;
   --background: var(--ion-color-primary);
   text-align: left;
-  margin: 5px;
+  margin: 0px;
   padding: 5px;
   font-size: larger;
   color: var(--ion-color-light);
@@ -143,4 +148,16 @@ ion-menu ion-item {
 ion-menu ion-item.selected {
   --background: #757e1b;
 }
+
+/* Breite der Navigation anpassen: schmaler*/
+.split-pane-visible >.split-pane-side {
+    min-width: 280px!important;
+    max-width: 280px!important;
+  }
+
+/* Navigation nicht mehr scrollbar machen, in ion-content class="no-scroll" hinzugefügt */
+    .no-scroll {
+    --overflow: hidden;
+    }
+  
 </style>
