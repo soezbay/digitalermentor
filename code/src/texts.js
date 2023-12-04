@@ -32,8 +32,10 @@ export const texts = {
     },
 
     modulbeschreibung: {
-        bewertungen: "Weitere Bewertungen"
-
+        weitereBewertungen: "Weitere Bewertungen",
+        bewertung: "Bewertung",
+        jetztBewerten: "Jetzt Bewerten",
+        deineBewertung: "Deine Bewertung",
     },
 
     dashboard: {
