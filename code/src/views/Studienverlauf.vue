@@ -506,7 +506,7 @@ export default defineComponent({
 					// Füge das Modul zum Zielsemester-Array hinzu
 					targetSemesterArray.push(removedModule)
 
-					this.sortModulesAlphabetically()
+					// this.sortModulesAlphabetically()
 
 					// Führe eine Aktualisierung der Vue.js-Ansicht durch
 					this.$forceUpdate()
@@ -519,55 +519,55 @@ export default defineComponent({
 		},
 
 		// Funktion zum Sortieren der Module nach 'Kürzel' in jedem Semester
-		sortModulesAlphabetically() {
-        for (let i = 0; i < this.groupedModules.length; i++) {
-            const semesterModules = this.groupedModules[i];
+	// 	sortModulesAlphabetically() {
+    //     for (let i = 0; i < this.groupedModules.length; i++) {
+    //         const semesterModules = this.groupedModules[i];
 
-            // Unterteile die Module in bestandene und nicht bestandene
-            const passedModules = semesterModules.filter(module =>
-                this.isPassedModules(module)
-            );
-            const remainingModules = semesterModules.filter(
-                module => !this.isPassedModules(module)
-            );
+    //         // Unterteile die Module in bestandene und nicht bestandene
+    //         const passedModules = semesterModules.filter(module =>
+    //             this.isPassedModules(module)
+    //         );
+    //         const remainingModules = semesterModules.filter(
+    //             module => !this.isPassedModules(module)
+    //         );
 
-            // Sortiere die bestandenen Module zuerst nach 'Kürzel'
-            passedModules.sort((a, b) => {
-                const kuerzelA = a.Kuerzel.toUpperCase();
-                const kuerzelB = b.Kuerzel.toUpperCase();
+    //         // Sortiere die bestandenen Module zuerst nach 'Kürzel'
+    //         passedModules.sort((a, b) => {
+    //             const kuerzelA = a.Kuerzel.toUpperCase();
+    //             const kuerzelB = b.Kuerzel.toUpperCase();
 
-                if (kuerzelA < kuerzelB) {
-                    return -1;
-                }
-                if (kuerzelA > kuerzelB) {
-                    return 1;
-                }
-                return 0;
-            });
+    //             if (kuerzelA < kuerzelB) {
+    //                 return -1;
+    //             }
+    //             if (kuerzelA > kuerzelB) {
+    //                 return 1;
+    //             }
+    //             return 0;
+    //         });
 
-            // Sortiere die restlichen Module nach 'Kürzel'
-            remainingModules.sort((a, b) => {
-                const kuerzelA = a.Kuerzel.toUpperCase();
-                const kuerzelB = b.Kuerzel.toUpperCase();
+    //         // Sortiere die restlichen Module nach 'Kürzel'
+    //         remainingModules.sort((a, b) => {
+    //             const kuerzelA = a.Kuerzel.toUpperCase();
+    //             const kuerzelB = b.Kuerzel.toUpperCase();
 
-                if (kuerzelA < kuerzelB) {
-                    return -1;
-                }
-                if (kuerzelA > kuerzelB) {
-                    return 1;
-                }
-                return 0;
-            });
+    //             if (kuerzelA < kuerzelB) {
+    //                 return -1;
+    //             }
+    //             if (kuerzelA > kuerzelB) {
+    //                 return 1;
+    //             }
+    //             return 0;
+    //         });
 
-            // Kombiniere die beiden sortierten Arrays
-            this.groupedModules[i] = passedModules.concat(remainingModules);
-        }
-    },
+    //         // Kombiniere die beiden sortierten Arrays
+    //         this.groupedModules[i] = passedModules.concat(remainingModules);
+    //     }
+    // },
 },
 
 	mounted() {
 		this.getData()
-		this.sortModulesAlphabetically()
+		// this.sortModulesAlphabetically()
 	},
 
 	computed: {
