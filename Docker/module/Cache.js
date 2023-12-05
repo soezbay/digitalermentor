@@ -48,6 +48,12 @@ class Cache {
         const [newCache, _] = await database.execute(sql);
         return newCache;
     }
+
+    static deleteCache(BenutzerID) {
+        let sql = `DELETE FROM BenutzerCache WHERE BenutzerID = '${BenutzerID}';`;
+    
+        return database.execute(sql);
+    }
     
     static getCache(BenutzerID) {
         let sql = `SELECT CacheDaten FROM BenutzerCache Where BenutzerID = '${BenutzerID}' ;`;

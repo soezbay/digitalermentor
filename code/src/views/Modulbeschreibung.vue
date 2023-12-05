@@ -3,15 +3,24 @@
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-button color="medium" @click="cancel">Zurück</ion-button>
+					<ion-button color="medium" @click="cancel">{{ texts.allgemein.zurueck }}</ion-button>
 				</ion-buttons>
 			</ion-toolbar>
 		</ion-header>
 
 		<ion-content class="ion-padding">
-			<h4>
-				Modulbeschreibung <strong> {{ selectedModul.Kuerzel }} </strong>
+			<h4 class="padding" style=" text-align: center; font-size: 1.4em; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
+				{{ texts.titel.modulbeschreibung }}
 			</h4>
+			<h5 style=" text-align: center; font-size: 1.3em;">
+				{{selectedModul.Name}}
+			</h5>
+			<h6 style=" text-align: center; font-size: 1.3em;">
+				({{ selectedModul.Kuerzel }})
+			</h6>
+			<ion-button-bewertung class="bewertung-button">
+				{{ texts.modulbeschreibung.bewertungen }}
+			</ion-button-bewertung>
 			<ion-list>
 				<ion-item v-for="(item, key) in filteredList" :key="key">
 					<ion-text>
@@ -47,6 +56,7 @@ import {
 import { defineComponent, ref } from "vue";
 import axios from "axios";
 import Moduluebersicht from "./Moduluebersicht.vue";
+import { texts } from '../texts.js';
 
 export default {
 	components: {
@@ -71,6 +81,7 @@ export default {
 		return {
 			modul: [],
 			filteredList: this.filteredList(),
+			texts,
 		};
 	},
 
@@ -120,6 +131,42 @@ export default {
 <style scoped>
 ion-toolbar {
 	--background: none;
+}
+
+ion-button{
+	padding-left: 30%;
+	padding-right: 30%;
+	padding-top: 20px;
+
+
+}
+@media (min-width: 800px) {
+.bewertung-button {
+	display: flex;
+	justify-content: center;
+	background-color: #d2d69e;
+	padding: 10px;
+	border-radius: 15px;
+	margin-left: 160px;
+	margin-right: 160px;
+	margin-top: 25px;
+	margin-bottom: 20px;
+}
+}
+
+@media (max-width: 800px) {
+.bewertung-button {
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	background-color: #d2d69e;
+	padding: 10px;
+	border-radius: 15px;
+	margin-left: 100px;
+	margin-right: 100px;
+	margin-top: 25px;
+	margin-bottom: 20px;
+}
 }
 
 .centered-text {
