@@ -135,7 +135,9 @@
 								:key="`modules-${semester}`"
 								class="modulesContainer"
 								v-if="semester == 0"
-								:data-semester="semester">
+								:data-semester="semester"
+								@dragenter="dragEnter"
+								@dragleave="dragLeave">
 								<ion-col
 									size="4"
 									v-for="(module, index) in semesterModules"
@@ -524,6 +526,12 @@ export default defineComponent({
 					position: 'bottom',
 					color: 'warning',
 				})
+				const targetSemesterArray = this.groupedModules[targetSemester]
+				// Entfernen des leeren Elements ('empty') aus dem Array
+				const index = targetSemesterArray.indexOf('empty')
+				if (index !== -1) {
+					targetSemesterArray.splice(index, 1)
+				}
 
 				toast.present()
 			}
