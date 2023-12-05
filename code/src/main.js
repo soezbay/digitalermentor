@@ -23,11 +23,25 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import info from './store/InfoCache';
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-  .use(store);
+  .use(store)
+  .use(info);
+
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('../service-worker.js')
+      .then((registration) => {
+        console.log('Service Worker registered with scope:', registration.scope);
+      })
+      .catch((error) => {
+        console.error('Service Worker registration failed:', error);
+      });
+  }
+  
   
 router.isReady().then(() => {
   app.mount('#app');

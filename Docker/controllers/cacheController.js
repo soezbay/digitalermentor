@@ -24,8 +24,8 @@ exports.getLastUpdateTime = async (req, res, next) => {
 
 exports.createNewCache = async (req, res, next) => {
     try {
-        let { BenutzerID, CacheDaten } = req.body;
-        let cache = new Cache(BenutzerID, CacheDaten);
+        let { BenutzerID, CacheDaten, Datum } = req.body;
+        let cache = new Cache(BenutzerID, CacheDaten, Datum);
 
         post = await cache.addCache();
 
@@ -49,8 +49,8 @@ exports.deleteCache1 = async (req, res, next) => {
 
 exports.updateCache = async (req, res, next) => {
         try {
-            let { BenutzerID, CacheDaten } = req.body;
-            let cache = new Cache(BenutzerID, CacheDaten);
+            let { BenutzerID, CacheDaten, Datum } = req.body;
+            let cache = new Cache(BenutzerID, CacheDaten, Datum);
     
             post = await cache.updateCache();
     

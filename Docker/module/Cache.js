@@ -5,11 +5,12 @@ class Cache {
     constructor(BenutzerID, CacheDaten, Datum) {
         this.BenutzerID = BenutzerID;
         this.CacheDaten = CacheDaten;
+        this.Datum = Datum;
     }
 
     async addCache() {
         
-        let date = new Date();
+        let date = new Date(this.Datum);
         let yyyy = date.getFullYear();
         let mm = (date.getMonth() + 1).toString().padStart(2, '0');
         let dd = date.getDate().toString().padStart(2, '0');
@@ -31,7 +32,7 @@ class Cache {
     }
 
     async updateCache() {
-        let date = new Date();
+        let date = new Date(this.Datum);
         let yyyy = date.getFullYear();
         let mm = (date.getMonth() + 1).toString().padStart(2, '0');
         let dd = date.getDate().toString().padStart(2, '0');

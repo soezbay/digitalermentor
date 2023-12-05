@@ -205,6 +205,8 @@ export default {
   },
 
   methods: {
+    
+
     async fetchStudiengaenge() {
       try {
         const response = await axios.get('http://localhost:8000/studiengang');

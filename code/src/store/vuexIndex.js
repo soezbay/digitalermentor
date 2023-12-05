@@ -17,7 +17,8 @@ const store = createStore({
             TestDaten: {
                 BenutzerID: 'Test123',
             },
-            letzterCacheUpdate: new Date(0)
+            letzterCacheUpdate: new Date(),
+            wasoffline: false
         }
     },
     mutations: {
@@ -27,6 +28,7 @@ const store = createStore({
                 const requestData = {
                   BenutzerID: state.TestDaten.BenutzerID,
                   CacheDaten: JSON.stringify(state),
+                  Datum: state.letzterCacheUpdate
                 };
                 await axios.post('http://localhost:8000/cache/', requestData);
                 console.log('Daten wurden erfolgreich erstellt.');
@@ -37,6 +39,7 @@ const store = createStore({
               }
         },
         async updateAPI(state) {
+            if (navigator.onLine) {
             try {
                 
                 console.info('Erhaltener JSON-String:', JSON.stringify(state));
@@ -44,6 +47,7 @@ const store = createStore({
                 const updatedData = {
                     BenutzerID: state.TestDaten.BenutzerID,
                     CacheDaten: JSON.stringify(state),
+                    Datum: state.letzterCacheUpdate
                   };
                 await axios.put(`http://localhost:8000/cache/`, updatedData)
                 console.log('Daten wurden erfolgreich aktualisiert.');
@@ -51,6 +55,7 @@ const store = createStore({
                 console.error('Fehler beim Aktualisieren der API-Daten:', error);
                 throw error; 
             }
+        }
         },
 
         setAPIData(state, data) {
@@ -209,6 +214,7 @@ const store = createStore({
 
     actions: {
         async fetchCacheFromAPI(context) {
+            if (navigator.onLine) {
             try {
                 const BenutzerID = context.state.TestDaten.BenutzerID;
                 // Überprüfen, ob bereits ein Cache-Eintrag vorhanden ist
@@ -231,19 +237,46 @@ const store = createStore({
                 const letzerCacheUpdateTimestamp = APICacheDate.getTime();
                 const localCacheTime = localCacheDate.getTime();
                     if (localCacheTime < letzerCacheUpdateTimestamp) {
-                    const innerJsonString = data.Daten[0].CacheDaten;
-                    try {
-                        const cachedData = JSON.parse(innerJsonString);
-                        console.info("Cache geupdated");
-                        context.commit('setAPIData', cachedData);
-                    } catch (error) {
-                        console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
-                    }
+                        if(context.state.wasoffline) {
+                            const userDecision = confirm('Möchten Sie den Offline-Modus beibehalten?');
+                            if (userDecision) {
+                              context.state.letzterCacheUpdate = new Date();
+                              context.state.wasoffline = false;
+                              context.commit('updateAPI',context);
+                            }else{
+                                context.state.wasoffline = false;
+                                console.info("localCache isz älter als in der API");
+                                const innerJsonString = data.Daten[0].CacheDaten;
+                                try {
+                                    const cachedData = JSON.parse(innerJsonString);
+                                    console.info("Cache geupdated");
+                                    context.commit('setAPIData', cachedData);
+                                    } catch (error) {
+                                        console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
+                                    }
+                            }
+                        }else {
+                            console.info("localCache isz älter als in der API");
+                            const innerJsonString = data.Daten[0].CacheDaten;
+                            try {
+                                const cachedData = JSON.parse(innerJsonString);
+                                console.info("Cache geupdated");
+                                context.commit('setAPIData', cachedData);
+                            } catch (error) {
+                                console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
+                            }
+                        }
+                }else {
+                    console.info("localCache ist auf dem aktuellsten stand");
                 }
                 }
             } catch (error) {
                 console.error('Fehler beim Abrufen des Caches von der API:', error);
             }
+        }else {
+            alert('Die App ist im Offline-Modus.');
+            context.state.wasoffline = true;
+        }
         },
         async deleteCache(context) {
             context.commit('deleteCache');
