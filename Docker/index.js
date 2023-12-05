@@ -2,6 +2,7 @@ const express = require("express");
 const mysql = require('mysql2');
 const cors = require('cors');
 const app = express();
+require("dotenv").config();
 
 //Middleware
 app.use(express.json());
@@ -37,3 +38,14 @@ app.use((err,req,res,next) => {
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+
+// Push-Nachrichten
+// server.js
+/*const webpush = require('web-push');
+
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
+const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
+
+webpush.setVapidDetails('digitalermentor@gmail.com', publicVapidKey, privateVapidKey);
+*/

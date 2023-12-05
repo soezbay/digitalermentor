@@ -46,6 +46,7 @@ export const texts = {
         einstellungen: "Einstellungen",
         modulbeschreibung: "Modulbeschreibung",
         einstellungen: "Einstellungen",
+        nachrichten: "Nachrichten",
     },
 
     ziele: {

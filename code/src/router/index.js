@@ -6,6 +6,7 @@ import Studienverlauf from '../views/Studienverlauf.vue';
 import Profil from '../profile/Profil.vue';
 import Einstellungen from '../views/Einstellungen.vue';
 import Studienziele from '../goals/Goals.vue'
+import Nachrichten from '../views/Nachrichten.vue'
 
 //routes muss immer angepasst werden wenn eine neue Seite programmiert wird, die Seite wird dann hier hinzugefügt
 
@@ -91,6 +92,10 @@ const routes = [
   {
     path: '/menu/einstellungen',
     component: Einstellungen
+  },
+  {
+    path: '/menu/nachrichten',
+    component: Nachrichten
   },
 ]
 

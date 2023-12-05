@@ -26,7 +26,7 @@
 			<!-- Einstellungen für Push-Benachrichtigungen -->
 			<ion-item>
 				<ion-label>{{ texts.einstellungen.push }}</ion-label>
-				<ion-toggle v-model="pushNotifications"></ion-toggle>
+				<ion-toggle v-model="pushNotifications" @change="handlePushNotificationToggle"></ion-toggle>
 			</ion-item>
 			<ion-item>
 				<ion-button id="Delete_Cache" @click="showAlert">{{
@@ -84,7 +84,7 @@ export default {
 			pushNotifications: false, // Hier werden die Push-Benachrichtigungen gespeichert
 			showAlertModal: false,
 			alertButtons: [],
-      texts,
+      		texts,
 		}
 	},
 	methods: {
@@ -101,7 +101,32 @@ export default {
 			this.$store.dispatch('deleteCache')
 			console.log('Cache deleted!')
 		},
+		handlePushNotificationToggle() {
+      // Handle the push notification toggle
+      if (this.pushNotifications) {
+        // User enabled push notifications
+        this.subscribeForPushNotifications();
+      } else {
+        // User disabled push notifications (You may want to unsubscribe here if needed)
+      }},
 	},
+
+	async subscribeForPushNotifications() {
+      try {
+        const registration = await navigator.serviceWorker.register('/service-worker.js');
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: 'BEyPfcxRnFWKKypjushrr7Bmszkk33H0IJXzMfRTd3Qi8vfPxsme3yDrQl40mkp7xI8e9ZT58fgPGjJiLWGj-_w',
+		  //applicationServerKey: process.env.PRIVATE_VAPID_KEY,
+        });
+
+        // Send the subscription details to your server
+        await axios.post(`${API_BASE_URL}/subscribe`, { pushSubscription: subscription });
+      } catch (error) {
+        console.error('Error subscribing to push notifications:', error);
+      }
+    },
+
 	mounted() {
 		const alert = document.querySelector('ion-alert')
 

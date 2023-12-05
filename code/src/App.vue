@@ -45,7 +45,9 @@ import {
   schoolOutline,
   rocketOutline,
   personOutline,
-  settingsOutline
+  settingsOutline,
+  mailOutline
+
 } from 'ionicons/icons';
 
 // const selectedIndex = ref(0);
@@ -79,6 +81,11 @@ const appPages = [
     title: texts.titel.einstellungen,
     url: '/menu/einstellungen',
     mdIcon: settingsOutline,
+  },
+  {
+    title: texts.titel.nachrichten,
+    url: '/menu/nachrichten',
+    mdIcon: mailOutline,
   },
 ];
 

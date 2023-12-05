@@ -20,7 +20,8 @@
     "mysql2": "^3.5.2",
     "nodemailer": "^6.9.7",
     "truncate": "^3.0.0",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "web-push": "^3.6.6"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
