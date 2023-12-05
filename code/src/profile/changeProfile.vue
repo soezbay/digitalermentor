@@ -93,7 +93,7 @@ export default {
     },
     data() {
         return {
-            avatarImage: 'resources/icon.png' // Hier wird das Standardbild festgelegt
+            avatarImage: 'resources/Platzhalter_Digitaler_Mentor.png' // Hier wird das Standardbild festgelegt
         };
     },
     methods: {

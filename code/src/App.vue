@@ -1,11 +1,11 @@
 <template>
   <ion-app>
     <!--Navigation-Umbruch width in split-pane-->
-    <ion-split-pane when= "(min-width: 1300px)" content-id="main-content">
-      <ion-menu side="end" content-id="main-content" type="overlay">
+    <ion-split-pane when= "(min-width: 1000px)" content-id="main-content">
+      <ion-menu side="end" content-id="main-content" >
         <ion-content class="no-scroll">
           <ion-list class="padding">
-            <ion-list-header>Digitaler Mentor</ion-list-header>
+            <ion-list-header>{{ texts.titel.digitalerMentor }}</ion-list-header>
             <hr class="solid">
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
@@ -25,8 +25,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { texts } from './texts.js'
 import {
   IonApp,
   IonContent,
@@ -50,32 +51,32 @@ import {
 // const selectedIndex = ref(0);
 const appPages = [
   {
-    title: 'Dashbord',
+    title: texts.titel.dashboard,
     url: '/menu/dashboard',
     mdIcon: desktopOutline,
   },
   {
-    title: 'Modulübersicht',
+    title: texts.titel.moduluebersicht,
     url: '/menu/moduluebersicht',
     mdIcon: bookOutline,
   },
   {
-    title: 'Studienverlauf',
+    title: texts.titel.studienverlauf,
     url: '/menu/studienverlauf',
     mdIcon: schoolOutline,
   },
   {
-    title: 'Studienziele',
+    title: texts.titel.studienziele,
     url: '/menu/studienziele',
     mdIcon: rocketOutline,
   },
   {
-    title: 'Profil',
+    title: texts.titel.profil,
     url: '/menu/profil',
     mdIcon: personOutline,
   },
   {
-    title: 'Einstellungen',
+    title: texts.titel.einstellungen,
     url: '/menu/einstellungen',
     mdIcon: settingsOutline,
   },
@@ -88,6 +89,7 @@ const appPages = [
 
 const route = useRoute();
 const selectedIndex = ref(appPages.findIndex(page => page.url === route.path));
+
 
 </script>
 
@@ -120,7 +122,7 @@ ion-list-header {
 }
 
 ion-menu {
-  --min-width: 80%;
+  --min-width: 10%;
 }
 
 ion-menu ion-content {
@@ -149,8 +151,8 @@ ion-menu ion-item.selected {
 
 /* Breite der Navigation anpassen: schmaler*/
 .split-pane-visible >.split-pane-side {
-    min-width: 350px!important;
-    max-width: 350px!important;
+    min-width: 280px!important;
+    max-width: 280px!important;
   }
 
 /* Navigation nicht mehr scrollbar machen, in ion-content class="no-scroll" hinzugefügt */

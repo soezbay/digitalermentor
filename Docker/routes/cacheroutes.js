@@ -6,6 +6,7 @@ const router = express.Router();
 // Hat ein Put und Postbefehl
 router.route("/").post(cacheControllers.createNewCache).put(cacheControllers.updateCache);
 // Beispiel: localhost:8000/cache/Test123
-router.route("/:BenutzerID").get(cacheControllers.getCache);
+//Hat Get und Delete Befehl
+router.route("/:BenutzerID").get(cacheControllers.getCache).delete(cacheControllers.deleteCache1);;
 router.route("/TimeStamp/:BenutzerID").get(cacheControllers.getLastUpdateTime);
 module.exports = router;

@@ -9,19 +9,26 @@
 							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
-				<ion-title>Studienverlauf</ion-title>
+				<ion-title>{{ texts.titel.studienverlauf }}</ion-title>
 				<ion-buttons slot="end">
 					<ion-menu-button color="primary"></ion-menu-button>
 				</ion-buttons>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content>
-			<h3 id="titel">Studienverlaufsübersicht</h3>
 			<!-- CP Progress bar mit Notendurchschnitt -->
 			<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
-			<div id="cpInfo">{{ reachedCreditPoints }}/{{ fullCreditPoints }} CP</div>
+			<div id="cpInfo">
+				{{
+					reachedCreditPoints +
+					'\/' +
+					fullCreditPoints +
+					' ' +
+					texts.studium.leistungspunkteKurz
+				}}
+			</div>
 			<div id="averageGrade">
-				Dein Notendurchschnitt:
+				{{ texts.studienverlauf.deinNotendurchschnitt }}
 				{{ calculateAverageGrade().toFixed(2).replace('.', ',') }} <br />
 			</div>
 			<!-- Pflichtmodule -->
@@ -34,7 +41,7 @@
 					<ion-col size="12">
 						<!-- Zeige nur Semester ab 1. Semester (da 0. Semester Wahlmodule sind)-->
 						<ion-row v-if="semester >= 1">
-							<h2>{{ semester }}.Semester</h2>
+							<h2>{{ semester }}. {{ texts.studium.semester }}</h2>
 							<!-- Remove Button wird nur angezeigt für das letzte Semester und nur, wenn es leer ist -->
 							<ion-icon
 								:icon="remove"
@@ -55,7 +62,7 @@
 								@click="setOpen(true)"></ion-icon>
 							<ion-toast
 								:is-open="isOpen"
-								message="Entferne alle Module um das Semester zu löschen."
+								:message="texts.studienverlauf.toastSemesterEntfernen"
 								:duration="3000"
 								@didDismiss="setOpen(false)"></ion-toast>
 						</ion-row>
@@ -103,7 +110,7 @@
 					<ion-buttons v-if="semester == 0" id="addSemester">
 						<ion-button @click="addEmptySemester">
 							<ion-icon :icon="add" id="addSemesterIcon"></ion-icon>
-							<h5>Semester hinzufügen</h5>
+							<h5>{{ texts.studienverlauf.semesterHinzufuegen }}</h5>
 						</ion-button>
 					</ion-buttons>
 				</ion-col>
@@ -143,14 +150,14 @@
 					</ion-col>
 				</ion-row>
 			</ion-grid>
-
+			<!-- Legende -->
 			<div id="legend">
 				<ion-badge id="legendBadge" color="primary">&nbsp;</ion-badge>
-				<span> Bestanden </span>
+				<span>{{ texts.studium.klausurStatus.bestanden }}</span>
 				<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
-				<span> 2. Versuch </span>
+				<span>{{ texts.studium.klausurStatus.zweiterVersuch }}</span>
 				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
-				<span> 3. Versuch </span>
+				<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
 			</div>
 		</ion-content>
 	</ion-page>
@@ -184,7 +191,7 @@ import {
 	toastController,
 } from '@ionic/vue'
 import { remove, add, ellipse } from 'ionicons/icons'
-
+import { texts } from '../texts.js'
 import { defineComponent, ref } from 'vue'
 import axios from 'axios'
 
@@ -245,6 +252,7 @@ export default defineComponent({
 			emptySemesters: 0, // Anzahl der leeren Semester
 			enabled: true,
 			targetSemesterModules: [],
+			texts,
 		}
 	},
 	methods: {
@@ -474,8 +482,7 @@ export default defineComponent({
 
 			if (!electiveModuleCheck) {
 				const toast = await toastController.create({
-					message:
-						'Pflichtmodule können nicht in Wahlpflichtmodule verschoben werden.',
+					message: texts.studienverlauf.toastWahlmodule,
 					duration: 3000,
 					position: 'bottom',
 					color: 'warning',
@@ -597,19 +604,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#titel {
-	background-color: var(--ion-color-primary);
-	text-align: center;
-	padding: 5px;
-	border-radius: 15px;
-	color: var(--ion-color-light);
-	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 30px;
-	margin-top: 30px;
-}
-
 ion-progress-bar {
 	--background: var(--ion-color-light);
 	--progress-background: var(--ion-color-primary);
@@ -743,6 +737,8 @@ ion-toast {
 
 #legendBadge {
 	box-shadow: 1px 1px 7px grey;
+	margin-right: 7px;
+	margin-left: 7px;
 }
 .list-item {
 	margin: 10px;
