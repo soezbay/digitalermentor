@@ -82,6 +82,16 @@
 									:data-semester="semester">
 									<!-- Bestandene Module können nicht verschoben werden -->
 									<ion-card
+										v-if="module === 'empty'"
+										class="moduleElement empty-card"
+										:draggable="false"
+										:data-semester="semester"
+										:id="'empty-' + semester"
+										@dragstart="e => dragStart(e, 'empty', semester)">
+										<span :data-semester="semester"></span>
+									</ion-card>
+									<ion-card
+										v-else
 										class="moduleElement"
 										:draggable="!isPassedModules(module)"
 										:data-semester="semester"
@@ -132,6 +142,16 @@
 									:key="index"
 									:data-semester="semester">
 									<ion-card
+										v-if="module === 'empty'"
+										class="moduleElement empty-card"
+										:draggable="false"
+										:data-semester="semester"
+										:id="'empty-' + semester"
+										@dragstart="e => dragStart(e, 'empty', semester)">
+										<span :data-semester="semester"></span>
+									</ion-card>
+									<ion-card
+										v-else
 										class="moduleElement"
 										draggable="true"
 										:data-semester="semester"
@@ -689,6 +709,10 @@ ion-card {
 	height: 50px;
 	margin: 0px;
 	box-shadow: 5px 5px 10px grey;
+}
+
+.empty-card {
+	opacity: 0.5;
 }
 
 #note {
