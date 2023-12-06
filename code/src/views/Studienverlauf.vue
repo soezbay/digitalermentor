@@ -82,6 +82,16 @@
 									:data-semester="semester">
 									<!-- Bestandene Module können nicht verschoben werden -->
 									<ion-card
+										v-if="module === 'empty'"
+										class="moduleElement empty-card"
+										:draggable="false"
+										:data-semester="semester"
+										:id="'empty-' + semester"
+										@dragstart="e => dragStart(e, 'empty', semester)">
+										<span :data-semester="semester"></span>
+									</ion-card>
+									<ion-card
+										v-else
 										class="moduleElement"
 										:draggable="!isPassedModules(module)"
 										:data-semester="semester"
@@ -125,13 +135,25 @@
 								:key="`modules-${semester}`"
 								class="modulesContainer"
 								v-if="semester == 0"
-								:data-semester="semester">
+								:data-semester="semester"
+								@dragenter="dragEnter"
+								@dragleave="dragLeave">
 								<ion-col
 									size="4"
 									v-for="(module, index) in semesterModules"
 									:key="index"
 									:data-semester="semester">
 									<ion-card
+										v-if="module === 'empty'"
+										class="moduleElement empty-card"
+										:draggable="false"
+										:data-semester="semester"
+										:id="'empty-' + semester"
+										@dragstart="e => dragStart(e, 'empty', semester)">
+										<span :data-semester="semester"></span>
+									</ion-card>
+									<ion-card
+										v-else
 										class="moduleElement"
 										draggable="true"
 										:data-semester="semester"
@@ -448,6 +470,11 @@ export default defineComponent({
 			e.preventDefault()
 			e.target.classList.add('drag-enter')
 			console.log('dragEnter')
+			const targetSemester = e.target.dataset.semester
+			console.log('dragEnter targetSemester: ' + targetSemester)
+			const targetSemesterArray = this.groupedModules[targetSemester]
+			targetSemesterArray.push('empty')
+			console.log(targetSemesterArray)
 		},
 
 		dragOver(e) {
@@ -459,7 +486,19 @@ export default defineComponent({
 		dragLeave(e) {
 			e.target.classList.remove('drag-enter')
 			console.log('dragLeave')
-			e.target.classList.remove('drag-over')
+
+			const targetSemester = e.target.dataset.semester
+			console.log('dragLeave targetSemester: ' + targetSemester)
+
+			const targetSemesterArray = this.groupedModules[targetSemester]
+
+			// Entfernen des leeren Elements ('empty') aus dem Array
+			const index = targetSemesterArray.indexOf('empty')
+			if (index !== -1) {
+				targetSemesterArray.splice(index, 1)
+			}
+
+			console.log(targetSemesterArray)
 		},
 
 		async drop(e) {
@@ -487,6 +526,12 @@ export default defineComponent({
 					position: 'bottom',
 					color: 'warning',
 				})
+				const targetSemesterArray = this.groupedModules[targetSemester]
+				// Entfernen des leeren Elements ('empty') aus dem Array
+				const index = targetSemesterArray.indexOf('empty')
+				if (index !== -1) {
+					targetSemesterArray.splice(index, 1)
+				}
 
 				toast.present()
 			}
@@ -513,7 +558,13 @@ export default defineComponent({
 					// Füge das Modul zum Zielsemester-Array hinzu
 					targetSemesterArray.push(removedModule)
 
-					this.sortModulesAlphabetically()
+					// this.sortModulesAlphabetically()
+
+					// Entfernen des leeren Elements ('empty') aus dem Array
+					const index = targetSemesterArray.indexOf('empty')
+					if (index !== -1) {
+						targetSemesterArray.splice(index, 1)
+					}
 
 					// Führe eine Aktualisierung der Vue.js-Ansicht durch
 					this.$forceUpdate()
@@ -525,56 +576,56 @@ export default defineComponent({
 			return this.getModuleStatusClass(module) === 'passed'
 		},
 
-		// Funktion zum Sortieren der Module nach 'Kürzel' in jedem Semester
-		sortModulesAlphabetically() {
-			for (let i = 0; i < this.groupedModules.length; i++) {
-				const semesterModules = this.groupedModules[i]
+		// // Funktion zum Sortieren der Module nach 'Kürzel' in jedem Semester
+		//  	sortModulesAlphabetically() {
+		//      for (let i = 0; i < this.groupedModules.length; i++) {
+		//          const semesterModules = this.groupedModules[i];
 
-				// Unterteile die Module in bestandene und nicht bestandene
-				const passedModules = semesterModules.filter(module =>
-					this.isPassedModules(module)
-				)
-				const remainingModules = semesterModules.filter(
-					module => !this.isPassedModules(module)
-				)
+		//          // Unterteile die Module in bestandene und nicht bestandene
+		//          const passedModules = semesterModules.filter(module =>
+		//              this.isPassedModules(module)
+		//          );
+		//          const remainingModules = semesterModules.filter(
+		//              module => !this.isPassedModules(module)
+		//          );
 
-				// Sortiere die bestandenen Module zuerst nach 'Kürzel'
-				passedModules.sort((a, b) => {
-					const kuerzelA = a.Kuerzel.toUpperCase()
-					const kuerzelB = b.Kuerzel.toUpperCase()
+		//          // Sortiere die bestandenen Module zuerst nach 'Kürzel'
+		//          passedModules.sort((a, b) => {
+		//              const kuerzelA = a.Kuerzel.toUpperCase();
+		//              const kuerzelB = b.Kuerzel.toUpperCase();
 
-					if (kuerzelA < kuerzelB) {
-						return -1
-					}
-					if (kuerzelA > kuerzelB) {
-						return 1
-					}
-					return 0
-				})
+		//              if (kuerzelA < kuerzelB) {
+		//                  return -1;
+		//              }
+		//              if (kuerzelA > kuerzelB) {
+		//                  return 1;
+		//              }
+		//              return 0;
+		//          });
 
-				// Sortiere die restlichen Module nach 'Kürzel'
-				remainingModules.sort((a, b) => {
-					const kuerzelA = a.Kuerzel.toUpperCase()
-					const kuerzelB = b.Kuerzel.toUpperCase()
+		//          // Sortiere die restlichen Module nach 'Kürzel'
+		//          remainingModules.sort((a, b) => {
+		//              const kuerzelA = a.Kuerzel.toUpperCase();
+		//              const kuerzelB = b.Kuerzel.toUpperCase();
 
-					if (kuerzelA < kuerzelB) {
-						return -1
-					}
-					if (kuerzelA > kuerzelB) {
-						return 1
-					}
-					return 0
-				})
+		//              if (kuerzelA < kuerzelB) {
+		//                  return -1;
+		//              }
+		//              if (kuerzelA > kuerzelB) {
+		//                  return 1;
+		//              }
+		//              return 0;
+		//          });
 
-				// Kombiniere die beiden sortierten Arrays
-				this.groupedModules[i] = passedModules.concat(remainingModules)
-			}
-		},
+		//          // Kombiniere die beiden sortierten Arrays
+		//          this.groupedModules[i] = passedModules.concat(remainingModules);
+		//      }
+		// },
 	},
 
 	mounted() {
 		this.getData()
-		this.sortModulesAlphabetically()
+		// this.sortModulesAlphabetically()
 	},
 
 	computed: {
@@ -666,6 +717,10 @@ ion-card {
 	height: 50px;
 	margin: 0px;
 	box-shadow: 5px 5px 10px grey;
+}
+
+.empty-card {
+	opacity: 0.5;
 }
 
 #note {
