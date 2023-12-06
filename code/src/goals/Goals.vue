@@ -218,26 +218,25 @@
                 <label v-else-if="(index + 1 === semesterList.length)"> {{ texts.studium.wahlpflichtmodule }} </label>
               </ion-row>
               <ion-row>
-                <ion-col size="2" v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex">
+                <ion-col size-xs="4" size-sm="4" size-md="4" size-lg="4" size-xl="2"  v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex">
                 <ion-card class="modules">
                   <ion-label style="color: #000000; font-weight: bolder">{{
 											fach.name
 										}}</ion-label>
                 </ion-card>
-				<!-- Legende -->
                 </ion-col>
               </ion-row>
             </ion-grid>
-					</ion-col>
-				</ion-row>
+
 				<!-- Legende -->
 			<div id="legend">
-
 				<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
 				<span>{{ texts.studium.klausurStatus.zweiterVersuch }}</span>
 				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
 				<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
 			</div>
+		</ion-col>
+		</ion-row>
 			</ion-grid>
 			
 
@@ -654,11 +653,9 @@ export default {
 }
 
 .grid {
-	
-	padding: 16px;
-	
+	padding: 25px;
 }
-@media (min-width:915px) {
+
 .modules {
   height: 35px;
   width: auto;
@@ -666,17 +663,6 @@ export default {
   text-align: center;
   padding: 10px;
   border-radius: 15px;
-}
-}
-@media (max-width:915px) {
-.modules {
-  height: 25px;
-  width: auto;
-  margin: 1px;
-  text-align: center;
-  border-radius: 15px;
-  padding: 5px;
-}
 }
 
 
@@ -831,11 +817,11 @@ ion-modal ion-toolbar {
 }
 
 #legend {
-	text-align: right;
-	padding-right: 16px;
+	text-align: center;
 	font-size: large;
 	margin-top: 25px;
 }
+
 #legendBadge {
 	box-shadow: 1px 1px 7px grey;
 	margin-right: 5px;
