@@ -29,7 +29,7 @@
 						border-bottom-right-radius: 25px;
 					"
 					alt=""
-					src="resources/Tafel.png"
+					src="resources/Tafel.jpg"
 					class="platzhalter" />
 				<div id="pb">
 					<ion-avatar>
