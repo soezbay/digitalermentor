@@ -2,10 +2,14 @@ const database = require('../config/database');
 const Modul = require('../module/Modul');
 
 class Bewertung {
-    constructor(BewertungsID, BewertungsGruppe, BewertungsInhalt, ModulKuerzel, BenutzerID) {
+    constructor(BewertungsID,Bewertung,Feedback,Schwierigkeitsgrad,Arbeitsaufwand,Lernhilfe,SemsterAnzeigen  , ModulKuerzel, BenutzerID) {
         this.BewertungsID =BewertungsID;
-        this.BewertungsGruppe = BewertungsGruppe;
-        this.BewertungsInhalt = BewertungsInhalt;
+        this.Bewertung = Bewertung;
+        this.Feedback = Feedback;
+        this.Schwierigkeitsgrad = Schwierigkeitsgrad;
+        this.Arbeitsaufwand = Arbeitsaufwand;
+        this.Lernhilfe = Lernhilfe;
+        this.SemsterAnzeigen = SemsterAnzeigen;
         this.ModulKuerzel = ModulKuerzel;
         this.BenutzerID = BenutzerID;
     }
@@ -20,8 +24,12 @@ class Bewertung {
     
         let sql = `Insert into Bewertung values(
             '${this.BewertungsID}',
-            '${this.BewertungsGruppe}',
-             ${this.BewertungsInhalt},
+            '${this.Bewertung}'
+            '${this.Feedback}',
+            '${this.Schwierigkeitsgrad}',
+            '${this.Arbeitsaufwand}',
+            '${this.Lernhilfe}',
+            '${this.SemsterAnzeigen}',
             '${ErstelltAM}',
             '${this.ModulKuerzel}',
             '${this.BenutzerID}'

@@ -13,8 +13,8 @@ exports.getAlleBewertungen = async (req, res, next) => {
 
 exports.createNewBewertung = async (req, res, next) => {
     try {
-        let { BewertungsID, BewertungsGruppe, BewertungsInhalt, ModulKuerzel, BenutzerID } = req.body;
-        let bewertung = new Bewertung(BewertungsID, BewertungsGruppe, BewertungsInhalt, ModulKuerzel, BenutzerID);
+        let { BewertungsID,Bewertung,Feedback,Schwierigkeitsgrad,Arbeitsaufwand,Lernhilfe,SemsterAnzeigen  , ModulKuerzel, BenutzerID } = req.body;
+        let bewertung = new Bewertung(BewertungsID,Bewertung,Feedback,Schwierigkeitsgrad,Arbeitsaufwand,Lernhilfe,SemsterAnzeigen  , ModulKuerzel, BenutzerID);
 
         post = await bewertung.createBewertung();
 
