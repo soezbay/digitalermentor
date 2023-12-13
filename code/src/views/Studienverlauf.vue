@@ -10,7 +10,10 @@
 					</ion-button>
 				</ion-buttons>
 				<ion-title>{{ texts.titel.studienverlauf }}</ion-title>
-				<ion-buttons slot="end">
+				<ion-buttons slot="end" style="display: flex; align-items: center">
+					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
+						<ion-icon :icon="helpCircleOutline"></ion-icon>
+					</ion-button>
 					<ion-menu-button color="primary"></ion-menu-button>
 				</ion-buttons>
 			</ion-toolbar>
@@ -172,6 +175,7 @@
 					</ion-col>
 				</ion-row>
 			</ion-grid>
+			
 			<!-- Legende -->
 			<div id="legend">
 				<ion-badge id="legendBadge" color="primary">&nbsp;</ion-badge>
@@ -181,6 +185,20 @@
 				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
 				<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
 			</div>
+
+
+			<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
+			<ion-content>
+				<ion-grid>
+					<ion-row justify-content-center align-items-center>
+						<ion-col size="12">
+							<div>
+							</div>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-content>
+		</ion-modal>
 		</ion-content>
 	</ion-page>
 </template>
@@ -212,7 +230,7 @@ import {
 	IonToast,
 	toastController,
 } from '@ionic/vue'
-import { remove, add, ellipse } from 'ionicons/icons'
+import { remove, add, ellipse, helpCircleOutline } from 'ionicons/icons'
 import { texts } from '../texts.js'
 import { defineComponent, ref } from 'vue'
 import axios from 'axios'
@@ -258,6 +276,7 @@ export default defineComponent({
 			remove,
 			add,
 			ellipse,
+			helpCircleOutline,
 			isOpen,
 			setOpen,
 			showToast,
@@ -655,6 +674,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+.infoButton {
+	font-size: 28px;
+}
+
 ion-progress-bar {
 	--background: var(--ion-color-light);
 	--progress-background: var(--ion-color-primary);
@@ -730,7 +754,7 @@ ion-card {
 #averageGrade {
 	color: var(--ion-color-primary);
 	text-align: center;
-	margin-top: 10px;
+	margin-top: px;
 }
 
 #removeSemesterIcon {
@@ -787,7 +811,9 @@ ion-toast {
 #legend {
 	text-align: center;
 	font-size: large;
-	margin-top: 25px;
+	margin-bottom: 10px;
+
+
 }
 
 #legendBadge {
@@ -809,4 +835,29 @@ ion-toast {
 	height: 50px;
 	background: #d2d69e;
 }
+
+ion-grid{
+	padding-right: 15px;
+}
+
+@media (max-width:950px) {
+	.info-modal {
+		--height: 75%;
+		--width: 75%;
+		--border-radius: 16px;
+		--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+			0 4px 6px -4px rgb(0 0 0 / 0.1);
+	}
+}
+
+@media (min-width:950px) {
+	.info-modal {
+		--height: 80%;
+		--width: 45%;
+		--border-radius: 16px;
+		--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+			0 4px 6px -4px rgb(0 0 0 / 0.1)
+	}
+}
+
 </style>
