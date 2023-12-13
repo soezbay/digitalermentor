@@ -43,6 +43,7 @@
                 <ion-card class="modulBlock" v-for="(module) in getModulesForSemester(semester)" :key="module.Kuerzel"
                   @click="openModal(module)">
                   <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
+                  <div v-if="console.info(JSON.stringify(module))"></div>
                 </ion-card>
               </ion-item>
             </ion-list>
@@ -234,9 +235,10 @@ export default {
 
         // Überprüfen Sie, ob die Daten in der Antwort vorhanden sind
         if (dataPflicht.pflicht && dataWahlpflicht.wahlpflicht) {
-          const map = new Map().set(this.selectedStudiengang,{pflichtmodule: dataPflicht.pflicht, wahlpflichtmodule: dataWahlpflicht.wahlpflicht})
-          console.log('Type of map in ModulU:', typeof map);
-          await this.$store.dispatch('updatepflichtmodule', map);
+          const data = {studiengang: this.selectedStudiengang, pflichtmodule: dataPflicht.pflicht, wahlpflichtmodule: dataWahlpflicht.wahlpflicht};
+          //const map = new Map().set(this.selectedStudiengang,{pflichtmodule: dataPflicht.pflicht, wahlpflichtmodule: dataWahlpflicht.wahlpflicht})
+          //console.log('Type of map in ModulU:', typeof map);
+          await this.$store.dispatch('updatepflichtmodule', data);
           this.modules.wahlpflicht = dataWahlpflicht.wahlpflicht
           console.log("Pflichtmodule geladen:", this.pflichtmodule);
         } else {
@@ -300,7 +302,10 @@ export default {
       // const data  =  await this.$store.dispatch('getpflichtmodule', this.selectedStudiengang, semester);
       // console.info(data)
       // return data
-      return this.pflichtmodule.filter((module) => module.Semester === semester);
+      console.info(JSON.parse(JSON.stringify(this.pflichtmodule)))
+      const filteredModules = JSON.parse(JSON.stringify(this.pflichtmodule)).filter(module => module.Semester === semester);
+      console.log(filteredModules);
+      return filteredModules;
     },
 
     istEinWahlpflichtmodulImSemester(semester) {

@@ -17,8 +17,7 @@ const store = createStore({
             TestDaten: {
                 BenutzerID: 'Test123',
             },
-            Studiengaenge: [],
-            module: new Map(),
+            module: [],
             letzterCacheUpdate: new Date(),
             wasoffline: false
         }
@@ -210,10 +209,19 @@ const store = createStore({
             console.log(lastSettings);
             state.moduleOverviewData = lastSettings;
         },
-        setpflichtmodule(state, map) {
-            console.log('Type of map in index set:', typeof map)
-            state.module = map;
-            console.log('Type of state.module ind index set:', typeof state.module);
+        setpflichtmodule(state, data) {
+            // Finde den Index des Objekts mit dem gleichen Studiengang
+  const index = state.module.findIndex(item => item.studiengang === data.studiengang);
+
+  if (index !== -1) {
+    // Wenn der Studiengang bereits vorhanden ist, aktualisiere das Objekt
+    state.module[index] = data;
+  } else {
+    // Wenn der Studiengang nicht vorhanden ist, füge das neue Objekt hinzu
+    state.module.push(data);
+  }
+
+  console.info(state.module);
         },
         
           
@@ -352,9 +360,8 @@ const store = createStore({
             context.commit('checkGoal', goal_ID);
             context.commit('updateAPI',context);
         },
-        async updatepflichtmodule(context,  map) {
-            console.log('Type of map in index update:', typeof map);
-            context.commit('setpflichtmodule',  map);
+        async updatepflichtmodule(context,  data) {
+            context.commit('setpflichtmodule',  data);
             context.commit('updateAPI',context);
         },
         setStudiengaenge(context) {
@@ -420,21 +427,15 @@ const store = createStore({
             return state.TestDaten.BenutzerID;
         },
         getpflichtmodule: (state) => (studiengang) =>{
-        
-            // If it is a Map and studiengang exists, proceed
-            const map = new Map(Object.entries(state.module));
-            console.log('Type of map in getpflichtmodule:', typeof map);
-            var data = [];
-            if(map.size != 0) {
-                data = map.get(studiengang).pflichtmodule;
-                console.info(data);
-            }
-        
-            return data;
-        },
-        
-        
-        
+            const data = state.module.find(item => item.studiengang === studiengang) ?? [{
+                studiengang : "",
+                pflichtmodule: [],
+                wahlpflichtmodule: []
+            }];
+            const pflichtmodule = data.pflichtmodule;
+            //console.info(pflichtmodule)
+            return pflichtmodule;
+        },  
         getStudiengaenge(state) {
             return state.Studiengaenge;
          }
