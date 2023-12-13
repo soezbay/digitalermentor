@@ -23,13 +23,11 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import info from './store/InfoCache';
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-  .use(store)
-  .use(info);
+  .use(store);
 
 
   if ('serviceWorker' in navigator) {

@@ -125,6 +125,7 @@ import {
 } from '@ionic/vue';
 import axios from 'axios';
 import Modal from "./Modulbeschreibung.vue";
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -151,10 +152,14 @@ export default {
   },
 
   computed: {
-    uniqueSemesters() {
+    //...mapGetters(['getpflichtmodule']),
+    pflichtmodule() {
+			return this.$store.getters.getpflichtmodule(this.selectedStudiengang);
+		},
+     uniqueSemesters() {
       // Überprüfen, ob this.modules.pflicht verfügbar ist, bevor auf sie zugegriffen wird
-      if (this.modules.pflicht) {
-        const uniqueSemesters = [...new Set(this.modules.pflicht.map(module => module.Semester))];
+      if (pflichtmodule(this.selectedStudiengang)) {
+        const uniqueSemesters = [...new Set(pflichtmodule(this.selectedStudiengang).map(module => module.Semester))];
 
         // Sortieren Sie die einzigartigen Semester aufsteigend
         uniqueSemesters.sort((a, b) => a - b);
@@ -176,12 +181,12 @@ export default {
     this.fetchStudiengaenge();
     // console.log("Studiengang= ", this.selectedStudiengang)
     if (this.selectedStudiengang != null) {
-      this.fetchPflichtModule(this.selectedStudiengang);
-      this.fetchWahplfichtModule(this.selectedStudiengang);
+       this.fetchModule();
+     // this.fetchWahplfichtModule(this.selectedStudiengang);
     }
   },
 
-  mounted() {
+ mounted() {
     this.fetchStudiengaenge();
     console.log("Mounte Settings:");
     console.log(this.settings);
@@ -196,10 +201,10 @@ export default {
     }
   },
 
-  watch: {
-    selectedStudiengang(newStudiengang) {
-      this.fetchPflichtModule(newStudiengang);
-      this.fetchWahplfichtModule(newStudiengang);
+   watch: {
+    async selectedStudiengang(newStudiengang) {
+     await this.fetchModule();
+      //this.fetchWahplfichtModule(newStudiengang);
       this.onStudiengangChange();
     },
   },
@@ -218,16 +223,21 @@ export default {
       }
     },
 
-    async fetchPflichtModule() {
+    async fetchModule() {
       try {
+        console.info("Fetch Module wurde ausgeführt")
         const response = await fetch(`http://localhost:8000/studiengang/pflicht/${this.selectedStudiengang}`);
-        const data = await response.json();
-        console.log(data);
+        const dataPflicht = await response.json();
+        const response2 = await axios.get(`http://localhost:8000/studiengang/wahlpflicht/${this.selectedStudiengang}`);
+        const dataWahlpflicht = await response2.data;
 
         // Überprüfen Sie, ob die Daten in der Antwort vorhanden sind
-        if (data.pflicht) {
-          this.modules.pflicht = data.pflicht;
-          console.log("Pflichtmodule geladen:", this.modules.pflicht);
+        if (dataPflicht.pflicht && dataWahlpflicht.wahlpflicht) {
+          const map = new Map().set(this.selectedStudiengang,{pflichtmodule: dataPflicht.pflicht, wahlpflichtmodule: dataWahlpflicht.wahlpflicht})
+          console.log('Type of map in ModulU:', typeof map);
+          await this.$store.dispatch('updatepflichtmodule', map);
+          this.modules.wahlpflicht = dataWahlpflicht.wahlpflicht
+          console.log("Pflichtmodule geladen:", pflichtmodule(this.selectedStudiengang));
         } else {
           console.error("Fehler beim Laden der Pflichtmodule.");
         }
@@ -284,9 +294,12 @@ export default {
         });
     },
 
-    getModulesForSemester(semester) {
+    async getModulesForSemester(semester) {
       // Filtern Sie die Pflichtmodule basierend auf dem ausgewählten Semester
-      return this.modules.pflicht.filter((module) => module.Semester === semester);
+      // const data  =  await this.$store.dispatch('getpflichtmodule', this.selectedStudiengang, semester);
+      // console.info(data)
+      // return data
+      return pflichtmodule(this.selectedStudiengang).filter((module) => module.Semester === semester);
     },
 
     istEinWahlpflichtmodulImSemester(semester) {
@@ -295,7 +308,7 @@ export default {
     },
 
     AnzahlPflichtmoduleImSemester(semester) {
-      const filteredModules = this.modules.pflicht.filter((module) => module.Semester === semester);
+      const filteredModules = pflichtmodule(this.selectedStudiengang).filter((module) => module.Semester === semester);
       return filteredModules.length;
     },
 

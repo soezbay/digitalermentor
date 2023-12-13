@@ -17,6 +17,8 @@ const store = createStore({
             TestDaten: {
                 BenutzerID: 'Test123',
             },
+            Studiengaenge: [],
+            module: new Map(),
             letzterCacheUpdate: new Date(),
             wasoffline: false
         }
@@ -207,8 +209,18 @@ const store = createStore({
             console.log("Last Settings:")
             console.log(lastSettings);
             state.moduleOverviewData = lastSettings;
-        }
-
+        },
+        setpflichtmodule(state, map) {
+            console.log('Type of map in index set:', typeof map)
+            state.module = map;
+            console.log('Type of state.module ind index set:', typeof state.module);
+        },
+        
+          
+        async setStudiengaenge(state) {
+            const response = await axios.get('http://localhost:8000/studiengang');
+            state.Studiengaenge = response.data.studiengaenge;
+        },
 
     },
 
@@ -278,6 +290,7 @@ const store = createStore({
             context.state.wasoffline = true;
         }
         },
+        
         async deleteCache(context) {
             context.commit('deleteCache');
             context.commit('updateAPI',context);
@@ -338,6 +351,17 @@ const store = createStore({
         async checkGoal(context, goal_ID) {
             context.commit('checkGoal', goal_ID);
             context.commit('updateAPI',context);
+        },
+        async updatepflichtmodule(context,  map) {
+            console.log('Type of map in index update:', typeof map);
+            context.commit('setpflichtmodule',  map);
+            context.commit('updateAPI',context);
+        },
+        setStudiengaenge(context) {
+            context.commit('setStudiengaenge');
+        },
+        getStudiengaenge(context) {
+            context.commit('getStudiengaenge');
         }
     },
 
@@ -394,7 +418,26 @@ const store = createStore({
         },
         getTestBenutzer(state) {
             return state.TestDaten.BenutzerID;
-        }
+        },
+        getpflichtmodule(state, studiengang) {
+        
+            // If it is a Map and studiengang exists, proceed
+            const map = new Map(Object.entries(state.module));
+            console.log('Type of map in getpflichtmodule:', typeof map);
+            var data = [];
+            if(map.size != 0) {
+                data = map.get(studiengang).pflichtmodule;
+                console.info(data);
+            }
+        
+            return data;
+        },
+        
+        
+        
+        getStudiengaenge(state) {
+            return state.Studiengaenge;
+         }
     },
     setters:{
     },

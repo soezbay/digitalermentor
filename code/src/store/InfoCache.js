@@ -5,15 +5,23 @@ import axios from 'axios';
 const info = createStore({
     state() {
         return {
-            pflichtmodulue: [],
+            pflichtmodulue: {
+                studiengang: "",
+                module: [],
+            },
             wahlpfichtmodulue: [],
             studiengaenge: [],
-            TestDaten: {
+            TestDatenInfo: {
                 BenutzerID: 'Test123',
             },
-            letzterCacheUpdate: new Date()
+            letzterCacheUpdateInfo: new Date()
         }
     },
+    plugins: [
+        createPersistedState({
+          key: 'info'
+        })
+      ],
     mutations: {
         addModul(state, data) {
             const newModul = {
@@ -51,6 +59,10 @@ const info = createStore({
         },
     },
     setters:{
+        setpflichtmodule(state, data) {
+            state.pflichtmodulue.Studiengang = data.studiengang;
+            state.pflichtmodulue = data.modulue;
+        }
     },
 
     plugins: [createPersistedState()]
