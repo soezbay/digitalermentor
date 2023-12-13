@@ -15,30 +15,44 @@
     </ion-header>
     
     <ion-content>
-      <ion-toolbar>
+      <!-- Grid erstellen, damit Studiengang und Listenansicht in einer Zeile dargestellt werden -->
+    <ion-grid>
+      <ion-row>
+        <!-- Spalte für Studiengang -->
+        <ion-col class="studiengang">
         <ion-item lines="none">
-          <ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" >
+          <!-- Wahl aus Studiengängen -->
+          <ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang:" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" slot="start" >
               <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
                 :value="studiengang.Kuerzel">
                 {{ studiengang.Name }}
               </ion-select-option>
           </ion-select>
         </ion-item>
+      </ion-col>
+
         <!-- <ion-item id="open-courses-modal">
           <ion-label slot="start">Studiengang</ion-label>
           <ion-button slot="end" color="light" id="open-courses-modal">Studiengang</ion-button>
         </ion-item> -->
-        <ion-item lines="none">
-          <ion-toggle v-model="showAsList" @click="onToggleChange()">Listenansicht</ion-toggle>
-        </ion-item>
-      </ion-toolbar>
-    
 
+        <!-- Spalte für Listenansicht -->
+        <ion-col class="listenansicht">
+        <ion-item lines="none">
+          <!-- Toggle-Button für Listenansicht -->
+          <ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">Listenansicht</ion-toggle>
+        </ion-item>
+    </ion-col>
+    </ion-row>
+    </ion-grid>
+    
+    <!-- Trenner von Wahl aus Studiengang und Listenansicht zu der Modulübersicht -->
+    <ion-item-divider></ion-item-divider>
     
       <!-- Ion Grid für Semester -->
       <ion-grid v-if="showAsList === false" :fixed="true">
         <ion-row v-for="semester in uniqueSemesters" :key="semester">
-          <ion-col size="12" style="width: 100%">
+          <ion-col size="12" size-md="10" style="width: 100%">
             <!-- <ion-list class="moduleList"> -->
               <ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
               <ion-col size="5">
@@ -53,7 +67,7 @@
           </ion-col>
         </ion-row>
         <ion-row v-if="modules.wahlpflicht != 0">
-          <ion-col size="12" style="width: 100%">
+          <ion-col size="10" style="width: 100%">
             <!-- <ion-list class="moduleList"> -->
               <ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
               <ion-col size="5">
@@ -337,14 +351,13 @@ export default {
     color: var(--ion-color-success-contrast);
 } */
 
-
+/* 
 ion-alert.custom-alert {
     --backdrop-opacity: 0.7;
-  }
-.moduleList {
-  padding-top: 15px;
-}
+  } */
 
+
+/* Modulblock Eigenschaften anpassen */
 .modulBlock {
   width: 100px;
   height: 30px;
@@ -357,28 +370,32 @@ ion-alert.custom-alert {
   background-color: var(--ion-color-secondary);
 }
 
+/* Modulnamen Schrift anpassen */
 .modulLabel {
   color: #000000;
   font-weight: bolder;
 
 }
 
+/* Grid anpassen */
 ion-grid {
   padding: 0;
   margin: 0;
 }
 
+/* Abstände Spalten/Zeilen anpassen */
 ion-col {
   margin: 0;
-  padding: 0;
+  padding: 0.1px;
 }
-
+/* Semester-Überschriften anpassen */
 .modulfont {
   text-align: left;
-  padding-left: 27px;
+  padding-left: 10px;
   padding-top: 10px;
 }
 
+/* Header für Listenansicht */
 .semesterHeaderList {
   background-color: var(--ion-color-secondary);
   color: #000000;
@@ -388,27 +405,20 @@ ion-col {
   padding: 0;
 }
 
-/* Test um Cards anzupassen */
-/* @media (min-width:915px) {
-	.modulBlock {
-		height: 35px;
-		width: auto;
-		margin: 1px;
-		text-align: center;
-		padding: 10px;
-		border-radius: 15px;
-	}
+/* Trenner von Studiengang/Listenansicht zu Modulübersicht */
+ion-item-divider {
+  margin-bottom: 20px;
+  margin-top: -30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width:915px) {
-	.modulBlock {
-		height: 25px;
-		width: auto;
-		margin: 1px;
-		text-align: center;
-		border-radius: 15px;
-		padding: 5px;
-	}
-} */
+/* Padding Studiengang */
+.studiengang {
+  margin-top: 0px;
+}
 
+/* Padding Listenansicht */
+.listenansicht {
+  margin-top: 5px;
+}
 </style>
