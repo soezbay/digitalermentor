@@ -12,10 +12,12 @@
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
       </ion-toolbar>
-
+    </ion-header>
+    
+    <ion-content>
       <ion-toolbar>
         <ion-item lines="none">
-          <ion-select v-model="selectedStudiengang" label="Studiengang" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" >
+          <ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" >
               <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
                 :value="studiengang.Kuerzel">
                 {{ studiengang.Name }}
@@ -30,35 +32,39 @@
           <ion-toggle v-model="showAsList" @click="onToggleChange()">Listenansicht</ion-toggle>
         </ion-item>
       </ion-toolbar>
-    </ion-header>
+    
 
-    <ion-content>
+    
       <!-- Ion Grid für Semester -->
-      <ion-grid v-if="showAsList === false">
+      <ion-grid v-if="showAsList === false" :fixed="true">
         <ion-row v-for="semester in uniqueSemesters" :key="semester">
-          <ion-col>
-            <ion-list class="moduleList">
+          <ion-col size="12" style="width: 100%">
+            <!-- <ion-list class="moduleList"> -->
               <ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
-              <ion-item>
+              <ion-col size="5">
+              <ion-row>
                 <ion-card class="modulBlock" v-for="(module) in getModulesForSemester(semester)" :key="module.Kuerzel"
                   @click="openModal(module)">
                   <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
                 </ion-card>
-              </ion-item>
-            </ion-list>
+              </ion-row>
+            </ion-col>
+            <!-- </ion-list> -->
           </ion-col>
         </ion-row>
         <ion-row v-if="modules.wahlpflicht != 0">
-          <ion-col>
-            <ion-list class="moduleList">
+          <ion-col size="12" style="width: 100%">
+            <!-- <ion-list class="moduleList"> -->
               <ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
-              <ion-item>
+              <ion-col size="5">
+              <ion-row>
                 <ion-card class="modulBlock" v-for="(module) in modules.wahlpflicht" :key="module.Kuerzel"
                   @click="openModal(module)">
                   <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
                 </ion-card>
-              </ion-item>
-            </ion-list>
+              </ion-row>
+            </ion-col>
+            <!-- </ion-list> -->
           </ion-col>
         </ion-row>
         <div style="height: 300px;"></div>
@@ -325,10 +331,12 @@ export default {
 </script>
 
 <style scoped>
-.custom-ion-select .alert-wrapper {
-  background-color: var(--ion-color-success);
+/* .custom-ion-select .alert-wrapper
+{
+  background-color: #000000;
     color: var(--ion-color-success-contrast);
-}
+} */
+
 
 ion-alert.custom-alert {
     --backdrop-opacity: 0.7;
@@ -346,7 +354,7 @@ ion-alert.custom-alert {
   margin: 5px;
   border-radius: 20px;
   cursor: pointer;
-  background-color: darkgrey;
+  background-color: var(--ion-color-secondary);
 }
 
 .modulLabel {
@@ -372,7 +380,7 @@ ion-col {
 }
 
 .semesterHeaderList {
-  background-color: var(--ion-color-primary);
+  background-color: var(--ion-color-secondary);
   color: #000000;
   font-size: 18px;
   height: 45px;
@@ -380,27 +388,27 @@ ion-col {
   padding: 0;
 }
 
-ion-modal {
-  --height: 35%;
-  --width: 90%;
-  --border-radius: 16px;
-  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+/* Test um Cards anzupassen */
+/* @media (min-width:915px) {
+	.modulBlock {
+		height: 35px;
+		width: auto;
+		margin: 1px;
+		text-align: center;
+		padding: 10px;
+		border-radius: 15px;
+	}
 }
 
-@media (min-width: 768px) {
-  ion-modal {
-    --width: 50%;
-    /* Breite für breitere Bildschirme anpassen */
-  }
-}
+@media (max-width:915px) {
+	.modulBlock {
+		height: 25px;
+		width: auto;
+		margin: 1px;
+		text-align: center;
+		border-radius: 15px;
+		padding: 5px;
+	}
+} */
 
-ion-modal::part(backdrop) {
-  background: rgba(209, 213, 219);
-  opacity: 1;
-}
-
-ion-modal ion-toolbar {
-  --background: #8C9900;
-  --color: white;
-}
 </style>
