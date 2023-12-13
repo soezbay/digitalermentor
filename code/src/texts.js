@@ -87,6 +87,20 @@ export const texts = {
         semesterHinzufuegen: "Semester hinzufügen",
         toastSemesterEntfernen: "Entferne alle Module um das Semester zu löschen.",
         toastWahlmodule: "Pflichtmodule können nicht in Wahlpflichtmodule verschoben werden.",
+        erklaerung: {
+            p1strong: "Dein Studienverlauf",
+            p1: "Hier kannst du deinen Studienverlauf planen und verfolgen.",
+            p2strong: "Dein Studienfortschritt",
+            p2: "Der Fortschrittsbalken gibt Auskunft über deine erworbene Leistungspunkte und zeigt deinen aktuellen Notdendurchschnitt an. Bestandene Module werden grün markiert.",
+            p3strong: "Modulsuche",
+            p3: "Nutze die Modulsuche, um Module schneller zu finden.",
+            p4strong: "Studienverlauf planen",
+            p4: "Mit Drag & Drop kannst du Module in andere Semster verschieben. Semester können hinzugefügt oder entfernt werden.",
+            p5strong: "Wahlpflichtmodule",
+            p5: "Bei den Wahlpflichtmodulen werden dir alle verfügbaren Optionen angezeigt. Wähle die Module aus, die deinen Interessen entsprechen und platziere sie in den Semestern in dem du sie absolvieren möchtest.",
+
+
+        }
     },
 
     einstellungen: {
