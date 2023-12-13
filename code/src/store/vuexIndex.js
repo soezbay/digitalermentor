@@ -419,7 +419,7 @@ const store = createStore({
         getTestBenutzer(state) {
             return state.TestDaten.BenutzerID;
         },
-        getpflichtmodule(state, studiengang) {
+        getpflichtmodule: (state) => (studiengang) =>{
         
             // If it is a Map and studiengang exists, proceed
             const map = new Map(Object.entries(state.module));
