@@ -37,7 +37,7 @@
 					<ion-searchbar
 						show-clear-button="always"
 						placeholder="Modulsuche"
-						style="width: 50%"
+						style="width: 70%"
 						type="text"
 						v-model="query"
 						@ionChange="handleSearchChange"></ion-searchbar>
