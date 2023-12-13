@@ -9,21 +9,20 @@
 		</ion-header>
 
 		<ion-content class="ion-padding">
-			<h4 class="padding"
-				style=" text-align: center; font-size: 1.4em; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
-				{{ texts.titel.modulbeschreibung }}
-			</h4>
-			<h5 style=" text-align: center; font-size: 1.3em;">
-				{{ selectedModul.Name }}
-			</h5>
-			<h6 style=" text-align: center; font-size: 1.3em;">
-				({{ selectedModul.Kuerzel }})
-			</h6>
-			<ion-item @click="openModalReviews">
-				<ion-label class="bewertung-button">
-					{{ texts.modulbeschreibung.weitereBewertungen }}
-				</ion-label>
-			</ion-item>
+			<div class="ion-text-center">
+				<h4 class="modalheader"
+					style=" text-align: center; font-size: 1.4em; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
+					{{ texts.titel.modulbeschreibung }}
+				</h4>
+				<h5 style=" text-align: center; font-size: 1.3em;">
+					{{ selectedModul.Name }}
+				</h5>
+				<h6 style=" text-align: center; font-size: 1.3em;">
+					({{ selectedModul.Kuerzel }})
+				</h6>
+				<ion-button @click="openModalReviews" class="weitereBewertungenButton">{{
+					texts.modulbeschreibung.weitereBewertungen }}</ion-button>
+			</div>
 			<ion-list>
 				<ion-item v-for="(item, key) in filteredList" :key="key">
 					<ion-text>
@@ -43,75 +42,83 @@
 				</ion-toolbar>
 			</ion-header>
 			<ion-content>
-				<h4 class="padding"
-					style=" text-align: center; font-size: 1.4em; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
-					<ion-label> {{ texts.modulbeschreibung.bewertung }}</ion-label>
-				</h4>
-				<h5 style=" text-align: center; font-size: 1.3em; margin-bottom: 0;">
-					{{ selectedModul.Name }}
-				</h5>
-				<br>
 				<div class="ion-text-center">
-					<ion-label class="underline">Deine Bewertung</ion-label>
+					<div class="modalheader">
+						<ion-label> {{ texts.modulbeschreibung.bewertung }}</ion-label>
+					</div>
+					<h5 style=" text-align: center; font-size: 1.3em; margin-bottom: 0;">
+						{{ selectedModul.Name }}
+					</h5>
+					<br>
+					<div class="ion-text-center">
+						<ion-label class="underline">Deine Bewertung</ion-label>
+					</div>
+					<ion-button @click="startEditing">{{ texts.modulbeschreibung.jetztBewerten }}</ion-button>
 				</div>
-				<ion-button @click="startEditing">{{ texts.modulbeschreibung.jetztBewerten }}</ion-button>
-				<div v-if="editingMode">
-					<ion-grid class="reviewBox">
-						<ion-row>
-							<ion-col>
-								<ion-checkbox justify="start" alignment="center">Semester anzeigen</ion-checkbox>
-							</ion-col>
-						</ion-row>
-						<ion-row>
-							<ion-col class="colHeader">
-								<ion-label>Schwierigkeitsgrad</ion-label>
-							</ion-col>
-							<ion-col>
-								<ion-checkbox justify="end">leicht</ion-checkbox>
-								<ion-checkbox justify="end">mittel</ion-checkbox>
-								<ion-checkbox justify="end">Schwer</ion-checkbox>
-							</ion-col>
-						</ion-row>
-						<ion-row>
-							<ion-col class="colHeader">
-								<ion-label>Arbeitsaufwand</ion-label>
-							</ion-col>
-							<ion-col>
-								<ion-checkbox justify="end">leicht</ion-checkbox>
-								<ion-checkbox justify="end">mittel</ion-checkbox>
-								<ion-checkbox justify="end">Schwer</ion-checkbox>
-							</ion-col>
-						</ion-row>
-						<ion-row>
-							<ion-col class="colHeader">
-								<ion-label>Das hat mir beim lernen geholfen</ion-label>
-							</ion-col>
-							<ion-col>
-								<ion-checkbox justify="end">Praktikum</ion-checkbox>
-								<ion-checkbox justify="end">Übung</ion-checkbox>
-								<ion-checkbox justify="end">Lerngruppe</ion-checkbox>
-								<ion-checkbox justify="end">Altklausur</ion-checkbox>
-								<ion-checkbox justify="end">Literatur</ion-checkbox>
-							</ion-col>
-						</ion-row>
-						<ion-row>
-							<ion-label position="floating">Persönlicher Feedback:</ion-label>
-							<ion-textarea rows="5"></ion-textarea>
-						</ion-row>
-						<ion-row>
-							<ion-col>
-								<ion-label position="floating">Gesamtbewertung</ion-label>
-							</ion-col>
-							<ion-col>
+				<div v-if="editingMode" class="reviewWrapper">
+					<form class="giveReviewBox">
+						<ion-grid>
+							<ion-row>
+								<ion-col>
+									<ion-label justify="start" alignment="center">Semester anzeigen</ion-label>
+								</ion-col>
+								<ion-col>
+									<ion-checkbox label-placement="fixed">Ja</ion-checkbox>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col class="colHeader">
+									<ion-label>Schwierigkeitsgrad</ion-label>
+								</ion-col>
+								<ion-col>
+									<ion-radio-group>
+										<ion-radio value="leicht" label-placement="fixed">leicht</ion-radio><br />
+										<ion-radio value="mittel" label-placement="fixed">mittel</ion-radio><br />
+										<ion-radio value="schwer" label-placement="fixed">schwer</ion-radio><br />
+									</ion-radio-group>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col class="colHeader">
+									<ion-label>Arbeitsaufwand</ion-label>
+								</ion-col>
+								<ion-col>
+									<ion-radio-group>
+										<ion-radio value="gering" label-placement="fixed">gering</ion-radio><br />
+										<ion-radio value="medium" label-placement="fixed">medium</ion-radio><br />
+										<ion-radio value="hoch" label-placement="fixed">hoch</ion-radio><br />
+									</ion-radio-group>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col class="colHeader">
+									<ion-label>Das hat mir beim lernen geholfen</ion-label>
+								</ion-col>
+								<ion-col>
+									<ion-checkbox label-placement="fixed">Praktikum</ion-checkbox><br />
+									<ion-checkbox label-placement="fixed">Übung</ion-checkbox><br />
+									<ion-checkbox label-placement="fixed">Lerngruppe</ion-checkbox><br />
+									<ion-checkbox label-placement="fixed">Altklausur</ion-checkbox><br />
+									<ion-checkbox label-placement="fixed">Literatur</ion-checkbox><br />
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-label position="floating">Persönlicher Feedback:</ion-label>
+								<ion-textarea rows="5"></ion-textarea>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<ion-label position="floating">Gesamtbewertung</ion-label>
+								</ion-col>
+								<ion-col>
 
-							</ion-col>
-						</ion-row>
-					</ion-grid>
-					<div style="display: flex; align-items: ;">
-						<ion-buttons slot="start">
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+					</form>
+					<div class="confirmButtons">
+						<ion-buttons>
 							<ion-button @click="cancelEditing" fill="outline" color="danger">Abbrechen</ion-button>
-						</ion-buttons>
-						<ion-buttons slot="">
 							<ion-button type="submit" fill="solid" color="primary">Absenden</ion-button>
 						</ion-buttons>
 					</div>
@@ -123,6 +130,24 @@
 				<div class="ion-text-center">
 					<ion-label class="underline">Das sagen andere Studierende</ion-label>
 				</div>
+				<br><br>
+				<div class="reviewBox" v-for="(review, index) in reviews" :key="index">
+					<div class="rating">
+						★★★★☆ <!-- Display stars based on the review's rating -->
+					</div>
+					<div class="reviewText">
+						{{ review.reviewText }}
+					</div>
+					<div class="labelRow">
+						<ion-label>Schwierigkeitsgrad: {{ review.difficulty }}</ion-label>
+					</div>
+					<div class="labelRow">
+						<ion-label>Arbeitsaufwand: {{ review.workload }}</ion-label>
+					</div>
+					<div class="labelRow">
+						<ion-label>Das hat mir beim Lernen geholfen: {{ review.helped.join(', ') }}</ion-label>
+					</div>
+				</div>
 			</ion-content>
 		</ion-modal>
 
@@ -130,9 +155,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
 import axios from "axios";
-import Moduluebersicht from "./Moduluebersicht.vue";
 import { texts } from '../texts.js';
 import {
 	IonContent,
@@ -184,6 +207,29 @@ export default {
 
 	data() {
 		return {
+			reviews: [
+				{
+					rating: 4,
+					reviewText: "test1",
+					difficulty: "mittel",
+					workload: "medium",
+					helped: ["Altklausur", "Praktikum"]
+				},
+				{
+					rating: 5,
+					reviewText: "test2",
+					difficulty: "leicht",
+					workload: "gering",
+					helped: ["Übung", "Lerngruppe"]
+				},
+				{
+					rating: 3,
+					reviewText: "test3",
+					difficulty: "schwer",
+					workload: "hoch",
+					helped: ["Literatur", "Praktikum"]
+				}
+			],
 			editingMode: false,
 			modul: [],
 			filteredList: this.filteredList(),
@@ -268,16 +314,6 @@ ion-button {
 	margin-bottom: 10px;
 }
 
-.reviewBox {
-	padding-left: 10px;
-	background-color: #d2d69e;
-	border-radius: 30px;
-	margin: 15px;
-	color: black;
-}
-
-
-
 @media only screen and (max-width: 767px) {
 	.reviews {
 		--height: 100%;
@@ -293,36 +329,138 @@ ion-button {
 	}
 }
 
-@media (min-width: 800px) {
-	.bewertung-button {
-		color: black;
-		display: flex;
-		justify-content: center;
-		background-color: #d2d69e;
+@media only screen and (min-width: 768px) {
+	.modalheader {
+		text-align: center;
+		font-size: 1.4em;
+		justify-self: center;
+		background-color: var(--ion-color-primary);
+		border-radius: 20px;
 		padding: 10px;
-		border-radius: 15px;
-		margin-left: 160px;
-		margin-right: 160px;
-		margin-top: 25px;
-		margin-bottom: 20px;
-		;
+		margin-left: 300px;
+		margin-right: 300px;
+		margin-top: 20px;
+		color: #fff;
 	}
+
+	.giveReviewBox {
+		width: 50%;
+		/* Adjust the width as needed */
+		margin: 0 auto;
+		/* Center the reviewBox horizontally */
+		padding: 10px;
+		background-color: #d2d69e;
+		border-radius: 30px;
+		margin-top: 15px;
+		color: black;
+	}
+
+	.confirmButtons {
+		width: 35%;
+		/* Adjust the width as needed */
+		margin: 0 auto;
+		/* Add space between buttons */
+	}
+
+	.confirmButtons ion-button {
+		padding: 50px;
+		padding-top: 10px;
+		padding-bottom: 5px;
+	}
+
+
 }
 
-@media (max-width: 800px) {
-	.bewertung-button {
-		color: black;
+@media only screen and (max-width: 767px) {
+
+	.modalheader {
 		text-align: center;
-		display: flex;
-		justify-content: center;
-		background-color: #d2d69e;
+		font-size: 1.4em;
+		justify-self: center;
+		background-color: var(--ion-color-primary);
+		border-radius: 20px;
 		padding: 10px;
-		border-radius: 15px;
-		margin-left: 80px;
-		margin-right: 80px;
-		margin-top: 25px;
-		margin-bottom: 20px;
+		margin: 70px;
+		margin-bottom: 0;
+		margin-top: 20px;
+		color: #fff;
 	}
+
+
+	.giveReviewBox {
+		width: 95%;
+		margin: 0 auto;
+		padding: 10px;
+		background-color: #d2d69e;
+		border-radius: 30px;
+		margin-top: 15px;
+		color: black;
+	}
+
+	.confirmButtons {
+		display: flex;
+		justify-content: space-between;
+		width: 90%;
+		/* Adjust the width as needed */
+		margin: 0 auto;
+		padding-right: 600px;
+		/* Add space between buttons */
+	}
+
+	.confirmButtons ion-button {
+		padding: 50px;
+		padding-top: 10px;
+		padding-bottom: 5px;
+	}
+
+}
+
+
+
+ion-checkbox {
+	--size: 20px;
+	--border-radius: 20px;
+	height: 30px;
+}
+
+ion-radio {
+	--border-radius: 10px;
+	--inner-border-radius: 10px;
+	width: 30px;
+	height: 23px;
+	--color: black;
+}
+
+.reviewBox {
+	color: black;
+	width: 90%;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	background-color: #d2d69e;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.reviewBox .rating {
+	font-size: 2em;
+	/* Adjust the size as needed */
+	margin-bottom: 10px;
+}
+
+.reviewBox .reviewText {
+	background-color: #f0f0f0;
+	/* Light gray background */
+	border-radius: 10px;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.reviewBox .labelRow {
+	margin-bottom: 10px;
+}
+
+.reviewBox ion-label {
+	font-weight: bold;
 }
 
 .centered-text {
