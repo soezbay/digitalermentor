@@ -36,31 +36,35 @@
 
     
       <!-- Ion Grid für Semester -->
-      <ion-grid v-if="showAsList === false">
+      <ion-grid v-if="showAsList === false" :fixed="true">
         <ion-row v-for="semester in uniqueSemesters" :key="semester">
-          <ion-col>
-            <ion-list class="moduleList">
+          <ion-col size="12" style="width: 100%">
+            <!-- <ion-list class="moduleList"> -->
               <ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
-              <ion-item>
+              <ion-col size="5">
+              <ion-row>
                 <ion-card class="modulBlock" v-for="(module) in getModulesForSemester(semester)" :key="module.Kuerzel"
                   @click="openModal(module)">
                   <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
                 </ion-card>
-              </ion-item>
-            </ion-list>
+              </ion-row>
+            </ion-col>
+            <!-- </ion-list> -->
           </ion-col>
         </ion-row>
         <ion-row v-if="modules.wahlpflicht != 0">
-          <ion-col>
-            <ion-list class="moduleList">
+          <ion-col size="12" style="width: 100%">
+            <!-- <ion-list class="moduleList"> -->
               <ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
-              <ion-item>
+              <ion-col size="5">
+              <ion-row>
                 <ion-card class="modulBlock" v-for="(module) in modules.wahlpflicht" :key="module.Kuerzel"
                   @click="openModal(module)">
                   <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
                 </ion-card>
-              </ion-item>
-            </ion-list>
+              </ion-row>
+            </ion-col>
+            <!-- </ion-list> -->
           </ion-col>
         </ion-row>
         <div style="height: 300px;"></div>
