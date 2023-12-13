@@ -15,13 +15,12 @@
         <ion-content>
             <form @submit.prevent="submitFormTermin">
                 <ion-list>
-                    <ion-datetime :presentation="'date'" size="cover" v-model="enteredDatum" display-format="YYYY-MM-DD"
-                        required>
-                    </ion-datetime>
                     <ion-item>
                         <ion-label position="fixed">Titel</ion-label>
                         <ion-input type="text" required v-model="enteredTitel" />
                     </ion-item>
+                    <ion-datetime :presentation="'date'" size="cover" v-model="enteredDatum"
+                            display-format="YYYY-MM-DD" required></ion-datetime>
                     <ion-item>
                         <ion-label position="fixed">Uhrzeit</ion-label>
                         <ion-input type="time" v-model="enteredZeit" required />

@@ -707,7 +707,7 @@ ion-card {
 .modulesContainer {
 	height: auto;
 	min-height: 50px;
-	background-color: transparent;
+	background-color: #d2d69e;
 	width: 100%;
 	margin-left: 5px;
 	margin-right: 5px;

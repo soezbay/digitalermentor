@@ -21,7 +21,7 @@ export const texts = {
     },
 
     allgemein: {
-        speichern: "Speichern",
+        speicher: "Speichern",
         info: "Info",
         zurueck: "Zurück",
     },
@@ -32,10 +32,8 @@ export const texts = {
     },
 
     modulbeschreibung: {
-        weitereBewertungen: "Weitere Bewertungen",
-        bewertung: "Bewertung",
-        jetztBewerten: "Jetzt Bewerten",
-        deineBewertung: "Deine Bewertung",
+        bewertungen: "Weitere Bewertungen"
+
     },
 
     dashboard: {
@@ -63,7 +61,6 @@ export const texts = {
         keineZieleDefiniert: "Keine Ziele definiert",
         zuBestehendeModule: "Diese Module musst du noch bestehen",
         erstelleZiel: "Erstelle ein Ziel",
-        bearbeiteZiel: "Bearbeite Ziel",
         erklaerung: {
             p1strong: "Studienziele verwalten und organisieren.",
             p2strong:"Ziele hinzufügen: ",

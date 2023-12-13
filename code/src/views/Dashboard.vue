@@ -263,7 +263,6 @@ export default {
 		this.getData()
 	},
 	computed: {
-		// Only the first four appointments are taken to dashbaord
 		kommendeTermine() {
 			const currentDate = new Date()
 			const kommendeTermine = this.$store.getters.termine.filter(termin => {
@@ -271,7 +270,7 @@ export default {
 				return terminDate >= currentDate
 			})
 
-			return kommendeTermine.slice(0, 4) 
+			return kommendeTermine.slice(0, 3) // Nur die ersten zwei Termine
 		},
 		goals_ss() {
 			return this.$store.getters.getGoals_ss

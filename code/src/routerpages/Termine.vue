@@ -18,7 +18,7 @@
             <div v-if="termine.length > 0">
                 <ion-list>
                     <ion-item-sliding v-for="termin in termine" :router-link="`/termine/${termin.id}`" :key="termin.id">
-                        <ion-item color="medium">
+                        <ion-item color="secondary">
                             <ion-label>
                                 <h2>{{ termin.titel }}</h2>
                                 <h3>{{ termin.ort }}</h3>
@@ -86,7 +86,7 @@ export default {
         IonList,
         IonFab,
         IonFabButton,
-        IonIcon,
+        IonFab, IonFabButton, IonIcon,
         IonItemSliding, IonItemOptions, IonItemOption
     },
     setup() {
