@@ -159,8 +159,8 @@ export default {
 		},
      uniqueSemesters() {
       // Überprüfen, ob this.modules.pflicht verfügbar ist, bevor auf sie zugegriffen wird
-      if (this.pflichtmodule()) {
-        const uniqueSemesters = [...new Set(this.pflichtmodule().map(module => module.Semester))];
+      if (this.pflichtmodule) {
+        const uniqueSemesters = [...new Set(this.pflichtmodule.map(module => module.Semester))];
 
         // Sortieren Sie die einzigartigen Semester aufsteigend
         uniqueSemesters.sort((a, b) => a - b);
@@ -238,7 +238,7 @@ export default {
           console.log('Type of map in ModulU:', typeof map);
           await this.$store.dispatch('updatepflichtmodule', map);
           this.modules.wahlpflicht = dataWahlpflicht.wahlpflicht
-          console.log("Pflichtmodule geladen:", this.pflichtmodule());
+          console.log("Pflichtmodule geladen:", this.pflichtmodule);
         } else {
           console.error("Fehler beim Laden der Pflichtmodule.");
         }
@@ -300,7 +300,7 @@ export default {
       // const data  =  await this.$store.dispatch('getpflichtmodule', this.selectedStudiengang, semester);
       // console.info(data)
       // return data
-      return this.pflichtmodule().filter((module) => module.Semester === semester);
+      return this.pflichtmodule.filter((module) => module.Semester === semester);
     },
 
     istEinWahlpflichtmodulImSemester(semester) {
@@ -309,7 +309,7 @@ export default {
     },
 
     AnzahlPflichtmoduleImSemester(semester) {
-      const filteredModules = this.pflichtmodule().filter((module) => module.Semester === semester);
+      const filteredModules = this.pflichtmodule.filter((module) => module.Semester === semester);
       return filteredModules.length;
     },
 
