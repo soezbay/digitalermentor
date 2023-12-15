@@ -542,6 +542,7 @@ export default {
 	},
 	data() {
 		return {
+			Adress : import.meta.env.VITE_API_URL,
 			texts,
 			add,
 			trash,
@@ -721,7 +722,7 @@ export default {
 		//Get Modules- and User-Data from Server
 		getData() {
 			axios
-				.get('http://localhost:8000/studiengang/pflicht/pi')
+				.get(`${this.Adress}/studiengang/pflicht/pi`)
 				.then(response => {
 					const pflichtModule = response.data.pflicht
 
@@ -751,7 +752,7 @@ export default {
 				})
 
 			axios
-				.get('http://localhost:8000/studiengang/wahlpflicht/pi')
+				.get(`${this.Adress}/studiengang/wahlpflicht/pi`)
 				.then(Response => {
 					console.log(Response.data)
 					this.electiveModules = Response.data.wahlpflicht
@@ -772,7 +773,7 @@ export default {
 				})
 
 			axios
-				.get(`http://localhost:8000/modul/status/${this.studentID}`)
+				.get(`${this.Adress}/modul/status/${this.studentID}`)
 				.then(Response => {
 					console.log(Response.data)
 

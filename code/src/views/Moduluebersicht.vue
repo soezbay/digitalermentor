@@ -160,6 +160,7 @@ export default {
   name: "ModulUebersicht",
   data() {
     return {
+      Adress: import.meta.env.VITE_API_URL,
       showAsList: false,
       selectedStudiengang: null,
       studiengaenge: [],
@@ -227,7 +228,8 @@ export default {
   methods: {
     async fetchStudiengaenge() {
       try {
-        const response = await axios.get('http://localhost:8000/studiengang');
+        console.log(this.Adress);
+        const response = await axios.get(`${this.Adress}/studiengang`);
         this.studiengaenge = response.data.studiengaenge;
         console.log("Test")
         console.log(this.studiengaenge)
@@ -238,7 +240,7 @@ export default {
 
     async fetchPflichtModule() {
       try {
-        const response = await fetch(`http://localhost:8000/studiengang/pflicht/${this.selectedStudiengang}`);
+        const response = await fetch(`${this.Adress}/studiengang/pflicht/${this.selectedStudiengang}`);
         const data = await response.json();
         console.log(data);
 
@@ -256,7 +258,7 @@ export default {
 
     async fetchWahplfichtModule(selectedStudiengang) {
       try {
-        const response = await axios.get(`http://localhost:8000/studiengang/wahlpflicht/${this.selectedStudiengang}`);
+        const response = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${this.selectedStudiengang}`);
         const data = await response.data;
         if (data.wahlpflicht) {
           this.modules.wahlpflicht = data.wahlpflicht;
@@ -307,15 +309,15 @@ export default {
       return this.modules.pflicht.filter((module) => module.Semester === semester);
     },
 
-    istEinWahlpflichtmodulImSemester(semester) {
-      const filteredModules = this.modules.wahlpflicht.filter((module) => module.Semester === semester);
-      return filteredModules.length > 0;
-    },
+    // istEinWahlpflichtmodulImSemester(semester) {
+    //   const filteredModules = this.modules.wahlpflicht.filter((module) => module.Semester === semester);
+    //   return filteredModules.length > 0;
+    // },
 
-    AnzahlPflichtmoduleImSemester(semester) {
-      const filteredModules = this.modules.pflicht.filter((module) => module.Semester === semester);
-      return filteredModules.length;
-    },
+    // AnzahlPflichtmoduleImSemester(semester) {
+    //   const filteredModules = this.modules.pflicht.filter((module) => module.Semester === semester);
+    //   return filteredModules.length;
+    // },
 
     maxWahlpflichtCols(semester) {
       const maxCols = 5;

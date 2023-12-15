@@ -322,6 +322,7 @@ export default defineComponent({
 	},
 	data() {
 		return {
+			Adress : import.meta.env.VITE_API_URL,
 			modules: [], // Alle Module aus der Datenbank
 			groupedModules: [], // Neues Datenattribut für gruppierte Module
 			electiveModules: [], // Wahlpflichtmodule
@@ -341,7 +342,7 @@ export default defineComponent({
 		},
 		getData() {
 			axios
-				.get('http://localhost:8000/studiengang/pflicht/pi')
+				.get(`${this.Adress}/studiengang/pflicht/pi`)
 				.then(Response => {
 					console.log(Response.data)
 					this.modules = Response.data.pflicht
@@ -351,7 +352,7 @@ export default defineComponent({
 					console.log(err)
 				})
 			axios
-				.get(`http://localhost:8000/modul/status/${this.studentID}`)
+				.get(`${this.Adress}/modul/status/${this.studentID}`)
 				.then(Response => {
 					console.log(Response.data)
 					this.studentProgress = Response.data.modul
@@ -360,7 +361,7 @@ export default defineComponent({
 					console.log(err)
 				})
 			axios
-				.get('http://localhost:8000/studiengang/wahlpflicht/pi')
+				.get(`${this.Adress}/studiengang/wahlpflicht/pi`)
 				.then(Response => {
 					console.log(Response.data)
 					this.electiveModules = Response.data.wahlpflicht

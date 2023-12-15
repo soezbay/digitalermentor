@@ -3,13 +3,13 @@ services:
   node-app:
     build: .
     ports:
-      - "8000:8000"
+      - "${PORT}:${PORT}"
     environment:
-      - PORT=8000
-      - MYSQL_HOST=mysql
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_DATABASE=digitalerMentorDB
+      - PORT=${PORT}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     depends_on:
       - mysql
   mysql:
@@ -18,5 +18,5 @@ services:
     volumes:
       - ./MySQL/init.sql:/docker-entrypoint-initdb.d/0_init.sql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=digitalerMentorDB
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}

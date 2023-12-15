@@ -184,6 +184,7 @@ export default {
 
 	data() {
 		return {
+			Adress : import.meta.env.VITE_API_URL,
 			editingMode: false,
 			modul: [],
 			filteredList: this.filteredList(),
@@ -198,7 +199,7 @@ export default {
 	methods: {
 		getData() {
 			axios
-				.get(`http://localhost:8000/modul/pi/${this.selectedModul.name}`)
+				.get(`${this.Adress}/modul/pi/${this.selectedModul.name}`)
 				.then((Response) => {
 					console.log(Response.data);
 					this.modul = Response.data.modul;
