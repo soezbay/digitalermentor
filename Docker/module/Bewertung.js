@@ -3,7 +3,7 @@ const Modul = require('../module/Modul');
 
 class Bewertung {
     constructor(BewertungsID, BewertungsGruppe, BewertungsInhalt, ModulKuerzel, BenutzerID) {
-        this.BewertungsID =BewertungsID;
+        this.BewertungsID = BewertungsID;
         this.BewertungsGruppe = BewertungsGruppe;
         this.BewertungsInhalt = BewertungsInhalt;
         this.ModulKuerzel = ModulKuerzel;
@@ -15,22 +15,18 @@ class Bewertung {
         let yyyy = date.getFullYear();
         let mm = (date.getMonth() + 1).toString().padStart(2, '0');
         let dd = date.getDate().toString().padStart(2, '0');
-    
+
         let ErstelltAM = `${yyyy}-${mm}-${dd}`;
-    
-        let sql = `Insert into Bewertung values(
-            '${this.BewertungsID}',
-            '${this.BewertungsGruppe}',
-             ${this.BewertungsInhalt},
-            '${ErstelltAM}',
-            '${this.ModulKuerzel}',
-            '${this.BenutzerID}'
-        )`;
+
+        let sql = `INSERT INTO Bewertung (BewertungsGruppe, BewertungsInhalt, ErstelltAM, ModulKuerzel, BenutzerID) 
+        VALUES ('${this.BewertungsGruppe}', ${this.BewertungsInhalt}, 
+                '${ErstelltAM}', '${this.ModulKuerzel}', '${this.BenutzerID}')`;
+
         const [newBewertung, _] = await database.execute(sql);
-    
+
         return newBewertung;
     }
-    
+
 
     static findAll() {
         let sql = "Select * From Bewertung";

@@ -307,6 +307,13 @@ ion-button {
 	padding-top: 20px;
 }
 
+.weitereBewertungenButton {
+	margin: 0 auto;
+	padding: 0;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
 .underline {
 	font-size: larger;
 	border-bottom: 2px solid #8c9900;
@@ -337,8 +344,8 @@ ion-button {
 		background-color: var(--ion-color-primary);
 		border-radius: 20px;
 		padding: 10px;
-		margin-left: 300px;
-		margin-right: 300px;
+		margin-left: 210px;
+		margin-right: 210px;
 		margin-top: 20px;
 		color: #fff;
 	}
