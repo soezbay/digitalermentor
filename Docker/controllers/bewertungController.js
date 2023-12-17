@@ -1,4 +1,4 @@
-const Bewertung = require('../module/Bewertung');
+const Bewertung = require('../module/Bewertung.js');
 
 exports.getAlleBewertungen = async (req, res, next) => {
     try {
@@ -13,16 +13,17 @@ exports.getAlleBewertungen = async (req, res, next) => {
 
 exports.createNewBewertung = async (req, res, next) => {
     try {
-        const { ModulKuerzel, BenutzerID, SemsterAnzeigen, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, PersoenlichesFeedback, Gesamtbewertung } = req.body;
-        const bewertung = new Bewertung(ModulKuerzel, BenutzerID, SemsterAnzeigen, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, PersoenlichesFeedback, Gesamtbewertung);
+        let { Bewertung, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID } = req.body;
+        let bewertung = new Bewertung(Bewertung, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID);
 
-        const newBewertung = await bewertung.createBewertung();
+        post = await bewertung.createBewertung();
 
-        console.log(newBewertung); // Changed from bewertung to newBewertung for consistency
+        console.log(bewertung);
 
-        res.status(201).json({ message: "Bewertung created successfully", newBewertung });
+        res.send("Create new Bewertung Route.");
     } catch (error) {
-        console.error(error); // Changed from console.log to console.error for better visibility of errors
+        console.log(error);
         next(error);
     }
 };
+

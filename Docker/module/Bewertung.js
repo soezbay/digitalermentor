@@ -1,18 +1,18 @@
-const database = require('../config/database');
+const database = require('../config/database.js');
 const Modul = require('../module/Modul');
 
 class Bewertung {
-    constructor(ModulKuerzel, BenutzerID, SemsterAnzeigen, Schwierigkeitsgrad,  Arbeitsaufwand,  Lernhilfe,  PersoenlichesFeedback, Gesamtbewertung) {
-        this.BewertungID;
-        this.ModulKuerzel = ModulKuerzel;
-        this.BenutzerID = BenutzerID;
-        this.SemsterAnzeigen = SemsterAnzeigen;
+    constructor(Bewertung, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID) {
+        this.Bewertung = Bewertung;
+        this.Feedback = Feedback;
         this.Schwierigkeitsgrad = Schwierigkeitsgrad;
         this.Arbeitsaufwand = Arbeitsaufwand;
         this.Lernhilfe = Lernhilfe;
-        this.PersoenlichesFeedback = PersoenlichesFeedback;
-        this.Gesamtbewertung = Gesamtbewertung;
+        this.SemsterAnzeigen = SemsterAnzeigen;
+        this.ModulKuerzel = ModulKuerzel;
+        this.BenutzerID = BenutzerID;
     }
+
 
     async createBewertung() {
         let date = new Date();
@@ -22,26 +22,22 @@ class Bewertung {
 
         let ErstelltAM = `${yyyy}-${mm}-${dd}`;
 
-        let sql = `
-        INSERT INTO Bewertung 
-        (ModulKuerzel, BenutzerID, SemsterAnzeigen, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, PersoenlichesFeedback, Gesamtbewertung, ErstelltAM) 
-        VALUES 
-        (
-            '${this.ModulKuerzel}', 
-            '${this.BenutzerID}', 
-            ${this.SemsterAnzeigen}, 
-            ${this.Schwierigkeitsgrad}, 
-            ${this.Arbeitsaufwand}, 
-            ${this.Lernhilfe}, 
-            ${this.PersoenlichesFeedback}, 
-            ${this.Gesamtbewertung}, 
-            '${ErstelltAM}'
+        let sql = `Insert into Bewertung values(
+            '${this.Bewertung}'
+            '${this.Feedback}',
+            '${this.Schwierigkeitsgrad}',
+            '${this.Arbeitsaufwand}',
+            '${this.Lernhilfe}',
+            '${this.SemsterAnzeigen}',
+            '${ErstelltAM}',
+            '${this.ModulKuerzel}',
+            '${this.BenutzerID}'
         )`;
-
         const [newBewertung, _] = await database.execute(sql);
 
         return newBewertung;
     }
+
 
 
     static findAll() {

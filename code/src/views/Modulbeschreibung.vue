@@ -302,14 +302,14 @@ export default {
 				}
 
 				const bewertungData = {
-					ModulKuerzel: this.selectedModul.Kuerzel,
-					BenutzerID: this.userdata.profile.matrikelnumber, // Setzen Sie dies auf den entsprechenden Wert
-					SemsterAnzeigen: this.formData.semesterAnzeigen ? 'Ja' : 'Nein',
+					Bewertung: this.formData.gesamtbewertung,
+					Feedback: this.formData.persönlichesFeedback,
 					Schwierigkeitsgrad: this.formData.schwierigkeitsgrad,
 					Arbeitsaufwand: this.formData.arbeitsaufwand,
 					Lernhilfe: Object.keys(this.formData.lernhilfen).join(', '), // Join the array to a string
-					PersoenlichesFeedback: this.formData.persönlichesFeedback,
-					Gesamtbewertung: this.formData.gesamtbewertung,
+					SemsterAnzeigen: this.formData.semesterAnzeigen ? 'Ja' : 'Nein',
+					ModulKuerzel: this.selectedModul.Kuerzel,
+					BenutzerID: this.userdata.profile.matrikelnumber, // Setzen Sie dies auf den entsprechenden Wert
 				};
 				console.log(bewertungData);
 
