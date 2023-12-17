@@ -83,7 +83,7 @@ CREATE Table Wahlpflicht (
 	);
 	
 Create Table Bewertung (
-	BewertungsID varchar(50) Primary Key,
+	BewertungsID SERIAL Primary Key,
 	Bewertung float,
 	Feedback varchar(5000),
 	Schwierigkeitsgrad varchar(15),
