@@ -25,10 +25,9 @@
 			</div>
 			<ion-list>
 				<ion-item v-for="(item, key) in filteredList" :key="key">
-					<ion-text>
-						<strong>{{ insertSpaceBetweenLowerAndUpper(key) }}: </strong> <br />
-						{{ item }}
-					</ion-text>
+					<ion-label class="ion-text-wrap" style="font-weight: 800;">{{ insertSpaceBetweenLowerAndUpper(key)
+					}}:</ion-label>
+					<ion-label class="ion-text-wrap">{{ item }}</ion-label>
 				</ion-item>
 			</ion-list>
 		</ion-content>
@@ -56,14 +55,15 @@
 					<ion-button @click="startEditing">{{ texts.modulbeschreibung.jetztBewerten }}</ion-button>
 				</div>
 				<div v-if="editingMode" class="reviewWrapper">
-					<form class="giveReviewBox">
+					<form class="giveReviewBox" @submit.prevent="submitReview">
 						<ion-grid>
 							<ion-row>
 								<ion-col>
 									<ion-label justify="start" alignment="center">Semester anzeigen</ion-label>
 								</ion-col>
 								<ion-col>
-									<ion-checkbox label-placement="fixed">Ja</ion-checkbox>
+									<ion-checkbox label-placement="fixed" required
+										v-model="formData.semesterAnzeigen">Ja</ion-checkbox>
 								</ion-col>
 							</ion-row>
 							<ion-row>
@@ -71,7 +71,8 @@
 									<ion-label>Schwierigkeitsgrad</ion-label>
 								</ion-col>
 								<ion-col>
-									<ion-radio-group>
+									<ion-radio-group value="mittel" required class="schwierigkeit"
+										v-model="formData.schwierigkeitsgrad">
 										<ion-radio value="leicht" label-placement="fixed">leicht</ion-radio><br />
 										<ion-radio value="mittel" label-placement="fixed">mittel</ion-radio><br />
 										<ion-radio value="schwer" label-placement="fixed">schwer</ion-radio><br />
@@ -83,9 +84,10 @@
 									<ion-label>Arbeitsaufwand</ion-label>
 								</ion-col>
 								<ion-col>
-									<ion-radio-group>
+									<ion-radio-group value="mittel" required class="schwierigkeit"
+										v-model="formData.arbeitsaufwand">
 										<ion-radio value="gering" label-placement="fixed">gering</ion-radio><br />
-										<ion-radio value="medium" label-placement="fixed">medium</ion-radio><br />
+										<ion-radio value="mittel" label-placement="fixed">mittel</ion-radio><br />
 										<ion-radio value="hoch" label-placement="fixed">hoch</ion-radio><br />
 									</ion-radio-group>
 								</ion-col>
@@ -95,57 +97,76 @@
 									<ion-label>Das hat mir beim lernen geholfen</ion-label>
 								</ion-col>
 								<ion-col>
-									<ion-checkbox label-placement="fixed">Praktikum</ion-checkbox><br />
-									<ion-checkbox label-placement="fixed">Übung</ion-checkbox><br />
-									<ion-checkbox label-placement="fixed">Lerngruppe</ion-checkbox><br />
-									<ion-checkbox label-placement="fixed">Altklausur</ion-checkbox><br />
-									<ion-checkbox label-placement="fixed">Literatur</ion-checkbox><br />
+									<ion-checkbox v-model="formData.lernhilfen.praktikum"
+										label-placement="fixed">Praktikum</ion-checkbox><br />
+									<ion-checkbox v-model="formData.lernhilfen.übung"
+										label-placement="fixed">Übung</ion-checkbox><br />
+									<ion-checkbox v-model="formData.lernhilfen.lerngruppe"
+										label-placement="fixed">Lerngruppe</ion-checkbox><br />
+									<ion-checkbox v-model="formData.lernhilfen.altklausur"
+										label-placement="fixed">Altklausur</ion-checkbox><br />
+									<ion-checkbox v-model="formData.lernhilfen.literatur"
+										label-placement="fixed">Literatur</ion-checkbox><br />
 								</ion-col>
 							</ion-row>
-							<ion-row>
-								<ion-label position="floating">Persönlicher Feedback:</ion-label>
-								<ion-textarea rows="5"></ion-textarea>
+							<ion-label position="floating">Persönlicher Feedback:</ion-label>
+							<ion-row
+								style="background-color: beige; border-radius: 20px; margin-top: 10px; margin-bottom: 20px;">
+								<ion-textarea v-model="formData.persönlichesFeedback" rows="5"></ion-textarea>
 							</ion-row>
-							<ion-row>
-								<ion-col>
-									<ion-label position="floating">Gesamtbewertung</ion-label>
-								</ion-col>
-								<ion-col>
-
-								</ion-col>
+							<ion-row ion-row style="margin-top: 10px; margin-bottom: 10px;">
+								<ion-label style="margin-bottom: 10px;">Gesamtbewertung (1-5, 1=schlecht 5=sehr
+									gut)</ion-label>
+								<ion-radio-group value="3" required class="bewertungGroup" v-model="formData.gesamtbewertung">
+									<ion-radio value="1" label-placement="stacked">1</ion-radio>
+									<ion-radio value="2" label-placement="stacked">2</ion-radio>
+									<ion-radio value="3" label-placement="stacked">3</ion-radio>
+									<ion-radio value="4" label-placement="stacked">4</ion-radio>
+									<ion-radio value="5" label-placement="stacked">5</ion-radio>
+								</ion-radio-group>
 							</ion-row>
 						</ion-grid>
+
+						<div class="confirmButtons">
+							<ion-buttons>
+								<ion-button @click="cancelEditing" fill="outline" color="danger">Abbrechen</ion-button>
+								<ion-button type="submit" fill="solid" color="primary">Absenden</ion-button>
+							</ion-buttons>
+						</div>
 					</form>
-					<div class="confirmButtons">
-						<ion-buttons>
-							<ion-button @click="cancelEditing" fill="outline" color="danger">Abbrechen</ion-button>
-							<ion-button type="submit" fill="solid" color="primary">Absenden</ion-button>
-						</ion-buttons>
-					</div>
 				</div>
 				<div v-else>
-
 				</div>
 				<br>
 				<div class="ion-text-center">
 					<ion-label class="underline">Das sagen andere Studierende</ion-label>
 				</div>
 				<br><br>
-				<div class="reviewBox" v-for="(review, index) in reviews" :key="index">
-					<div class="rating">
-						★★★★☆ <!-- Display stars based on the review's rating -->
-					</div>
-					<div class="reviewText">
-						{{ review.reviewText }}
-					</div>
-					<div class="labelRow">
-						<ion-label>Schwierigkeitsgrad: {{ review.difficulty }}</ion-label>
-					</div>
-					<div class="labelRow">
-						<ion-label>Arbeitsaufwand: {{ review.workload }}</ion-label>
-					</div>
-					<div class="labelRow">
-						<ion-label>Das hat mir beim Lernen geholfen: {{ review.helped.join(', ') }}</ion-label>
+				<div v-for="(review, index) in reviews" :key="index">
+					<ion-item style="padding-left: 10px; padding-right: 10px; height: 40px;">
+						<ion-label>Von: {{ review.BenutzerID }} ({{ review.SemsterAnzeigen }}. Semester)</ion-label>
+						<ion-label slot="end">{{ review.ErstelltAm.slice(0, 10) }}</ion-label>
+					</ion-item>
+					<div class="reviewBox">
+						<div class="rating">
+							<!-- Display stars based on the review's rating -->
+							{{ '★'.repeat(review.Bewertung) + '☆'.repeat(5 - review.Bewertung) }}
+						</div>
+						<div class="reviewText">
+							{{ review.Feedback }}
+						</div>
+						<div class="labelRow">
+							<ion-label color="tertiary">Schwierigkeitsgrad: </ion-label>
+							<ion-label>{{ review.Schwierigkeitsgrad }}</ion-label>
+						</div>
+						<div class="labelRow">
+							<ion-label color="tertiary">Arbeitsaufwand: </ion-label>
+							<ion-label>{{ review.Arbeitsaufwand }}</ion-label>
+						</div>
+						<div class="labelRow">
+							<ion-label color="tertiary">Das hat mir beim Lernen geholfen: </ion-label>
+							<ion-label>{{ review.Lernhilfe }}</ion-label>
+						</div>
 					</div>
 				</div>
 			</ion-content>
@@ -178,8 +199,11 @@ import {
 	IonTextarea,
 	IonGrid,
 	IonRow,
-	IonCol
+	IonCol,
+	IonRadioGroup,
+	IonRadio
 } from "@ionic/vue";
+import { userdata } from "../userdata.js";
 
 export default {
 	components: {
@@ -202,39 +226,36 @@ export default {
 		IonTextarea,
 		IonGrid,
 		IonRow,
-		IonCol
+		IonCol,
+		IonRadioGroup,
+		IonRadio
 	},
 
 	data() {
 		return {
-			reviews: [
-				{
-					rating: 4,
-					reviewText: "test1",
-					difficulty: "mittel",
-					workload: "medium",
-					helped: ["Altklausur", "Praktikum"]
-				},
-				{
-					rating: 5,
-					reviewText: "test2",
-					difficulty: "leicht",
-					workload: "gering",
-					helped: ["Übung", "Lerngruppe"]
-				},
-				{
-					rating: 3,
-					reviewText: "test3",
-					difficulty: "schwer",
-					workload: "hoch",
-					helped: ["Literatur", "Praktikum"]
-				}
-			],
+			reviews: [],
 			editingMode: false,
 			modul: [],
 			filteredList: this.filteredList(),
 			texts,
+			userdata,
+			formData: {
+				semesterAnzeigen: false,
+				schwierigkeitsgrad: '',
+				arbeitsaufwand: '',
+				lernhilfen: {
+					praktikum: false,
+					übung: false,
+					lerngruppe: false,
+					altklausur: false,
+					literatur: false,
+				},
+				persönlichesFeedback: '',
+				gesamtbewertung: null,
+			},
+
 		};
+
 	},
 
 	props: {
@@ -253,10 +274,72 @@ export default {
 					console.log(err);
 				});
 		},
+		getReviewData() {
+			axios
+				.get(`http://localhost:8000/bewertung`)
+				.then((Response) => {
+					console.log(Response.data);
+					this.reviews = Response.data.bewertungen
+					console.log(this.reviews);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		async submitReview() {
+			try {
+
+				if (!this.formData.lernhilfen.praktikum && !this.formData.lernhilfen.übung &&
+					!this.formData.lernhilfen.lerngruppe && !this.formData.lernhilfen.altklausur &&
+					!this.formData.lernhilfen.literatur) {
+					// Wenn keine Lernhilfen ausgewählt wurden, setzen Sie den Standardwert "Keine Angabe"
+					this.formData.lernhilfen = { 'Keine Angabe': true };
+				}
+
+				if (!this.formData.persönlichesFeedback) {
+					// Wenn kein persönliches Feedback gegeben wurde, setzen Sie den Standardwert "Keine Angabe"
+					this.formData.persönlichesFeedback = 'Keine Angabe';
+				}
+
+				const bewertungData = {
+					ModulKuerzel: this.selectedModul.Kuerzel,
+					BenutzerID: this.userdata.profile.matrikelnumber, // Setzen Sie dies auf den entsprechenden Wert
+					SemsterAnzeigen: this.formData.semesterAnzeigen ? 'Ja' : 'Nein',
+					Schwierigkeitsgrad: this.formData.schwierigkeitsgrad,
+					Arbeitsaufwand: this.formData.arbeitsaufwand,
+					Lernhilfe: Object.keys(this.formData.lernhilfen).join(', '), // Join the array to a string
+					PersoenlichesFeedback: this.formData.persönlichesFeedback,
+					Gesamtbewertung: this.formData.gesamtbewertung,
+				};
+				console.log(bewertungData);
+
+				await axios.post('http://localhost:8000/bewertung', bewertungData);
+
+				// Optional: Feedback an den Benutzer geben (z. B. Erfolgsmeldung).
+
+				// Schließen Sie das Modal oder setzen Sie den Bearbeitungsmodus zurück.
+				this.cancelEditing();
+			} catch (error) {
+				console.error(error);
+				// Optional: Fehlerbehandlung oder Benachrichtigung anzeigen.
+			}
+		},
+		// async createNewBewertung(bewertungData) {
+		// 	try {
+		// 		// Hier können Sie die Bewertung erstellen, indem Sie die Daten an Ihren API-Endpunkt senden
+		// 		// Verwenden Sie Axios oder eine ähnliche Bibliothek für HTTP-Anfragen
+		// 		await this.$axios.post('http://localhost:8000/bewertung', bewertungData);
+
+		// 		// Optional: Feedback an den Benutzer geben
+
+		// 	} catch (error) {
+		// 		console.error(error);
+		// 		// Optional: Fehlerbehandlung oder Benachrichtigung anzeigen
+		// 	}
+		// },
 		// Schließen des Modals
 		cancel() {
 			modalController.dismiss(null, "cancel");
-			this.dismiss();
 		},
 
 		// selectedModul nach items filtern, die ein Value besitzen
@@ -286,6 +369,7 @@ export default {
 		openModalReviews() {
 			const editModal = this.$refs.modal_reviews.$el;
 			if (editModal) {
+				this.getReviewData();
 				editModal.present();
 			}
 		},
@@ -422,12 +506,10 @@ ion-button {
 
 }
 
-
-
 ion-checkbox {
 	--size: 20px;
 	--border-radius: 20px;
-	height: 30px;
+	height: 23px;
 }
 
 ion-radio {
@@ -436,6 +518,15 @@ ion-radio {
 	width: 30px;
 	height: 23px;
 	--color: black;
+}
+
+.bewertungGroup ion-radio {
+	width: 50px;
+	padding-right: 18px;
+}
+
+.bewertungGroup {
+	margin-left: 50px;
 }
 
 .reviewBox {
@@ -455,8 +546,7 @@ ion-radio {
 }
 
 .reviewBox .reviewText {
-	background-color: #f0f0f0;
-	/* Light gray background */
+	background-color: beige;
 	border-radius: 10px;
 	padding: 10px;
 	margin-bottom: 10px;

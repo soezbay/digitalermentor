@@ -2,12 +2,16 @@ const database = require('../config/database');
 const Modul = require('../module/Modul');
 
 class Bewertung {
-    constructor(BewertungsID, BewertungsGruppe, BewertungsInhalt, ModulKuerzel, BenutzerID) {
-        this.BewertungsID = BewertungsID;
-        this.BewertungsGruppe = BewertungsGruppe;
-        this.BewertungsInhalt = BewertungsInhalt;
+    constructor(ModulKuerzel, BenutzerID, SemsterAnzeigen, Schwierigkeitsgrad,  Arbeitsaufwand,  Lernhilfe,  PersoenlichesFeedback, Gesamtbewertung) {
+        this.BewertungID;
         this.ModulKuerzel = ModulKuerzel;
         this.BenutzerID = BenutzerID;
+        this.SemsterAnzeigen = SemsterAnzeigen;
+        this.Schwierigkeitsgrad = Schwierigkeitsgrad;
+        this.Arbeitsaufwand = Arbeitsaufwand;
+        this.Lernhilfe = Lernhilfe;
+        this.PersoenlichesFeedback = PersoenlichesFeedback;
+        this.Gesamtbewertung = Gesamtbewertung;
     }
 
     async createBewertung() {
@@ -18,9 +22,21 @@ class Bewertung {
 
         let ErstelltAM = `${yyyy}-${mm}-${dd}`;
 
-        let sql = `INSERT INTO Bewertung (BewertungsGruppe, BewertungsInhalt, ErstelltAM, ModulKuerzel, BenutzerID) 
-        VALUES ('${this.BewertungsGruppe}', ${this.BewertungsInhalt}, 
-                '${ErstelltAM}', '${this.ModulKuerzel}', '${this.BenutzerID}')`;
+        let sql = `
+        INSERT INTO Bewertung 
+        (ModulKuerzel, BenutzerID, SemsterAnzeigen, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, PersoenlichesFeedback, Gesamtbewertung, ErstelltAM) 
+        VALUES 
+        (
+            '${this.ModulKuerzel}', 
+            '${this.BenutzerID}', 
+            ${this.SemsterAnzeigen}, 
+            ${this.Schwierigkeitsgrad}, 
+            ${this.Arbeitsaufwand}, 
+            ${this.Lernhilfe}, 
+            ${this.PersoenlichesFeedback}, 
+            ${this.Gesamtbewertung}, 
+            '${ErstelltAM}'
+        )`;
 
         const [newBewertung, _] = await database.execute(sql);
 
