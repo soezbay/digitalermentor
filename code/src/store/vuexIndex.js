@@ -2,6 +2,8 @@ import { createStore } from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import axios from 'axios';
 
+const Adress = import.meta.env.VITE_API_URL;
+
 const store = createStore({
     state() {
         return {
@@ -28,7 +30,7 @@ const store = createStore({
                     BenutzerID: state.TestDaten.BenutzerID,
                     CacheDaten: JSON.stringify(state),
                 };
-                await axios.post('http://localhost:8000/cache/', requestData);
+                await axios.post(`${Adress}/cache/`, requestData);
                 console.log('Daten wurden erfolgreich erstellt.');
                 console.info('createCacheAPI wurde ausgeführt');
             } catch (error) {
@@ -45,7 +47,7 @@ const store = createStore({
                     BenutzerID: state.TestDaten.BenutzerID,
                     CacheDaten: JSON.stringify(state),
                 };
-                await axios.put(`http://localhost:8000/cache/`, updatedData)
+                await axios.put(`${Adress}/cache/`, updatedData)
                 console.log('Daten wurden erfolgreich aktualisiert.');
             } catch (error) {
                 console.error('Fehler beim Aktualisieren der API-Daten:', error);
@@ -236,7 +238,7 @@ const store = createStore({
             try {
                 const BenutzerID = context.state.TestDaten.BenutzerID;
                 // Überprüfen, ob bereits ein Cache-Eintrag vorhanden ist
-                const response = await axios.get('http://localhost:8000/cache/' + BenutzerID);
+                const response = await axios.get(`${Adress}/cache/` + BenutzerID);
                 const data = response.data;
 
                 if (data.Daten.length === 0) {
@@ -245,7 +247,7 @@ const store = createStore({
                     const localCacheDate = new Date(context.state.letzterCacheUpdate);
                     let APICacheDate = new Date(0);
                     try {
-                        const response = await axios.get(`http://localhost:8000/cache/Timestamp/${BenutzerID}`);
+                        const response = await axios.get(`${Adress}/cache/Timestamp/${BenutzerID}`);
                         const apiData = response.data;
                         const apiDateString = apiData.TimeStamp[0].Datum;
                         APICacheDate = new Date(apiDateString);

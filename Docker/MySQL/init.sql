@@ -96,7 +96,7 @@ Create Table Bewertung (
 	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel) On Delete CASCADE,
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE
 	);
-	
+
 -- Create TABLE Kalendereintrag (
 -- 	Datum datetime,
 -- 	Eintrag text,
@@ -367,3 +367,27 @@ Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
 Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 1);
 Insert Into Note Value("PID3", "Test123", 5.0, "Nicht Bestanden", 1);
 Insert Into Note Value("PID4", "Test123", 2.0, "Bestanden", 2);
+
+INSERT INTO Bewertung (
+    BewertungsID,
+    Bewertung,
+    Feedback,
+    Schwierigkeitsgrad,
+    Arbeitsaufwand,
+    Lernhilfe,
+    SemsterAnzeigen,
+    ErstelltAm,
+    Kuerzel,
+    BenutzerID
+) VALUES (
+    '1', -- Beispiel BewertungsID
+    4.5, -- Beispiel Bewertung
+    'Gute Vorlesungen und interessante Übungen.', -- Beispiel Feedback
+    'Mittel', -- Beispiel Schwierigkeitsgrad
+    'Mittel', -- Beispiel Arbeitsaufwand
+    'Altklausur', -- Beispiel Lernhilfe
+    true, -- Beispiel SemsterAnzeigen
+    '2023-12-11', -- Beispiel ErstelltAm
+    'LDS', -- Beispiel Kuerzel
+    'Test123' -- Beispiel BenutzerID
+);

@@ -12,53 +12,73 @@
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
       </ion-toolbar>
-
-      <ion-toolbar>
+    </ion-header>
+    
+    <ion-content>
+      <!-- Grid erstellen, damit Studiengang und Listenansicht in einer Zeile dargestellt werden -->
+    <ion-grid>
+      <ion-row>
+        <!-- Spalte für Studiengang -->
+        <ion-col class="studiengang">
         <ion-item lines="none">
-          <ion-select v-model="selectedStudiengang" label="Studiengang" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" >
+          <!-- Wahl aus Studiengängen -->
+          <ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang:" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" slot="start" >
               <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
                 :value="studiengang.Kuerzel">
                 {{ studiengang.Name }}
               </ion-select-option>
           </ion-select>
         </ion-item>
+      </ion-col>
+
         <!-- <ion-item id="open-courses-modal">
           <ion-label slot="start">Studiengang</ion-label>
           <ion-button slot="end" color="light" id="open-courses-modal">Studiengang</ion-button>
         </ion-item> -->
-        <ion-item lines="none">
-          <ion-toggle v-model="showAsList" @click="onToggleChange()">Listenansicht</ion-toggle>
-        </ion-item>
-      </ion-toolbar>
-    </ion-header>
 
-    <ion-content>
+        <!-- Spalte für Listenansicht -->
+        <ion-col class="listenansicht">
+        <ion-item lines="none">
+          <!-- Toggle-Button für Listenansicht -->
+          <ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">Listenansicht</ion-toggle>
+        </ion-item>
+    </ion-col>
+    </ion-row>
+    </ion-grid>
+    
+    <!-- Trenner von Wahl aus Studiengang und Listenansicht zu der Modulübersicht -->
+    <ion-item-divider></ion-item-divider>
+    
       <!-- Ion Grid für Semester -->
-      <ion-grid v-if="showAsList === false">
+      <ion-grid v-if="showAsList === false" :fixed="true">
         <ion-row v-for="semester in uniqueSemesters" :key="semester">
-          <ion-col>
-            <ion-list class="moduleList">
+          <ion-col size="12" size-md="10" style="width: 100%">
+            <!-- <ion-list class="moduleList"> -->
               <ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
-              <ion-item>
+              <ion-col size="5">
+              <ion-row>
                 <ion-card class="modulBlock" v-for="(module) in getModulesForSemester(semester)" :key="module.Kuerzel"
                   @click="openModal(module)">
                   <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
                 </ion-card>
-              </ion-item>
-            </ion-list>
+              </ion-row>
+            </ion-col>
+            <!-- </ion-list> -->
           </ion-col>
         </ion-row>
         <ion-row v-if="modules.wahlpflicht != 0">
-          <ion-col>
-            <ion-list class="moduleList">
+          <ion-col size="10" style="width: 100%">
+            <!-- <ion-list class="moduleList"> -->
               <ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
-              <ion-item>
+              <ion-col size="5">
+              <ion-row>
                 <ion-card class="modulBlock" v-for="(module) in modules.wahlpflicht" :key="module.Kuerzel"
                   @click="openModal(module)">
                   <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
                 </ion-card>
-              </ion-item>
-            </ion-list>
+              </ion-row>
+            </ion-col>
+            <!-- </ion-list> -->
           </ion-col>
         </ion-row>
         <div style="height: 300px;"></div>
@@ -140,6 +160,7 @@ export default {
   name: "ModulUebersicht",
   data() {
     return {
+      Adress: import.meta.env.VITE_API_URL,
       showAsList: false,
       selectedStudiengang: null,
       studiengaenge: [],
@@ -207,7 +228,8 @@ export default {
   methods: {
     async fetchStudiengaenge() {
       try {
-        const response = await axios.get('http://localhost:8000/studiengang');
+        console.log(this.Adress);
+        const response = await axios.get(`${this.Adress}/studiengang`);
         this.studiengaenge = response.data.studiengaenge;
         console.log("Test")
         console.log(this.studiengaenge)
@@ -218,7 +240,7 @@ export default {
 
     async fetchPflichtModule() {
       try {
-        const response = await fetch(`http://localhost:8000/studiengang/pflicht/${this.selectedStudiengang}`);
+        const response = await fetch(`${this.Adress}/studiengang/pflicht/${this.selectedStudiengang}`);
         const data = await response.json();
         console.log(data);
 
@@ -236,7 +258,7 @@ export default {
 
     async fetchWahplfichtModule(selectedStudiengang) {
       try {
-        const response = await axios.get(`http://localhost:8000/studiengang/wahlpflicht/${this.selectedStudiengang}`);
+        const response = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${this.selectedStudiengang}`);
         const data = await response.data;
         if (data.wahlpflicht) {
           this.modules.wahlpflicht = data.wahlpflicht;
@@ -287,15 +309,15 @@ export default {
       return this.modules.pflicht.filter((module) => module.Semester === semester);
     },
 
-    istEinWahlpflichtmodulImSemester(semester) {
-      const filteredModules = this.modules.wahlpflicht.filter((module) => module.Semester === semester);
-      return filteredModules.length > 0;
-    },
+    // istEinWahlpflichtmodulImSemester(semester) {
+    //   const filteredModules = this.modules.wahlpflicht.filter((module) => module.Semester === semester);
+    //   return filteredModules.length > 0;
+    // },
 
-    AnzahlPflichtmoduleImSemester(semester) {
-      const filteredModules = this.modules.pflicht.filter((module) => module.Semester === semester);
-      return filteredModules.length;
-    },
+    // AnzahlPflichtmoduleImSemester(semester) {
+    //   const filteredModules = this.modules.pflicht.filter((module) => module.Semester === semester);
+    //   return filteredModules.length;
+    // },
 
     maxWahlpflichtCols(semester) {
       const maxCols = 5;
@@ -325,18 +347,19 @@ export default {
 </script>
 
 <style scoped>
-.custom-ion-select .alert-wrapper {
-  background-color: var(--ion-color-success);
+/* .custom-ion-select .alert-wrapper
+{
+  background-color: #000000;
     color: var(--ion-color-success-contrast);
-}
+} */
 
+/* 
 ion-alert.custom-alert {
     --backdrop-opacity: 0.7;
-  }
-.moduleList {
-  padding-top: 15px;
-}
+  } */
 
+
+/* Modulblock Eigenschaften anpassen */
 .modulBlock {
   width: 100px;
   height: 30px;
@@ -346,33 +369,37 @@ ion-alert.custom-alert {
   margin: 5px;
   border-radius: 20px;
   cursor: pointer;
-  background-color: darkgrey;
+  background-color: var(--ion-color-secondary);
 }
 
+/* Modulnamen Schrift anpassen */
 .modulLabel {
   color: #000000;
   font-weight: bolder;
 
 }
 
+/* Grid anpassen */
 ion-grid {
   padding: 0;
   margin: 0;
 }
 
+/* Abstände Spalten/Zeilen anpassen */
 ion-col {
   margin: 0;
-  padding: 0;
+  padding: 0.1px;
 }
-
+/* Semester-Überschriften anpassen */
 .modulfont {
   text-align: left;
-  padding-left: 27px;
+  padding-left: 10px;
   padding-top: 10px;
 }
 
+/* Header für Listenansicht */
 .semesterHeaderList {
-  background-color: var(--ion-color-primary);
+  background-color: var(--ion-color-secondary);
   color: #000000;
   font-size: 18px;
   height: 45px;
@@ -380,27 +407,20 @@ ion-col {
   padding: 0;
 }
 
-ion-modal {
-  --height: 35%;
-  --width: 90%;
-  --border-radius: 16px;
-  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+/* Trenner von Studiengang/Listenansicht zu Modulübersicht */
+ion-item-divider {
+  margin-bottom: 20px;
+  margin-top: -30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@media (min-width: 768px) {
-  ion-modal {
-    --width: 50%;
-    /* Breite für breitere Bildschirme anpassen */
-  }
+/* Padding Studiengang */
+.studiengang {
+  margin-top: 0px;
 }
 
-ion-modal::part(backdrop) {
-  background: rgba(209, 213, 219);
-  opacity: 1;
-}
-
-ion-modal ion-toolbar {
-  --background: #8C9900;
-  --color: white;
+/* Padding Listenansicht */
+.listenansicht {
+  margin-top: 5px;
 }
 </style>
