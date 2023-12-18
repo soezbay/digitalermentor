@@ -1,9 +1,10 @@
 const database = require('../config/database.js');
-const Modul = require('../module/Modul');
+const { v4: uuidv4 } = require('uuid');
 
 class Bewertung {
-    constructor(Bewertung, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID) {
-        this.Bewertung = Bewertung;
+    constructor( BewertungSterne, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID) {
+        this.BewertungID = uuidv4();
+        this.BewertungSterne = BewertungSterne;
         this.Feedback = Feedback;
         this.Schwierigkeitsgrad = Schwierigkeitsgrad;
         this.Arbeitsaufwand = Arbeitsaufwand;
@@ -23,7 +24,8 @@ class Bewertung {
         let ErstelltAM = `${yyyy}-${mm}-${dd}`;
 
         let sql = `Insert into Bewertung values(
-            '${this.Bewertung}'
+            '${this.BewertungID}',
+            '${this.BewertungSterne}',
             '${this.Feedback}',
             '${this.Schwierigkeitsgrad}',
             '${this.Arbeitsaufwand}',
@@ -42,6 +44,12 @@ class Bewertung {
 
     static findAll() {
         let sql = "Select * From Bewertung";
+
+        return database.execute(sql);
+    }
+
+    static findBewertungenVonModul(Modul) {
+        let sql = `Select * From Bewertung WHERE Kuerzel = '${Modul}'`
 
         return database.execute(sql);
     }

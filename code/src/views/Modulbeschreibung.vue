@@ -277,7 +277,7 @@ export default {
 		},
 		getReviewData() {
 			axios
-				.get(`http://localhost:8000/bewertung`)
+				.get(`${this.Adress}/bewertung/${this.selectedModul.Kuerzel}`)
 				.then((Response) => {
 					console.log(Response.data);
 					this.reviews = Response.data.bewertungen
@@ -303,14 +303,15 @@ export default {
 				}
 
 				const bewertungData = {
-					Bewertung: this.formData.gesamtbewertung,
+					BewertungSterne: this.formData.gesamtbewertung,
 					Feedback: this.formData.persönlichesFeedback,
 					Schwierigkeitsgrad: this.formData.schwierigkeitsgrad,
 					Arbeitsaufwand: this.formData.arbeitsaufwand,
 					Lernhilfe: Object.keys(this.formData.lernhilfen).join(', '), // Join the array to a string
 					SemsterAnzeigen: this.formData.semesterAnzeigen ? 'Ja' : 'Nein',
 					ModulKuerzel: this.selectedModul.Kuerzel,
-					BenutzerID: this.userdata.profile.matrikelnumber, // Setzen Sie dies auf den entsprechenden Wert
+					//BenutzerID: this.userdata.profile.matrikelnumber, // Setzen Sie dies auf den entsprechenden Wert
+					BenutzerID: this.$store.getters.getTestBenutzer
 				};
 				console.log(bewertungData);
 

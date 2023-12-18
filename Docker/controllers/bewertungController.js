@@ -11,10 +11,22 @@ exports.getAlleBewertungen = async (req, res, next) => {
     }
 };
 
+exports.getAlleBewertungenVonModul = async (req, res, next) => {
+    try {
+        let Modul = req.params.ModulKuerzel;
+        const [bewertungen, _] = await Bewertung.findBewertungenVonModul(Modul);
+
+        res.status(200).json({ bewertungen });
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+};
+
 exports.createNewBewertung = async (req, res, next) => {
     try {
-        let { Bewertung, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID } = req.body;
-        let bewertung = new Bewertung(Bewertung, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID);
+        let { BewertungSterne, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID } = req.body;
+        let bewertung = new Bewertung( BewertungSterne, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID);
 
         post = await bewertung.createBewertung();
 
