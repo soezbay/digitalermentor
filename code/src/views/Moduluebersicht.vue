@@ -15,13 +15,13 @@
     </ion-header>
     
     <ion-content>
-      <!-- Grid erstellen, damit Studiengang und Listenansicht in einer Zeile dargestellt werden -->
+      <!-- ion-grid for "Studiengang and Listenansicht" in one line -->
     <ion-grid>
       <ion-row>
-        <!-- Spalte für Studiengang -->
+        <!-- ion-col for Studiengang -->
         <ion-col class="studiengang">
         <ion-item lines="none">
-          <!-- Wahl aus Studiengängen -->
+          <!-- choice between "Studiengängen" -->
           <ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang:" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" slot="start" >
               <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
                 :value="studiengang.Kuerzel">
@@ -36,17 +36,17 @@
           <ion-button slot="end" color="light" id="open-courses-modal">Studiengang</ion-button>
         </ion-item> -->
 
-        <!-- Spalte für Listenansicht -->
+        <!-- ion-col for Listenansicht -->
         <ion-col class="listenansicht">
         <ion-item lines="none">
-          <!-- Toggle-Button für Listenansicht -->
+          <!-- ion-toggle for "Listenansicht" -->
           <ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">Listenansicht</ion-toggle>
         </ion-item>
     </ion-col>
     </ion-row>
     </ion-grid>
     
-    <!-- Trenner von Wahl aus Studiengang und Listenansicht zu der Modulübersicht -->
+    <!-- divider between "Studiengang/Listenansicht" and "Modulübersicht" -->
     <ion-item-divider></ion-item-divider>
     
       <!-- Ion Grid für Semester -->
@@ -167,7 +167,7 @@ export default {
       selectedStudiengang: null,
       studiengaenge: [],
       modules: {
-        pflicht: [],// Pflichtmodule initialisieren
+        pflicht: [],// initialize "Pflichtmodule"
         wahlpflicht: []
       }
     };
@@ -175,11 +175,11 @@ export default {
 
   computed: {
     uniqueSemesters() {
-      // Überprüfen, ob this.modules.pflicht verfügbar ist, bevor auf sie zugegriffen wird
+      // check, if this.modules.pflicht is available, before they are accessed
       if (this.modules.pflicht) {
         const uniqueSemesters = [...new Set(this.modules.pflicht.map(module => module.Semester))];
 
-        // Sortieren Sie die einzigartigen Semester aufsteigend
+        // sort the unique semesters in ascending order
         uniqueSemesters.sort((a, b) => a - b);
 
         console.log("Einzigartige Semester:", uniqueSemesters);
@@ -246,7 +246,7 @@ export default {
         const data = await response.json();
         console.log(data);
 
-        // Überprüfen Sie, ob die Daten in der Antwort vorhanden sind
+        // check if the data is existing in the response
         if (data.pflicht) {
           this.modules.pflicht = data.pflicht;
           console.log("Pflichtmodule geladen:", this.modules.pflicht);
@@ -307,7 +307,7 @@ export default {
     },
 
     getModulesForSemester(semester) {
-      // Filtern Sie die Pflichtmodule basierend auf dem ausgewählten Semester
+      // filter the "Pflichtmodule" based on the selected semester
       return this.modules.pflicht.filter((module) => module.Semester === semester);
     },
 
@@ -340,7 +340,7 @@ export default {
     },
 
     onStudiengangChange() {
-      // Aktualisiere den Store, wenn selectedStudiengang geändert wird
+      // update the store when "selectedStudiengang" is changed
       const settingsArr = { selectedStudiengang: this.selectedStudiengang, showAsList: this.showAsList };
       this.$store.commit('saveSettingsModuleOverview', settingsArr);
     },
@@ -361,7 +361,7 @@ ion-alert.custom-alert {
   } */
 
 
-/* Modulblock Eigenschaften anpassen */
+/* adjust properties */
 .modulBlock {
   width: 100px;
   height: 30px;
@@ -374,32 +374,32 @@ ion-alert.custom-alert {
   background-color: var(--ion-color-secondary);
 }
 
-/* Modulnamen Schrift anpassen */
+/* adjust font */
 .modulLabel {
   color: #000000;
   font-weight: bolder;
 
 }
 
-/* Grid anpassen */
+/* adjust grid */
 ion-grid {
   padding: 0;
   margin: 0;
 }
 
-/* Abstände Spalten/Zeilen anpassen */
+/* adjust margin/padding of column */
 ion-col {
   margin: 0;
   padding: 0.1px;
 }
-/* Semester-Überschriften anpassen */
+/* adjust semester headers */
 .modulfont {
   text-align: left;
   padding-left: 10px;
   padding-top: 10px;
 }
 
-/* Header für Listenansicht */
+/* header of "Listenansicht" */
 .semesterHeaderList {
   background-color: var(--ion-color-secondary);
   color: #000000;
@@ -409,20 +409,21 @@ ion-col {
   padding: 0;
 }
 
-/* Trenner von Studiengang/Listenansicht zu Modulübersicht */
+/* divider "Studiengang/Listenansicht" */
 ion-item-divider {
   margin-bottom: 20px;
   margin-top: -30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Padding Studiengang */
+/* padding "Studiengang" */
 .studiengang {
   margin-top: 0px;
 }
 
-/* Padding Listenansicht */
+/* padding "Listenansicht" */
 .listenansicht {
   margin-top: 5px;
 }
+
 </style>

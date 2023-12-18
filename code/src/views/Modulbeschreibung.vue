@@ -11,7 +11,7 @@
 		<ion-content class="ion-padding">
 			<div class="ion-text-center">
 				<h4 class="modalheader"
-					style=" text-align: center; font-size: 1.4em; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
+					style=" text-align: center; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
 					{{ texts.titel.modulbeschreibung }}
 				</h4>
 				<h5 style=" text-align: center; font-size: 1.3em;">
@@ -63,7 +63,9 @@
 								</ion-col>
 								<ion-col>
 									<ion-checkbox label-placement="fixed" required
-										v-model="formData.semesterAnzeigen">Ja</ion-checkbox>
+										v-model="formData.semesterAnzeigen.ja">Ja</ion-checkbox><br />
+										<!-- <ion-checkbox label-placement="fixed" required
+										v-model="formData.semesterAnzeigen.nein">Nein</ion-checkbox> -->
 								</ion-col>
 							</ion-row>
 							<ion-row>
@@ -94,7 +96,7 @@
 							</ion-row>
 							<ion-row>
 								<ion-col class="colHeader">
-									<ion-label>Das hat mir beim lernen geholfen</ion-label>
+									<ion-label>Das hat mir beim Lernen geholfen</ion-label>
 								</ion-col>
 								<ion-col>
 									<ion-checkbox v-model="formData.lernhilfen.praktikum"
@@ -109,13 +111,13 @@
 										label-placement="fixed">Literatur</ion-checkbox><br />
 								</ion-col>
 							</ion-row>
-							<ion-label position="floating">Persönlicher Feedback:</ion-label>
+							<ion-label position="floating">Persönliches Feedback</ion-label>
 							<ion-row
 								style="background-color: beige; border-radius: 20px; margin-top: 10px; margin-bottom: 20px;">
-								<ion-textarea v-model="formData.persönlichesFeedback" rows="5"></ion-textarea>
+								<ion-textarea v-model="formData.persönlichesFeedback" rows="5" style="padding: 10px"></ion-textarea>
 							</ion-row>
 							<ion-row ion-row style="margin-top: 10px; margin-bottom: 10px;">
-								<ion-label style="margin-bottom: 10px;">Gesamtbewertung (1-5, 1=schlecht 5=sehr
+								<ion-label style="margin-bottom: 10px;">Gesamtbewertung <br/>(1-5, 1=schlecht 5=sehr
 									gut)</ion-label>
 								<ion-radio-group value="3" required class="bewertungGroup" v-model="formData.gesamtbewertung">
 									<ion-radio value="1" label-placement="stacked">1</ion-radio>
@@ -241,7 +243,10 @@ export default {
 			texts,
 			userdata,
 			formData: {
-				semesterAnzeigen: false,
+				semesterAnzeigen: {
+					ja: false,
+					nein: false,
+				},
 				schwierigkeitsgrad: '',
 				arbeitsaufwand: '',
 				lernhilfen: {
@@ -277,7 +282,7 @@ export default {
 		},
 		getReviewData() {
 			axios
-				.get(`http://localhost:8000/bewertung`)
+				.get(`${this.Adress}/bewertung/${this.selectedModul.Kuerzel}`)
 				.then((Response) => {
 					console.log(Response.data);
 					this.reviews = Response.data.bewertungen
@@ -303,14 +308,15 @@ export default {
 				}
 
 				const bewertungData = {
-					Bewertung: this.formData.gesamtbewertung,
+					BewertungSterne: this.formData.gesamtbewertung,
 					Feedback: this.formData.persönlichesFeedback,
 					Schwierigkeitsgrad: this.formData.schwierigkeitsgrad,
 					Arbeitsaufwand: this.formData.arbeitsaufwand,
 					Lernhilfe: Object.keys(this.formData.lernhilfen).join(', '), // Join the array to a string
 					SemsterAnzeigen: this.formData.semesterAnzeigen ? 'Ja' : 'Nein',
 					ModulKuerzel: this.selectedModul.Kuerzel,
-					BenutzerID: this.userdata.profile.matrikelnumber, // Setzen Sie dies auf den entsprechenden Wert
+					//BenutzerID: this.userdata.profile.matrikelnumber, // Setzen Sie dies auf den entsprechenden Wert
+					BenutzerID: this.$store.getters.getTestBenutzer
 				};
 				console.log(bewertungData);
 
@@ -448,10 +454,13 @@ ion-button {
 	}
 
 	.confirmButtons {
-		width: 35%;
 		/* Adjust the width as needed */
-		margin: 0 auto;
+		width: 35%;
 		/* Add space between buttons */
+		margin: 0 auto;
+		/* Centered button alignment */
+		display: flex;
+		justify-content: center;
 	}
 
 	.confirmButtons ion-button {
@@ -490,19 +499,24 @@ ion-button {
 	}
 
 	.confirmButtons {
+		/* Centered button alignment */
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		width: 90%;
 		/* Adjust the width as needed */
 		margin: 0 auto;
-		padding-right: 600px;
 		/* Add space between buttons */
+		
 	}
 
 	.confirmButtons ion-button {
 		padding: 50px;
 		padding-top: 10px;
 		padding-bottom: 5px;
+	}
+
+	.modalheader {
+		font-size: 1.2em;
 	}
 
 }
@@ -565,4 +579,5 @@ ion-radio {
 	text-align: center;
 	/* Horizontal zentrieren */
 }
+
 </style>

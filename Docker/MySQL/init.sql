@@ -83,13 +83,13 @@ CREATE Table Wahlpflicht (
 	);
 	
 Create Table Bewertung (
-	BewertungsID SERIAL Primary Key,
+	BewertungsID varchar(50) Primary Key,
 	Bewertung float,
 	Feedback varchar(5000),
 	Schwierigkeitsgrad varchar(15),
 	Arbeitsaufwand varchar(15),
 	Lernhilfe varchar(500),
-	SemsterAnzeigen boolean,
+	SemsterAnzeigen varchar(10),
 	ErstelltAm date,
 	Kuerzel VARCHAR(5),
 	BenutzerID varchar(10),
@@ -383,13 +383,13 @@ INSERT INTO Bewertung (
     Kuerzel,
     BenutzerID
 ) VALUES (
-    '1', -- Beispiel BewertungsID
+    'Test123LDS', -- Beispiel BewertungsID
     4.5, -- Beispiel Bewertung
     'Gute Vorlesungen und interessante Übungen.', -- Beispiel Feedback
     'Mittel', -- Beispiel Schwierigkeitsgrad
     'Mittel', -- Beispiel Arbeitsaufwand
     'Altklausur', -- Beispiel Lernhilfe
-    true, -- Beispiel SemsterAnzeigen
+    'Ja', -- Beispiel SemsterAnzeigen
     '2023-12-11', -- Beispiel ErstelltAm
     'LDS', -- Beispiel Kuerzel
     'Test123' -- Beispiel BenutzerID
