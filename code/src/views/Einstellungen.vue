@@ -4,9 +4,7 @@
 			<ion-toolbar>
 				<ion-buttons slot="start">
 					<ion-button router-link="/menu/dashboard">
-						<ion-icon
-							style="font-size: 45px"
-							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+						<ion-icon style="font-size: 45px" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
 				<ion-buttons slot="end">
@@ -15,7 +13,7 @@
 				<ion-title>{{ texts.titel.einstellungen }}</ion-title>
 			</ion-toolbar>
 		</ion-header>
-		<ion-content>
+		<ion-content class="ion-padding">
 			<h3 class="titel">{{ texts.einstellungen.mitteilungen }}</h3>
 			<!-- Einstellungen für E-Mail-Benachrichtigungen -->
 			<ion-item>
@@ -29,15 +27,11 @@
 				<ion-toggle v-model="pushNotifications"></ion-toggle>
 			</ion-item>
 			<ion-item>
-				<ion-button id="Delete_Cache" @click="showAlert">{{
-					texts.einstellungen.loeschen
-				}}</ion-button>
-				<ion-alert
-					trigger="Delete_Cache"
-					v-show="showAlertModal"
-					class="custom-alert"
-					:header="texts.einstellungen.loeschenBestaetigung"
-					:buttons="alertButtons"></ion-alert>
+				<ion-button id="Delete_Cache" @click="showAlert">
+					{{texts.einstellungen.loeschen }}
+				</ion-button>
+				<ion-alert trigger="Delete_Cache" v-show="showAlertModal" class="custom-alert"
+					:header="texts.einstellungen.loeschenBestaetigung" :buttons="alertButtons"></ion-alert>
 			</ion-item>
 		</ion-content>
 	</ion-page>
@@ -84,7 +78,7 @@ export default {
 			pushNotifications: false, // Hier werden die Push-Benachrichtigungen gespeichert
 			showAlertModal: false,
 			alertButtons: [],
-      texts,
+			texts,
 		}
 	},
 	methods: {
@@ -128,7 +122,9 @@ export default {
 
 <style scoped>
 .titel {
-	--ion-background-color: #00ff00; /* Grün als Hintergrundfarbe */
-	color: white; /* Weiße Schriftfarbe, damit der Text sichtbar ist */
+	--ion-background-color: #00ff00;
+	/* Grün als Hintergrundfarbe */
+	color: white;
+	/* Weiße Schriftfarbe, damit der Text sichtbar ist */
 }
 </style>

@@ -139,7 +139,8 @@ import {
   IonSelectOption, IonSelect,
   IonList, IonListHeader, IonItem, IonLabel, IonIcon,
   IonCard, IonCardTitle,
-  modalController, IonModal
+  modalController, IonModal,
+  IonNote,
 } from '@ionic/vue';
 import axios from 'axios';
 import Modal from "./Modulbeschreibung.vue";
@@ -152,7 +153,8 @@ export default {
     IonSearchbar, IonToggle,
     IonSelectOption, IonSelect,
     IonList, IonListHeader, IonItem, IonLabel, IonIcon,
-    IonCard, IonCardTitle, IonModal
+    IonCard, IonCardTitle, IonModal,
+    IonNote
   },
 
   name: "ModulUebersicht",
