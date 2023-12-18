@@ -50,39 +50,41 @@
     <ion-item-divider></ion-item-divider>
     
       <!-- Ion Grid für Semester -->
-      <ion-grid v-if="showAsList === false" :fixed="true">
-        <ion-row v-for="semester in uniqueSemesters" :key="semester">
-          <ion-col size="12" size-md="10" style="width: 100%">
-            <!-- <ion-list class="moduleList"> -->
-              <ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
-              <ion-col size="5">
-              <ion-row>
-                <ion-card class="modulBlock" v-for="(module) in getModulesForSemester(semester)" :key="module.Kuerzel"
-                  @click="openModal(module)">
-                  <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
-                </ion-card>
-              </ion-row>
+      <div v-if="showAsList === false" class="ion-padding">
+        <ion-grid :fixed="true">
+          <ion-row v-for="semester in uniqueSemesters" :key="semester">
+            <ion-col size="12" size-md="10" style="width: 100%">
+              <!-- <ion-list class="moduleList"> -->
+                <ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
+                <ion-col size="5">
+                <ion-row>
+                  <ion-card class="modulBlock" v-for="(module) in getModulesForSemester(semester)" :key="module.Kuerzel"
+                    @click="openModal(module)">
+                    <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
+                  </ion-card>
+                </ion-row>
+              </ion-col>
+              <!-- </ion-list> -->
             </ion-col>
-            <!-- </ion-list> -->
-          </ion-col>
-        </ion-row>
-        <ion-row v-if="modules.wahlpflicht != 0">
-          <ion-col size="10" style="width: 100%">
-            <!-- <ion-list class="moduleList"> -->
-              <ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
-              <ion-col size="5">
-              <ion-row>
-                <ion-card class="modulBlock" v-for="(module) in modules.wahlpflicht" :key="module.Kuerzel"
-                  @click="openModal(module)">
-                  <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
-                </ion-card>
-              </ion-row>
+          </ion-row>
+          <ion-row v-if="modules.wahlpflicht != 0">
+            <ion-col size="12" style="width: 100%">
+              <!-- <ion-list class="moduleList"> -->
+                <ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
+                <ion-col size="5">
+                <ion-row>
+                  <ion-card class="modulBlock" v-for="(module) in modules.wahlpflicht" :key="module.Kuerzel"
+                    @click="openModal(module)">
+                    <ion-label class="modulLabel">{{ module.Kuerzel }}</ion-label>
+                  </ion-card>
+                </ion-row>
+              </ion-col>
+              <!-- </ion-list> -->
             </ion-col>
-            <!-- </ion-list> -->
-          </ion-col>
-        </ion-row>
-        <div style="height: 300px;"></div>
-      </ion-grid>
+          </ion-row>
+          <div style="height: 300px;"></div>
+        </ion-grid>
+      </div>
 
 
       <!--Show modules as List when showAsList=true-->
