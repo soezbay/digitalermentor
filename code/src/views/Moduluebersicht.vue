@@ -13,50 +13,47 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    
+
     <ion-content>
       <!-- ion-grid for "Studiengang and Listenansicht" in one line -->
-    <ion-grid>
-      <ion-row>
-        <!-- ion-col for Studiengang -->
-        <ion-col class="studiengang">
-        <ion-item lines="none">
-          <!-- choice between "Studiengängen" -->
-          <ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang:" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" slot="start" >
-              <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
-                :value="studiengang.Kuerzel">
-                {{ studiengang.Name }}
-              </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-col>
+      <ion-grid>
+        <ion-row style="margin-bottom: 7px;">
+          <!-- ion-col for Studiengang -->
+          <ion-col class="studiengang">
+            <ion-item lines="none">
+              <!-- choice between "Studiengängen" -->
+              <ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang:"
+                placeholder="Studiengang auswählen" :interface-options="{ cssClass: 'custom-ion-select' }" slot="start">
+                <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
+                  :value="studiengang.Kuerzel">
+                  {{ studiengang.Name }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
 
-        <!-- <ion-item id="open-courses-modal">
+          <!-- <ion-item id="open-courses-modal">
           <ion-label slot="start">Studiengang</ion-label>
           <ion-button slot="end" color="light" id="open-courses-modal">Studiengang</ion-button>
         </ion-item> -->
 
-        <!-- ion-col for Listenansicht -->
-        <ion-col class="listenansicht">
-        <ion-item lines="none">
-          <!-- ion-toggle for "Listenansicht" -->
-          <ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">Listenansicht</ion-toggle>
-        </ion-item>
-    </ion-col>
-    </ion-row>
-    </ion-grid>
-    
-    <!-- divider between "Studiengang/Listenansicht" and "Modulübersicht" -->
-    <ion-item-divider></ion-item-divider>
-    
+          <!-- ion-col for Listenansicht -->
+          <ion-col class="listenansicht">
+            <ion-item lines="none">
+              <!-- ion-toggle for "Listenansicht" -->
+              <ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">Listenansicht</ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
       <!-- Ion Grid für Semester -->
       <div v-if="showAsList === false" class="ion-padding">
         <ion-grid :fixed="true">
           <ion-row v-for="semester in uniqueSemesters" :key="semester">
             <ion-col size="12" size-md="10" style="width: 100%">
               <!-- <ion-list class="moduleList"> -->
-                <ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
-                <ion-col size="5">
+              <ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
+              <ion-col size="5">
                 <ion-row>
                   <ion-card class="modulBlock" v-for="(module) in getModulesForSemester(semester)" :key="module.Kuerzel"
                     @click="openModal(module)">
@@ -70,8 +67,8 @@
           <ion-row v-if="modules.wahlpflicht != 0">
             <ion-col size="12" style="width: 100%">
               <!-- <ion-list class="moduleList"> -->
-                <ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
-                <ion-col size="5">
+              <ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
+              <ion-col size="5">
                 <ion-row>
                   <ion-card class="modulBlock" v-for="(module) in modules.wahlpflicht" :key="module.Kuerzel"
                     @click="openModal(module)">
@@ -120,9 +117,8 @@
         </ion-header>
         <ion-content>
           <ion-list>
-            <ion-item button v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
-                :value="studiengang.Kuerzel">
-                <ion-label>{{ studiengang.Name }}</ion-label>
+            <ion-item button v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel" :value="studiengang.Kuerzel">
+              <ion-label>{{ studiengang.Name }}</ion-label>
             </ion-item>
           </ion-list>
         </ion-content>
@@ -392,6 +388,7 @@ ion-col {
   margin: 0;
   padding: 0.1px;
 }
+
 /* adjust semester headers */
 .modulfont {
   text-align: left;
@@ -425,5 +422,4 @@ ion-item-divider {
 .listenansicht {
   margin-top: 5px;
 }
-
 </style>
