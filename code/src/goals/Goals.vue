@@ -101,7 +101,7 @@
 											<ion-label>{{ texts.ziele.nachOben }}</ion-label>
 										</ion-item-option>
 									</ion-item-options>
-									<!--Displayin Goal-Element properties-->
+									<!--Displaying Goal-Element properties-->
 									<ion-item color="#d2d69e" class="item-container" lines="none">
 										<ion-label class="card-label">
 											<h2>{{ goal.titel }}</h2>
@@ -141,13 +141,13 @@
 
 					<!--Item-Elements routing to checked Goals and deleted Goals-->
 					<ion-col class="col">
-						<ion-item class="background" color="primary" router-link="/menu/studienziele/checked" id="header"
-							detail="true" lines="none">
+						<ion-item class="background header" color="primary" router-link="/menu/studienziele/checked"
+							detail="true" lines="none" id="reachedGoalsButton">
 							<ion-label class="labelHeader">{{ texts.ziele.erreichteZiele }}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
-						<ion-item class="background" color="light" router-link="/menu/studienziele/deleted" id="header"
-							detail="true" lines="none">
+						<ion-item class="background header" color="light" router-link="/menu/studienziele/deleted"
+							detail="true" lines="none" id="deletedGoalsButton">
 							<ion-label class="labelHeader">{{ texts.ziele.geloeschteZiele }}</ion-label>
 						</ion-item>
 
@@ -852,5 +852,21 @@ ion-modal ion-toolbar {
 	padding: 9px;
 	border-radius: 15px;
 	background-color: var(--ion-color-danger);
+}
+
+#reachedGoalsButton {
+	transition: 0.8s;
+}
+
+#reachedGoalsButton:hover {
+	opacity: 0.7;
+}
+
+#deletedGoalsButton {
+	transition: 0.8s;
+}
+
+#deletedGoalsButton:hover {
+	background-color: #848484;
 }
 </style>
