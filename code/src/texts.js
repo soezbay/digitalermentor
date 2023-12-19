@@ -29,6 +29,20 @@ export const texts = {
     moduluebersicht: {
         studiengangAuswaehlen: "Studiengang auswählen",
         listenansicht: "Listenansicht",
+        erklaerung: {
+            p1strong: "Modulübersicht",
+            p1: "Hier werden alle verfügbaren Module angezeigt.",
+            p2strong: "Studiengang wechseln",
+            p2: "Entdecke Module aus verschiedenen Studiengängen, indem du einen anderen Studiengang auswählst.",
+            p3strong: "Listenansicht",
+            p3: "Erhalte eine strukturierte Übersicht, indem du zur Listenansicht wechselst. Hier werden die vollständigen Modulnamen angezeigt, was besonders zu Beginn, wenn die Kürzel noch nicht vertraut sind, die Orientierung erleichtert.",
+            p4strong:"Modulbeschreibung",
+            p4: "Erfahre mehr über ein Modul, indem du auf das Modulkürzel oder den Modulnamen klickst.",
+            p5strong: "Modulbewertungen",
+            p5: "Teile deine Erfahrungen, indem du Module bewertest und sieh dir die Bewertungen anderer Studierender an. Profitiere von Tipps, um Module erfolgreich zu absolvieren.",
+
+        },
+
     },
 
     modulbeschreibung: {

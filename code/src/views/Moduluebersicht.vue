@@ -8,7 +8,10 @@
           </ion-button>
         </ion-buttons>
         <ion-title>Modulübersicht</ion-title>
-        <ion-buttons slot="end">
+        <ion-buttons slot="end" style="display: flex; align-items: center">
+					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
+						<ion-icon :icon="helpCircleOutline"></ion-icon>
+					</ion-button>
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
       </ion-toolbar>
@@ -126,13 +129,44 @@
         </ion-content>
       </ion-modal>
 
+      <!--Help-Modal-option for user-->
+			<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
+			<ion-content>
+				<ion-grid>
+					<ion-row justify-content-center align-items-center>
+						<ion-col size="12">
+							<div class="ion-text-center">
+                <p><ion-icon :icon="book" style="font-size: 40px; color:#BBCC00"></ion-icon></p>
+								<p style="font-size: 22px;">
+									<strong>{{ texts.moduluebersicht.erklaerung.p1strong }}</strong>
+								</p>
+								<p> {{ texts.moduluebersicht.erklaerung.p1 }}</p>
+								<p><strong>{{ texts.moduluebersicht.erklaerung.p2strong }}</strong></p>
+								<p> {{ texts.moduluebersicht.erklaerung.p2 }}</p>
+								<p><strong>{{ texts.moduluebersicht.erklaerung.p3strong }}</strong></p>
+								<p> {{ texts.moduluebersicht.erklaerung.p3 }}</p>
+								<p><strong>{{ texts.moduluebersicht.erklaerung.p4strong }}</strong></p>
+								<p> {{ texts.moduluebersicht.erklaerung.p4 }}</p>
+                <p><strong>{{ texts.moduluebersicht.erklaerung.p5strong }}</strong></p>
+                <p>{{ texts.moduluebersicht.erklaerung.p5 }}</p>
+
+
+							</div>
+
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-content>
+		</ion-modal>
+
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 
-
+import {helpCircleOutline, book} from 'ionicons/icons'
+import { texts } from '../texts.js'
 import {
   IonPage, IonContent, IonHeader, IonTitle, IonToolbar,
   IonButtons, IonMenuButton, IonButton,
@@ -141,7 +175,7 @@ import {
   IonSelectOption, IonSelect,
   IonList, IonListHeader, IonItem, IonLabel, IonIcon,
   IonCard, IonCardTitle,
-  modalController, IonModal
+  IonModal, modalController,
 } from '@ionic/vue';
 import axios from 'axios';
 import Modal from "./Modulbeschreibung.vue";
@@ -160,10 +194,12 @@ export default {
   name: "ModulUebersicht",
   data() {
     return {
+      helpCircleOutline, book,
       Adress: import.meta.env.VITE_API_URL,
       showAsList: false,
       selectedStudiengang: null,
       studiengaenge: [],
+      texts,
       modules: {
         pflicht: [],// initialize "Pflichtmodule"
         wahlpflicht: []
@@ -347,6 +383,10 @@ export default {
 </script>
 
 <style scoped>
+.infoButton {
+	font-size: 28px;
+}
+
 /* .custom-ion-select .alert-wrapper
 {
   background-color: #000000;
@@ -423,5 +463,27 @@ ion-item-divider {
 .listenansicht {
   margin-top: 5px;
 }
+
+@media (max-width:950px) {
+	.info-modal {
+		--height: 75%;
+		--width: 75%;
+		--border-radius: 16px;
+		--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+			0 4px 6px -4px rgb(0 0 0 / 0.1);
+	}
+}
+
+@media (min-width:950px) {
+	.info-modal {
+		--height: 80%;
+		--width: 45%;
+		--border-radius: 16px;
+		--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+			0 4px 6px -4px rgb(0 0 0 / 0.1)
+	}
+}
+
+
 
 </style>
