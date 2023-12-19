@@ -243,10 +243,7 @@ export default {
 			texts,
 			userdata,
 			formData: {
-				semesterAnzeigen: {
-					ja: false,
-					nein: false,
-				},
+				semesterAnzeigen: false,
 				schwierigkeitsgrad: '',
 				arbeitsaufwand: '',
 				lernhilfen: {

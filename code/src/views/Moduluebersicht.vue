@@ -17,23 +17,6 @@
       </ion-toolbar>
     </ion-header>
     
-    <ion-content>
-      <!-- ion-grid for "Studiengang and Listenansicht" in one line -->
-    <ion-grid>
-      <ion-row>
-        <!-- ion-col for Studiengang -->
-        <ion-col class="studiengang">
-        <ion-item lines="none">
-          <!-- choice between "Studiengängen" -->
-          <ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang:" placeholder="Studiengang auswählen" :interface-options="{cssClass: 'custom-ion-select'}" slot="start" >
-              <ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
-                :value="studiengang.Kuerzel">
-                {{ studiengang.Name }}
-              </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-col>
-
 		<ion-content>
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid>
@@ -220,7 +203,7 @@ import {
   IonSelectOption, IonSelect,
   IonList, IonListHeader, IonItem, IonLabel, IonIcon,
   IonCard, IonCardTitle,
-  IonModal, modalController,
+  IonModal, modalController, IonNote
 } from '@ionic/vue';
 import axios from 'axios';
 import Modal from "./Modulbeschreibung.vue";
