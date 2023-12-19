@@ -47,7 +47,7 @@ function messageSemesteranfang(user) {
     return `
     Hi ${user.Vorname},
 
-    sie haben bisher  ${user.Credits} Credits eingesammelt. Gut gemacht, das ist gar nicht so schlecht.
+    du hast  bisher  ${user.Credits} Credits eingesammelt. Gut gemacht, das ist gar nicht so schlecht.
 
     Aber um die Fächer des ${nextSemester} Semesters schreiben zu können, brauchst du -${numberOfCredits} Credits.
     Du brauchst also ${additionalCredits} mehr Credits.

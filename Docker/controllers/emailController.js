@@ -5,7 +5,7 @@ const axios = require('axios');
 const emailTemplates = require('../templates/emailTemplates');
 require("dotenv").config();
 
-// Assuming your backend API endpoint for fetching user information is 'http://localhost:8000/benutzer'
+// Backend API endpoint for fetching user information is 'http://localhost:8000/benutzer'
 const API_BASE_URL = 'http://localhost:8000';
 const BENUTZER_API_ENDPOINT = '/benutzer';
 
