@@ -92,6 +92,7 @@
 								@dragleave="dragLeave">
 								<ion-col
 									size="4"
+									size-md="3"
 									v-for="(module, index) in semesterModules"
 									:key="index"
 									:data-semester="semester">
@@ -156,6 +157,7 @@
         >
           <ion-col
             size="4"
+			size-md="3"
             v-for="(module, index) in semesterModules"
             :key="index"
             :data-semester="semester"
@@ -716,6 +718,10 @@ ion-progress-bar {
 	--background: var(--ion-color-success);
 }
 
+.passed:hover {
+	opacity: 0.8;
+}
+
 .secondTry {
 	--background: var(--ion-color-danger);
 }
@@ -734,6 +740,11 @@ ion-card {
 	text-align: center;
 	color: black;
 	border-radius: 15px;
+	transition: 0.8s;
+}
+
+ion-card:hover {
+	opacity: 0.8;
 }
 
 #highlightText {
@@ -769,6 +780,11 @@ ion-card {
 	height: 50px;
 	margin: 0px;
 	box-shadow: 5px 5px 10px grey;
+	transition: 0.8s;
+}
+
+.moduleElement:hover {
+	opacity: 0.6;
 }
 
 .empty-card {
