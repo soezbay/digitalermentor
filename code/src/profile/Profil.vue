@@ -40,25 +40,27 @@
 			<div style="height: 70px"></div>
 			<div style="text-align: center">
 				<h1>{{ texts.profil.name }}</h1>
-				<h4>Max Mustermann</h4>
+				<h4>{{ userdata.profile.firstname }} {{ userdata.lastname }} </h4>
 
 				<h1>{{ texts.profil.matrikel }}</h1>
-				<h4>202021000</h4>
+				<h4>{{ userdata.profile.matrikelnumber }}</h4>
 
 				<h1>{{ texts.profil.studiengang }}</h1>
-				<h4>Informatik (B.Sc)</h4>
+				<h4>{{ userdata.profile.course }}</h4>
 
 				<h1>{{ texts.profil.fachsemester }}</h1>
-				<h4 style="margin-bottom: 0px">4</h4>
+				<h4 style="margin-bottom: 0px"> {{ userdata.profile.semester }}</h4>
 
 				<h1>{{ texts.profil.email }}</h1>
-				<h4>max.mustermann@studmail.w-hs.de</h4>
+				<h4>{{ userdata.profile.email }}</h4>
 			</div>
 		</ion-content>
 	</ion-page>
 </template>
 
 <script>
+import { userdata } from '../userdata.js';
+import { texts } from '../texts.js'
 import { create } from 'ionicons/icons'
 import {
 	IonPage,
@@ -79,8 +81,6 @@ import {
 	IonIcon,
 	IonAvatar,
 } from '@ionic/vue'
-import { texts } from '../texts.js'
-
 export default {
 	components: {
 		IonPage,
@@ -105,6 +105,7 @@ export default {
 	data() {
 		return {
 			texts,
+			userdata,
 		}
 	},
 

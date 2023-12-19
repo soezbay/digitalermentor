@@ -1,10 +1,10 @@
-const database = require('../config/database');
-const Modul = require('../module/Modul');
+const database = require('../config/database.js');
+const { v4: uuidv4 } = require('uuid');
 
 class Bewertung {
-    constructor(BewertungsID,Bewertung,Feedback,Schwierigkeitsgrad,Arbeitsaufwand,Lernhilfe,SemsterAnzeigen  , ModulKuerzel, BenutzerID) {
-        this.BewertungsID =BewertungsID;
-        this.Bewertung = Bewertung;
+    constructor( BewertungSterne, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID) {
+        this.BewertungID = uuidv4();
+        this.BewertungSterne = BewertungSterne;
         this.Feedback = Feedback;
         this.Schwierigkeitsgrad = Schwierigkeitsgrad;
         this.Arbeitsaufwand = Arbeitsaufwand;
@@ -14,17 +14,18 @@ class Bewertung {
         this.BenutzerID = BenutzerID;
     }
 
+
     async createBewertung() {
         let date = new Date();
         let yyyy = date.getFullYear();
         let mm = (date.getMonth() + 1).toString().padStart(2, '0');
         let dd = date.getDate().toString().padStart(2, '0');
-    
+
         let ErstelltAM = `${yyyy}-${mm}-${dd}`;
-    
+
         let sql = `Insert into Bewertung values(
-            '${this.BewertungsID}',
-            '${this.Bewertung}'
+            '${this.BewertungID}',
+            '${this.BewertungSterne}',
             '${this.Feedback}',
             '${this.Schwierigkeitsgrad}',
             '${this.Arbeitsaufwand}',
@@ -35,13 +36,20 @@ class Bewertung {
             '${this.BenutzerID}'
         )`;
         const [newBewertung, _] = await database.execute(sql);
-    
+
         return newBewertung;
     }
-    
+
+
 
     static findAll() {
         let sql = "Select * From Bewertung";
+
+        return database.execute(sql);
+    }
+
+    static findBewertungenVonModul(Modul) {
+        let sql = `Select * From Bewertung WHERE Kuerzel = '${Modul}'`
 
         return database.execute(sql);
     }
