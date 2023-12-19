@@ -4,18 +4,12 @@
 			<ion-toolbar>
 				<ion-buttons slot="start">
 					<ion-button router-link="/menu/dashboard">
-						<ion-icon
-							style="font-size: 45px"
-							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+						<ion-icon style="font-size: 45px" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
 				<ion-title>{{ texts.titel.studienziele }}</ion-title>
 				<ion-buttons slot="end" style="display: flex; align-items: center">
-					<ion-button
-						class="infoButton"
-						color="primary"
-						id="open-info-modal"
-						expand="block">
+					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
 						<ion-icon :icon="helpCircleOutline"></ion-icon>
 					</ion-button>
 					<ion-menu-button color="primary"></ion-menu-button>
@@ -35,29 +29,18 @@
 								texts.studium.sommersemester
 							}}</ion-label>
 							<ion-buttons slot="end">
-								<ion-button
-									style="padding-right: 15px"
-									color="primary"
-									id="open-SS-modal"
-									@click="openSSModal()"
-									expand="block">
+								<ion-button style="padding-right: 15px" color="primary" id="open-SS-modal"
+									@click="openSSModal()" expand="block">
 									<ion-icon :icon="add"></ion-icon>
 								</ion-button>
 							</ion-buttons>
 						</div>
 						<!-- Getting Sommersemester-Goals-Array out of vuex Store and displaying all elements -->
 						<ion-list class="drag-drop-containers" v-if="goals_ss.length > 0">
-							<ion-reorder-group
-								:disabled="false"
-								@ionItemReorder="handleReorderForSS($event)">
-								<ion-item-sliding
-									v-for="goal in goals_ss"
-									:key="goal.id"
-									class="drag-drop-box-item">
+							<ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
+								<ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="drag-drop-box-item">
 									<ion-item-options side="start">
-										<ion-item-option
-											color="success"
-											@click="switchToWS(goal.id)">
+										<ion-item-option color="success" @click="switchToWS(goal.id)">
 											<ion-label>{{ texts.ziele.nachUnten }}</ion-label>
 										</ion-item-option>
 									</ion-item-options>
@@ -70,9 +53,7 @@
 										<ion-label slot="end" class="card-label">
 											<h5>{{ goal.date }}</h5>
 										</ion-label>
-										<ion-reorder
-											slot="end"
-											style="
+										<ion-reorder slot="end" style="
 												color: #000000;
 												margin: 0px;
 												padding-left: 5px;
@@ -80,23 +61,14 @@
 									</ion-item>
 									<!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
 									<ion-item-options side="end">
-										<ion-item-option
-											color="none"
-											id="open-edit-modal"
-											@click="openEditModal(goal.id)">
+										<ion-item-option color="none" id="open-edit-modal" @click="openEditModal(goal.id)">
 											<ion-icon slot="icon-only" :icon="create"></ion-icon>
 										</ion-item-option>
-										<ion-item-option
-											color="danger"
-											@click="deleteGoalHandler(goal.id)">
+										<ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
 											<ion-icon slot="icon-only" :icon="trash"></ion-icon>
 										</ion-item-option>
-										<ion-item-option
-											color="success"
-											@click="checkGoal(goal.id)">
-											<ion-icon
-												slot="icon-only"
-												:icon="checkmarkDone"></ion-icon>
+										<ion-item-option color="success" @click="checkGoal(goal.id)">
+											<ion-icon slot="icon-only" :icon="checkmarkDone"></ion-icon>
 										</ion-item-option>
 									</ion-item-options>
 								</ion-item-sliding>
@@ -112,37 +84,24 @@
 						</div>
 
 						<div class="semesterHeader">
-							<ion-label class="labelHeader">{{
-								texts.studium.wintersemester
-							}}</ion-label>
+							<ion-label class="labelHeader">{{ texts.studium.wintersemester }}</ion-label>
 							<ion-buttons slot="end">
-								<ion-button
-									style="padding-right: 15px"
-									color="primary"
-									id="open-WS-modal"
-									@click="openWSModal()"
-									expand="block">
+								<ion-button style="padding-right: 15px" color="primary" id="open-WS-modal"
+									@click="openWSModal()" expand="block">
 									<ion-icon :icon="add"></ion-icon>
 								</ion-button>
 							</ion-buttons>
 						</div>
 						<!-- Getting Sommersemester-Array of vuex and displaying all elements -->
 						<ion-list class="drag-drop-containers" v-if="goals_ws.length > 0">
-							<ion-reorder-group
-								:disabled="false"
-								@ionItemReorder="handleReorderForWS($event)">
-								<ion-item-sliding
-									v-for="goal in goals_ws"
-									:key="goal.id"
-									class="drag-drop-box-item">
+							<ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
+								<ion-item-sliding v-for="goal in goals_ws" :key="goal.id" class="drag-drop-box-item">
 									<ion-item-options side="start">
-										<ion-item-option
-											color="success"
-											@click="switchToSS(goal.id)">
+										<ion-item-option color="success" @click="switchToSS(goal.id)">
 											<ion-label>{{ texts.ziele.nachOben }}</ion-label>
 										</ion-item-option>
 									</ion-item-options>
-									<!--Displayin Goal-Element properties-->
+									<!--Displaying Goal-Element properties-->
 									<ion-item color="#d2d69e" class="item-container" lines="none">
 										<ion-label class="card-label">
 											<h2>{{ goal.titel }}</h2>
@@ -151,9 +110,7 @@
 										<ion-label slot="end" class="card-label">
 											<h5>{{ goal.date }}</h5>
 										</ion-label>
-										<ion-reorder
-											slot="end"
-											style="
+										<ion-reorder slot="end" style="
 												color: #000000;
 												margin: 0px;
 												padding-left: 5px;
@@ -161,23 +118,14 @@
 									</ion-item>
 									<!--Slide-Options, first one Deleting Goals, second one moving it into checkedGoals.vue-->
 									<ion-item-options side="end">
-										<ion-item-option
-											color="none"
-											id="open-edit-modal"
-											@click="openEditModal(goal.id)">
+										<ion-item-option color="none" id="open-edit-modal" @click="openEditModal(goal.id)">
 											<ion-icon slot="icon-only" :icon="create"></ion-icon>
 										</ion-item-option>
-										<ion-item-option
-											color="danger"
-											@click="deleteGoalHandler(goal.id)">
+										<ion-item-option color="danger" @click="deleteGoalHandler(goal.id)">
 											<ion-icon slot="icon-only" :icon="trash"></ion-icon>
 										</ion-item-option>
-										<ion-item-option
-											color="success"
-											@click="checkGoal(goal.id)">
-											<ion-icon
-												slot="icon-only"
-												:icon="checkmarkDone"></ion-icon>
+										<ion-item-option color="success" @click="checkGoal(goal.id)">
+											<ion-icon slot="icon-only" :icon="checkmarkDone"></ion-icon>
 										</ion-item-option>
 									</ion-item-options>
 								</ion-item-sliding>
@@ -186,74 +134,65 @@
 						<!--Only getting displayed when Array is empty-->
 						<div v-else class="ion-padding">
 							<div class="explanatory-text">
-								<ion-label style="font-size: large">{{
-									texts.ziele.keineZieleDefiniert
-								}}</ion-label>
+								<ion-label style="font-size: large">{{ texts.ziele.keineZieleDefiniert }}</ion-label>
 							</div>
 						</div>
 					</ion-col>
 
 					<!--Item-Elements routing to checked Goals and deleted Goals-->
-					<ion-col size="12" size-md="6" class="col">
-						<ion-item
-							class="background"
-							color="primary"
-							router-link="/menu/studienziele/checked"
-							id="header"
-							detail="true"
-							lines="none">
-							<ion-label class="labelHeader">{{
-								texts.ziele.erreichteZiele
-							}}</ion-label>
+					<ion-col class="col">
+						<ion-item class="background header" color="primary" router-link="/menu/studienziele/checked"
+							detail="true" lines="none" id="reachedGoalsButton">
+							<ion-label class="labelHeader">{{ texts.ziele.erreichteZiele }}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
-						<ion-item
-							class="background"
-							color="light"
-							router-link="/menu/studienziele/deleted"
-							id="header"
-							detail="true"
-							lines="none">
-							<ion-label class="labelHeader">{{
-								texts.ziele.geloeschteZiele
-							}}</ion-label>
+						<ion-item class="background header" color="light" router-link="/menu/studienziele/deleted"
+							detail="true" lines="none" id="deletedGoalsButton">
+							<ion-label class="labelHeader">{{ texts.ziele.geloeschteZiele }}</ion-label>
 						</ion-item>
 
 						<ion-item-divider class="spacer"></ion-item-divider>
 
 						<ion-row class="klausuren-title">
-							<ion-label class="underline"
-								>{{ texts.ziele.zuBestehendeModule }}
+							<ion-label class="underline">{{ texts.ziele.zuBestehendeModule }}
 							</ion-label>
 						</ion-row>
 
 						<!-- List of Semester and modules -->
-						<ion-grid v-for="(semester, index) in semesterList" :key="index">
+						<ion-col v-for="(semester, index) in semesterList" :key="index">
 							<ion-row>
-								<label v-if="index + 1 < semesterList.length">
-									{{ index + 1 }}. {{ texts.studium.semester }}
-								</label>
-								<label v-else-if="index + 1 === semesterList.length">
-									{{ texts.studium.wahlpflichtmodule }}
+								<label>
+									{{ semester.semestercount }}
 								</label>
 							</ion-row>
 							<ion-row>
-								<ion-col
-									size-xs="4"
-									size-sm="4"
-									size-md="4"
-									size-lg="4"
-									size-xl="2"
-									v-for="(fach, fachIndex) in semester.faecher"
-									:key="fachIndex">
-									<ion-card class="modules" :class="getModuleStatusClass(fach)">
-										<ion-label style="color: #000000; font-weight: bolder">{{
-											fach.name
-										}}</ion-label>
-									</ion-card>
+								<ion-col size-xs="2.3" size-sm="2.6" size-md="4" size-lg="4" size-xl="2"
+									v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
+									style="padding: 1px;">
+									<div v-if="modul.tryCount === 1">
+										<ion-card class="modules">
+											<ion-label style="color: #000000; font-weight: bolder">
+												{{ modul.kuerzel }}
+											</ion-label>
+										</ion-card>
+									</div>
+									<div v-else-if="modul.tryCount === 2">
+										<ion-card class="secondTry">
+											<ion-label style="color: #000000; font-weight: bolder">
+												{{ modul.kuerzel }}
+											</ion-label>
+										</ion-card>
+									</div>
+									<div v-else-if="modul.tryCount === 3">
+										<ion-card  class="thirdTry">
+											<ion-label style="color: #000000; font-weight: bolder">
+												{{ modul.kuerzel }}
+											</ion-label>
+										</ion-card>
+									</div>
 								</ion-col>
 							</ion-row>
-						</ion-grid>
+						</ion-col>
 
 						<!-- Legende -->
 						<div id="legend">
@@ -268,20 +207,13 @@
 		</ion-content>
 
 		<!-- Modals for adding a goal (Sommersemester)-->
-		<ion-modal
-			ref="modal_SS"
-			trigger="open-SS-modal"
-			:presenting-element="presentingElement">
+		<ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
 					<ion-buttons slot="end">
-						<ion-button
-							@click="saveGoal"
-							:disabled="!goal_name"
-							style="color: white"
-							>{{ texts.allgemein.speichern }}</ion-button
-						>
+						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white">{{
+							texts.allgemein.speichern }}</ion-button>
 					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
@@ -291,17 +223,9 @@
 					<ion-input v-model="goal_name"></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-select
-						ref="semesterSelect"
-						label="Semester"
-						placeholder="Semesterseason"
-						value="Sommersemester">
-						<ion-select-option value="Sommersemester">{{
-							texts.studium.sommersemester
-						}}</ion-select-option>
-						<ion-select-option value="Wintersemester">{{
-							texts.studium.wintersemester
-						}}</ion-select-option>
+					<ion-select ref="semesterSelect" label="Semester" placeholder="Semesterseason" value="Sommersemester">
+						<ion-select-option value="Sommersemester">{{ texts.studium.sommersemester }}</ion-select-option>
+						<ion-select-option value="Wintersemester">{{ texts.studium.wintersemester }}</ion-select-option>
 					</ion-select>
 				</ion-item>
 				<ion-item>
@@ -312,20 +236,13 @@
 		</ion-modal>
 
 		<!-- Modals for adding a goal (Wintersemester)-->
-		<ion-modal
-			ref="modal_WS"
-			trigger="open-WS-modal"
-			:presenting-element="presentingElement">
+		<ion-modal ref="modal_WS" trigger="open-WS-modal" :presenting-element="presentingElement">
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
 					<ion-buttons slot="end">
-						<ion-button
-							@click="saveGoal"
-							:disabled="!goal_name"
-							style="color: white"
-							>{{ texts.allgemein.speichern }}</ion-button
-						>
+						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white">{{
+							texts.allgemein.speichern }}</ion-button>
 					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
@@ -335,11 +252,7 @@
 					<ion-input v-model="goal_name"></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-select
-						ref="semesterSelect"
-						label="Semester"
-						placeholder="Semesterseason"
-						value="Wintersemester">
+					<ion-select ref="semesterSelect" label="Semester" placeholder="Semesterseason" value="Wintersemester">
 						<ion-select-option value="Sommersemester">{{
 							texts.studium.sommersemester
 						}}</ion-select-option>
@@ -356,20 +269,13 @@
 		</ion-modal>
 
 		<!-- Modals for editing a goal-->
-		<ion-modal
-			ref="modal_edit"
-			trigger="open-edit-modal"
-			:presenting-element="presentingElement">
+		<ion-modal ref="modal_edit" trigger="open-edit-modal" :presenting-element="presentingElement">
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.bearbeiteZiel }}</ion-title>
 					<ion-buttons slot="end">
-						<ion-button
-							@click="saveEditedGoal"
-							:disabled="!goal_name"
-							style="color: white"
-							>{{ texts.allgemein.speichern }}</ion-button
-						>
+						<ion-button @click="saveEditedGoal" :disabled="!goal_name" style="color: white">{{
+							texts.allgemein.speichern }}</ion-button>
 					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
@@ -379,11 +285,7 @@
 					<ion-input v-model="goal_name"></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-select
-						ref="semesterSelect"
-						v-model="semesterSeason"
-						label="Semester"
-						placeholder="Semesterseason">
+					<ion-select ref="semesterSelect" v-model="semesterSeason" label="Semester" placeholder="Semesterseason">
 						<ion-select-option value="Sommersemester">{{
 							texts.studium.sommersemester
 						}}</ion-select-option>
@@ -400,11 +302,7 @@
 		</ion-modal>
 
 		<!--Help-Modal-option for user-->
-		<ion-modal
-			class="info-modal"
-			ref="modal_info"
-			trigger="open-info-modal"
-			:presenting-element="presentingElement">
+		<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
 			<ion-content>
 				<ion-grid>
 					<ion-row justify-content-center align-items-center>
@@ -415,9 +313,7 @@
 								</p>
 								<p>
 									<ion-button color="primary" shape="round">
-										<ion-icon
-											:icon="add"
-											style="font-size: 20px; color: white"></ion-icon>
+										<ion-icon :icon="add" style="font-size: 20px; color: white"></ion-icon>
 									</ion-button>
 								</p>
 								<p>
@@ -425,27 +321,21 @@
 								</p>
 								<p>{{ texts.ziele.erklaerung.p2 }}</p>
 								<p>
-									<ion-icon
-										:icon="trash"
-										style="font-size: 35px; color: #f07181"></ion-icon>
+									<ion-icon :icon="trash" style="font-size: 35px; color: #f07181"></ion-icon>
 								</p>
 								<p>
 									<strong>{{ texts.ziele.erklaerung.p3strong }}</strong>
 								</p>
 								<p>{{ texts.ziele.erklaerung.p3 }}</p>
 								<p>
-									<ion-icon
-										:icon="checkmarkDone"
-										style="font-size: 35px; color: #bbcc00"></ion-icon>
+									<ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #bbcc00"></ion-icon>
 								</p>
 								<p>
 									<strong>{{ texts.ziele.erklaerung.p4strong }}</strong>
 								</p>
 								<p>{{ texts.ziele.erklaerung.p4 }}</p>
 								<p>
-									<ion-icon
-										:icon="create"
-										style="font-size: 35px; color: grey"></ion-icon>
+									<ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon>
 								</p>
 								<p>
 									<strong>{{ texts.ziele.erklaerung.p5strong }}</strong>
@@ -472,9 +362,8 @@ import {
 	checkmarkDone,
 	create,
 	helpCircleOutline,
-	sadOutline,
 } from 'ionicons/icons'
-import axios from 'axios'
+import axios, { formToJSON } from 'axios'
 import { texts } from '../texts.js'
 
 import {
@@ -542,7 +431,7 @@ export default {
 	},
 	data() {
 		return {
-			Adress : import.meta.env.VITE_API_URL,
+			Adress: import.meta.env.VITE_API_URL,
 			texts,
 			add,
 			trash,
@@ -556,21 +445,8 @@ export default {
 			info: '',
 			goal_id: '',
 			studentID: 'test123',
-			modules: [], // Alle Module aus der Datenbank
-			studentProgress: [], // Teilgenommene Module des Studierenden
-			electiveModules: [],
-			passedModules: [],
-			passedModuleKuerzel: [],
-			//Array with Modules
-			semesterList: [
-				{ name: '1. Semester' },
-				{ name: '2. Semester' },
-				{ name: '3. Semester' },
-				{ name: '4. Semester' },
-				{ name: '5. Semester' },
-				{ name: '6. Semester' },
-				{ name: 'Wahlpflichtmodule' },
-			],
+			studiengang: 'PI',
+			semesterList: [],
 		}
 	},
 
@@ -675,149 +551,72 @@ export default {
 			}
 		},
 
-		// Status des Moduls herausfinden (Bestanden oder nicht Bestanden)
-		getModuleStatusClass(fach) {
-			// Einträge aus studentProgress mit dem übergebenen Modul werden zu enteredModules hinzugefügt
-			const enteredModules = this.studentProgress.filter(
-				progressModule => progressModule.Kuerzel === fach.name
-			)
-			// Wenn enteredModules leer ist, ist das Modul noch nicht angetreten worden
-			if (enteredModules.length === 0) {
-				return 'notEntered'
+		async getData() {
+			// Retrieve the regular study duration for the specific study program
+			const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
+			const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/pi`);
+			const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/pi`);
+			const studentProgressResponse = await axios.get(`${this.Adress}/modul/status/${this.studentID}`);
+
+			const regelstudienzeit = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === this.studiengang).Regelstudienzeit;
+			console.log("--------Die regelstudienzeit:", regelstudienzeit);
+			const pflichtModule = pflichtModuleResponse.data.pflicht;
+			const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
+			const studentProgress = studentProgressResponse.data.modul;
+			console.log(studentProgress.find(spModule => spModule.Kuerzel === "LDS").Versuch);
+
+			// Sort mandatory modules by semester
+			pflichtModule.sort((a, b) => a.Semester - b.Semester);
+			console.log("------Pflichtmodule getData---------", pflichtModule);
+
+			// Retrieve all modules where the student has passed the exam/module
+			const passedModuleKuerzel = studentProgress
+				.filter(modul => modul.Status === 'Bestanden')
+				.map(modul => modul.Kuerzel);
+
+			// Inline getModulesForSemester function
+			for (let semester = 1; semester <= regelstudienzeit; semester++) {
+				this.semesterList.push({
+					semestercount: `${semester}. Semester`,
+					faecher: pflichtModule
+						.filter(modul => modul.Semester === semester && !passedModuleKuerzel.includes(modul.Kuerzel))
+						.map(modul => ({
+							name: modul.Name,
+							kuerzel: modul.Kuerzel,
+							status: 'Nicht_Bestanden',
+							tryCount: studentProgress.find(spModul => spModul.Kuerzel === modul.Kuerzel)?.Versuch || 1,
+						}))
+				});
 			}
 
-			// Berechnen des Notendurchschnitts
-			const averageGrade =
-				enteredModules.reduce(
-					(total, progressModule) => total + parseFloat(progressModule.Note),
-					0
-				) / enteredModules.length
+			// Add the elective modules to the semester list
+			this.semesterList.push({
+				semestercount: 'Wahlpflichtmodule',
+				faecher: wahlpflichtmodule
+					.filter(modul => !passedModuleKuerzel.includes(modul.Kuerzel))
+					.map(modul => ({
+						name: modul.Name,
+						kuerzel: modul.Kuerzel,
+						status: 'Nicht_Bestanden',
+						tryCount: studentProgress.find(spModul => spModul.Kuerzel === modul.Kuerzel)?.Versuch || 1,
+					}))
+			});
 
-			if (averageGrade >= 5 && enteredModules.length == 1) {
-				return 'firstTry' // Modul ein mal nicht bestanden, gelbe Farbe
-			} else if (averageGrade >= 5 && enteredModules.length == 2) {
-				return 'secondTry' // Modul zwei mal nicht bestanden, rote Farbe
+		},
+		getModuleClass(tryCount) {
+			console.log("trycount:", tryCount);
+			if (tryCount === 2) {
+				return 'secondTry';
+			} else if (tryCount === 3) {
+				return 'thirdTry';
 			} else {
-				return 'passed' // Modul bestanden, grüne Farbe
+				return 'modules'; // Fallback, wenn keine spezifische Klasse gefunden wird
 			}
-		},
-
-		removeModulesByKuerzel(modulKuerzel) {
-    // Iterate through each semester in the semesterList
-    this.semesterList.forEach(semester => {
-        // Filter out the modules with the specified Kuerzels
-        semester.faecher = semester.faecher.filter(
-            modul => !modulKuerzel.includes(modul.name) // Hier könnte es sein, dass `modul.name` in Ihrem Fall `fach` sein sollte
-        );
-    });
-},
-
-
-		// Call this method with an array of module Kuerzels to remove them from the list
-		removeFromSemesterList() {
-			const modulesToRemove = this.passedModules.Kuerzel // Replace with the actual module Kuerzels
-			this.removeModulesByKuerzel(modulesToRemove)
-		},
-
-		//Get Modules- and User-Data from Server
-		getData() {
-			axios
-				.get(`${this.Adress}/studiengang/pflicht/pi`)
-				.then(response => {
-					const pflichtModule = response.data.pflicht
-
-					// Group Modules by Semester
-					const groupedModules = {}
-					pflichtModule.forEach(modul => {
-						const semester = modul.Semester
-						if (!groupedModules[semester]) {
-							groupedModules[semester] = []
-						}
-						groupedModules[semester].push(modul)
-					})
-
-					// Fill semesterList-Array with the grouped Modules
-					this.semesterList.forEach((semester, index) => {
-						const semesterIndex = index + 1
-						if (groupedModules[semesterIndex]) {
-							semester.faecher = groupedModules[semesterIndex].map(modul => {
-								//Put Module in array
-								return { name: modul.Kuerzel, status: 'versuch1' }
-							})
-						}
-					})
-				})
-				.catch(error => {
-					console.error(error)
-				})
-
-			axios
-				.get(`${this.Adress}/studiengang/wahlpflicht/pi`)
-				.then(Response => {
-					console.log(Response.data)
-					this.electiveModules = Response.data.wahlpflicht
-
-					// Put electiveModules in belonging SemesterArray
-					const wahlpflichtSemesterIndex = this.semesterList.findIndex(
-						item => item.name === 'Wahlpflichtmodule'
-					)
-					if (wahlpflichtSemesterIndex !== -1) {
-						this.semesterList[wahlpflichtSemesterIndex].faecher =
-							this.electiveModules.map(modul => {
-								return { name: modul.Kuerzel, status: 'versuch1' }
-							})
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
-
-			axios
-				.get(`${this.Adress}/modul/status/${this.studentID}`)
-				.then(Response => {
-					console.log(Response.data)
-
-					const studentModules = Response.data.modul
-					this.studentProgress = Response.data.modul
-					this.passedModuleKuerzel = this.studentProgress
-						.filter(modul => modul.Status === 'Bestanden')
-						.map(modul => modul.Kuerzel)
-						console.log(this.passedModuleKuerzel)
-
-					this.semesterList.forEach(semester => {
-						semester.faecher = semester.faecher.filter(fach => {
-							if (this.passedModuleKuerzel.includes(fach.name)) {
-								return false
-							}
-
-							const matchingModule = this.studentProgress.find(
-								modul => modul.Kuerzel === fach.name
-							)
-
-							if (matchingModule) {
-								if (matchingModule.Status === 'Nicht Bestanden') {
-									if (matchingModule.Versuch < 3) {
-										fach.status =
-											'versuch' + (parseInt(matchingModule.Versuch) + 1)
-									} else {
-										fach.status = parseInt(matchingModule.Versuch)
-									}
-								}
-								return true
-							}
-							return true
-						})
-					})
-				})
-				.catch(err => {
-					console.log(err)
-				})
 		},
 	},
 	//Display when data is fetched
-	mounted() {
-		this.getData()
-		this.removeFromSemesterList();
+	async mounted() {
+		await this.getData();
 	},
 
 	computed: {
@@ -861,14 +660,6 @@ export default {
 	padding: 25px;
 }
 
-.modules {
-	height: 35px;
-	width: auto;
-	margin: 1px;
-	text-align: center;
-	padding: 10px;
-	border-radius: 15px;
-}
 
 .background {
 	border-radius: 15px;
@@ -891,7 +682,6 @@ export default {
 	padding-top: 30px;
 	padding-bottom: 20px;
 	border-radius: 15px;
-	/* Platzierung für den Inhalt */
 }
 
 .labelHeader {
@@ -1034,11 +824,49 @@ ion-modal ion-toolbar {
 	margin-left: 5px;
 }
 
-.secondTry {
-	--background: var(--ion-color-danger);
+.modules {
+	height: 35px;
+	width: auto;
+	margin: 2px;
+	text-align: center;
+	padding: 9px;
+	border-radius: 15px;
+	background-color: #fff;
 }
 
-.firstTry {
-	--background: var(--ion-color-warning);
+.secondTry {
+	height: 35px;
+	width: auto;
+	margin: 2px;
+	text-align: center;
+	padding: 9px;
+	border-radius: 15px;
+	background-color: var(--ion-color-warning);
+}
+
+.thirdTry {
+	height: 35px;
+	width: auto;
+	margin: 2px;
+	text-align: center;
+	padding: 9px;
+	border-radius: 15px;
+	background-color: var(--ion-color-danger);
+}
+
+#reachedGoalsButton {
+	transition: 0.8s;
+}
+
+#reachedGoalsButton:hover {
+	opacity: 0.7;
+}
+
+#deletedGoalsButton {
+	transition: 0.8s;
+}
+
+#deletedGoalsButton:hover {
+	background-color: #848484;
 }
 </style>

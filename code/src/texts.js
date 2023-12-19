@@ -27,7 +27,7 @@ export const texts = {
     },
 
     moduluebersicht: {
-        studiengangAuswaehlen: "Studiengang auswählen",
+        studiengangAuswaehlen: "Wähle einen Studiengang aus",
         listenansicht: "Listenansicht",
         erklaerung: {
             p1strong: "Modulübersicht",

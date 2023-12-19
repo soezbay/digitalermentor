@@ -359,14 +359,17 @@ Insert Into Pruefung Value("PID2", 1, '2023-09-03 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID3", 1, '2023-09-02 12:00:00', "LDS" );
 Insert Into Pruefung Value("PID4", 2, '2023-09-02 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID5", 1, '2023-10-10 12:00:00', "LDS" );
+Insert Into Pruefung Value("PID6", 1, '2023-10-10 12:00:00', "TGI" );
 
 Insert Into Anmeldung Value("Test123", "PID5");
 
 
 Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
-Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 1);
-Insert Into Note Value("PID3", "Test123", 5.0, "Nicht Bestanden", 1);
+Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 2);
+Insert Into Note Value("PID3", "Test123", 5.0, "Nicht Bestanden", 3);
 Insert Into Note Value("PID4", "Test123", 2.0, "Bestanden", 2);
+Insert Into Note Value("PID6", "Test123", 5.0, "Nicht Bestanden", 2);
+
 
 INSERT INTO Bewertung (
     BewertungsID,

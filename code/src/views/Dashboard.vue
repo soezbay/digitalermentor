@@ -392,6 +392,11 @@ export default {
 #header {
 	font-size: larger;
 	text-align: center;
+	transition: 0.8s;
+}
+
+#header:hover {
+	opacity: 0.7;
 }
 
 #header ion-label {
