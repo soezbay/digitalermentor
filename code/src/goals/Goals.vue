@@ -826,30 +826,30 @@ ion-modal ion-toolbar {
 
 .modules {
 	height: 35px;
-	width: auto;
+	width: 100%;
 	margin: 2px;
 	text-align: center;
-	padding: 9px;
+	padding: 8px;
 	border-radius: 15px;
 	background-color: #fff;
 }
 
 .secondTry {
 	height: 35px;
-	width: auto;
+	width: 100%;
 	margin: 2px;
 	text-align: center;
-	padding: 9px;
+	padding: 8px;
 	border-radius: 15px;
 	background-color: var(--ion-color-warning);
 }
 
 .thirdTry {
 	height: 35px;
-	width: auto;
+	width: 100%;
 	margin: 2px;
 	text-align: center;
-	padding: 9px;
+	padding: 8px;
 	border-radius: 15px;
 	background-color: var(--ion-color-danger);
 }
@@ -859,7 +859,7 @@ ion-modal ion-toolbar {
 }
 
 #reachedGoalsButton:hover {
-	opacity: 0.7;
+	opacity: 0.5;
 }
 
 #deletedGoalsButton {
@@ -867,6 +867,12 @@ ion-modal ion-toolbar {
 }
 
 #deletedGoalsButton:hover {
-	background-color: #848484;
+	filter: brightness(0.7);
+}
+
+@media (max-width: 767px) {
+  .modules {
+    width: 100%; /* Adjust the width as needed */
+  }
 }
 </style>
