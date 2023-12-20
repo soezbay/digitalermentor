@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import Dashboard from '../views/Dashboard.vue';
-import Moduluebersicht from '../views/Moduluebersicht.vue';
-import Termine from '../routerpages/Termine.vue';
+import Moduluebersicht from '../modulesOverview/Moduluebersicht.vue';
+import Termine from '../appointments/Termine.vue';
 import Studienverlauf from '../views/Studienverlauf.vue';
 import Profil from '../profile/Profil.vue';
 import Einstellungen from '../views/Einstellungen.vue';
@@ -28,37 +28,31 @@ const routes = [
   },
   {
     path: '/menu/modulbeschreibung',
-    component: () => import('../views/Modulbeschreibung.vue')
+    component: () => import('../modulesOverview/Modulbeschreibung.vue')
   },
   {
     path: '/menu/modulbeschreibung/:url_kuerzel',
-    component: () => import('../views/Modulbeschreibung.vue')
+    component: () => import('../modulesOverview/Modulbeschreibung.vue')
   },
-  //---
-  {
-    path: '/menu/bewertungen',
-    component: () => import('../views/Bewertungen.vue')
-  },
-  {
-    path: '/menu/bewertungen/:url_kuerzel',
-    component: () => import('../views/Bewertungen.vue')
-  },
-  //---
   {
     path: '/termine',
     component: Termine
   },
   {
     path: '/termine/:id',
-    component: () => import('../routerpages/TermineDetails.vue')
+    component: () => import('../appointments/TermineDetails.vue')
   },
   {
     path: '/menu/dashboard/termine',
     component: Termine
   },
+   {
+    path: '/menu/dashboard/termine',
+    component: Termine
+  },
   {
     path: '/menu/dashboard/termine/add_termin',
-    component: () => import('../routerpages/AddTermin.vue')
+    component: () => import('../appointments/AddTermin.vue')
   },
   {
     path: '/studienverlauf',
@@ -73,12 +67,20 @@ const routes = [
     component: Studienziele
   },
   {
+    path: '/studienziele',
+    component: Studienziele
+  },
+  {
     path: '/menu/studienziele/checked',
     component: () => import('../goals/checkedGoals.vue')
   },
   {
     path: '/menu/studienziele/deleted',
     component: () => import('../goals/deletedGoals.vue')
+  },
+  {
+    path: '/profil',
+    component: Profil
   },
   {
     path: '/menu/profil',
