@@ -11,6 +11,18 @@ exports.getAlleStudiengaenge = async (req, res, next) => {
     }
 };
 
+exports.getStudiengangInfo = async (req, res, next) => {
+    try{
+        let StudiengangKuerzel = req.params.Studiengang;
+        const [studiengaenge, _] = await Studiengang.findStudiengangInfo(StudiengangKuerzel);
+
+        res.status(200).json({studiengaenge});
+    }catch (error) {
+       console.log(error);
+        next(error);
+    }
+};
+
 exports.getPflichtModuleVonStudiengang = async (req, res, next) => {
     try{
         let StudiengangKuerzel = req.params.Studiengang;

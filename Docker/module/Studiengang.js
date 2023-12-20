@@ -1,13 +1,14 @@
 const database = require('../config/database');
 
 class Studiengang {
-    constructor(Kuerzel, Name,Standort, Abschlussart, Regelstudienzeit, Studienbeginn) {
+    constructor(Kuerzel, Name,Standort, Abschlussart, Regelstudienzeit, Studienbeginn, AnzahlWahlpflichtmodule) {
         this.Kuerzel = Kuerzel;
         this.Name = Name;
         this.Standort = Standort;
         this.Abschlussart = Abschlussart;
         this. Regelstudienzeit = Regelstudienzeit;
         this.Studienbeginn = Studienbeginn;
+        this.AnzahlWahlpflichtmodule = AnzahlWahlpflichtmodule;
 
     }
 
@@ -16,6 +17,13 @@ class Studiengang {
 
         return database.execute(sql);
     }
+
+    static findStudiengangInfo(Studiengang) {
+        let sql = `Select * From Studiengang where Kuerzel = '${Studiengang}'`;
+
+        return database.execute(sql);
+    }
+
 
     static findAllPflichtModuleFromStudiengang(StudiengangKuerzel) {
         let sql = `Select * From Modul Inner Join Pflicht On Pflicht.ModulKuerzel = Modul.Kuerzel where Pflicht.StudiengangKuerzel = '${StudiengangKuerzel}';`;

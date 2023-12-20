@@ -7,5 +7,7 @@ router.route("/").get(studiengangControllers.getAlleStudiengaenge);
 router.route("/pflicht/:Studiengang").get(studiengangControllers.getPflichtModuleVonStudiengang);
 // Beispiel: localhost:8000/studiengang/wahlpflicht/PI
 router.route("/wahlpflicht/:Studiengang").get(studiengangControllers.getWahlpflichtModuleVonStudiengang);
+// Beispiel: localhost:8000/studiengang/PI
+router.route("/:Studiengang").get(studiengangControllers.getStudiengangInfo);
 
 module.exports = router;
