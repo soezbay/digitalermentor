@@ -127,4 +127,9 @@ export default {
 	color: white;
 	/* Weiße Schriftfarbe, damit der Text sichtbar ist */
 }
+
+/* move to the left */
+ion-title {
+	margin-left: -5px;
+}
 </style>

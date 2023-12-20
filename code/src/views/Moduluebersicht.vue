@@ -571,4 +571,9 @@ ion-item-divider {
   }
 }
 
+/* move to the left */
+ion-title {
+  margin-left: -5px;
+}
+
 </style>

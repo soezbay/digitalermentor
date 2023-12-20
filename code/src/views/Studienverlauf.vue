@@ -40,7 +40,7 @@
 					<ion-searchbar
 						show-clear-button="always"
 						placeholder="Modulsuche"
-						style="width: 50%"
+						class="searchbar"
 						type="text"
 						v-model="query"
 						@ionChange="handleSearchChange"></ion-searchbar>
@@ -895,4 +895,17 @@ ion-grid{
 	}
 }
 
+/* move to the left */
+ion-title {
+	margin-left: -5px;
+}
+
+.searchbar {
+  width: 50%; /* width for normal screens */
+  padding-top: 20px;
+
+  @media (max-width: 767px) {
+    width: 80%; /* width for mobile devices */
+  }
+}
 </style>

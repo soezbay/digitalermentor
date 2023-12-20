@@ -182,4 +182,10 @@ h4 {
 		height: 300px;
 	}
 }
+
+/* move to the left */
+ion-title {
+	margin-left: -5px;
+}
+
 </style>
