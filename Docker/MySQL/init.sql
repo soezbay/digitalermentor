@@ -13,6 +13,7 @@ Create Table Studiengang (
 	AnzahlWahlpflichtmodule smallint
 	);
 
+
 Create Table Benutzer (
 	BenutzerID varchar(10) Primary Key,
 	Martrikelnummer int,
@@ -26,6 +27,13 @@ Create Table Benutzer (
 	Kuerzel varchar(5),
 	FOREIGN KEY (Kuerzel) REFERENCES Studiengang(Kuerzel)
 	);
+
+Create Table BenutzerEmail ( 
+	EmailID varchar(50) Primary Key,
+	EmailInhalt varchar(10000),
+	BenutzerID varchar(10),
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
+);
 
 CREATE TABLE BenutzerCache (
     BenutzerID varchar(10) PRIMARY KEY,
