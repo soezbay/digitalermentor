@@ -412,4 +412,10 @@ ion-datetime {
 	color: var(--ion-color #fff);
 	border-radius: 16px;
 }
+
+/* move to the left */
+ion-title {
+	margin-left: -5px;
+}
+
 </style>

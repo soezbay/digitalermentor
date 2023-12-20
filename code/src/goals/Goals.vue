@@ -875,4 +875,10 @@ ion-modal ion-toolbar {
     width: 100%; /* Adjust the width as needed */
   }
 }
+
+/* move to the left */
+ion-title {
+	margin-left: -5px;
+}
+
 </style>
