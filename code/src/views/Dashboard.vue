@@ -87,8 +87,9 @@
 								</div>
 							</ion-list>
 						</div>
+						<div><img src="/resources/Sprechblase.png" alt="Sprechblase" class="speechbubble"></div>
+						<div><img src="/resources/DigitalerMentor-Koala.png" alt="Digitaler Mentor Koala" class="koala-image"></div>	
 					</ion-col>
-
 					<ion-header style="height: 0.3%"></ion-header>
 
 					<ion-col
@@ -282,6 +283,8 @@ export default {
 		},
 	},
 }
+
+
 </script>
 
 <style scoped>
@@ -309,16 +312,16 @@ export default {
 
 @media screen and (min-width: 992px) {
 	.ion-margin-horizontal {
-		margin-left: 10px;
-		margin-right: 40px;
+		margin-left: 20px;
+		margin-right: 20px;
 	}
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1035px) {
 	.dateDiv {
 		max-width: 1400px;
-		padding-left: 50px;
-		padding-right: 50px;
+		padding-left: 20px;
+		padding-right: 20px;
 	}
 }
 
@@ -328,7 +331,7 @@ export default {
 
 .semester-container {
 	display: flex;
-	padding-top: 10px;
+	padding-top: 25px;
 	background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
 
@@ -396,7 +399,7 @@ export default {
 }
 
 #header:hover {
-	opacity: 0.7;
+	opacity: 0.5;
 }
 
 #header ion-label {
@@ -411,5 +414,42 @@ ion-datetime {
 	background: var(--ion-item-background, var(--ion-background-color, #d2d69e));
 	color: var(--ion-color #fff);
 	border-radius: 16px;
+}
+
+@media only screen and (min-width: 768px) {
+	.koala-image {
+		margin-top: -90px;
+		display: inline;
+		height: 300px;
+		margin-left: -20px;	
+	}
+}
+
+@media only screen and (max-width: 767px) {
+    .koala-image {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+	.speechbubble {
+		margin-left: 200px;
+		margin-top: 100px;
+		display: inline;
+		height: 90px;	
+	}
+}
+
+@media only screen and (max-width: 767px) {
+    .speechbubble {
+        display: none;
+    }
+}
+
+
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 </style>
