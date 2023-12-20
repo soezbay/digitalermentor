@@ -22,7 +22,7 @@
 			<ion-grid>
 				<ion-row style="margin-bottom: 7px">
 					<!-- ion-col for Studiengang -->
-					<ion-col class="studiengang">
+					<ion-col class="studiengang" size="12" size-sm="6">
 						<ion-item lines="none">
 							<!-- choice between "Studiengängen" -->
 							<ion-select
@@ -48,7 +48,7 @@
 		  </ion-item> -->
 
 					<!-- ion-col for Listenansicht -->
-					<ion-col class="listenansicht">
+					<ion-col class="listenansicht" size="12" size-sm="6">
 						<ion-item lines="none">
 							<!-- ion-toggle for "Listenansicht" -->
 							<ion-toggle
@@ -61,7 +61,11 @@
 					</ion-col>
 				</ion-row>
 			</ion-grid>
-			<!-- Ion Grid für Semester -->
+
+      <!-- Divider between Semester and Studiengang/Listenansicht -->
+      <ion-item-divider></ion-item-divider>
+            
+			<!-- Ion Grid for Semester -->
 			<div v-if="showAsList === false" class="ion-padding">
 				<ion-grid :fixed="true">
 					<ion-row v-for="semester in uniqueSemesters" :key="semester">
@@ -86,8 +90,9 @@
 							<!-- </ion-list> -->
 						</ion-col>
 					</ion-row>
-					<ion-row v-if="modules.wahlpflicht != 0">
-						<ion-col size="12" style="width: 100%">
+					
+          <ion-row v-if="modules.wahlpflicht != 0">
+						<ion-col size-md="9" size-xs="12" style="width: 100%">
 							<!-- <ion-list class="moduleList"> -->
 							<ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
 							<ion-col size="5">
@@ -530,6 +535,7 @@ ion-item-divider {
 	margin-top: 5px;
 }
 
+/* modal for desktop */
 @media (max-width:950px) {
 	.info-modal {
 		--height: 75%;
@@ -540,6 +546,7 @@ ion-item-divider {
 	}
 }
 
+/* modal for mobile devices */
 @media (min-width:950px) {
 	.info-modal {
 		--height: 80%;
@@ -550,6 +557,18 @@ ion-item-divider {
 	}
 }
 
+/* for mobile devices, columns of Studiengang/Listenansicht aligned on the left*/
+@media (max-width: 767px) {
+  .studiengang,
+  .listenansicht {
 
+    display: flex;
+    align-items: left;
+    justify-content: left;
+  }
+  .modulBlock {
+    width: calc(20% - 10px); /* Adjust the width as needed */
+  }
+}
 
 </style>
