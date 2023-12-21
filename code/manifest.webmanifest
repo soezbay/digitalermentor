@@ -1,0 +1,22 @@
+{
+    "name": "digitaler-mentor",
+    "short_name": "digitaler-mentor",
+    "description": "Deine GoTo App die dir beim Planen deines Studiums unter die Arme greift. Module auflisten, deinen Studienverlauf planen und Ziele definieren die essenziel für dein Studium sein könnten!",
+    "theme_color": "#8C9900",
+    "icons": [
+        {
+            "src": "/resources/App_Logo_DigitalerMentor_192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/resources/App_Logo_DigitalerMentor_512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#000000"
+}

@@ -29,37 +29,47 @@
 						border-bottom-right-radius: 25px;
 					"
 					alt=""
-					src="resources/Tafel.png"
+					src="resources/Tafel.jpg"
 					class="platzhalter" />
 				<div id="pb">
 					<ion-avatar>
-						<img alt="" src="resources/Platzhalter_Digitaler_Mentor.png" />
+						<img alt="" src="resources/Platzhalter_Digitaler_Mentor.jpg" />
 					</ion-avatar>
 				</div>
 			</div>
 			<div style="height: 70px"></div>
+			<template v-if="Benutzer[0]">
 			<div style="text-align: center">
 				<h1>{{ texts.profil.name }}</h1>
-				<h4>Max Mustermann</h4>
+				<!-- <h4>{{ userdata.profile.firstname }} {{ userdata.lastname }} </h4> -->
+				<h4>{{ this.Benutzer[0].Vorname }} {{ this.Benutzer[0].Nachname }}</h4>
 
 				<h1>{{ texts.profil.matrikel }}</h1>
-				<h4>202021000</h4>
+				<!-- <h4>{{ userdata.profile.matrikelnumber }}</h4> -->
+				<h4>{{ this.Benutzer[0].Martrikelnummer }}</h4>
 
 				<h1>{{ texts.profil.studiengang }}</h1>
-				<h4>Informatik (B.Sc)</h4>
+				<!-- <h4>{{ userdata.profile.course }}</h4> -->
+				<h4>{{ this.Benutzer[0].Kuerzel }}</h4>
 
 				<h1>{{ texts.profil.fachsemester }}</h1>
-				<h4 style="margin-bottom: 0px">4</h4>
+				<!-- <h4 style="margin-bottom: 0px"> {{ userdata.profile.semester }}</h4> -->
+				<h4 style="margin-bottom: 0px">{{  this.Benutzer[0].Fachsemester }}</h4>
 
 				<h1>{{ texts.profil.email }}</h1>
-				<h4>max.mustermann@studmail.w-hs.de</h4>
+				<!-- <h4>{{ userdata.profile.email }}</h4> -->
+				<h4>{{ this.Benutzer[0].EMail }}</h4>
 			</div>
+		</template>
 		</ion-content>
 	</ion-page>
 </template>
 
 <script>
+import { userdata } from '../userdata.js';
+import { texts } from '../texts.js'
 import { create } from 'ionicons/icons'
+import axios from 'axios'
 import {
 	IonPage,
 	IonHeader,
@@ -79,8 +89,6 @@ import {
 	IonIcon,
 	IonAvatar,
 } from '@ionic/vue'
-import { texts } from '../texts.js'
-
 export default {
 	components: {
 		IonPage,
@@ -104,13 +112,30 @@ export default {
 
 	data() {
 		return {
+			Adress: import.meta.env.VITE_API_URL,
 			texts,
+			userdata,
+			Benutzer: {}
 		}
 	},
 
 	setup() {
 		return { create }
 	},
+	created() {
+		this.fetchBenutzer();
+	},
+	methods: {
+		async fetchBenutzer() {
+			try {
+				const response = await axios.get(`${this.Adress}/benutzer/${this.$store.getters.getTestBenutzer}`)
+				this.Benutzer = response.data.benutzer
+				console.info(this.Benutzer);
+			} catch (error) {
+				console.error('Error fetching Benutzer:', error)
+			}
+		}
+	}
 }
 </script>
 
@@ -157,4 +182,10 @@ h4 {
 		height: 300px;
 	}
 }
+
+/* move to the left */
+ion-title {
+	margin-left: -5px;
+}
+
 </style>

@@ -25,9 +25,12 @@
 							<ion-label>{{ texts.ziele.deineZiele }}</ion-label>
 						</div>
 						<div class="semesterHeader">
-							<ion-label class="labelHeader">{{ texts.studium.sommersemester }}</ion-label>
+							<ion-label class="labelHeader">{{
+								texts.studium.sommersemester
+							}}</ion-label>
 							<ion-buttons slot="end">
-								<ion-button style="padding-right: 15px" color="primary" id="open-SS-modal" @click="openSSModal()" expand="block">
+								<ion-button style="padding-right: 15px" color="primary" id="open-SS-modal"
+									@click="openSSModal()" expand="block">
 									<ion-icon :icon="add"></ion-icon>
 								</ion-button>
 							</ion-buttons>
@@ -74,14 +77,17 @@
 						<!--Only getting displayed when Array is empty-->
 						<div v-else class="ion-padding">
 							<div class="explanatory-text">
-								<ion-label style="font-size: large">{{ texts.ziele.keineZieleDefiniert }}</ion-label>
+								<ion-label style="font-size: large">{{
+									texts.ziele.keineZieleDefiniert
+								}}</ion-label>
 							</div>
 						</div>
 
 						<div class="semesterHeader">
 							<ion-label class="labelHeader">{{ texts.studium.wintersemester }}</ion-label>
 							<ion-buttons slot="end">
-								<ion-button style="padding-right: 15px" color="primary" id="open-WS-modal" @click="openWSModal()" expand="block">
+								<ion-button style="padding-right: 15px" color="primary" id="open-WS-modal"
+									@click="openWSModal()" expand="block">
 									<ion-icon :icon="add"></ion-icon>
 								</ion-button>
 							</ion-buttons>
@@ -95,7 +101,7 @@
 											<ion-label>{{ texts.ziele.nachOben }}</ion-label>
 										</ion-item-option>
 									</ion-item-options>
-									<!--Displayin Goal-Element properties-->
+									<!--Displaying Goal-Element properties-->
 									<ion-item color="#d2d69e" class="item-container" lines="none">
 										<ion-label class="card-label">
 											<h2>{{ goal.titel }}</h2>
@@ -134,14 +140,14 @@
 					</ion-col>
 
 					<!--Item-Elements routing to checked Goals and deleted Goals-->
-					<ion-col size="12" size-md="6" class="col">
-						<ion-item class="background" color="primary" router-link="/menu/studienziele/checked" id="header"
-							detail="true" lines="none">
+					<ion-col class="col">
+						<ion-item class="background header" color="primary" router-link="/menu/studienziele/checked"
+							detail="true" lines="none" id="reachedGoalsButton">
 							<ion-label class="labelHeader">{{ texts.ziele.erreichteZiele }}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
-						<ion-item class="background" color="light" router-link="/menu/studienziele/deleted" id="header"
-							detail="true" lines="none">
+						<ion-item class="background header" color="light" router-link="/menu/studienziele/deleted"
+							detail="true" lines="none" id="deletedGoalsButton">
 							<ion-label class="labelHeader">{{ texts.ziele.geloeschteZiele }}</ion-label>
 						</ion-item>
 
@@ -153,37 +159,52 @@
 						</ion-row>
 
 						<!-- List of Semester and modules -->
-						<ion-grid v-for="(semester, index) in semesterList" :key="index">
+						<ion-col v-for="(semester, index) in semesterList" :key="index">
 							<ion-row>
-								<label v-if="(index + 1 < semesterList.length)"> {{ index + 1 }}. {{ texts.studium.semester
-								}} </label>
-								<label v-else-if="(index + 1 === semesterList.length)"> {{ texts.studium.wahlpflichtmodule
-								}} </label>
+								<label>
+									{{ semester.semestercount }}
+								</label>
 							</ion-row>
 							<ion-row>
-								<ion-col size="2" v-for="(fach, fachIndex) in semester.faecher" :key="fachIndex">
-									<ion-card class="modules">
-										<ion-label style="color: #000000; font-weight: bolder">{{
-											fach.name
-										}}</ion-label>
-									</ion-card>
-									<!-- Legende -->
+								<ion-col size-xs="2.3" size-sm="2.6" size-md="4" size-lg="4" size-xl="2"
+									v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
+									style="padding: 1px;">
+									<div v-if="modul.tryCount === 1">
+										<ion-card class="modules">
+											<ion-label style="color: #000000; font-weight: bolder">
+												{{ modul.kuerzel }}
+											</ion-label>
+										</ion-card>
+									</div>
+									<div v-else-if="modul.tryCount === 2">
+										<ion-card class="secondTry">
+											<ion-label style="color: #000000; font-weight: bolder">
+												{{ modul.kuerzel }}
+											</ion-label>
+										</ion-card>
+									</div>
+									<div v-else-if="modul.tryCount === 3">
+										<ion-card  class="thirdTry">
+											<ion-label style="color: #000000; font-weight: bolder">
+												{{ modul.kuerzel }}
+											</ion-label>
+										</ion-card>
+									</div>
 								</ion-col>
 							</ion-row>
-						</ion-grid>
+						</ion-col>
+
+						<!-- Legende -->
+						<div id="legend">
+							<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
+							<span>{{ texts.studium.klausurStatus.zweiterVersuch }}</span>
+							<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
+							<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
+						</div>
 					</ion-col>
 				</ion-row>
-				<!-- Legende -->
-				<div id="legend">
-
-					<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
-					<span>{{ texts.studium.klausurStatus.zweiterVersuch }}</span>
-					<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
-					<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
-				</div>
 			</ion-grid>
 		</ion-content>
-
 
 		<!-- Modals for adding a goal (Sommersemester)-->
 		<ion-modal ref="modal_SS" trigger="open-SS-modal" :presenting-element="presentingElement">
@@ -191,9 +212,8 @@
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
 					<ion-buttons slot="end">
-						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white;">{{
-							texts.allgemein.speichern
-						}}</ion-button>
+						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white">{{
+							texts.allgemein.speichern }}</ion-button>
 					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
@@ -221,9 +241,8 @@
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
 					<ion-buttons slot="end">
-						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white;">{{
-							texts.allgemein.speichern
-						}}</ion-button>
+						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white">{{
+							texts.allgemein.speichern }}</ion-button>
 					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
@@ -234,8 +253,12 @@
 				</ion-item>
 				<ion-item>
 					<ion-select ref="semesterSelect" label="Semester" placeholder="Semesterseason" value="Wintersemester">
-						<ion-select-option value="Sommersemester">{{ texts.studium.sommersemester }}</ion-select-option>
-						<ion-select-option value="Wintersemester">{{ texts.studium.wintersemester }}</ion-select-option>
+						<ion-select-option value="Sommersemester">{{
+							texts.studium.sommersemester
+						}}</ion-select-option>
+						<ion-select-option value="Wintersemester">{{
+							texts.studium.wintersemester
+						}}</ion-select-option>
 					</ion-select>
 				</ion-item>
 				<ion-item>
@@ -251,9 +274,8 @@
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.bearbeiteZiel }}</ion-title>
 					<ion-buttons slot="end">
-						<ion-button @click="saveEditedGoal" :disabled="!goal_name" style="color: white;">{{
-							texts.allgemein.speichern
-						}}</ion-button>
+						<ion-button @click="saveEditedGoal" :disabled="!goal_name" style="color: white">{{
+							texts.allgemein.speichern }}</ion-button>
 					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
@@ -264,8 +286,12 @@
 				</ion-item>
 				<ion-item>
 					<ion-select ref="semesterSelect" v-model="semesterSeason" label="Semester" placeholder="Semesterseason">
-						<ion-select-option value="Sommersemester">{{ texts.studium.sommersemester }}</ion-select-option>
-						<ion-select-option value="Wintersemester">{{ texts.studium.wintersemester }}</ion-select-option>
+						<ion-select-option value="Sommersemester">{{
+							texts.studium.sommersemester
+						}}</ion-select-option>
+						<ion-select-option value="Wintersemester">{{
+							texts.studium.wintersemester
+						}}</ion-select-option>
 					</ion-select>
 				</ion-item>
 				<ion-item>
@@ -282,26 +308,42 @@
 					<ion-row justify-content-center align-items-center>
 						<ion-col size="12">
 							<div class="ion-text-center">
-								<p style="font-size: 22px;">
+								<p style="font-size: 22px">
 									<strong>{{ texts.ziele.erklaerung.p1strong }}</strong>
 								</p>
 								<p>
 									<ion-button color="primary" shape="round">
-										<ion-icon :icon="add" style="font-size: 20px; color:white"></ion-icon>
+										<ion-icon :icon="add" style="font-size: 20px; color: white"></ion-icon>
 									</ion-button>
 								</p>
-								<p><strong>{{ texts.ziele.erklaerung.p2strong }}</strong></p>
+								<p>
+									<strong>{{ texts.ziele.erklaerung.p2strong }}</strong>
+								</p>
 								<p>{{ texts.ziele.erklaerung.p2 }}</p>
-								<p><ion-icon :icon="trash" style="font-size: 35px; color: #f07181;"></ion-icon></p>
-								<p><strong>{{ texts.ziele.erklaerung.p3strong }}</strong></p>
+								<p>
+									<ion-icon :icon="trash" style="font-size: 35px; color: #f07181"></ion-icon>
+								</p>
+								<p>
+									<strong>{{ texts.ziele.erklaerung.p3strong }}</strong>
+								</p>
 								<p>{{ texts.ziele.erklaerung.p3 }}</p>
-								<p><ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #BBCC00"></ion-icon></p>
-								<p><strong>{{ texts.ziele.erklaerung.p4strong }}</strong></p>
+								<p>
+									<ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #bbcc00"></ion-icon>
+								</p>
+								<p>
+									<strong>{{ texts.ziele.erklaerung.p4strong }}</strong>
+								</p>
 								<p>{{ texts.ziele.erklaerung.p4 }}</p>
-								<p><ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon></p>
-								<p><strong>{{ texts.ziele.erklaerung.p5strong }}</strong></p>
+								<p>
+									<ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon>
+								</p>
+								<p>
+									<strong>{{ texts.ziele.erklaerung.p5strong }}</strong>
+								</p>
 								<p>{{ texts.ziele.erklaerung.p5 }}</p>
-								<p><strong>{{ texts.ziele.erklaerung.p6strong }}</strong></p>
+								<p>
+									<strong>{{ texts.ziele.erklaerung.p6strong }}</strong>
+								</p>
 								<p>{{ texts.ziele.erklaerung.p6 }}</p>
 								<p>{{ texts.ziele.erklaerung.p7 }}</p>
 							</div>
@@ -320,10 +362,9 @@ import {
 	checkmarkDone,
 	create,
 	helpCircleOutline,
-	sadOutline,
 } from 'ionicons/icons'
-import axios from 'axios'
-import { texts } from "../texts.js";
+import axios, { formToJSON } from 'axios'
+import { texts } from '../texts.js'
 
 import {
 	IonPage,
@@ -354,7 +395,7 @@ import {
 	IonCol,
 	IonItemDivider,
 	IonBadge,
-	modalController
+	modalController,
 } from '@ionic/vue'
 
 export default {
@@ -387,10 +428,10 @@ export default {
 		IonCol,
 		IonItemDivider,
 		IonBadge,
-
 	},
 	data() {
 		return {
+			Adress: import.meta.env.VITE_API_URL,
 			texts,
 			add,
 			trash,
@@ -404,19 +445,8 @@ export default {
 			info: '',
 			goal_id: '',
 			studentID: 'test123',
-			modules: [], // Alle Module aus der Datenbank
-			studentProgress: [], // Teilgenommene Module des Studierenden
-			electiveModules: [],
-			//Array with Modules
-			semesterList: [
-				{ name: '1. Semester' },
-				{ name: '2. Semester' },
-				{ name: '3. Semester' },
-				{ name: '4. Semester' },
-				{ name: '5. Semester' },
-				{ name: '6. Semester' },
-				{ name: 'Wahlpflichtmodule' },
-			],
+			studiengang: 'PI',
+			semesterList: [],
 		}
 	},
 
@@ -440,7 +470,7 @@ export default {
 		},
 		//Logik for saving a new Goal to Vuex-Store
 		saveGoal() {
-			const selectedOption = this.$refs.semesterSelect.value; //get selected Semester in Modal
+			const selectedOption = this.$refs.semesterSelect.value //get selected Semester in Modal
 			if (this.goal_name && selectedOption) {
 				console.log('Erstelle Ziel Daten')
 				//Set Properties from input
@@ -464,8 +494,8 @@ export default {
 			}
 		},
 		saveEditedGoal() {
-			const selectedOption = this.semesterSeason;
-			console.log(selectedOption);
+			const selectedOption = this.semesterSeason
+			console.log(selectedOption)
 			const goal_data = {
 				id: this.goal_id,
 				date: new Date().toLocaleDateString(),
@@ -473,10 +503,10 @@ export default {
 				semesterSeason: selectedOption,
 				info: this.info,
 			}
-			this.goal_name = '';
-			this.semesterSeason = '';
-			this.info = '';
-			this.goal_id = '';
+			this.goal_name = ''
+			this.semesterSeason = ''
+			this.info = ''
+			this.goal_id = ''
 			this.$store.dispatch('editGoal', goal_data)
 			this.dismiss()
 		},
@@ -496,127 +526,97 @@ export default {
 			this.$store.dispatch('switchToSS', goal_ID)
 		},
 		openSSModal() {
-			this.goal_name = '';
-			this.semesterSeason = '';
-			this.info = '';
-			this.goal_id = '';
-			this.$refs.modal_SS.$el.present();
+			this.goal_name = ''
+			this.semesterSeason = ''
+			this.info = ''
+			this.goal_id = ''
+			this.$refs.modal_SS.$el.present()
 		},
 		openWSModal() {
-			this.goal_name = '';
-			this.semesterSeason = '';
-			this.info = '';
-			this.goal_id = '';
-			this.$refs.modal_WS.$el.present();
+			this.goal_name = ''
+			this.semesterSeason = ''
+			this.info = ''
+			this.goal_id = ''
+			this.$refs.modal_WS.$el.present()
 		},
 		openEditModal(goal_ID) {
-			const editModal = this.$refs.modal_edit.$el;
-			this.goal_id = goal_ID;
-			this.goal_name = this.$store.getters.getGoal(goal_ID).titel;
-			this.semesterSeason = this.$store.getters.getGoal(goal_ID).semesterSeason;
-			this.info = this.$store.getters.getGoal(goal_ID).info;
+			const editModal = this.$refs.modal_edit.$el
+			this.goal_id = goal_ID
+			this.goal_name = this.$store.getters.getGoal(goal_ID).titel
+			this.semesterSeason = this.$store.getters.getGoal(goal_ID).semesterSeason
+			this.info = this.$store.getters.getGoal(goal_ID).info
 
 			if (editModal) {
-				editModal.present();
+				editModal.present()
 			}
 		},
 
-		//Get Modules- and User-Data from Server
-		getData() {
-			axios
-				.get('http://localhost:8000/studiengang/pflicht/pi')
-				.then(response => {
-					const pflichtModule = response.data.pflicht
+		async getData() {
+			// Retrieve the regular study duration for the specific study program
+			const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
+			const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/pi`);
+			const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/pi`);
+			const studentProgressResponse = await axios.get(`${this.Adress}/modul/status/${this.studentID}`);
 
-					// Group Modules by Semester
-					const groupedModules = {}
-					pflichtModule.forEach(modul => {
-						const semester = modul.Semester
-						if (!groupedModules[semester]) {
-							groupedModules[semester] = []
-						}
-						groupedModules[semester].push(modul)
-					})
+			const regelstudienzeit = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === this.studiengang).Regelstudienzeit;
+			console.log("--------Die regelstudienzeit:", regelstudienzeit);
+			const pflichtModule = pflichtModuleResponse.data.pflicht;
+			const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
+			const studentProgress = studentProgressResponse.data.modul;
+			console.log(studentProgress.find(spModule => spModule.Kuerzel === "LDS").Versuch);
 
-					// Fill semesterList-Array with the grouped Modules
-					this.semesterList.forEach((semester, index) => {
-						const semesterIndex = index + 1
-						if (groupedModules[semesterIndex]) {
-							semester.faecher = groupedModules[semesterIndex].map(modul => {
-								//Put Module in array
-								return { name: modul.Kuerzel, status: 'versuch1' }
-							})
-						}
-					})
-				})
-				.catch(error => {
-					console.error(error)
-				})
+			// Sort mandatory modules by semester
+			pflichtModule.sort((a, b) => a.Semester - b.Semester);
+			console.log("------Pflichtmodule getData---------", pflichtModule);
 
-			axios
-				.get('http://localhost:8000/studiengang/wahlpflicht/pi')
-				.then(Response => {
-					console.log(Response.data)
-					this.electiveModules = Response.data.wahlpflicht
+			// Retrieve all modules where the student has passed the exam/module
+			const passedModuleKuerzel = studentProgress
+				.filter(modul => modul.Status === 'Bestanden')
+				.map(modul => modul.Kuerzel);
 
-					// Put electiveModules in belonging SemesterArray
-					const wahlpflichtSemesterIndex = this.semesterList.findIndex(
-						item => item.name === 'Wahlpflichtmodule'
-					)
-					if (wahlpflichtSemesterIndex !== -1) {
-						this.semesterList[wahlpflichtSemesterIndex].faecher =
-							this.electiveModules.map(modul => {
-								return { name: modul.Kuerzel, status: 'versuch1' }
-							})
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
+			// Inline getModulesForSemester function
+			for (let semester = 1; semester <= regelstudienzeit; semester++) {
+				this.semesterList.push({
+					semestercount: `${semester}. Semester`,
+					faecher: pflichtModule
+						.filter(modul => modul.Semester === semester && !passedModuleKuerzel.includes(modul.Kuerzel))
+						.map(modul => ({
+							name: modul.Name,
+							kuerzel: modul.Kuerzel,
+							status: 'Nicht_Bestanden',
+							tryCount: studentProgress.find(spModul => spModul.Kuerzel === modul.Kuerzel)?.Versuch || 1,
+						}))
+				});
+			}
 
-			axios
-				.get(`http://localhost:8000/modul/status/${this.studentID}`)
-				.then(Response => {
-					console.log(Response.data)
+			// Add the elective modules to the semester list
+			this.semesterList.push({
+				semestercount: 'Wahlpflichtmodule',
+				faecher: wahlpflichtmodule
+					.filter(modul => !passedModuleKuerzel.includes(modul.Kuerzel))
+					.map(modul => ({
+						name: modul.Name,
+						kuerzel: modul.Kuerzel,
+						status: 'Nicht_Bestanden',
+						tryCount: studentProgress.find(spModul => spModul.Kuerzel === modul.Kuerzel)?.Versuch || 1,
+					}))
+			});
 
-					const studentModules = Response.data.modul
-					const passedModuleKuerzel = studentModules
-						.filter(modul => modul.Status === 'Bestanden')
-						.map(modul => modul.Kuerzel)
-
-					this.semesterList.forEach(semester => {
-						semester.faecher = semester.faecher.filter(fach => {
-							if (passedModuleKuerzel.includes(fach.name)) {
-								return false
-							}
-
-							const matchingModule = studentModules.find(
-								modul => modul.Kuerzel === fach.name
-							)
-
-							if (matchingModule) {
-								if (matchingModule.Status === 'Nicht Bestanden') {
-									if (matchingModule.Versuch < 3) {
-										fach.status =
-											'versuch' + (parseInt(matchingModule.Versuch) + 1)
-									} else {
-										fach.status = parseInt(matchingModule.Versuch)
-									}
-								}
-								return true
-							}
-							return true
-						})
-					})
-				})
-				.catch(err => {
-					console.log(err)
-				})
+		},
+		getModuleClass(tryCount) {
+			console.log("trycount:", tryCount);
+			if (tryCount === 2) {
+				return 'secondTry';
+			} else if (tryCount === 3) {
+				return 'thirdTry';
+			} else {
+				return 'modules'; // Fallback, wenn keine spezifische Klasse gefunden wird
+			}
 		},
 	},
 	//Display when data is fetched
-	mounted() {
-		this.getData()
+	async mounted() {
+		await this.getData();
 	},
 
 	computed: {
@@ -657,31 +657,7 @@ export default {
 }
 
 .grid {
-
-	padding: 16px;
-
-}
-
-@media (min-width:915px) {
-	.modules {
-		height: 35px;
-		width: auto;
-		margin: 1px;
-		text-align: center;
-		padding: 10px;
-		border-radius: 15px;
-	}
-}
-
-@media (max-width:915px) {
-	.modules {
-		height: 25px;
-		width: auto;
-		margin: 1px;
-		text-align: center;
-		border-radius: 15px;
-		padding: 5px;
-	}
+	padding: 25px;
 }
 
 
@@ -706,7 +682,6 @@ export default {
 	padding-top: 30px;
 	padding-bottom: 20px;
 	border-radius: 15px;
-	/* Platzierung für den Inhalt */
 }
 
 .labelHeader {
@@ -792,7 +767,7 @@ export default {
 	cursor: pointer;
 }
 
-@media (max-width:950px) {
+@media (max-width: 950px) {
 	.info-modal {
 		--height: 75%;
 		--width: 75%;
@@ -802,13 +777,13 @@ export default {
 	}
 }
 
-@media (min-width:950px) {
+@media (min-width: 950px) {
 	.info-modal {
 		--height: 80%;
 		--width: 45%;
 		--border-radius: 16px;
 		--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-			0 4px 6px -4px rgb(0 0 0 / 0.1)
+			0 4px 6px -4px rgb(0 0 0 / 0.1);
 	}
 }
 
@@ -838,8 +813,7 @@ ion-modal ion-toolbar {
 }
 
 #legend {
-	text-align: right;
-	padding-right: 16px;
+	text-align: center;
 	font-size: large;
 	margin-top: 25px;
 }
@@ -849,4 +823,62 @@ ion-modal ion-toolbar {
 	margin-right: 5px;
 	margin-left: 5px;
 }
+
+.modules {
+	height: 30px;
+	width: 100%;
+	margin: 2px;
+	text-align: center;
+	padding: 6px;
+	border-radius: 15px;
+	background-color: #fff;
+}
+
+.secondTry {
+	height: 30px;
+	width: 100%;
+	margin: 2px;
+	text-align: center;
+	padding: 6px;
+	border-radius: 15px;
+	background-color: var(--ion-color-warning);
+}
+
+.thirdTry {
+	height: 30px;
+	width: 100%;
+	margin: 2px;
+	text-align: center;
+	padding: 6px;
+	border-radius: 15px;
+	background-color: var(--ion-color-danger);
+}
+
+#reachedGoalsButton {
+	transition: 0.8s;
+}
+
+#reachedGoalsButton:hover {
+	opacity: 0.5;
+}
+
+#deletedGoalsButton {
+	transition: 0.8s;
+}
+
+#deletedGoalsButton:hover {
+	filter: brightness(0.7);
+}
+
+@media (max-width: 767px) {
+  .modules {
+    width: 100%; /* Adjust the width as needed */
+  }
+}
+
+/* move to the left */
+ion-title {
+	margin-left: -5px;
+}
+
 </style>

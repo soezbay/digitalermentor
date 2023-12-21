@@ -2,6 +2,8 @@ import { createStore } from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import axios from 'axios';
 
+const Adress = import.meta.env.VITE_API_URL;
+
 const store = createStore({
     state() {
         return {
@@ -13,6 +15,7 @@ const store = createStore({
             goals_ws: [],
             deletedGoals: [],
             checkedGoals: [],
+            modulesBook: [],
             moduleOverviewData: [],
             TestDaten: {
                 BenutzerID: 'Test123',
@@ -28,7 +31,7 @@ const store = createStore({
                     BenutzerID: state.TestDaten.BenutzerID,
                     CacheDaten: JSON.stringify(state),
                 };
-                await axios.post('http://localhost:8000/cache/', requestData);
+                await axios.post(`${Adress}/cache/`, requestData);
                 console.log('Daten wurden erfolgreich erstellt.');
                 console.info('createCacheAPI wurde ausgeführt');
             } catch (error) {
@@ -45,7 +48,7 @@ const store = createStore({
                     BenutzerID: state.TestDaten.BenutzerID,
                     CacheDaten: JSON.stringify(state),
                 };
-                await axios.put(`http://localhost:8000/cache/`, updatedData)
+                await axios.put(`${Adress}/cache/`, updatedData)
                 console.log('Daten wurden erfolgreich aktualisiert.');
             } catch (error) {
                 console.error('Fehler beim Aktualisieren der API-Daten:', error);
@@ -192,12 +195,6 @@ const store = createStore({
             state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
             state.checkedGoals = state.checkedGoals.filter(goal => goal !== null && goal !== undefined);
         },
-        // updateGoalsOrderForWS(state, updatedGoals_ws) {
-        //     state.goals_ws = updatedGoals_ws;
-        // },
-        // updateGoalsOrderForSS(state, updatedGoals_ss) {
-        //     state.goals_ss = updatedGoals_ss;
-        // },
         restoreGoal(state, goal_ID) {
             const targetGoal = state.deletedGoals.find(goal => goal.id === goal_ID);
             if (targetGoal.semesterSeason === "Sommersemester") {
@@ -222,13 +219,14 @@ const store = createStore({
                 state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);
             }
         },
+        saveModulesBookToStore(state, updatedModulesBook) {
+            state.modulesBook = [...state.modulesBook, updatedModulesBook];
+        },
         saveSettingsModuleOverview(state, lastSettings) {
             console.log("Last Settings:")
             console.log(lastSettings);
             state.moduleOverviewData = lastSettings;
-        }
-
-
+        },
     },
 
     actions: {
@@ -236,7 +234,7 @@ const store = createStore({
             try {
                 const BenutzerID = context.state.TestDaten.BenutzerID;
                 // Überprüfen, ob bereits ein Cache-Eintrag vorhanden ist
-                const response = await axios.get('http://localhost:8000/cache/' + BenutzerID);
+                const response = await axios.get(`${Adress}/cache/` + BenutzerID);
                 const data = response.data;
 
                 if (data.Daten.length === 0) {
@@ -245,7 +243,7 @@ const store = createStore({
                     const localCacheDate = new Date(context.state.letzterCacheUpdate);
                     let APICacheDate = new Date(0);
                     try {
-                        const response = await axios.get(`http://localhost:8000/cache/Timestamp/${BenutzerID}`);
+                        const response = await axios.get(`${Adress}/cache/Timestamp/${BenutzerID}`);
                         const apiData = response.data;
                         const apiDateString = apiData.TimeStamp[0].Datum;
                         APICacheDate = new Date(apiDateString);
@@ -334,48 +332,45 @@ const store = createStore({
         async checkGoal(context, goal_ID) {
             context.commit('checkGoal', goal_ID);
             context.commit('updateAPI', context);
-        }
+        },
+        async saveModulesBook(context, updatedModulesBook) {
+            context.commit('saveModulesBookToStore', updatedModulesBook);
+            context.commit('updateAPI', context);
+        },
+        
+        
     },
 
     getters: {
         userData(state) {
             return state.userData;
         },
-
         termine(state) {
             return state.termine;
         },
-
         termin(state) {
             return (terminId) => {
                 return state.termine.find(termin => termin.id === terminId);
             };
         },
-
         termin: (state) => (id) => {
             return state.termine.find((termin) => termin.id === id);
         },
-
         getSelectedDate(state) {
             return state.selectedDate;
         },
-
         getGoals(state) {
             return state.goals;
         },
-
         getGoal: (state) => (id) => {
             return state.goals.find((goal) => goal.id === id);
         },
-
         getGoals_ss(state) {
             return state.goals_ss;
         },
-
         getGoals_ws(state) {
             return state.goals_ws;
         },
-
         getDeletedGoals(state) {
             return state.deletedGoals;
         },
@@ -390,6 +385,9 @@ const store = createStore({
         },
         getTestBenutzer(state) {
             return state.TestDaten.BenutzerID;
+        },
+        getModulesBook(state) {
+            return state.modulesBook;
         }
     },
     setters: {

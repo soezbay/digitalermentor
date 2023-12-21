@@ -9,8 +9,10 @@ Create Table Studiengang (
 	Standort varchar(50),
 	Abschlussart varchar(10),
 	Regelstudienzeit smallint,
-	Studienbeginn varchar(20)
+	Studienbeginn varchar(20),
+	AnzahlWahlpflichtmodule smallint
 	);
+
 
 Create Table Benutzer (
 	BenutzerID varchar(10) Primary Key,
@@ -26,12 +28,21 @@ Create Table Benutzer (
 	FOREIGN KEY (Kuerzel) REFERENCES Studiengang(Kuerzel)
 	);
 
+Create Table BenutzerEmail ( 
+	EmailID varchar(50) Primary Key,
+	EmailInhalt varchar(10000),
+	BenutzerID varchar(10),
+	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
+);
+
 CREATE TABLE BenutzerCache (
     BenutzerID varchar(10) PRIMARY KEY,
     CacheDaten TEXT,
 	Datum datetime,
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
 );
+
+
  
     
 Create Table Modul ( 
@@ -84,15 +95,19 @@ CREATE Table Wahlpflicht (
 	
 Create Table Bewertung (
 	BewertungsID varchar(50) Primary Key,
-	BewertugsGruppe varchar(20),
 	Bewertung float,
+	Feedback varchar(5000),
+	Schwierigkeitsgrad varchar(15),
+	Arbeitsaufwand varchar(15),
+	Lernhilfe varchar(500),
+	SemsterAnzeigen varchar(10),
 	ErstelltAm date,
 	Kuerzel VARCHAR(5),
 	BenutzerID varchar(10),
 	FOREIGN KEY (Kuerzel) REFERENCES Modul(Kuerzel) On Delete CASCADE,
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID) On Delete CASCADE
 	);
-	
+
 -- Create TABLE Kalendereintrag (
 -- 	Datum datetime,
 -- 	Eintrag text,
@@ -238,8 +253,8 @@ Insert into Modul Value("SYT","Systemtheorie","Prof. Dr. Ekkehard Schrey","Prof.
 
 Insert into Modul Value("ZDR","Zeitdiskrete Regelsysteme","Prof. Dr. Ekkehard Schrey","Prof. Dr. Ekkehard Schrey","Deutsch","Wintersemester",6,180,null,null,"Grundlagen der Mathematik für Informatiker, Mathematik für Informatiker, Technische Grundlagen der Informatik, Algorithmen und Datenstrukturen, Einführung in die Programmierung, Einführung in die Systemtheorie","Klausur",Null,Null,Null);
 
-Insert Into Studiengang Value("PI", "Praktische Informatik", "Westfählische Hochschule Gelsenkirchen","Bachelor",6,"Wintersemester");
-Insert Into Studiengang Value("TI", "Technische Informatik", "Westfählische Hochschule Gelsenkirchen","Bachelor",6,"Wintersemester");
+Insert Into Studiengang Value("PI", "Praktische Informatik", "Westfählische Hochschule Gelsenkirchen","Bachelor",6,"Wintersemester",5);
+Insert Into Studiengang Value("TI", "Technische Informatik", "Westfählische Hochschule Gelsenkirchen","Bachelor",6,"Wintersemester",5);
 
 Insert Into Pflicht Value("PI", "LDS",1);
 Insert Into Pflicht Value("PI", "EPR",1);
@@ -355,11 +370,38 @@ Insert Into Pruefung Value("PID2", 1, '2023-09-03 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID3", 1, '2023-09-02 12:00:00', "LDS" );
 Insert Into Pruefung Value("PID4", 2, '2023-09-02 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID5", 1, '2023-10-10 12:00:00', "LDS" );
+Insert Into Pruefung Value("PID6", 1, '2023-10-10 12:00:00', "TGI" );
 
 Insert Into Anmeldung Value("Test123", "PID5");
 
 
 Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
-Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 1);
-Insert Into Note Value("PID3", "Test123", 5.0, "Nicht Bestanden", 1);
+Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 2);
+Insert Into Note Value("PID3", "Test123", 5.0, "Nicht Bestanden", 3);
 Insert Into Note Value("PID4", "Test123", 2.0, "Bestanden", 2);
+Insert Into Note Value("PID6", "Test123", 5.0, "Nicht Bestanden", 2);
+
+
+INSERT INTO Bewertung (
+    BewertungsID,
+    Bewertung,
+    Feedback,
+    Schwierigkeitsgrad,
+    Arbeitsaufwand,
+    Lernhilfe,
+    SemsterAnzeigen,
+    ErstelltAm,
+    Kuerzel,
+    BenutzerID
+) VALUES (
+    'Test123LDS', -- Beispiel BewertungsID
+    4.5, -- Beispiel Bewertung
+    'Gute Vorlesungen und interessante Übungen.', -- Beispiel Feedback
+    'Mittel', -- Beispiel Schwierigkeitsgrad
+    'Mittel', -- Beispiel Arbeitsaufwand
+    'Altklausur', -- Beispiel Lernhilfe
+    'Ja', -- Beispiel SemsterAnzeigen
+    '2023-12-11', -- Beispiel ErstelltAm
+    'LDS', -- Beispiel Kuerzel
+    'Test123' -- Beispiel BenutzerID
+);
