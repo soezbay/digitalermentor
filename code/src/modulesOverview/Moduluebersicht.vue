@@ -18,6 +18,7 @@
 		</ion-header>
 
 		<ion-content>
+			<ion-searchbar v-model="searchText" @ionChange="onSearchChange"></ion-searchbar>
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid>
 				<ion-row style="margin-bottom: 7px">
@@ -51,68 +52,43 @@
 
 			<!-- Ion Grid for Semester -->
 			<div v-if="showAsList === false" class="ion-padding">
-				<ion-grid :fixed="true">
-					<ion-row v-for="semester in uniqueSemesters" :key="semester">
-						<ion-col size="12" size-md="10" style="width: 100%">
-							<ion-label class="modulfont">{{ `${semester}. Semester ` }}</ion-label>
-							<ion-col size="5">
-								<ion-row>
-									<ion-card class="modulBlock" v-for="module in getModulesForSemester(semester)"
-										:key="module.Kuerzel" @click="openModal(module)">
-										<ion-label class="modulLabel">
-											{{ module.Kuerzel }}</ion-label>
-									</ion-card>
-								</ion-row>
+				<ion-grid>
+					<ion-col v-for="(semester, index) in getselectedCourseModules()" :key="index">
+						<ion-row style="padding-left: 10px;">
+							<label>
+								{{ semester.semestercount }}
+							</label>
+						</ion-row>
+						<ion-row style="max-width: 750px;">
+							<ion-col size="1.7" v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
+								style="width: 100px; max-width: 100px; min-width: 60px;">
+								<ion-card class="modulBlock" @click="openModal(modul)">
+									<ion-label style="color: #000000; font-weight: bolder">
+										{{ modul.Kuerzel }}
+									</ion-label>
+								</ion-card>
 							</ion-col>
-						</ion-col>
-					</ion-row>
-					
-					<ion-row v-if="modules.wahlpflicht != 0">
-						<ion-col size-md="9" size-xs="12" style="width: 100%">
-							<ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
-							<ion-col size="5">
-								<ion-row>
-									<ion-card class="modulBlock" v-for="module in modules.wahlpflicht" :key="module.Kuerzel"
-										@click="openModal(module)">
-										<ion-label class="modulLabel">{{
-											module.Kuerzel
-										}}</ion-label>
-									</ion-card>
-								</ion-row>
-							</ion-col>
-						</ion-col>
-					</ion-row>
-					<div style="height: 300px"></div>
+						</ion-row>
+					</ion-col>
 				</ion-grid>
 			</div>
 
 			<!--Show modules as List when showAsList=true-->
-			<ion-list v-else style="padding: 0">
-				<div v-for="semester in uniqueSemesters" :key="semester">
+			<ion-list v-else style="padding: 0; padding-top: 10px;">
+				<div v-for="(semester, index) in getselectedCourseModules()" :key="index">
 					<ion-list-header class="semesterHeaderList">
-						<ion-label>{{ `Semester ${semester}` }}</ion-label>
+						<ion-label>{{ semester.semestercount }}</ion-label>
 					</ion-list-header>
-					<ion-item v-for="module in getModulesForSemester(semester)" :key="module.Kuerzel"
-						@click="openModal(module)">
-						<ion-label>{{ module.Name }} ({{ module.Kuerzel }})</ion-label>
-						<ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
-					</ion-item>
-				</div>
-				<!-- Show elective Modules after obligatory Modules-->
-				<div v-if="modules.wahlpflicht != 0">
-					<ion-list-header class="semesterHeaderList">
-						<ion-label>Wahlpflichtflichtmodule</ion-label>
-					</ion-list-header>
-					<ion-item v-for="module in modules.wahlpflicht" :key="module.Kuerzel" @click="openModal(module)">
-						<ion-label>{{ module.Name }} ({{ module.Kuerzel }})</ion-label>
-						<ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
+					<ion-item v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex" @click="openModal(modul)">
+						<ion-label>{{ modul.Name }} ({{ modul.Kuerzel }})</ion-label>
+						<ion-note slot="end">{{ modul.Leistungspunkte }} LP</ion-note>
 					</ion-item>
 				</div>
 				<div style="height: 200px"></div>
 			</ion-list>
 
 			<!-- Modal for changing Courses to display -->
-			<ion-modal ref="coursesModal" trigger="open-courses-modal">
+			<ion-modal ref="coursesModal">
 				<ion-header>
 					<ion-toolbar>
 						<ion-title>Wähle einen Studiengang aus</ion-title>
@@ -129,8 +105,7 @@
 			</ion-modal>
 
 			<!--Help-Modal-option for user-->
-			<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal"
-				:presenting-element="presentingElement">
+			<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal">
 				<ion-content>
 					<ion-grid>
 						<ion-row justify-content-center align-items-center>
@@ -175,7 +150,7 @@ import {
 	IonSelectOption, IonSelect,
 	IonList, IonListHeader, IonItem, IonLabel, IonIcon,
 	IonCard, IonCardTitle,
-	IonModal, modalController, IonNote
+	IonModal, modalController, IonNote, IonItemDivider
 } from '@ionic/vue';
 
 export default {
@@ -204,135 +179,108 @@ export default {
 		IonCardTitle,
 		IonModal,
 		IonNote,
+		IonItemDivider
 	},
 
-	name: "ModulUebersicht",
 	data() {
 		return {
-			helpCircleOutline, book,
+			helpCircleOutline, book, texts,
 			Adress: import.meta.env.VITE_API_URL,
 			showAsList: false,
 			selectedStudiengang: null,
 			studiengaenge: [],
-			texts,
-			modules: {
-				pflicht: [],// initialize "Pflichtmodule"
-				wahlpflicht: []
-			}
+			modulesBook: [],
 		};
 	},
 
-	computed: {
-		uniqueSemesters() {
-			// check, if this.modules.pflicht is available, before they are accessed
-			if (this.modules.pflicht) {
-				const uniqueSemesters = [
-					...new Set(this.modules.pflicht.map(module => module.Semester)),
-				]
-
-				// sort the unique semesters in ascending order
-				uniqueSemesters.sort((a, b) => a - b)
-
-				console.log('Einzigartige Semester:', uniqueSemesters)
-				return uniqueSemesters
-			} else {
-				return []
-			}
-		},
-		settings() {
-			console.log('Getting settings:')
-			return this.$store.getters.getModuleOverviewData
-		},
-	},
-
-	created() {
-		// console.log("Wir sind hier");
-		this.fetchStudiengaenge()
-		// console.log("Studiengang= ", this.selectedStudiengang)
-		if (this.selectedStudiengang != null) {
-			this.fetchPflichtModule(this.selectedStudiengang)
-			this.fetchWahplfichtModule(this.selectedStudiengang)
-		}
-	},
-
-	mounted() {
-		this.fetchStudiengaenge()
-		console.log('Mounte Settings:')
-		console.log(this.settings)
-		const lastSetup = this.settings
-
-		if (
-			lastSetup.selectedStudiengang !== undefined &&
-			lastSetup.selectedStudiengang !== null
-		) {
-			this.selectedStudiengang = lastSetup.selectedStudiengang
-		}
-		if (lastSetup.showAsList !== undefined && lastSetup.showAsList !== null) {
-			this.showAsList = lastSetup.showAsList
-			console.log('Settings Geladen')
-		}
-	},
-
-	watch: {
-		selectedStudiengang(newStudiengang) {
-			this.fetchPflichtModule(newStudiengang)
-			this.fetchWahplfichtModule(newStudiengang)
-			this.onStudiengangChange()
-		},
-	},
 
 	methods: {
 		async fetchStudiengaenge() {
 			try {
-				console.log(this.Adress)
 				const response = await axios.get(`${this.Adress}/studiengang`)
 				this.studiengaenge = response.data.studiengaenge
-				console.log('Test')
-				console.log(this.studiengaenge)
 			} catch (error) {
 				console.error('Error fetching studiengaenge:', error)
 			}
 		},
 
-		async fetchPflichtModule() {
-			try {
-				const response = await fetch(
-					`${this.Adress}/studiengang/pflicht/${this.selectedStudiengang}`
-				)
-				const data = await response.json()
-				console.log(data)
+		async getModuleData(selectedStudiengang) {
 
-				// check if the data is existing in the response
-				if (data.pflicht) {
-					this.modules.pflicht = data.pflicht
-					console.log('Pflichtmodule geladen:', this.modules.pflicht)
-				} else {
-					console.error('Fehler beim Laden der Pflichtmodule.')
+			try {
+
+				if (selectedStudiengang === null || selectedStudiengang === undefined) {
+					throw new Error('selectedStudiengang ist null oder undefined');
 				}
+
+				// Überprüfen, ob der Studiengang bereits in der modulesBook vorhanden ist
+				const studiengangExists = this.modulesBook.some(item => item.course === selectedStudiengang);
+				if (studiengangExists) {
+					console.log(`Studiengang ${selectedStudiengang} ist bereits in der modulesBook vorhanden.`);
+					return;
+				}
+
+				// Retrieve the regular study duration for the specific study program
+				const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
+				const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/${selectedStudiengang}`);
+				const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${selectedStudiengang}`);
+
+				const pflichtModule = pflichtModuleResponse.data.pflicht;
+				const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
+				const studiengang = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === selectedStudiengang);
+
+				const regelstudienzeit = studiengang.Regelstudienzeit;
+
+				console.log("--------Die regelstudienzeit:", regelstudienzeit);
+				// Sort mandatory modules by semester
+				pflichtModule.sort((a, b) => a.Semester - b.Semester);
+				console.log("------Pflichtmodule getData---------", pflichtModule);
+
+				// Inline getModulesForSemester function
+				for (let semester = 1; semester <= regelstudienzeit; semester++) {
+					this.modulesBook.push({
+						course: selectedStudiengang,
+						semestercount: `${semester}. Semester`,
+						faecher: pflichtModule
+							.filter(modul => modul.Semester === semester)
+					});
+				}
+				// Add the elective modules to the semester list
+				this.modulesBook.push({
+					course: selectedStudiengang,
+					semestercount: 'Wahlpflichtmodule',
+					faecher: wahlpflichtmodule
+				});
+
+				this.$store.dispatch('updateModulesBook', this.modulesBook);
+
 			} catch (error) {
-				console.error('Fehler beim Abrufen der Daten:', error)
+				// Fehlerbehandlung: Gib den Fehler aus
+				console.error('Fehler beim Abrufen oder Verarbeiten der Daten:', error.message);
+				if (error.message.includes('Network Error')) {
+					console.error('Keine Internetverbindung!');
+					// Hier könntest du zusätzliche Maßnahmen ergreifen oder eine Meldung an den Benutzer anzeigen
+				}
 			}
+
 		},
 
-		async fetchWahplfichtModule(selectedStudiengang) {
-			try {
-				const response = await axios.get(
-					`${this.Adress}/studiengang/wahlpflicht/${this.selectedStudiengang}`
-				)
-				const data = await response.data
-				if (data.wahlpflicht) {
-					this.modules.wahlpflicht = data.wahlpflicht
-					console.log('Wahlplichtmodule geladen:', this.modules.wahlpflicht)
-				} else {
-					console.error('Fehler beim Laden der Wahlpflichtflichtmodule.')
-				}
-			} catch (error) {
-				console.error('Fehler beim Abrufen der Daten:', error)
-			}
+		getselectedCourseModules() {
+			console.log("-----------DIE modulesBook MIT MODULEN:", this.modulesBook);
+			const array = this.modulesBook.filter(arr => arr.course === this.selectedStudiengang);
+			console.log("________DIE GEFILTERTE LISTE", array);
+			return array;
 		},
-		toggleDescription(semesterIndex, moduleIndex) {
-			this.moduleSemesters[semesterIndex][moduleIndex].showDescription =
-				!this.moduleSemesters[semesterIndex][moduleIndex].showDescription
+
+		onSearchChange() {
+			const filteredModules = this.modulesBook.map((semester) => ({
+				...semester,
+				faecher: semester.faecher.filter((modul) =>
+					modul.Kuerzel.toLowerCase().includes(this.searchText.toLowerCase())
+				),
+			}));
+
+			// Aktualisieren Sie die gefilterten Module in Ihrer Datenoption
+			this.filteredModules = filteredModules;
 		},
 
 		async openModal(selectedModul) {
@@ -363,28 +311,6 @@ export default {
 				})
 		},
 
-		getModulesForSemester(semester) {
-			// filter the "Pflichtmodule" based on the selected semester
-			return this.modules.pflicht.filter(module => module.Semester === semester)
-		},
-
-		// istEinWahlpflichtmodulImSemester(semester) {
-		//   const filteredModules = this.modules.wahlpflicht.filter((module) => module.Semester === semester);
-		//   return filteredModules.length > 0;
-		// },
-
-		// AnzahlPflichtmoduleImSemester(semester) {
-		//   const filteredModules = this.modules.pflicht.filter((module) => module.Semester === semester);
-		//   return filteredModules.length;
-		// },
-
-		maxWahlpflichtCols(semester) {
-			const maxCols = 5
-			const numPflichtModules = this.getModulesForSemester(semester).length
-			const remainingCols = maxCols - numPflichtModules
-			return Math.max(0, remainingCols)
-		},
-
 		onToggleChange() {
 			if (this.showAsList === true) {
 				const settingsArr = {
@@ -411,6 +337,39 @@ export default {
 			this.$store.commit('saveSettingsModuleOverview', settingsArr)
 		},
 	},
+
+	async mounted() {
+
+		this.fetchStudiengaenge();
+		this.modulesBook = this.$store.getters.getModulesBook;
+		console.log("VUEX MODULESBOOK", this.$store.getters.getModulesBook);
+		console.log("MODULESBOOK", this.modulesBook);
+		console.log("-----STUDIENGANG:", this.selectedStudiengang);
+		await this.getModuleData(this.selectedStudiengang);
+
+		const lastSetup = this.settings;
+		if (lastSetup.selectedStudiengang !== undefined && lastSetup.selectedStudiengang !== null) {
+			this.selectedStudiengang = lastSetup.selectedStudiengang
+		}
+		if (lastSetup.showAsList !== undefined && lastSetup.showAsList !== null) {
+			this.showAsList = lastSetup.showAsList
+			console.log('Settings Geladen')
+		};
+	},
+
+	watch: {
+		selectedStudiengang(newStudiengang) {
+			this.getModuleData(newStudiengang);
+			this.onStudiengangChange()
+		},
+	},
+
+	computed: {
+		settings() {
+			console.log('Getting settings')
+			return this.$store.getters.getModuleOverviewData
+		},
+	},
 }
 </script>
 
@@ -419,25 +378,13 @@ export default {
 	font-size: 28px;
 }
 
-/* .custom-ion-select .alert-wrapper
-  {
-	background-color: #000000;
-	  color: var(--ion-color-success-contrast);
-  } */
-
-/* 
-  ion-alert.custom-alert {
-	  --backdrop-opacity: 0.7;
-	} */
-
-/* adjust properties */
 .modulBlock {
-	width: 100px;
 	height: 30px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 5px;
+	width: 100%;
+	max-width: 100px;
+	margin: 2px;
+	text-align: center;
+	padding: 6px;
 	border-radius: 20px;
 	cursor: pointer;
 	background-color: var(--ion-color-secondary);
@@ -446,31 +393,6 @@ export default {
 
 .modulBlock:hover {
 	opacity: 0.7;
-}
-
-/* adjust font */
-.modulLabel {
-	color: #000000;
-	font-weight: bolder;
-}
-
-/* adjust grid */
-ion-grid {
-	padding: 0;
-	margin: 0;
-}
-
-/* adjust margin/padding of column */
-ion-col {
-	margin: 0;
-	padding: 0.1px;
-}
-
-/* adjust semester headers */
-.modulfont {
-	text-align: left;
-	padding-left: 10px;
-	padding-top: 10px;
 }
 
 /* header of "Listenansicht" */
@@ -485,19 +407,19 @@ ion-col {
 
 /* divider "Studiengang/Listenansicht" */
 ion-item-divider {
-	margin-bottom: 20px;
-	margin-top: -30px;
+	margin-bottom: -10px;
+	margin-top: -35px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* padding "Studiengang" */
 .studiengang {
-	margin-top: 0px;
+	padding: 0;
 }
 
 /* padding "Listenansicht" */
 .listenansicht {
-	margin-top: 5px;
+	padding: 0;
 }
 
 /* modal for desktop */
@@ -531,11 +453,6 @@ ion-item-divider {
 		display: flex;
 		align-items: left;
 		justify-content: left;
-	}
-
-	.modulBlock {
-		width: calc(20% - 10px);
-		/* Adjust the width as needed */
 	}
 }
 </style>
