@@ -15,6 +15,7 @@ const store = createStore({
             goals_ws: [],
             deletedGoals: [],
             checkedGoals: [],
+            modulesBook: [],
             moduleOverviewData: [],
             TestDaten: {
                 BenutzerID: 'Test123',
@@ -194,12 +195,6 @@ const store = createStore({
             state.goals_ws = state.goals_ws.filter(goal => goal.id !== goal_ID);
             state.checkedGoals = state.checkedGoals.filter(goal => goal !== null && goal !== undefined);
         },
-        // updateGoalsOrderForWS(state, updatedGoals_ws) {
-        //     state.goals_ws = updatedGoals_ws;
-        // },
-        // updateGoalsOrderForSS(state, updatedGoals_ss) {
-        //     state.goals_ss = updatedGoals_ss;
-        // },
         restoreGoal(state, goal_ID) {
             const targetGoal = state.deletedGoals.find(goal => goal.id === goal_ID);
             if (targetGoal.semesterSeason === "Sommersemester") {
@@ -224,13 +219,14 @@ const store = createStore({
                 state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);
             }
         },
+        saveModulesBookToStore(state, updatedModulesBook) {
+            state.modulesBook = [...state.modulesBook, updatedModulesBook];
+        },
         saveSettingsModuleOverview(state, lastSettings) {
             console.log("Last Settings:")
             console.log(lastSettings);
             state.moduleOverviewData = lastSettings;
-        }
-
-
+        },
     },
 
     actions: {
@@ -336,48 +332,45 @@ const store = createStore({
         async checkGoal(context, goal_ID) {
             context.commit('checkGoal', goal_ID);
             context.commit('updateAPI', context);
-        }
+        },
+        async saveModulesBook(context, updatedModulesBook) {
+            context.commit('saveModulesBookToStore', updatedModulesBook);
+            context.commit('updateAPI', context);
+        },
+        
+        
     },
 
     getters: {
         userData(state) {
             return state.userData;
         },
-
         termine(state) {
             return state.termine;
         },
-
         termin(state) {
             return (terminId) => {
                 return state.termine.find(termin => termin.id === terminId);
             };
         },
-
         termin: (state) => (id) => {
             return state.termine.find((termin) => termin.id === id);
         },
-
         getSelectedDate(state) {
             return state.selectedDate;
         },
-
         getGoals(state) {
             return state.goals;
         },
-
         getGoal: (state) => (id) => {
             return state.goals.find((goal) => goal.id === id);
         },
-
         getGoals_ss(state) {
             return state.goals_ss;
         },
-
         getGoals_ws(state) {
             return state.goals_ws;
         },
-
         getDeletedGoals(state) {
             return state.deletedGoals;
         },
@@ -392,6 +385,9 @@ const store = createStore({
         },
         getTestBenutzer(state) {
             return state.TestDaten.BenutzerID;
+        },
+        getModulesBook(state) {
+            return state.modulesBook;
         }
     },
     setters: {

@@ -825,31 +825,31 @@ ion-modal ion-toolbar {
 }
 
 .modules {
-	height: 35px;
+	height: 30px;
 	width: 100%;
 	margin: 2px;
 	text-align: center;
-	padding: 8px;
+	padding: 6px;
 	border-radius: 15px;
 	background-color: #fff;
 }
 
 .secondTry {
-	height: 35px;
+	height: 30px;
 	width: 100%;
 	margin: 2px;
 	text-align: center;
-	padding: 8px;
+	padding: 6px;
 	border-radius: 15px;
 	background-color: var(--ion-color-warning);
 }
 
 .thirdTry {
-	height: 35px;
+	height: 30px;
 	width: 100%;
 	margin: 2px;
 	text-align: center;
-	padding: 8px;
+	padding: 6px;
 	border-radius: 15px;
 	background-color: var(--ion-color-danger);
 }
