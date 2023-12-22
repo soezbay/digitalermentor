@@ -7,19 +7,27 @@ const Adress = import.meta.env.VITE_API_URL;
 const store = createStore({
     state() {
         return {
+            //userData Storage
             userData: [],
+            //appoinments Storage
             termine: [],
             selectedDate: new Date(),
+            //moduleOverview Storage
+            modulesBook: [],
+            moduleOverviewData: [],
+            //goals Storage
             goals: [],
             goals_ss: [],
             goals_ws: [],
             deletedGoals: [],
             checkedGoals: [],
-            modulesBook: [],
-            moduleOverviewData: [],
+
+            //Test Storage
             TestDaten: {
                 BenutzerID: 'Test123',
             },
+            
+            //cache Storage
             letzterCacheUpdate: new Date(0)
         }
     },
@@ -337,8 +345,8 @@ const store = createStore({
             context.commit('saveModulesBookToStore', updatedModulesBook);
             context.commit('updateAPI', context);
         },
-        
-        
+
+
     },
 
     getters: {
