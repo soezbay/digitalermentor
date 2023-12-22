@@ -399,6 +399,7 @@ import {
 	IonBadge,
 	modalController,
 } from '@ionic/vue'
+import { toHandlers } from 'vue'
 
 export default {
 	components: {
@@ -555,71 +556,76 @@ export default {
 
 		async getData() {
 
-			let studiengaengeResponse;
-			let pflichtModuleResponse;
-			let wahlpflichtmoduleResponse;
+			try {
 
-			const modulesBook = this.$store.getter.getModulesBook
-			if (modulesBook.some(module => module.Studiengang === this.studiengang)) {
-				this.modulesList = modulesBook.filter(module => module.Studiengang === this.studiengang);
-			} else {
+				const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
+				const regelstudienzeit = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === this.studiengang).Regelstudienzeit;
+				console.log("--------Die regelstudienzeit:", regelstudienzeit);
+				console.log("u are here3");
 
-				// Retrieve the regular study duration for the specific study program
-				studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
-				pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/pi`);
-				wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/pi`);
+				if (regelstudienzeit) {
+					console.log("u are here");
+
+					const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/${this.studiengang} `);
+					const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${this.studiengang}`);
+					const studentProgressResponse = await axios.get(`${this.Adress}/modul/status/${this.studentID}`);
+
+					const studentProgress = studentProgressResponse.data.modul;
+					this.$store.dispatch('saveStudentProgress', this.studentProgress);
+
+					const pflichtModule = pflichtModuleResponse.data.pflicht;
+					const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
+					console.log(studentProgress.find(spModule => spModule.Kuerzel === "LDS").Versuch);
+
+					// Sort mandatory modules by semester
+					pflichtModule.sort((a, b) => a.Semester - b.Semester);
+					console.log("------Pflichtmodule getData---------", pflichtModule);
+
+					// Retrieve all modules where the student has passed the exam/module
+					const passedModuleKuerzel = studentProgress
+						.filter(modul => modul.Status === 'Bestanden')
+						.map(modul => modul.Kuerzel);
+
+					this.ModuleList = [];
+					// Inline getModulesForSemester function
+					for (let semester = 1; semester <= regelstudienzeit; semester++) {
+						this.ModuleList.push({
+							semestercount: `${semester}. Semester`,
+							faecher: pflichtModule
+								.filter(modul => modul.Semester === semester && !passedModuleKuerzel.includes(modul.Kuerzel))
+								.map(modul => ({
+									Name: modul.Name,
+									Kuerzel: modul.Kuerzel,
+									Status: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Status || '',
+									tryCount: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Versuch || 0,
+								}))
+						});
+					}
+
+					// Add the elective modules to the semester list
+					this.ModuleList.push({
+						semestercount: 'Wahlpflichtmodule',
+						faecher: wahlpflichtmodule
+							.filter(modul => !passedModuleKuerzel.includes(modul.Kuerzel))
+							.map(modul => ({
+								Name: modul.Name,
+								Kuerzel: modul.Kuerzel,
+								Status: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Status || '',
+								tryCount: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Versuch || 0,
+							}))
+					});
+					this.$store.dispatch('updateCurrentModules', this.ModuleList)
+
+				} 
+
+			} catch (error) {
+				console.log(error);
 			}
-
-			const studentProgressResponse = await axios.get(`${this.Adress}/modul/status/${this.studentID}`);
-
-			const regelstudienzeit = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === this.studiengang).Regelstudienzeit;
-			console.log("--------Die regelstudienzeit:", regelstudienzeit);
-			const pflichtModule = pflichtModuleResponse.data.pflicht;
-			const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
-			const studentProgress = studentProgressResponse.data.modul;
-			console.log(studentProgress.find(spModule => spModule.Kuerzel === "LDS").Versuch);
-
-			// Sort mandatory modules by semester
-			pflichtModule.sort((a, b) => a.Semester - b.Semester);
-			console.log("------Pflichtmodule getData---------", pflichtModule);
-
-			// Retrieve all modules where the student has passed the exam/module
-			const passedModuleKuerzel = studentProgress
-				.filter(modul => modul.Status === 'Bestanden')
-				.map(modul => modul.Kuerzel);
-
-			// Inline getModulesForSemester function
-			for (let semester = 1; semester <= regelstudienzeit; semester++) {
-				this.ModuleList.push({
-					semestercount: `${semester}. Semester`,
-					faecher: pflichtModule
-						.filter(modul => modul.Semester === semester && !passedModuleKuerzel.includes(modul.Kuerzel))
-						.map(modul => ({
-							Name: modul.Name,
-							Kuerzel: modul.Kuerzel,
-							Status: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Status || '',
-							tryCount: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Versuch || 0,
-						}))
-				});
-			}
-
-			// Add the elective modules to the semester list
-			this.ModuleList.push({
-				semestercount: 'Wahlpflichtmodule',
-				faecher: wahlpflichtmodule
-					.filter(modul => !passedModuleKuerzel.includes(modul.Kuerzel))
-					.map(modul => ({
-						Name: modul.Name,
-						Kuerzel: modul.Kuerzel,
-						Status: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Status || '',
-						tryCount: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Versuch || 0,
-					}))
-			});
-
 		},
+
 		getModuleClass(tryCount, status) {
-			console.log("trycount:", tryCount);
-			console.log("status:", status);
+			// console.log("trycount:", tryCount);
+			// console.log("status:", status);
 			if (tryCount === 1 && status !== 'Nicht Bestande') {
 				return 'secondTry';
 			} else if (tryCount === 2 && status === 'Nicht Bestanden') {
@@ -631,9 +637,12 @@ export default {
 			}
 		},
 	},
+
 	//Display when data is fetched
 	async mounted() {
-		await this.getData();
+		this.ModuleList = this.$store.getters.getCurrentModules;
+		console.log("currentMODULES: ", this.ModuleList);
+		this.getData();
 	},
 
 	computed: {
