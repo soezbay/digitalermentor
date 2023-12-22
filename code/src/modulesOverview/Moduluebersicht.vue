@@ -15,12 +15,12 @@
 					<ion-menu-button color="primary"></ion-menu-button>
 				</ion-buttons>
 			</ion-toolbar>
+				<ion-searchbar v-model="searchText" @ionChange="onSearchChange"></ion-searchbar>
 		</ion-header>
 
 		<ion-content>
-			<ion-searchbar v-model="searchText" @ionChange="onSearchChange"></ion-searchbar>
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
-			<ion-grid>
+			<ion-grid style="margin: 0; padding-bottom: 0; padding-top: 0;">
 				<ion-row style="margin-bottom: 7px">
 					<!-- ion-col for Studiengang -->
 					<ion-col class="studiengang" size="12" size-sm="6">
@@ -47,12 +47,10 @@
 				</ion-row>
 			</ion-grid>
 
-			<!-- Divider between Semester and Studiengang/Listenansicht -->
-			<ion-item-divider></ion-item-divider>
-
 			<!-- Ion Grid for Semester -->
-			<div v-if="showAsList === false" class="ion-padding">
-				<ion-grid>
+			<div v-if="showAsList === false" class="ion-padding" style="padding-top: 0;">
+				<hr class="solid">
+				<ion-grid style="padding-top: 0; margin-top: 0;">
 					<ion-col v-for="(semester, index) in getselectedCourseModules()" :key="index">
 						<ion-row style="padding-left: 10px;">
 							<label>
@@ -61,7 +59,7 @@
 						</ion-row>
 						<ion-row style="max-width: 750px;">
 							<ion-col size="1.7" v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
-								style="width: 100px; max-width: 100px; min-width: 60px;">
+								style="width: 100px; max-width: 100px; min-width: 68px;">
 								<ion-card class="modulBlock" @click="openModal(modul)">
 									<ion-label style="color: #000000; font-weight: bolder">
 										{{ modul.Kuerzel }}
@@ -199,6 +197,7 @@ export default {
 			try {
 				const response = await axios.get(`${this.Adress}/studiengang`)
 				this.studiengaenge = response.data.studiengaenge
+				this.$store.dispatch('saveCourses', this.studiengaenge);
 			} catch (error) {
 				console.error('Error fetching studiengaenge:', error)
 			}
@@ -206,7 +205,9 @@ export default {
 
 		async getModuleData(selectedStudiengang) {
 
+
 			try {
+				console.log("ur here2");
 
 				if (selectedStudiengang === null || selectedStudiengang === undefined) {
 					throw new Error('selectedStudiengang ist null oder undefined');
@@ -214,13 +215,17 @@ export default {
 
 				// Überprüfen, ob der Studiengang bereits in der modulesBook vorhanden ist
 				const studiengangExists = this.modulesBook.some(item => item.course === selectedStudiengang);
+				console.log(studiengangExists);
 				if (studiengangExists) {
 					console.log(`Studiengang ${selectedStudiengang} ist bereits in der modulesBook vorhanden.`);
 					return;
 				}
+				console.log("ur here3");
 
 				// Retrieve the regular study duration for the specific study program
 				const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
+				console.log("ur here4");
+
 				const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/${selectedStudiengang}`);
 				const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${selectedStudiengang}`);
 
@@ -265,6 +270,7 @@ export default {
 		},
 
 		getselectedCourseModules() {
+			this.getDataOfStore;
 			console.log("-----------DIE modulesBook MIT MODULEN:", this.modulesBook);
 			const array = this.modulesBook.filter(arr => arr.course === this.selectedStudiengang);
 			console.log("________DIE GEFILTERTE LISTE", array);
@@ -339,13 +345,13 @@ export default {
 	},
 
 	async mounted() {
-
-		this.fetchStudiengaenge();
+		this.studiengaenge = this.$store.getters.getCourses;
 		this.modulesBook = this.$store.getters.getModulesBook;
-		console.log("VUEX MODULESBOOK", this.$store.getters.getModulesBook);
-		console.log("MODULESBOOK", this.modulesBook);
-		console.log("-----STUDIENGANG:", this.selectedStudiengang);
-		await this.getModuleData(this.selectedStudiengang);
+		this.fetchStudiengaenge();
+		// console.log("VUEX MODULESBOOK", this.$store.getters.getModulesBook);
+		// console.log("MODULESBOOK", this.modulesBook);
+		// console.log("-----STUDIENGANG:", this.selectedStudiengang);
+		this.getModuleData(this.selectedStudiengang);
 
 		const lastSetup = this.settings;
 		if (lastSetup.selectedStudiengang !== undefined && lastSetup.selectedStudiengang !== null) {
@@ -365,6 +371,10 @@ export default {
 	},
 
 	computed: {
+		// getDataOfStore() {
+		// 	this.studiengaenge = this.$store.getters.getCourses;
+		// 	this.modulesBook = this.$store.getters.getModulesBook;
+		// },
 		settings() {
 			console.log('Getting settings')
 			return this.$store.getters.getModuleOverviewData
@@ -376,6 +386,15 @@ export default {
 <style scoped>
 .infoButton {
 	font-size: 28px;
+}
+
+.solid {
+  border-top: 1px solid grey;
+  /* Breite der Trennstriche angepasst */
+  width: 100%;
+  
+  margin: 0;
+  padding: 0;
 }
 
 .modulBlock {
@@ -407,7 +426,7 @@ export default {
 
 /* divider "Studiengang/Listenansicht" */
 ion-item-divider {
-	margin-bottom: -10px;
+	margin-bottom: -20px;
 	margin-top: -35px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -415,6 +434,7 @@ ion-item-divider {
 /* padding "Studiengang" */
 .studiengang {
 	padding: 0;
+	
 }
 
 /* padding "Listenansicht" */

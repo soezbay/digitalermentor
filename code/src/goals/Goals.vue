@@ -159,7 +159,7 @@
 						</ion-row>
 
 						<!-- List of Semester and modules -->
-						<ion-col v-for="(semester, index) in semesterList" :key="index">
+						<ion-col v-for="(semester, index) in ModuleList" :key="index">
 							<ion-row>
 								<label>
 									{{ semester.semestercount }}
@@ -169,14 +169,14 @@
 								<ion-col size-xs="2.3" size-sm="2.6" size-md="4" size-lg="4" size-xl="2"
 									v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
 									style="padding: 1px;">
-									<div v-if="modul.tryCount === 1">
-										<ion-card class="modules">
-											<ion-label style="color: #000000; font-weight: bolder">
-												{{ modul.kuerzel }}
-											</ion-label>
-										</ion-card>
-									</div>
-									<div v-else-if="modul.tryCount === 2">
+									<!-- <div v-if="modul.tryCount === 1"> -->
+									<ion-card :class="getModuleClass(modul.tryCount, modul.Status)">
+										<ion-label style="color: #000000; font-weight: bolder">
+											{{ modul.Kuerzel }}
+										</ion-label>
+									</ion-card>
+									<!-- </div> -->
+									<!-- <div v-else-if="modul.tryCount === 2">
 										<ion-card class="secondTry">
 											<ion-label style="color: #000000; font-weight: bolder">
 												{{ modul.kuerzel }}
@@ -189,7 +189,7 @@
 												{{ modul.kuerzel }}
 											</ion-label>
 										</ion-card>
-									</div>
+									</div> -->
 								</ion-col>
 							</ion-row>
 						</ion-col>
@@ -200,6 +200,8 @@
 							<span>{{ texts.studium.klausurStatus.zweiterVersuch }}</span>
 							<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
 							<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
+							<ion-badge id="legendBadge" style="background-color: grey;">&nbsp;</ion-badge>
+							<span>Nicht mehr ablegbar</span>
 						</div>
 					</ion-col>
 				</ion-row>
@@ -397,6 +399,7 @@ import {
 	IonBadge,
 	modalController,
 } from '@ionic/vue'
+import { toHandlers } from 'vue'
 
 export default {
 	components: {
@@ -446,7 +449,7 @@ export default {
 			goal_id: '',
 			studentID: 'test123',
 			studiengang: 'PI',
-			semesterList: [],
+			ModuleList: [],
 		}
 	},
 
@@ -552,71 +555,94 @@ export default {
 		},
 
 		async getData() {
-			// Retrieve the regular study duration for the specific study program
-			const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
-			const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/pi`);
-			const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/pi`);
-			const studentProgressResponse = await axios.get(`${this.Adress}/modul/status/${this.studentID}`);
 
-			const regelstudienzeit = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === this.studiengang).Regelstudienzeit;
-			console.log("--------Die regelstudienzeit:", regelstudienzeit);
-			const pflichtModule = pflichtModuleResponse.data.pflicht;
-			const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
-			const studentProgress = studentProgressResponse.data.modul;
-			console.log(studentProgress.find(spModule => spModule.Kuerzel === "LDS").Versuch);
+			try {
 
-			// Sort mandatory modules by semester
-			pflichtModule.sort((a, b) => a.Semester - b.Semester);
-			console.log("------Pflichtmodule getData---------", pflichtModule);
+				const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
+				const regelstudienzeit = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === this.studiengang).Regelstudienzeit;
+				console.log("--------Die regelstudienzeit:", regelstudienzeit);
+				console.log("u are here3");
 
-			// Retrieve all modules where the student has passed the exam/module
-			const passedModuleKuerzel = studentProgress
-				.filter(modul => modul.Status === 'Bestanden')
-				.map(modul => modul.Kuerzel);
+				if (regelstudienzeit) {
+					console.log("u are here");
 
-			// Inline getModulesForSemester function
-			for (let semester = 1; semester <= regelstudienzeit; semester++) {
-				this.semesterList.push({
-					semestercount: `${semester}. Semester`,
-					faecher: pflichtModule
-						.filter(modul => modul.Semester === semester && !passedModuleKuerzel.includes(modul.Kuerzel))
-						.map(modul => ({
-							name: modul.Name,
-							kuerzel: modul.Kuerzel,
-							status: 'Nicht_Bestanden',
-							tryCount: studentProgress.find(spModul => spModul.Kuerzel === modul.Kuerzel)?.Versuch || 1,
-						}))
-				});
+					const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/${this.studiengang} `);
+					const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${this.studiengang}`);
+					const studentProgressResponse = await axios.get(`${this.Adress}/modul/status/${this.studentID}`);
+
+					const studentProgress = studentProgressResponse.data.modul;
+					this.$store.dispatch('saveStudentProgress', this.studentProgress);
+
+					const pflichtModule = pflichtModuleResponse.data.pflicht;
+					const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
+					console.log(studentProgress.find(spModule => spModule.Kuerzel === "LDS").Versuch);
+
+					// Sort mandatory modules by semester
+					pflichtModule.sort((a, b) => a.Semester - b.Semester);
+					console.log("------Pflichtmodule getData---------", pflichtModule);
+
+					// Retrieve all modules where the student has passed the exam/module
+					const passedModuleKuerzel = studentProgress
+						.filter(modul => modul.Status === 'Bestanden')
+						.map(modul => modul.Kuerzel);
+
+					this.ModuleList = [];
+					// Inline getModulesForSemester function
+					for (let semester = 1; semester <= regelstudienzeit; semester++) {
+						this.ModuleList.push({
+							semestercount: `${semester}. Semester`,
+							faecher: pflichtModule
+								.filter(modul => modul.Semester === semester && !passedModuleKuerzel.includes(modul.Kuerzel))
+								.map(modul => ({
+									Name: modul.Name,
+									Kuerzel: modul.Kuerzel,
+									Status: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Status || '',
+									tryCount: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Versuch || 0,
+								}))
+						});
+					}
+
+					// Add the elective modules to the semester list
+					this.ModuleList.push({
+						semestercount: 'Wahlpflichtmodule',
+						faecher: wahlpflichtmodule
+							.filter(modul => !passedModuleKuerzel.includes(modul.Kuerzel))
+							.map(modul => ({
+								Name: modul.Name,
+								Kuerzel: modul.Kuerzel,
+								Status: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Status || '',
+								tryCount: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Versuch || 0,
+							}))
+					});
+					this.$store.dispatch('updateCurrentModules', this.ModuleList)
+
+				} 
+
+			} catch (error) {
+				console.log(error);
 			}
-
-			// Add the elective modules to the semester list
-			this.semesterList.push({
-				semestercount: 'Wahlpflichtmodule',
-				faecher: wahlpflichtmodule
-					.filter(modul => !passedModuleKuerzel.includes(modul.Kuerzel))
-					.map(modul => ({
-						name: modul.Name,
-						kuerzel: modul.Kuerzel,
-						status: 'Nicht_Bestanden',
-						tryCount: studentProgress.find(spModul => spModul.Kuerzel === modul.Kuerzel)?.Versuch || 1,
-					}))
-			});
-
 		},
-		getModuleClass(tryCount) {
-			console.log("trycount:", tryCount);
-			if (tryCount === 2) {
+
+		getModuleClass(tryCount, status) {
+			// console.log("trycount:", tryCount);
+			// console.log("status:", status);
+			if (tryCount === 1 && status !== 'Nicht Bestande') {
 				return 'secondTry';
-			} else if (tryCount === 3) {
+			} else if (tryCount === 2 && status === 'Nicht Bestanden') {
 				return 'thirdTry';
+			} else if (tryCount === 3 && status === 'Nicht Bestanden') {
+				return 'moduleFailed';
 			} else {
 				return 'modules'; // Fallback, wenn keine spezifische Klasse gefunden wird
 			}
 		},
 	},
+
 	//Display when data is fetched
 	async mounted() {
-		await this.getData();
+		this.ModuleList = this.$store.getters.getCurrentModules;
+		console.log("currentMODULES: ", this.ModuleList);
+		this.getData();
 	},
 
 	computed: {
@@ -854,6 +880,16 @@ ion-modal ion-toolbar {
 	background-color: var(--ion-color-danger);
 }
 
+.moduleFailed {
+	height: 30px;
+	width: 100%;
+	margin: 2px;
+	text-align: center;
+	padding: 6px;
+	border-radius: 15px;
+	background-color: grey;
+}
+
 #reachedGoalsButton {
 	transition: 0.8s;
 }
@@ -871,14 +907,14 @@ ion-modal ion-toolbar {
 }
 
 @media (max-width: 767px) {
-  .modules {
-    width: 100%; /* Adjust the width as needed */
-  }
+	.modules {
+		width: 100%;
+		/* Adjust the width as needed */
+	}
 }
 
 /* move to the left */
 ion-title {
 	margin-left: -5px;
 }
-
 </style>
