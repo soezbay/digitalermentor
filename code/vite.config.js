@@ -8,7 +8,11 @@ import legacy from '@vitejs/plugin-legacy'
 export default defineConfig({
   plugins: [
     vue(),
-    VitePWA({ registerType: 'autoUpdate' }),
+    VitePWA(
+      { registerType: 'autoUpdate' },
+      { injectRegister: 'auto' }
+      
+      ),
     legacy(),
   ],
   resolve: {
