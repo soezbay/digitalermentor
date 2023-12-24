@@ -10,9 +10,32 @@ export default defineConfig({
     vue(),
     VitePWA(
       { registerType: 'autoUpdate' },
-      { injectRegister: 'auto' }
-      
-      ),
+      { injectRegister: 'auto' },
+      { strategies: 'generateSW' },
+      {
+        workbox: {
+          runtimeCaching: [{
+            handler: 'NetworkFirst',
+            urlPattern: /\/api\/.*\/*.json/,
+            // urlPattern: ({ url }) => {
+            //   return url.pathname.startsWith("/")
+            // }
+            options: {
+              cacheName: "api-cache",
+              cacheableResponse: {
+                statuses: [0, 200]
+              },
+              backgroundSync: {
+                name: 'backgroundSync1',
+                options: {
+                  maxRetentionTime: 24 * 60
+                }
+              }
+            }
+          }]
+        }
+      }
+    ),
     legacy(),
   ],
   resolve: {
