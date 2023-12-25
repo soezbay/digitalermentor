@@ -21,7 +21,7 @@
 			<ion-grid class="grid">
 				<ion-row>
 					<ion-col size="12" size-md="6" class="col">
-						<div class="goals-container">
+						<div class="goals-container headerText">
 							<ion-label>{{ texts.ziele.deineZiele }}</ion-label>
 						</div>
 						<div class="semesterHeader">
@@ -143,12 +143,12 @@
 					<ion-col class="col">
 						<ion-item class="background header" color="primary" router-link="/menu/studienziele/checked"
 							detail="true" lines="none" id="reachedGoalsButton">
-							<ion-label class="labelHeader">{{ texts.ziele.erreichteZiele }}</ion-label>
+							<ion-label class="labelHeader headerText">{{ texts.ziele.erreichteZiele }}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
-						<ion-item class="background header" color="light" router-link="/menu/studienziele/deleted"
+						<ion-item class="background headerText" color="medium" router-link="/menu/studienziele/deleted"
 							detail="true" lines="none" id="deletedGoalsButton">
-							<ion-label class="labelHeader">{{ texts.ziele.geloeschteZiele }}</ion-label>
+							<ion-label class="labelHeader headerText">{{ texts.ziele.geloeschteZiele }}</ion-label>
 						</ion-item>
 
 						<ion-item-divider class="spacer"></ion-item-divider>
@@ -688,6 +688,10 @@ export default {
 	text-align: center;
 	padding: 5px;
 	font-size: larger;
+}
+
+.headerText {
+	color: var(--ion-color-light);
 }
 
 .semesterHeader ion-icon {
