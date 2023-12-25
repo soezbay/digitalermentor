@@ -29,11 +29,11 @@
 						border-bottom-right-radius: 25px;
 					"
 					alt=""
-					src="resources/Tafel.jpg"
+					src="resources/Tafel.png"
 					class="platzhalter" />
 				<div id="pb">
 					<ion-avatar>
-						<img alt="" src="resources/Platzhalter_Digitaler_Mentor.jpg" />
+						<img alt="" src="resources/Platzhalter_Digitaler_Mentor.png" />
 					</ion-avatar>
 				</div>
 			</div>
