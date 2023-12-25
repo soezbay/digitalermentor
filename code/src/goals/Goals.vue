@@ -21,7 +21,7 @@
 			<ion-grid class="grid">
 				<ion-row>
 					<ion-col size="12" size-md="6" class="col">
-						<div class="goals-container">
+						<div class="goals-container headerText">
 							<ion-label>{{ texts.ziele.deineZiele }}</ion-label>
 						</div>
 						<div class="semesterHeader">
@@ -143,12 +143,12 @@
 					<ion-col class="col">
 						<ion-item class="background header" color="primary" router-link="/menu/studienziele/checked"
 							detail="true" lines="none" id="reachedGoalsButton">
-							<ion-label class="labelHeader">{{ texts.ziele.erreichteZiele }}</ion-label>
+							<ion-label class="labelHeader headerText">{{ texts.ziele.erreichteZiele }}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
-						<ion-item class="background header" color="light" router-link="/menu/studienziele/deleted"
+						<ion-item class="background header" color="medium" router-link="/menu/studienziele/deleted"
 							detail="true" lines="none" id="deletedGoalsButton">
-							<ion-label class="labelHeader">{{ texts.ziele.geloeschteZiele }}</ion-label>
+							<ion-label class="labelHeader headerText">{{ texts.ziele.geloeschteZiele }}</ion-label>
 						</ion-item>
 
 						<ion-item-divider class="spacer"></ion-item-divider>
@@ -643,7 +643,7 @@ export default {
 }
 
 .goals-container {
-	background-color: #8c9900;
+	background-color: var(--ion-color-primary);
 	border-radius: 15px;
 	height: 50px;
 	text-align: center;
@@ -652,7 +652,7 @@ export default {
 }
 
 .explanatory-text {
-	color: grey;
+	color: var(--ion-color-medium);
 	text-align: center;
 }
 
@@ -690,12 +690,17 @@ export default {
 	font-size: larger;
 }
 
+.headerText{
+	color: var(--ion-color-light);
+
+}
+
 .semesterHeader ion-icon {
 	width: 45px;
 	height: 25px;
 	border-radius: 30px;
 	background-color: var(--ion-color-primary);
-	color: white;
+	color: var(--ion-color-light);
 }
 
 .drag-drop-containers {
@@ -712,7 +717,7 @@ export default {
 	margin: 10px;
 	border-radius: 30px;
 	text-align: left;
-	background-color: #d2d69e;
+	background-color: var(--ion-color-secondary);
 }
 
 .drag-drop-box-item ion-icon {
@@ -720,14 +725,14 @@ export default {
 }
 
 .item-container {
-	background-color: #d2d69e;
+	background-color: var(--ion-color-secondary);;
 }
 
 .card-label {
 	margin: 0;
 	padding-left: 15px;
 	font-weight: normal;
-	color: black;
+	color: var(--ion-color-primary-contrast);
 }
 
 .card-label h2 {
@@ -739,7 +744,7 @@ export default {
 	width: 27px;
 	margin-left: 8px;
 	margin-top: 4px;
-	border: 2px solid #ccc;
+	border: 2px solid var(--ion-color-medium);
 	border-radius: 0px;
 }
 
@@ -751,7 +756,7 @@ export default {
 }
 
 .underline {
-	border-bottom: 2px solid #8c9900;
+	border-bottom: 2px solid var(--ion-color-primary);
 	padding-bottom: 5px;
 	margin-bottom: 10px;
 }
@@ -808,8 +813,8 @@ ion-modal::part(backdrop) {
 }
 
 ion-modal ion-toolbar {
-	--background: #8c9900;
-	--color: white;
+	--background: var(--ion-color-primary);
+	--color: var(--ion-color-light);
 }
 
 #legend {
@@ -819,7 +824,7 @@ ion-modal ion-toolbar {
 }
 
 #legendBadge {
-	box-shadow: 1px 1px 7px grey;
+	box-shadow: 1px 1px 7px var(--ion-color-medium);
 	margin-right: 5px;
 	margin-left: 5px;
 }
@@ -831,7 +836,7 @@ ion-modal ion-toolbar {
 	text-align: center;
 	padding: 6px;
 	border-radius: 15px;
-	background-color: #fff;
+	background-color: var(--ion-color-light);
 }
 
 .secondTry {
