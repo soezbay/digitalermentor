@@ -23,17 +23,17 @@
 
 		<ion-content>
 			<div id="imageContainer">
-				<img
+				<!-- <img
 					style="
 						border-bottom-left-radius: 25px;
 						border-bottom-right-radius: 25px;
 					"
 					alt=""
 					src="resources/Tafel.jpg"
-					class="platzhalter" />
+					class="platzhalter" /> -->
 				<div id="pb">
 					<ion-avatar>
-						<img alt="" src="resources/Platzhalter_Digitaler_Mentor.jpg" />
+						<!-- <img alt="" src="resources/Platzhalter_Digitaler_Mentor.jpg" /> -->
 					</ion-avatar>
 				</div>
 			</div>
