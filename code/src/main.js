@@ -2,9 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import store from './store/vuexIndex';
-
 import { IonicVue } from '@ionic/vue';
-
 import { registerSW } from 'virtual:pwa-register'
 
 /* Core CSS required for Ionic components to work properly */
