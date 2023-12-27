@@ -1,26 +1,10 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-toolbar>
-				<ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon
-							style="font-size: 45px"
-							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-title>{{ texts.titel.dashboard }}</ion-title>
-				<ion-buttons slot="end">
-					<ion-menu-button color="primary"></ion-menu-button>
-				</ion-buttons>
-			</ion-toolbar>
-		</ion-header>
-
+		<HeaderComponent :title="texts.titel.dashboard" :hasInfo="false" />
 		<ion-content>
-			<ion-header id="displayUsername"
-				>{{ getGreeting() }}, {{ getUsername() }}</ion-header
-			>
-
+			<ion-header id="displayUsername">
+				{{ getGreeting() }}, {{ getUsername() }}
+			</ion-header>
 			<ion-grid>
 				<ion-row>
 					<ion-col
@@ -171,6 +155,8 @@ import axios from 'axios'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { texts } from '../texts.js'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+
 
 export default {
 	components: {
@@ -191,6 +177,7 @@ export default {
 		IonListHeader,
 		IonIcon,
 		IonDatetime,
+		HeaderComponent,
 	},
 	setup() {
 		const store = useStore()
