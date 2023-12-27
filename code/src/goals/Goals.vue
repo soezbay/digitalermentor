@@ -1,22 +1,7 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-toolbar>
-				<ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon style="font-size: 45px" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-title>{{ texts.titel.studienziele }}</ion-title>
-				<ion-buttons slot="end" style="display: flex; align-items: center">
-					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
-						<ion-icon :icon="helpCircleOutline"></ion-icon>
-					</ion-button>
-					<ion-menu-button color="primary"></ion-menu-button>
-				</ion-buttons>
-			</ion-toolbar>
-		</ion-header>
-
+		<HeaderComponent :title="texts.titel.studienziele" :hasInfo="true" />
+		<InfoModalComponent />
 		<ion-content>
 			<ion-grid class="grid">
 				<ion-row>
@@ -301,57 +286,7 @@
 			</ion-content>
 		</ion-modal>
 
-		<!--Help-Modal-option for user-->
-		<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
-			<ion-content>
-				<ion-grid>
-					<ion-row justify-content-center align-items-center>
-						<ion-col size="12">
-							<div class="ion-text-center">
-								<p style="font-size: 22px">
-									<strong>{{ texts.ziele.erklaerung.p1strong }}</strong>
-								</p>
-								<p>
-									<ion-button color="primary" shape="round">
-										<ion-icon :icon="add" style="font-size: 20px; color: white"></ion-icon>
-									</ion-button>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p2strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p2 }}</p>
-								<p>
-									<ion-icon :icon="trash" style="font-size: 35px; color: #f07181"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p3strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p3 }}</p>
-								<p>
-									<ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #bbcc00"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p4strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p4 }}</p>
-								<p>
-									<ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p5strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p5 }}</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p6strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p6 }}</p>
-								<p>{{ texts.ziele.erklaerung.p7 }}</p>
-							</div>
-						</ion-col>
-					</ion-row>
-				</ion-grid>
-			</ion-content>
-		</ion-modal>
+		
 	</ion-page>
 </template>
 
@@ -365,6 +300,8 @@ import {
 } from 'ionicons/icons'
 import axios, { formToJSON } from 'axios'
 import { texts } from '../texts.js'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+import InfoModalComponent from '../views/Components/InfoModalStudienziele.vue'
 
 import {
 	IonPage,
@@ -428,6 +365,8 @@ export default {
 		IonCol,
 		IonItemDivider,
 		IonBadge,
+		InfoModalComponent,
+		HeaderComponent,
 	},
 	data() {
 		return {

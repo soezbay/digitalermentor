@@ -1,23 +1,7 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-toolbar>
-				<ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon
-							style="font-size: 45px"
-							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-title>{{ texts.titel.studienverlauf }}</ion-title>
-				<ion-buttons slot="end" style="display: flex; align-items: center">
-					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
-						<ion-icon :icon="helpCircleOutline"></ion-icon>
-					</ion-button>
-					<ion-menu-button color="primary"></ion-menu-button>
-				</ion-buttons>
-			</ion-toolbar>
-		</ion-header>
+		<HeaderComponent :title="texts.titel.studienverlauf" :hasInfo="true" />
+		<InfoModalComponent />
 		<ion-content>
 			<!-- CP Progress bar mit Notendurchschnitt -->
 			<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
@@ -207,35 +191,6 @@
 				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
 				<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
 			</div>
-
-			<!--Help-Modal-option for user-->
-			<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
-			<ion-content>
-				<ion-grid>
-					<ion-row justify-content-center align-items-center>
-						<ion-col size="12">
-							<div class="ion-text-center">
-							<p><ion-icon :icon="school" style="font-size: 40px; color:#BBCC00"></ion-icon></p>
-								<p style="font-size: 22px;">
-									<strong>{{ texts.studienverlauf.erklaerung.p1strong }}</strong>
-								</p>
-								<p> {{ texts.studienverlauf.erklaerung.p1 }}</p>
-								<p><strong>{{ texts.studienverlauf.erklaerung.p2strong }}</strong></p>
-								<p> {{ texts.studienverlauf.erklaerung.p2 }}</p>
-								<p><strong>{{ texts.studienverlauf.erklaerung.p3strong }}</strong></p>
-								<p> {{ texts.studienverlauf.erklaerung.p3 }}</p>
-								<p><strong>{{ texts.studienverlauf.erklaerung.p4strong }}</strong></p>
-								<p> {{ texts.studienverlauf.erklaerung.p4 }}</p>
-								<p><strong>{{ texts.studienverlauf.erklaerung.p5strong }}</strong></p>
-								<p> {{ texts.studienverlauf.erklaerung.p5 }}</p>
-
-							</div>
-
-						</ion-col>
-					</ion-row>
-				</ion-grid>
-			</ion-content>
-		</ion-modal>
 		</ion-content>
 	</ion-page>
 </template>
@@ -243,7 +198,6 @@
 <script>
 import {
 	IonContent,
-	IonHeader,
 	IonPage,
 	IonTitle,
 	IonToolbar,
@@ -272,11 +226,12 @@ import { remove, add, ellipse, helpCircleOutline, school } from 'ionicons/icons'
 import { texts } from '../texts.js'
 import { defineComponent, ref } from 'vue'
 import axios from 'axios'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+import InfoModalComponent from '../views/Components/InfoModalStudienverlauf.vue'
 
 export default defineComponent({
 	components: {
 		IonPage,
-		IonHeader,
 		IonToolbar,
 		IonTitle,
 		IonContent,
@@ -298,6 +253,8 @@ export default defineComponent({
 		IonCard,
 		IonToast,
 		IonSearchbar,
+		HeaderComponent,
+		InfoModalComponent,
 	},
 
 	setup() {
@@ -648,7 +605,6 @@ export default defineComponent({
 		},
 
 		highlight(text, query) {
-			console.log('Highlighting:', text, 'with query:', query)
 			if (text.toLowerCase() === query.toLowerCase()) {
 				return (
 					'<span id="highlightText" style="background-color:yellow;">' +

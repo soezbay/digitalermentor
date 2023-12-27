@@ -1,26 +1,6 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-toolbar>
-				<ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon
-							style="font-size: 45px"
-							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-title>{{ texts.titel.profil }}</ion-title>
-				<ion-buttons slot="end">
-					<ion-button color="primary" router-link="/menu/profil/changeProfile">
-						<ion-icon slot="icon-only" :icon="create"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-buttons slot="end">
-					<ion-menu-button color="primary"></ion-menu-button>
-				</ion-buttons>
-			</ion-toolbar>
-		</ion-header>
-
+		<HeaderComponent :title="texts.titel.profil" :hasInfo="false" />
 		<ion-content>
 			<div id="imageContainer">
 				<img
@@ -70,6 +50,8 @@ import { userdata } from '../userdata.js';
 import { texts } from '../texts.js'
 import { create } from 'ionicons/icons'
 import axios from 'axios'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+
 import {
 	IonPage,
 	IonHeader,
@@ -108,6 +90,7 @@ export default {
 		IonFabButton,
 		IonIcon,
 		IonAvatar,
+		HeaderComponent,
 	},
 
 	data() {

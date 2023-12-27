@@ -1,22 +1,7 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button router-link="/menu/dashboard">
-            <ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title>Modulübersicht</ion-title>
-        <ion-buttons slot="end" style="display: flex; align-items: center">
-					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
-						<ion-icon :icon="helpCircleOutline"></ion-icon>
-					</ion-button>
-          <ion-menu-button color="primary"></ion-menu-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    
+	<ion-page>
+		<HeaderComponent :title="texts.titel.moduluebersicht" :hasInfo="true" />
+		<InfoModalComponent />
 		<ion-content>
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid>
@@ -62,9 +47,9 @@
 				</ion-row>
 			</ion-grid>
 
-      <!-- Divider between Semester and Studiengang/Listenansicht -->
-      <ion-item-divider></ion-item-divider>
-            
+			<!-- Divider between Semester and Studiengang/Listenansicht -->
+			<ion-item-divider></ion-item-divider>
+
 			<!-- Ion Grid for Semester -->
 			<div v-if="showAsList === false" class="ion-padding">
 				<ion-grid :fixed="true">
@@ -90,8 +75,8 @@
 							<!-- </ion-list> -->
 						</ion-col>
 					</ion-row>
-					
-          <ion-row v-if="modules.wahlpflicht != 0">
+
+					<ion-row v-if="modules.wahlpflicht != 0">
 						<ion-col size-md="9" size-xs="12" style="width: 100%">
 							<!-- <ion-list class="moduleList"> -->
 							<ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
@@ -146,72 +131,62 @@
 				<div style="height: 200px"></div>
 			</ion-list>
 
-      <ion-modal ref="coursesModal" trigger="open-courses-modal">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Wähle einen Studiengang aus</ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <ion-list>
-            <ion-item button v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
-                :value="studiengang.Kuerzel">
-                <ion-label>{{ studiengang.Name }}</ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-content>
-      </ion-modal>
-
-      <!--Help-Modal-option for user-->
-			<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
-			<ion-content>
-				<ion-grid>
-					<ion-row justify-content-center align-items-center>
-						<ion-col size="12">
-							<div class="ion-text-center">
-                <p><ion-icon :icon="book" style="font-size: 40px; color:#BBCC00"></ion-icon></p>
-								<p style="font-size: 22px;">
-									<strong>{{ texts.moduluebersicht.erklaerung.p1strong }}</strong>
-								</p>
-								<p> {{ texts.moduluebersicht.erklaerung.p1 }}</p>
-								<p><strong>{{ texts.moduluebersicht.erklaerung.p2strong }}</strong></p>
-								<p> {{ texts.moduluebersicht.erklaerung.p2 }}</p>
-								<p><strong>{{ texts.moduluebersicht.erklaerung.p3strong }}</strong></p>
-								<p> {{ texts.moduluebersicht.erklaerung.p3 }}</p>
-								<p><strong>{{ texts.moduluebersicht.erklaerung.p4strong }}</strong></p>
-								<p> {{ texts.moduluebersicht.erklaerung.p4 }}</p>
-                <p><strong>{{ texts.moduluebersicht.erklaerung.p5strong }}</strong></p>
-                <p>{{ texts.moduluebersicht.erklaerung.p5 }}</p>
-
-
-							</div>
-
-						</ion-col>
-					</ion-row>
-				</ion-grid>
-			</ion-content>
-		</ion-modal>
-
-    </ion-content>
-  </ion-page>
+			<ion-modal ref="coursesModal" trigger="open-courses-modal">
+				<ion-header>
+					<ion-toolbar>
+						<ion-title>Wähle einen Studiengang aus</ion-title>
+					</ion-toolbar>
+				</ion-header>
+				<ion-content>
+					<ion-list>
+						<ion-item
+							button
+							v-for="studiengang in studiengaenge"
+							:key="studiengang.Kuerzel"
+							:value="studiengang.Kuerzel">
+							<ion-label>{{ studiengang.Name }}</ion-label>
+						</ion-item>
+					</ion-list>
+				</ion-content>
+			</ion-modal>
+		</ion-content>
+	</ion-page>
 </template>
 
 <script>
-
-import {helpCircleOutline, book} from 'ionicons/icons'
+import { helpCircleOutline, book } from 'ionicons/icons'
 import { texts } from '../texts.js'
 import {
-  IonPage, IonContent, IonHeader, IonTitle, IonToolbar,
-  IonButtons, IonMenuButton, IonButton,
-  IonGrid, IonRow, IonCol,
-  IonSearchbar, IonToggle,
-  IonSelectOption, IonSelect,
-  IonList, IonListHeader, IonItem, IonLabel, IonIcon,
-  IonCard, IonCardTitle,
-  IonModal, modalController, IonNote
-} from '@ionic/vue';
-import axios from 'axios';
-import Modal from "./Modulbeschreibung.vue";
+	IonPage,
+	IonContent,
+	IonHeader,
+	IonTitle,
+	IonToolbar,
+	IonButtons,
+	IonMenuButton,
+	IonButton,
+	IonGrid,
+	IonRow,
+	IonCol,
+	IonSearchbar,
+	IonToggle,
+	IonSelectOption,
+	IonSelect,
+	IonList,
+	IonListHeader,
+	IonItem,
+	IonLabel,
+	IonIcon,
+	IonCard,
+	IonCardTitle,
+	IonModal,
+	modalController,
+	IonNote,
+} from '@ionic/vue'
+import axios from 'axios'
+import Modal from './Modulbeschreibung.vue'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+import InfoModalComponent from '../views/Components/InfoModalModuluebersicht.vue'
 
 export default {
 	components: {
@@ -239,23 +214,26 @@ export default {
 		IonCardTitle,
 		IonModal,
 		IonNote,
+		HeaderComponent,
+		InfoModalComponent,
 	},
 
-  name: "ModulUebersicht",
-  data() {
-    return {
-      helpCircleOutline, book,
-      Adress: import.meta.env.VITE_API_URL,
-      showAsList: false,
-      selectedStudiengang: null,
-      studiengaenge: [],
-      texts,
-      modules: {
-        pflicht: [],// initialize "Pflichtmodule"
-        wahlpflicht: []
-      }
-    };
-  },
+	name: 'ModulUebersicht',
+	data() {
+		return {
+			helpCircleOutline,
+			book,
+			Adress: import.meta.env.VITE_API_URL,
+			showAsList: false,
+			selectedStudiengang: null,
+			studiengaenge: [],
+			texts,
+			modules: {
+				pflicht: [], // initialize "Pflichtmodule"
+				wahlpflicht: [],
+			},
+		}
+	},
 
 	computed: {
 		uniqueSemesters() {
@@ -536,7 +514,7 @@ ion-item-divider {
 }
 
 /* modal for desktop */
-@media (max-width:950px) {
+@media (max-width: 950px) {
 	.info-modal {
 		--height: 75%;
 		--width: 75%;
@@ -547,33 +525,31 @@ ion-item-divider {
 }
 
 /* modal for mobile devices */
-@media (min-width:950px) {
+@media (min-width: 950px) {
 	.info-modal {
 		--height: 80%;
 		--width: 45%;
 		--border-radius: 16px;
 		--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-			0 4px 6px -4px rgb(0 0 0 / 0.1)
+			0 4px 6px -4px rgb(0 0 0 / 0.1);
 	}
 }
 
 /* for mobile devices, columns of Studiengang/Listenansicht aligned on the left*/
 @media (max-width: 767px) {
-  .studiengang,
-  .listenansicht {
-
-    display: flex;
-    align-items: left;
-    justify-content: left;
-  }
-  .modulBlock {
-    width: calc(20% - 10px); /* Adjust the width as needed */
-  }
+	.studiengang,
+	.listenansicht {
+		display: flex;
+		align-items: left;
+		justify-content: left;
+	}
+	.modulBlock {
+		width: calc(20% - 10px); /* Adjust the width as needed */
+	}
 }
 
 /* move to the left */
 ion-title {
-  margin-left: -5px;
+	margin-left: -5px;
 }
-
 </style>
