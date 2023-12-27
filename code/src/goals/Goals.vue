@@ -626,7 +626,7 @@ export default {
 		getModuleClass(tryCount, status) {
 			// console.log("trycount:", tryCount);
 			// console.log("status:", status);
-			if (tryCount === 1 && status !== 'Nicht Bestande') {
+			if (tryCount === 1 && status === 'Nicht Bestanden') {
 				return 'secondTry';
 			} else if (tryCount === 2 && status === 'Nicht Bestanden') {
 				return 'thirdTry';
