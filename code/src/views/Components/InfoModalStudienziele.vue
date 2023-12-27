@@ -1,4 +1,14 @@
 <script setup>
+import {
+	IonModal,
+	IonContent,
+	IonGrid,
+	IonRow,
+	IonCol,
+	IonIcon,
+	IonButton,
+	IonItemDivider,
+} from '@ionic/vue'
 import { ref } from 'vue'
 import { texts } from '../../texts.js'
 import { add, checkmarkDone, trash, create } from 'ionicons/icons'
