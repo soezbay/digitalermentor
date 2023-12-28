@@ -39,7 +39,7 @@
 					<!-- Semester Überschriften -->
 					<ion-col size="12">
 						<!-- Zeige nur Semester ab 1. Semester (da 0. Semester Wahlmodule sind)-->
-						<ion-row v-if="semester >= 1">
+						<ion-row v-if="semester >= 1" style="padding-left: 7px;">
 							<h2>{{ semester }}. {{ texts.studium.semester }}</h2>
 							<!-- Remove Button wird nur angezeigt für das letzte Semester und nur, wenn es leer ist -->
 							<ion-icon

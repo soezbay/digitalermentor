@@ -5,6 +5,7 @@
 			<ion-header id="displayUsername">
 				{{ getGreeting() }}, {{ getUsername() }}
 			</ion-header>
+
 			<ion-grid>
 				<ion-row>
 					<ion-col
@@ -375,7 +376,8 @@ export default {
 #displayUsername {
 	font-family: 'Blessing', sans-serif;
 	padding: 20px;
-	font-size: 45px;
+	padding-bottom: 5px;
+	font-size: 35px;
 	text-align: center;
 }
 
