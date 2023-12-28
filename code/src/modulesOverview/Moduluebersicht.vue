@@ -10,16 +10,10 @@
 					<ion-col class="studiengang" size="12" size-sm="6">
 						<ion-item lines="none">
 							<!-- choice between "Studiengängen" -->
-							<ion-select
-								v-model="selectedStudiengang"
-								interface="popover"
-								label="Studiengang:"
-								placeholder="Studiengang auswählen"
-								:interface-options="{ cssClass: 'custom-ion-select' }"
+							<ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang:"
+								placeholder="Studiengang auswählen" :interface-options="{ cssClass: 'custom-ion-select' }"
 								slot="start">
-								<ion-select-option
-									v-for="studiengang in studiengaenge"
-									:key="studiengang.Kuerzel"
+								<ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
 									:value="studiengang.Kuerzel">
 									{{ studiengang.Name }}
 								</ion-select-option>
@@ -36,12 +30,7 @@
 					<ion-col class="listenansicht" size="12" size-sm="6">
 						<ion-item lines="none">
 							<!-- ion-toggle for "Listenansicht" -->
-							<ion-toggle
-								v-model="showAsList"
-								@click="onToggleChange()"
-								slot="end"
-								>Listenansicht</ion-toggle
-							>
+							<ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">Listenansicht</ion-toggle>
 						</ion-item>
 					</ion-col>
 				</ion-row>
@@ -67,19 +56,16 @@
 								</ion-card>
 							</ion-col>
 							<!-- </ion-list> -->
-						</ion-col>
-					</ion-row>
-
+						</ion-row>
+					</ion-col>
+					
 					<ion-row v-if="modules.wahlpflicht != 0">
 						<ion-col size-md="9" size-xs="12" style="width: 100%">
 							<!-- <ion-list class="moduleList"> -->
 							<ion-label class="modulfont">Wahlpflichtflichtmodule</ion-label>
 							<ion-col size="5">
 								<ion-row>
-									<ion-card
-										class="modulBlock"
-										v-for="module in modules.wahlpflicht"
-										:key="module.Kuerzel"
+									<ion-card class="modulBlock" v-for="module in modules.wahlpflicht" :key="module.Kuerzel"
 										@click="openModal(module)">
 										<ion-label class="modulLabel">{{
 											module.Kuerzel
@@ -100,9 +86,7 @@
 					<ion-list-header class="semesterHeaderList">
 						<ion-label>{{ `Semester ${semester}` }}</ion-label>
 					</ion-list-header>
-					<ion-item
-						v-for="module in getModulesForSemester(semester)"
-						:key="module.Kuerzel"
+					<ion-item v-for="module in getModulesForSemester(semester)" :key="module.Kuerzel"
 						@click="openModal(module)">
 						<ion-label>{{ module.Name }} ({{ module.Kuerzel }})</ion-label>
 						<ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
@@ -113,10 +97,7 @@
 					<ion-list-header class="semesterHeaderList">
 						<ion-label>Wahlpflichtflichtmodule</ion-label>
 					</ion-list-header>
-					<ion-item
-						v-for="module in modules.wahlpflicht"
-						:key="module.Kuerzel"
-						@click="openModal(module)">
+					<ion-item v-for="module in modules.wahlpflicht" :key="module.Kuerzel" @click="openModal(module)">
 						<ion-label>{{ module.Name }} ({{ module.Kuerzel }})</ion-label>
 						<ion-note slot="end">{{ module.Leistungspunkte }} LP</ion-note>
 					</ion-item>
@@ -133,10 +114,7 @@
 				</ion-header>
 				<ion-content>
 					<ion-list>
-						<ion-item
-							button
-							v-for="studiengang in studiengaenge"
-							:key="studiengang.Kuerzel"
+						<ion-item button v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
 							:value="studiengang.Kuerzel">
 							<ion-label>{{ studiengang.Name }}</ion-label>
 						</ion-item>
@@ -498,12 +476,12 @@ export default {
 }
 
 .solid {
-  border-top: 1px solid grey;
-  /* Breite der Trennstriche angepasst */
-  width: 100%;
-  
-  margin: 0;
-  padding: 0;
+	border-top: 1px solid grey;
+	/* Breite der Trennstriche angepasst */
+	width: 100%;
+
+	margin: 0;
+	padding: 0;
 }
 
 .modulBlock {
@@ -568,7 +546,7 @@ ion-item-divider {
 /* padding "Studiengang" */
 .studiengang {
 	padding: 0;
-	
+
 }
 
 /* padding "Listenansicht" */
@@ -600,14 +578,17 @@ ion-item-divider {
 
 /* for mobile devices, columns of Studiengang/Listenansicht aligned on the left*/
 @media (max-width: 767px) {
+
 	.studiengang,
 	.listenansicht {
 		display: flex;
 		align-items: left;
 		justify-content: left;
 	}
+
 	.modulBlock {
-		width: calc(20% - 10px); /* Adjust the width as needed */
+		width: calc(20% - 10px);
+		/* Adjust the width as needed */
 	}
 }
 
