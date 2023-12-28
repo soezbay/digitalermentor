@@ -10,20 +10,28 @@ const store = createStore({
             //userData Storage
             userData: [],
             studentProgress: [],
-            currentModules: [],
             courses: [],
+
             //appoinments Storage
             termine: [],
             selectedDate: new Date(),
+
             //moduleOverview Storage
             modulesBook: [],
             moduleOverviewData: [],
+
+            //studienverlauf Storage
+            groupedmodules: [],
+            obligatoryModules: [],
+            electiveModules: [],
+
             //goals Storage
             goals: [],
             goals_ss: [],
             goals_ws: [],
             deletedGoals: [],
             checkedGoals: [],
+            currentModules: [],
 
             //Test Storage
             TestDaten: {
@@ -37,7 +45,7 @@ const store = createStore({
     mutations: {
         async createCacheAPI(state) {
             try {
-                console.info('Erhaltener JSON-String1:', JSON.stringify(state));
+                // console.info('Erhaltener JSON-String1:', JSON.stringify(state));
                 const requestData = {
                     BenutzerID: state.TestDaten.BenutzerID,
                     CacheDaten: JSON.stringify(state),
@@ -53,7 +61,7 @@ const store = createStore({
         async updateAPI(state) {
             try {
 
-                console.info('Erhaltener JSON-String:', JSON.stringify(state));
+                // console.info('Erhaltener JSON-String:', JSON.stringify(state));
                 state.letzterCacheUpdate = new Date();
                 const updatedData = {
                     BenutzerID: state.TestDaten.BenutzerID,
@@ -237,13 +245,22 @@ const store = createStore({
             state.moduleOverviewData = lastSettings;
         },
         saveStudentProgress(state, progress) {
-            state.studentProgress = [...progress];;
+            state.studentProgress = progress;
         },
         saveCurrentModules(state, modules) {
             state.currentModules = modules;
         },
         saveCourses(state, fetchedCourses) {
             state.courses = fetchedCourses;
+        },
+        saveGroupedModules(state, gmodules) {
+            state.groupedmodules = gmodules;
+        },
+        saveObligatoryModules(state, omodules) {
+            state.obligatoryModules = omodules;
+        },
+        saveElectiveModules(state, emodules) {
+            state.electiveModules = emodules;
         },
     },
 
@@ -355,8 +372,8 @@ const store = createStore({
             context.commit('saveModulesBook', updatedModulesBook);
             context.commit('updateAPI', context);
         },
-        async updateStudenProgress(context, progress) {
-            context.commit('saveStudentProgess', progress);
+        async updateStudentProgress(context, progress) {
+            context.commit('saveStudentProgress', progress);
             context.commit('updateAPI', context);
         },
         async updateCurrentModules(context, modules) {
@@ -365,6 +382,18 @@ const store = createStore({
         },
         async updateCourses(context, fetchedCourses) {
             context.commit('saveCourses', fetchedCourses);
+            context.commit('updateAPI', context);
+        },
+        async updateGroupedModules(context, gmodules) {
+            context.commit('saveGroupedModules', gmodules);
+            context.commit('updateAPI', context);
+        },
+        async updateObligatoryModules(context, omodules) {
+            context.commit('saveObligatoryModules', omodules);
+            context.commit('updateAPI', context);
+        },
+        async updateElectiveModules(context, emodules) {
+            context.commit('saveElectiveModules', emodules);
             context.commit('updateAPI', context);
         },
 
@@ -426,6 +455,15 @@ const store = createStore({
         },
         getCourses(state) {
             return state.courses;
+        },
+        getGroupedModules(state) {
+            return state.groupedmodules;
+        },
+        getElectiveModules(state) {
+            return state.electiveModules;
+        },
+        getObligatoryModules(state) {
+            return state.obligatoryModules;
         },
     },
     setters: {
