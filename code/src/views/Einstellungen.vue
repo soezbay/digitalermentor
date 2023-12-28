@@ -1,18 +1,6 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-toolbar>
-				<ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon style="font-size: 45px" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-buttons slot="end">
-					<ion-menu-button color="primary"></ion-menu-button>
-				</ion-buttons>
-				<ion-title>{{ texts.titel.einstellungen }}</ion-title>
-			</ion-toolbar>
-		</ion-header>
+		<HeaderComponent :title="texts.titel.einstellungen" :hasInfo="false" />
 		<ion-content class="ion-padding">
 			<h3 class="titel">{{ texts.einstellungen.mitteilungen }}</h3>
 			<!-- Einstellungen für E-Mail-Benachrichtigungen -->
@@ -55,6 +43,7 @@ import {
 } from '@ionic/vue'
 import axios from 'axios'
 import { texts } from '../texts.js'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
 
 export default {
 	components: {
@@ -71,6 +60,7 @@ export default {
 		IonToggle,
 		IonItem,
 		IonAlert,
+		HeaderComponent,
 	},
 	data() {
 		return {

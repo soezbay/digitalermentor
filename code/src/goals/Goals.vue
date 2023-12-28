@@ -1,27 +1,12 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-toolbar>
-				<ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon style="font-size: 45px" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-title>{{ texts.titel.studienziele }}</ion-title>
-				<ion-buttons slot="end" style="display: flex; align-items: center">
-					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
-						<ion-icon :icon="helpCircleOutline"></ion-icon>
-					</ion-button>
-					<ion-menu-button color="primary"></ion-menu-button>
-				</ion-buttons>
-			</ion-toolbar>
-		</ion-header>
-
+		<HeaderComponent :title="texts.titel.studienziele" :hasInfo="true" />
+		<InfoModalComponent />
 		<ion-content>
 			<ion-grid class="grid">
 				<ion-row>
 					<ion-col size="12" size-md="6" class="col">
-						<div class="goals-container">
+						<div class="goals-container headerText">
 							<ion-label>{{ texts.ziele.deineZiele }}</ion-label>
 						</div>
 						<div class="semesterHeader">
@@ -143,12 +128,12 @@
 					<ion-col class="col">
 						<ion-item class="background header" color="primary" router-link="/menu/studienziele/checked"
 							detail="true" lines="none" id="reachedGoalsButton">
-							<ion-label class="labelHeader">{{ texts.ziele.erreichteZiele }}</ion-label>
+							<ion-label class="labelHeader headerText">{{ texts.ziele.erreichteZiele }}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
-						<ion-item class="background header" color="light" router-link="/menu/studienziele/deleted"
+						<ion-item class="background header" color="medium" router-link="/menu/studienziele/deleted"
 							detail="true" lines="none" id="deletedGoalsButton">
-							<ion-label class="labelHeader">{{ texts.ziele.geloeschteZiele }}</ion-label>
+							<ion-label class="labelHeader headerText">{{ texts.ziele.geloeschteZiele }}</ion-label>
 						</ion-item>
 
 						<ion-item-divider class="spacer"></ion-item-divider>
@@ -303,57 +288,7 @@
 			</ion-content>
 		</ion-modal>
 
-		<!--Help-Modal-option for user-->
-		<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
-			<ion-content>
-				<ion-grid>
-					<ion-row justify-content-center align-items-center>
-						<ion-col size="12">
-							<div class="ion-text-center">
-								<p style="font-size: 22px">
-									<strong>{{ texts.ziele.erklaerung.p1strong }}</strong>
-								</p>
-								<p>
-									<ion-button color="primary" shape="round">
-										<ion-icon :icon="add" style="font-size: 20px; color: white"></ion-icon>
-									</ion-button>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p2strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p2 }}</p>
-								<p>
-									<ion-icon :icon="trash" style="font-size: 35px; color: #f07181"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p3strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p3 }}</p>
-								<p>
-									<ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #bbcc00"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p4strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p4 }}</p>
-								<p>
-									<ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p5strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p5 }}</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p6strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p6 }}</p>
-								<p>{{ texts.ziele.erklaerung.p7 }}</p>
-							</div>
-						</ion-col>
-					</ion-row>
-				</ion-grid>
-			</ion-content>
-		</ion-modal>
+		
 	</ion-page>
 </template>
 
@@ -367,6 +302,8 @@ import {
 } from 'ionicons/icons'
 import axios, { formToJSON } from 'axios'
 import { texts } from '../texts.js'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+import InfoModalComponent from '../views/Components/InfoModalStudienziele.vue'
 
 import {
 	IonPage,
@@ -431,6 +368,8 @@ export default {
 		IonCol,
 		IonItemDivider,
 		IonBadge,
+		InfoModalComponent,
+		HeaderComponent,
 	},
 	data() {
 		return {
@@ -669,7 +608,7 @@ export default {
 }
 
 .goals-container {
-	background-color: #8c9900;
+	background-color: var(--ion-color-primary);
 	border-radius: 15px;
 	height: 50px;
 	text-align: center;
@@ -678,7 +617,7 @@ export default {
 }
 
 .explanatory-text {
-	color: grey;
+	color: var(--ion-color-medium);
 	text-align: center;
 }
 
@@ -716,12 +655,17 @@ export default {
 	font-size: larger;
 }
 
+.headerText{
+	color: var(--ion-color-light);
+
+}
+
 .semesterHeader ion-icon {
 	width: 45px;
 	height: 25px;
 	border-radius: 30px;
 	background-color: var(--ion-color-primary);
-	color: white;
+	color: var(--ion-color-light);
 }
 
 .drag-drop-containers {
@@ -738,7 +682,7 @@ export default {
 	margin: 10px;
 	border-radius: 30px;
 	text-align: left;
-	background-color: #d2d69e;
+	background-color: var(--ion-color-secondary);
 }
 
 .drag-drop-box-item ion-icon {
@@ -746,14 +690,14 @@ export default {
 }
 
 .item-container {
-	background-color: #d2d69e;
+	background-color: var(--ion-color-secondary);;
 }
 
 .card-label {
 	margin: 0;
 	padding-left: 15px;
 	font-weight: normal;
-	color: black;
+	color: var(--ion-color-primary-contrast);
 }
 
 .card-label h2 {
@@ -765,7 +709,7 @@ export default {
 	width: 27px;
 	margin-left: 8px;
 	margin-top: 4px;
-	border: 2px solid #ccc;
+	border: 2px solid var(--ion-color-medium);
 	border-radius: 0px;
 }
 
@@ -777,7 +721,7 @@ export default {
 }
 
 .underline {
-	border-bottom: 2px solid #8c9900;
+	border-bottom: 2px solid var(--ion-color-primary);
 	padding-bottom: 5px;
 	margin-bottom: 10px;
 }
@@ -834,8 +778,8 @@ ion-modal::part(backdrop) {
 }
 
 ion-modal ion-toolbar {
-	--background: #8c9900;
-	--color: white;
+	--background: var(--ion-color-primary);
+	--color: var(--ion-color-light);
 }
 
 #legend {
@@ -845,7 +789,7 @@ ion-modal ion-toolbar {
 }
 
 #legendBadge {
-	box-shadow: 1px 1px 7px grey;
+	box-shadow: 1px 1px 7px var(--ion-color-medium);
 	margin-right: 5px;
 	margin-left: 5px;
 }
@@ -857,7 +801,7 @@ ion-modal ion-toolbar {
 	text-align: center;
 	padding: 6px;
 	border-radius: 15px;
-	background-color: #fff;
+	background-color: var(--ion-color-light);
 }
 
 .secondTry {
