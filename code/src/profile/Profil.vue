@@ -8,12 +8,12 @@
 						border-bottom-left-radius: 25px;
 						border-bottom-right-radius: 25px;
 					"
-					alt=""
-					src="resources/Tafel.png"
+					alt="Tafel"
+					src="/resources/Tafel.jpg"
 					class="platzhalter" />
 				<div id="pb">
 					<ion-avatar>
-						<img alt="" src="resources/Platzhalter_Digitaler_Mentor.png" />
+						<img alt="" src="/resources/Platzhalter_Digitaler_Mentor.jpg" />
 					</ion-avatar>
 				</div>
 			</div>
