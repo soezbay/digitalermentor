@@ -4,3 +4,4 @@ Dockerfile
 .gitignoredock
 docker-compose*
 MySQL
+**/node_modules
