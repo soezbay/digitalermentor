@@ -7,19 +7,30 @@ const Adress = import.meta.env.VITE_API_URL;
 const store = createStore({
     state() {
         return {
+            //userData Storage
             userData: [],
+            studentProgress: [],
+            currentModules: [],
+            courses: [],
+            //appoinments Storage
             termine: [],
             selectedDate: new Date(),
+            //moduleOverview Storage
+            modulesBook: [],
+            moduleOverviewData: [],
+            //goals Storage
             goals: [],
             goals_ss: [],
             goals_ws: [],
             deletedGoals: [],
             checkedGoals: [],
-            modulesBook: [],
-            moduleOverviewData: [],
+
+            //Test Storage
             TestDaten: {
                 BenutzerID: 'Test123',
             },
+
+            //cache Storage
             letzterCacheUpdate: new Date(0)
         }
     },
@@ -219,13 +230,20 @@ const store = createStore({
                 state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID);
             }
         },
-        saveModulesBookToStore(state, updatedModulesBook) {
+        saveModulesBook(state, updatedModulesBook) {
             state.modulesBook = [...state.modulesBook, updatedModulesBook];
         },
         saveSettingsModuleOverview(state, lastSettings) {
-            console.log("Last Settings:")
-            console.log(lastSettings);
             state.moduleOverviewData = lastSettings;
+        },
+        saveStudentProgress(state, progress) {
+            state.studentProgress = [...progress];;
+        },
+        saveCurrentModules(state, modules) {
+            state.currentModules = modules;
+        },
+        saveCourses(state, fetchedCourses) {
+            state.courses = fetchedCourses;
         },
     },
 
@@ -333,12 +351,23 @@ const store = createStore({
             context.commit('checkGoal', goal_ID);
             context.commit('updateAPI', context);
         },
-        async saveModulesBook(context, updatedModulesBook) {
-            context.commit('saveModulesBookToStore', updatedModulesBook);
+        async updateModulesBook(context, updatedModulesBook) {
+            context.commit('saveModulesBook', updatedModulesBook);
             context.commit('updateAPI', context);
         },
-        
-        
+        async updateStudenProgress(context, progress) {
+            context.commit('saveStudentProgess', progress);
+            context.commit('updateAPI', context);
+        },
+        async updateCurrentModules(context, modules) {
+            context.commit('saveCurrentModules', modules);
+            context.commit('updateAPI', context);
+        },
+        async updateCourses(context, fetchedCourses) {
+            context.commit('saveCourses', fetchedCourses);
+            context.commit('updateAPI', context);
+        },
+
     },
 
     getters: {
@@ -388,7 +417,16 @@ const store = createStore({
         },
         getModulesBook(state) {
             return state.modulesBook;
-        }
+        },
+        getStudentProgress(state) {
+            return state.studentProgress;
+        },
+        getCurrentModules(state) {
+            return state.currentModules;
+        },
+        getCourses(state) {
+            return state.courses;
+        },
     },
     setters: {
     },

@@ -5,6 +5,8 @@ import store from './store/vuexIndex';
 
 import { IonicVue } from '@ionic/vue';
 
+import { registerSW } from 'virtual:pwa-register'
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
 
@@ -24,11 +26,15 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+const updateSW = registerSW({
+  onOfflineReady() {},
+})
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-  .use(store);
+  .use(store)
+  .use(updateSW);
   
 router.isReady().then(() => {
   app.mount('#app');

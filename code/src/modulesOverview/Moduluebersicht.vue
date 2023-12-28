@@ -4,7 +4,7 @@
 		<InfoModalComponent />
 		<ion-content>
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
-			<ion-grid>
+			<ion-grid style="margin: 0; padding-bottom: 0; padding-top: 0;">
 				<ion-row style="margin-bottom: 7px">
 					<!-- ion-col for Studiengang -->
 					<ion-col class="studiengang" size="12" size-sm="6">
@@ -47,30 +47,24 @@
 				</ion-row>
 			</ion-grid>
 
-			<!-- Divider between Semester and Studiengang/Listenansicht -->
-			<ion-item-divider></ion-item-divider>
-
 			<!-- Ion Grid for Semester -->
-			<div v-if="showAsList === false" class="ion-padding">
-				<ion-grid :fixed="true">
-					<ion-row v-for="semester in uniqueSemesters" :key="semester">
-						<ion-col size="12" size-md="10" style="width: 100%">
-							<!-- <ion-list class="moduleList"> -->
-							<ion-label class="modulfont">{{
-								`${semester}. Semester `
-							}}</ion-label>
-							<ion-col size="5">
-								<ion-row>
-									<ion-card
-										class="modulBlock"
-										v-for="module in getModulesForSemester(semester)"
-										:key="module.Kuerzel"
-										@click="openModal(module)">
-										<ion-label class="modulLabel">{{
-											module.Kuerzel
-										}}</ion-label>
-									</ion-card>
-								</ion-row>
+			<div v-if="showAsList === false" class="ion-padding" style="padding-top: 0;">
+				<hr class="solid">
+				<ion-grid style="padding-top: 0; margin-top: 0;">
+					<ion-col v-for="(semester, index) in getselectedCourseModules()" :key="index">
+						<ion-row style="padding-left: 10px;">
+							<label>
+								{{ semester.semestercount }}
+							</label>
+						</ion-row>
+						<ion-row style="max-width: 750px;">
+							<ion-col size="1.7" v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
+								style="width: 100px; max-width: 100px; min-width: 68px;">
+								<ion-card class="modulBlock" @click="openModal(modul)">
+									<ion-label style="color: #000000; font-weight: bolder">
+										{{ modul.Kuerzel }}
+									</ion-label>
+								</ion-card>
 							</ion-col>
 							<!-- </ion-list> -->
 						</ion-col>
@@ -300,20 +294,17 @@ export default {
 				console.log(this.Adress)
 				const response = await axios.get(`${this.Adress}/studiengang`)
 				this.studiengaenge = response.data.studiengaenge
-				console.log('Test')
-				console.log(this.studiengaenge)
+				this.$store.dispatch('saveCourses', this.studiengaenge);
 			} catch (error) {
 				console.error('Error fetching studiengaenge:', error)
 			}
 		},
 
-		async fetchPflichtModule() {
+		async getModuleData(selectedStudiengang) {
+
+
 			try {
-				const response = await fetch(
-					`${this.Adress}/studiengang/pflicht/${this.selectedStudiengang}`
-				)
-				const data = await response.json()
-				console.log(data)
+				console.log("ur here2");
 
 				// check if the data is existing in the response
 				if (data.pflicht) {
@@ -322,26 +313,63 @@ export default {
 				} else {
 					console.error('Fehler beim Laden der Pflichtmodule.')
 				}
+
+				// Überprüfen, ob der Studiengang bereits in der modulesBook vorhanden ist
+				const studiengangExists = this.modulesBook.some(item => item.course === selectedStudiengang);
+				console.log(studiengangExists);
+				if (studiengangExists) {
+					console.log(`Studiengang ${selectedStudiengang} ist bereits in der modulesBook vorhanden.`);
+					return;
+				}
+				console.log("ur here3");
+
+				// Retrieve the regular study duration for the specific study program
+				const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
+				console.log("ur here4");
+
+				const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/${selectedStudiengang}`);
+				const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${selectedStudiengang}`);
+
+				const pflichtModule = pflichtModuleResponse.data.pflicht;
+				const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
+				const studiengang = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === selectedStudiengang);
+
+				const regelstudienzeit = studiengang.Regelstudienzeit;
+
+				console.log("--------Die regelstudienzeit:", regelstudienzeit);
+				// Sort mandatory modules by semester
+				pflichtModule.sort((a, b) => a.Semester - b.Semester);
+				console.log("------Pflichtmodule getData---------", pflichtModule);
+
+				// Inline getModulesForSemester function
+				for (let semester = 1; semester <= regelstudienzeit; semester++) {
+					this.modulesBook.push({
+						course: selectedStudiengang,
+						semestercount: `${semester}. Semester`,
+						faecher: pflichtModule
+							.filter(modul => modul.Semester === semester)
+					});
+				}
+				// Add the elective modules to the semester list
+				this.modulesBook.push({
+					course: selectedStudiengang,
+					semestercount: 'Wahlpflichtmodule',
+					faecher: wahlpflichtmodule
+				});
+
+				this.$store.dispatch('updateModulesBook', this.modulesBook);
+
 			} catch (error) {
 				console.error('Fehler beim Abrufen der Daten:', error)
 			}
 		},
 
-		async fetchWahplfichtModule(selectedStudiengang) {
-			try {
-				const response = await axios.get(
-					`${this.Adress}/studiengang/wahlpflicht/${this.selectedStudiengang}`
-				)
-				const data = await response.data
-				if (data.wahlpflicht) {
-					this.modules.wahlpflicht = data.wahlpflicht
-					console.log('Wahlplichtmodule geladen:', this.modules.wahlpflicht)
-				} else {
-					console.error('Fehler beim Laden der Wahlpflichtflichtmodule.')
-				}
-			} catch (error) {
-				console.error('Fehler beim Abrufen der Daten:', error)
-			}
+		getselectedCourseModules() {
+			this.getDataOfStore;
+			console.log("-----------DIE modulesBook MIT MODULEN:", this.modulesBook);
+			const array = this.modulesBook.filter(arr => arr.course === this.selectedStudiengang);
+			console.log("________DIE GEFILTERTE LISTE", array);
+			return array;
 		},
 		toggleDescription(semesterIndex, moduleIndex) {
 			this.moduleSemesters[semesterIndex][moduleIndex].showDescription =
@@ -424,6 +452,43 @@ export default {
 			this.$store.commit('saveSettingsModuleOverview', settingsArr)
 		},
 	},
+
+	async mounted() {
+		this.studiengaenge = this.$store.getters.getCourses;
+		this.modulesBook = this.$store.getters.getModulesBook;
+		this.fetchStudiengaenge();
+		// console.log("VUEX MODULESBOOK", this.$store.getters.getModulesBook);
+		// console.log("MODULESBOOK", this.modulesBook);
+		// console.log("-----STUDIENGANG:", this.selectedStudiengang);
+		this.getModuleData(this.selectedStudiengang);
+
+		const lastSetup = this.settings;
+		if (lastSetup.selectedStudiengang !== undefined && lastSetup.selectedStudiengang !== null) {
+			this.selectedStudiengang = lastSetup.selectedStudiengang
+		}
+		if (lastSetup.showAsList !== undefined && lastSetup.showAsList !== null) {
+			this.showAsList = lastSetup.showAsList
+			console.log('Settings Geladen')
+		};
+	},
+
+	watch: {
+		selectedStudiengang(newStudiengang) {
+			this.getModuleData(newStudiengang);
+			this.onStudiengangChange()
+		},
+	},
+
+	computed: {
+		// getDataOfStore() {
+		// 	this.studiengaenge = this.$store.getters.getCourses;
+		// 	this.modulesBook = this.$store.getters.getModulesBook;
+		// },
+		settings() {
+			console.log('Getting settings')
+			return this.$store.getters.getModuleOverviewData
+		},
+	},
 }
 </script>
 
@@ -432,18 +497,15 @@ export default {
 	font-size: 28px;
 }
 
-/* .custom-ion-select .alert-wrapper
-  {
-	background-color: #000000;
-	  color: var(--ion-color-success-contrast);
-  } */
+.solid {
+  border-top: 1px solid grey;
+  /* Breite der Trennstriche angepasst */
+  width: 100%;
+  
+  margin: 0;
+  padding: 0;
+}
 
-/* 
-  ion-alert.custom-alert {
-	  --backdrop-opacity: 0.7;
-	} */
-
-/* adjust properties */
 .modulBlock {
 	width: 100px;
 	height: 30px;
@@ -498,14 +560,15 @@ ion-col {
 
 /* divider "Studiengang/Listenansicht" */
 ion-item-divider {
-	margin-bottom: 20px;
-	margin-top: -30px;
+	margin-bottom: -20px;
+	margin-top: -35px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* padding "Studiengang" */
 .studiengang {
-	margin-top: 0px;
+	padding: 0;
+	
 }
 
 /* padding "Listenansicht" */
