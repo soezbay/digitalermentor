@@ -197,7 +197,7 @@ export default {
 			try {
 				const response = await axios.get(`${this.Adress}/studiengang`)
 				this.studiengaenge = response.data.studiengaenge
-				this.$store.dispatch('saveCourses', this.studiengaenge);
+				this.$store.dispatch('updateCourses', this.studiengaenge);
 			} catch (error) {
 				console.error('Error fetching studiengaenge:', error)
 			}
