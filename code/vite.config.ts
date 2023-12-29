@@ -6,7 +6,7 @@ import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/digitalermentor/', // Beispiel-Basis-URL für die Produktion
+  base: '/app/', // Beispiel-Basis-URL für die Produktion
   plugins: [vue(), legacy()],
   resolve: {
     alias: {
