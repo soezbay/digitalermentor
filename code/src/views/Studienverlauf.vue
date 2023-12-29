@@ -223,9 +223,9 @@ export default defineComponent({
 			modules: [], // Alle Module aus der Datenbank
 			groupedModules: [], // Neues Datenattribut für gruppierte Module
 			electiveModules: [], // Wahlpflichtmodule
+			studentProgress: [], // Teilgenommene Module des Studierenden
 			fullCreditPoints: 180, // Zu erreichenden Credit Points
 			studentID: 'test123',
-			studentProgress: [], // Teilgenommene Module des Studierenden
 			emptySemesters: 0, // Anzahl der leeren Semester
 			enabled: true,
 			targetSemesterModules: [],
@@ -239,62 +239,38 @@ export default defineComponent({
 		},
 		getData() {
 
-			// this.groupedModules = this.$store.getters.getGroupedModules;
-			// this.studentProgress = this.$store.getters.getStudentProgess;
-			// // Filtere die Pflichtmodule
-			// this.modules = this.$store.getters.getCurrentModules
-			// 	.filter(semester => semester.semestercount !== "Wahlpflichtmodule")
-			// 	.flatMap(semester => semester.faecher);
-
-			// // Filtere die Wahlpflichtmodule
-			// this.electiveModules = this.$store.getters.getCurrentModules
-			// 	.filter(semester => semester.semestercount === "Wahlpflichtmodule")
-			// 	.flatMap(semester => semester.faecher);
-
-
-			if (this.studentProgress) {
-				axios
-					.get(`${this.Adress}/modul/status/${this.studentID}`)
-					.then(Response => {
-						console.log(Response.data);
-						this.studentProgress = Response.data.modul;
-						this.$store.dispatch('updateStudentProgress', this.studentProgress);
-						// console.log("LENGTHHHHHHHH____________________!!_!______________!!_!_2", this.studentProgress);
-
-					})
-					.catch(err => {
-						console.log(err)
-					})
-			}
-
-			if (this.modules) {
-				axios
-					.get(`${this.Adress}/studiengang/pflicht/pi`)
-					.then(Response => {
-						console.log(Response.data);
-						this.modules = Response.data.pflicht;
-						this.$store.dispatch('updateObligatoryModules', this.modules);
-						this.groupModules();
-					})
-					.catch(err => {
-						console.log(err)
-					})
-			}
-			if (this.getObligatoryModules) {
-				axios
-					.get(`${this.Adress}/studiengang/wahlpflicht/pi`)
-					.then(Response => {
-						console.log(Response.data);
-						this.electiveModules = Response.data.wahlpflicht;
-						this.$store.dispatch('updateElectiveModules', this.electiveModules);
-						this.groupModules();
-					})
-					.catch(err => {
-						console.log(err)
-					})
-
-			}
-
+			axios
+				.get(`${this.Adress}/modul/status/${this.studentID}`)
+				.then(Response => {
+					console.log(Response.data);
+					this.studentProgress = Response.data.modul;
+					this.$store.dispatch('updateStudentProgress', this.studentProgress);
+				})
+				.catch(err => {
+					console.log(err)
+				})
+			axios
+				.get(`${this.Adress}/studiengang/pflicht/pi`)
+				.then(Response => {
+					console.log(Response.data);
+					this.modules = Response.data.pflicht;
+					this.$store.dispatch('updateObligatoryModules', this.modules);
+					this.groupModules();
+				})
+				.catch(err => {
+					console.log(err)
+				})
+			axios
+				.get(`${this.Adress}/studiengang/wahlpflicht/pi`)
+				.then(Response => {
+					console.log(Response.data);
+					this.electiveModules = Response.data.wahlpflicht;
+					this.$store.dispatch('updateElectiveModules', this.electiveModules);
+					this.groupModules();
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		},
 
 		// Rufen Sie diese Methode auf, um die Module zu gruppieren
@@ -372,25 +348,6 @@ export default defineComponent({
 			}
 		},
 
-		// Funktion zur Berechnung der erreichten Credit Points
-		calculateCreditPoints() {
-			let totalCreditPoints = 0
-
-			for (const progressModule of this.studentProgress) {
-				if (progressModule.Status === 'Bestanden') {
-					// Findet das entsprechende Modul im Array 'modules' und fügt die Credit Points hinzu
-					const matchingModule = this.modules.find(
-						module => module.Kuerzel === progressModule.Kuerzel
-					)
-					if (matchingModule) {
-						totalCreditPoints += matchingModule.Leistungspunkte
-					}
-				}
-			}
-
-			return totalCreditPoints
-		},
-
 		// Diese Methode gibt die Note zurück, mit der der Student das Modul bestanden hat
 		getStudentModuleNoteForPass(module) {
 			const passedModules = this.studentProgress.filter(
@@ -403,6 +360,24 @@ export default defineComponent({
 			if (passedModules.length > 0) {
 				return 'Note: ' + passedModules[0].Note
 			}
+		},
+
+		// Funktion zur Berechnung der erreichten Credit Points
+		calculateCreditPoints() {
+			let totalCreditPoints = 0
+			
+			for (const progressModule of this.studentProgress) {
+				if (progressModule.Status === 'Bestanden') {
+					// Findet das entsprechende Modul im Array 'modules' und fügt die Credit Points hinzu
+					const matchingModule = this.modules.find(
+						module => module.Kuerzel === progressModule.Kuerzel
+					)
+					if (matchingModule) {
+						totalCreditPoints += matchingModule.Leistungspunkte
+					}
+				}
+			}
+			return totalCreditPoints
 		},
 
 		// Durchschnittsnote berechnen
@@ -475,7 +450,7 @@ export default defineComponent({
 			console.log('dragOver')
 		},
 
-		dragLeave(e) {
+		dragLeave(e) { 
 			e.target.classList.remove('drag-enter')
 			console.log('dragLeave')
 
@@ -599,11 +574,11 @@ export default defineComponent({
 		this.studentProgress = this.$store.getters.getStudentProgress;
 		this.modules = this.$store.getters.getObligatoryModules;
 		this.electiveModules = this.$store.getters.getElectiveModules;
-		console.log("LENGTHHHHHHHH____________________!!_!______________!!_!_", this.groupedModules.length);
-		console.log("LENGTHHHHHHHH____________________!!_!______________!!_!_", this.groupedModules);
-		console.log("LENGTHHHHHHHH_____asdasdasd_", this.studentProgress);
-		console.log("LENGTHHHHHHHH___asdasdas", this.modules);
-		console.log("LENGTHHHHHHHH_________asdasd", this.electiveModules);
+		console.log("LENGTH____________________!!_!______________!!_!_", this.groupedModules.length);
+		console.log("LENGTH____________________!!_!______________!!_!_", this.groupedModules);
+		console.log("LENGTH_____1______", this.studentProgress);
+		console.log("LENGTH_____2______", this.modules);
+		console.log("LENGTH_____3______", this.electiveModules);
 		this.getData()
 		// this.sortModulesAlphabetically()
 	},
@@ -690,6 +665,12 @@ ion-card:hover {
 	text-align: center;
 }
 
+#averageGrade {
+	color: var(--ion-color-primary);
+	text-align: center;
+	margin-top: px;
+}
+
 .drag-start:active {
 	opacity: 0.7;
 }
@@ -728,12 +709,6 @@ ion-card:hover {
 
 #note {
 	color: white;
-}
-
-#averageGrade {
-	color: var(--ion-color-primary);
-	text-align: center;
-	margin-top: px;
 }
 
 #removeSemesterIcon {
