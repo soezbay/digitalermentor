@@ -13,30 +13,59 @@
 							class="rounded-item ion-margin-horizontal">
 							<ion-label class="custom-label"> Aktuelle Module und LP </ion-label>
 						</ion-item>
-						<!-- CP Progress bar mit Notendurchschnitt -->
-						<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
-						<div class="cpInfo">
-							{{
-								reachedCreditPoints +
-								'\/' +
-								fullCreditPoints +
-								' ' +
-								texts.studium.leistungspunkteKurz
-							}}
+						<div>
+							<div style="text-align: center;">
+								<h5 style="margin-bottom: 0; padding-bottom: 0;">
+									{{ this.currentSemester }}. {{ texts.studium.semester }}
+									<ion-label color="primary">{{ calculateAverageGrade().toFixed(2).replace('.', ',') + "⌀"
+									}}</ion-label>
+								</h5>
+							</div>
+							<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
+							<div style="text-align: center; padding-top: 5px;">
+								<ion-label>
+									{{ reachedCreditPoints + '\/' + fullCreditPoints + ' ' +
+										texts.studium.leistungspunkteKurz }}
+								</ion-label>
+							</div>
 						</div>
-						<div class="averageGrade">
-							{{ texts.studienverlauf.deinNotendurchschnitt }}
-							{{ calculateAverageGrade().toFixed(2).replace('.', ',') }} <br />
-						</div>
+						<ion-grid>
+							<ion-row>
+								<ion-col size="10">
+									<ion-row class="modulesRow">
+										<ion-row class="modulesContainer">
+											<ion-col size="4"
+												v-for="(module, index) in groupedModules[this.currentSemester]"
+												:key="index">
+												<!-- Bestandene Module können nicht verschoben werden -->
+												<ion-card :class="getModuleClass(module)">
+													<ion-label style="color: #000000; font-weight: bolder;">
+														{{ module.Kuerzel }}
+													</ion-label>
+													<br>
+													<ion-label style="color: #000000; font-weight: bolder;">
+														{{ getGradeOfModule(module) }}
+													</ion-label>
+												</ion-card>
+											</ion-col>
+										</ion-row>
+									</ion-row>
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+
 						<br>
-						
 						<ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none"
 							class="rounded-item ion-margin-horizontal">
 							<ion-label class="custom-label"> {{ texts.ziele.deineZiele }} </ion-label>
 						</ion-item>
 						<div class="semester-container ion-padding-bottom">
-							<ion-label class="semester-label" style="font-size: larger">{{ texts.studium.sommersemester }}</ion-label>
-							<ion-label class="semester-label" style="font-size: larger">{{ texts.studium.wintersemester }}</ion-label>
+							<ion-label class="semester-label">
+								{{ texts.studium.sommersemester }}
+							</ion-label>
+							<ion-label class="semester-label">
+								{{ texts.studium.wintersemester }}
+							</ion-label>
 						</div>
 						<div class="ziel-container">
 							<ion-list class="drag-drop-containers">
@@ -121,6 +150,14 @@
 </template>
 
 <script>
+
+import axios from 'axios'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { texts } from '../texts.js'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+import Studienverlauf from './Studienverlauf.vue'
+
 import {
 	IonPage,
 	IonHeader,
@@ -139,15 +176,9 @@ import {
 	IonListHeader,
 	IonIcon,
 	IonDatetime,
-	IonProgressBar
+	IonProgressBar,
+	IonCard
 } from '@ionic/vue'
-
-import axios from 'axios'
-import { computed } from 'vue'
-import { useStore } from 'vuex'
-import { texts } from '../texts.js'
-import HeaderComponent from '../views/Components/HeaderComponent.vue'
-
 
 export default {
 	components: {
@@ -170,6 +201,8 @@ export default {
 		IonDatetime,
 		HeaderComponent,
 		IonProgressBar,
+		Studienverlauf,
+		IonCard
 	},
 	setup() {
 		const store = useStore()
@@ -208,6 +241,7 @@ export default {
 		return {
 			Adress: import.meta.env.VITE_API_URL,
 			studentID: 'test123',
+			currentSemester: 1,
 			modules: [], // Alle Module aus der Datenbank
 			groupedModules: [], // Neues Datenattribut für gruppierte Module
 			electiveModules: [], // Wahlpflichtmodule
@@ -323,6 +357,30 @@ export default {
 
 			return totalGrade / totalCreditPoints
 		},
+		getModuleClass(module) {
+			const succededModule = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
+			console.log("SUCCEDEDMODULES: ", succededModule);
+			if (succededModule.Status === 'Bestanden') {
+				return 'moduleElementSuccess';
+			} else if (succededModule.Versuch === 1 && succededModule.Status === 'Nicht Bestanden') {
+				return 'moduleElement2';
+			} else if (succededModule.Versuch === 2 && succededModule.Status === 'Nicht Bestanden') {
+				return 'moduleElement3';
+			} else if (succededModule.Versuch === 3 && succededModule.Status === 'Nicht Bestanden') {
+				return 'moduleElementFailed';
+			} else {
+				return 'moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
+			}
+		},
+
+		getGradeOfModule(module) {
+			const grade = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel).Note
+			if(grade) {
+				return "Note: " + grade;
+			} else {
+				return " ";
+			}
+		},
 	},
 
 	mounted() {
@@ -335,7 +393,7 @@ export default {
 	computed: {
 		// Berechnung der erreichten Credit Points des Studenten
 		reachedCreditPoints() {
-			const rcp =  this.calculateCreditPoints();
+			const rcp = this.calculateCreditPoints();
 			console.log("Dein RCP: ", rcp);
 			return rcp;
 		},
@@ -387,7 +445,73 @@ ion-progress-bar {
 	width: 70%;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 30px;
+	margin-top: 10px;
+}
+
+.modulesRow {
+	width: 100%;
+	margin-left: 33px;
+	margin-right: 5px;
+	background-color: var(--ion-color-secondary);
+	border-radius: 10px;
+}
+
+.modulesContainer {
+	height: auto;
+	min-height: 50px;
+	background-color: transparent;
+	width: 100%;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.moduleElement1 {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 10px grey;
+	transition: 0.8s;
+	text-align: center;
+	border-radius: 15px;
+}
+
+.moduleElement2 {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 10px grey;
+	transition: 0.8s;
+	text-align: center;
+	border-radius: 15px;
+	background-color: var(--ion-color-warning);
+}
+
+.moduleElement3 {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 10px grey;
+	transition: 0.8s;
+	text-align: center;
+	border-radius: 15px;
+	background-color: var(--ion-color-danger);
+}
+
+.moduleElementSuccess {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 10px grey;
+	transition: 0.8s;
+	text-align: center;
+	border-radius: 15px;
+	background-color: var(--ion-color-primary);
+}
+
+.moduleElementFailed {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 10px grey;
+	transition: 0.8s;
+	text-align: center;
+	border-radius: 15px;
+	background-color: #555;
 }
 
 
@@ -443,6 +567,7 @@ ion-progress-bar {
 	font-size: larger;
 	text-align: center;
 	display: inline-block;
+	font-size: larger;
 }
 
 .ziel-container {
@@ -549,8 +674,6 @@ ion-datetime {
 		display: none;
 	}
 }
-
-
 
 .hidden {
 	opacity: 0;

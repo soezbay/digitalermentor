@@ -365,7 +365,7 @@ export default defineComponent({
 		// Funktion zur Berechnung der erreichten Credit Points
 		calculateCreditPoints() {
 			let totalCreditPoints = 0
-			
+
 			for (const progressModule of this.studentProgress) {
 				if (progressModule.Status === 'Bestanden') {
 					// Findet das entsprechende Modul im Array 'modules' und fügt die Credit Points hinzu

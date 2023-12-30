@@ -15,10 +15,13 @@
 					<ion-menu-button color="primary"></ion-menu-button>
 				</ion-buttons>
 			</ion-toolbar>
-				<ion-searchbar v-model="searchText" @ionChange="onSearchChange"></ion-searchbar>
 		</ion-header>
 
 		<ion-content>
+			<div style="padding: 0; margin: 0; margin-left: 15px; margin-right: 15px;">
+				<ion-searchbar v-model="searchText" @ionChange="onSearchChange" color="light"
+					style="padding: 0; padding-top: 10px;"></ion-searchbar>
+			</div>
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid style="margin: 0; padding-bottom: 0; padding-top: 0;">
 				<ion-row style="margin-bottom: 7px">
@@ -36,7 +39,6 @@
 							</ion-select>
 						</ion-item>
 					</ion-col>
-
 					<!-- ion-col for Listenansicht -->
 					<ion-col class="listenansicht" size="12" size-sm="6">
 						<ion-item lines="none">
@@ -70,6 +72,7 @@
 					</ion-col>
 				</ion-grid>
 			</div>
+
 
 			<!--Show modules as List when showAsList=true-->
 			<ion-list v-else style="padding: 0; padding-top: 10px;">
@@ -389,12 +392,12 @@ export default {
 }
 
 .solid {
-  border-top: 1px solid grey;
-  /* Breite der Trennstriche angepasst */
-  width: 100%;
-  
-  margin: 0;
-  padding: 0;
+	border-top: 1px solid grey;
+	/* Breite der Trennstriche angepasst */
+	width: 100%;
+
+	margin: 0;
+	padding: 0;
 }
 
 .modulBlock {
@@ -434,7 +437,7 @@ ion-item-divider {
 /* padding "Studiengang" */
 .studiengang {
 	padding: 0;
-	
+
 }
 
 /* padding "Listenansicht" */

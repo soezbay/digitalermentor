@@ -154,27 +154,11 @@
 								<ion-col size-xs="2.3" size-sm="2.6" size-md="4" size-lg="4" size-xl="2"
 									v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
 									style="padding: 1px;">
-									<!-- <div v-if="modul.tryCount === 1"> -->
 									<ion-card :class="getModuleClass(modul.tryCount, modul.Status)">
 										<ion-label style="color: #000000; font-weight: bolder">
 											{{ modul.Kuerzel }}
 										</ion-label>
 									</ion-card>
-									<!-- </div> -->
-									<!-- <div v-else-if="modul.tryCount === 2">
-										<ion-card class="secondTry">
-											<ion-label style="color: #000000; font-weight: bolder">
-												{{ modul.kuerzel }}
-											</ion-label>
-										</ion-card>
-									</div>
-									<div v-else-if="modul.tryCount === 3">
-										<ion-card  class="thirdTry">
-											<ion-label style="color: #000000; font-weight: bolder">
-												{{ modul.kuerzel }}
-											</ion-label>
-										</ion-card>
-									</div> -->
 								</ion-col>
 							</ion-row>
 						</ion-col>
@@ -510,7 +494,7 @@ export default {
 					const studentProgressResponse = await axios.get(`${this.Adress}/modul/status/${this.studentID}`);
 
 					const studentProgress = studentProgressResponse.data.modul;
-					this.$store.dispatch('saveStudentProgress', this.studentProgress);
+					this.$store.dispatch('updateStudentProgress', studentProgress);
 
 					const pflichtModule = pflichtModuleResponse.data.pflicht;
 					const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
