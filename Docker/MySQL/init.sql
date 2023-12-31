@@ -1,5 +1,7 @@
 DROP DATABASE IF EXISTS digitalerMentorDB;
-Create DATABASE digitalerMentorDB;
+Create DATABASE digitalerMentorDB
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
 USE digitalerMentorDB;
 
 
@@ -37,7 +39,7 @@ Create Table BenutzerEmail (
 
 CREATE TABLE BenutzerCache (
     BenutzerID varchar(10) PRIMARY KEY,
-    CacheDaten TEXT,
+    CacheDaten MEDIUMTEXT,
 	Datum datetime,
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
 );
@@ -352,6 +354,7 @@ INSERT INTO VoraussetzungenEmpfohlen(ModulKuerzel, VoraussetzungModulKuerzel) VA
 
 
 INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
+INSERT INTO Benutzer Value("ad12345", 87654321, "Adrian", "Knigge", 7, "Adrian.Knigge@Studmail.w-hs.de", Null, Null, Null, "TI");
 
 -- Insert Into Ziel Value("Test1", "ADS", "Test123");
 -- Insert Into Ziel Value("Test2", "MIN", "Test123");

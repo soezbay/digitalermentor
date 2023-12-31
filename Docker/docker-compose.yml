@@ -5,6 +5,7 @@ services:
     ports:
       - "${PORT}:${PORT}"
     environment:
+      - LANG=C.UTF-8
       - PORT=${PORT}
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_USER=${MYSQL_USER}
@@ -17,6 +18,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./MySQL/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - ./mycustom.cnf:/etc/mysql/conf.d/custom.cnf
     environment:
+      - MYSQL_CHARSET=utf8mb4
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}

@@ -3,7 +3,7 @@ const Modul = require('../module/Modul');
 exports.getAlleModule = async (req, res, next) => {
     try{
         const [module, _] = await Modul.findAll();
-
+        console.info();
         res.status(200).json({module});
     }catch (error) {
        console.log(error);

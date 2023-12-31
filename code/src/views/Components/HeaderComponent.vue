@@ -25,11 +25,11 @@ const data = ref({
 					</ion-button>
 				</ion-buttons>
 				<ion-title>{{ title }}</ion-title>
-				<ion-buttons v-if="title === 'Profil'" slot="end">
+				<!-- <ion-buttons v-if="title === 'Profil'" slot="end">
 					<ion-button color="primary" router-link="/menu/profil/changeProfile">
 						<ion-icon slot="icon-only" :icon="create"></ion-icon>
 					</ion-button>
-				</ion-buttons>
+				</ion-buttons> -->
 				<ion-buttons v-if="hasInfo" slot="end" style="display: flex; align-items: center">
 					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
 						<ion-icon :icon="helpCircleOutline"></ion-icon>

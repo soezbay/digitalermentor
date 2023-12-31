@@ -369,6 +369,7 @@ export default {
 	watch: {
 		selectedStudiengang(newStudiengang) {
 			this.getModuleData(newStudiengang);
+			console.info("Change")
 			this.onStudiengangChange()
 		},
 	},
