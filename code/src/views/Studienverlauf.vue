@@ -22,7 +22,7 @@
 			<!-- Modulsuche -->
 			<ion-grid>
 				<ion-row class="ion-justify-content-center">
-					<ion-searchbar show-clear-button="always" placeholder="Modulsuche" class="searchbar" type="text"
+					<ion-searchbar show-clear-button="always" placeholder="Modulsuche" class="searchbar" type="text" color="light"
 						v-model="query" @ionChange="handleSearchChange"></ion-searchbar>
 				</ion-row>
 			</ion-grid>
@@ -617,11 +617,13 @@ export default defineComponent({
 ion-progress-bar {
 	--background: var(--ion-color-light);
 	--progress-background: var(--ion-color-primary);
+	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 	height: 20px;
 	width: 70%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 30px;
+	margin-bottom: 10px;
 }
 
 .passed {
@@ -649,6 +651,7 @@ ion-card {
 	height: 100%;
 	text-align: center;
 	color: black;
+	font-weight: bold;
 	border-radius: 15px;
 	transition: 0.8s;
 }
@@ -682,6 +685,8 @@ ion-card:hover {
 	background-color: var(--ion-color-secondary);
 	border-radius: 10px;
 }
+
+
 
 .modulesContainer {
 	height: auto;
