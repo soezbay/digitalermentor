@@ -18,7 +18,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./MySQL/init.sql:/docker-entrypoint-initdb.d/0_init.sql
-      - ./mycustom.cnf:/etc/mysql/conf.d/custom.cnf
     environment:
       - MYSQL_CHARSET=utf8mb4
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
