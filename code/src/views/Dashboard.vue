@@ -441,11 +441,13 @@ export default {
 ion-progress-bar {
 	--background: var(--ion-color-light);
 	--progress-background: var(--ion-color-primary);
+	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 	height: 20px;
 	width: 70%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .modulesRow {
@@ -468,7 +470,7 @@ ion-progress-bar {
 .moduleElement1 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 10px grey;
+	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -477,7 +479,7 @@ ion-progress-bar {
 .moduleElement2 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 10px grey;
+	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -487,7 +489,7 @@ ion-progress-bar {
 .moduleElement3 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 10px grey;
+	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -497,7 +499,7 @@ ion-progress-bar {
 .moduleElementSuccess {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 10px grey;
+	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -507,11 +509,11 @@ ion-progress-bar {
 .moduleElementFailed {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 10px grey;
+	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
-	background-color: #555;
+	background-color: var(--ion-color-medium);
 }
 
 
@@ -679,4 +681,16 @@ ion-datetime {
 	opacity: 0;
 	pointer-events: none;
 }
+
+/* label for modules and lp, goals and appointments */
+.custom-label {
+	color: var(--ion-color-light);
+	font-weight: bold;
+}
+
+/* move to the left */
+ion-title {
+	margin-left: -5px;
+}
+
 </style>

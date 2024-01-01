@@ -641,6 +641,7 @@ export default {
 
 .headerText{
 	color: var(--ion-color-light);
+	font-weight: bold;
 
 }
 
@@ -785,7 +786,7 @@ ion-modal ion-toolbar {
 	text-align: center;
 	padding: 6px;
 	border-radius: 15px;
-	background-color: var(--ion-color-light);
+	background-color: var(--ion-color-secondary);
 }
 
 .secondTry {
@@ -815,7 +816,7 @@ ion-modal ion-toolbar {
 	text-align: center;
 	padding: 6px;
 	border-radius: 15px;
-	background-color: grey;
+	background-color: var(--ion-color-medium);
 }
 
 #reachedGoalsButton {

@@ -19,8 +19,7 @@
 
 		<ion-content>
 			<div style="padding: 0; margin: 0; margin-left: 15px; margin-right: 15px;">
-				<ion-searchbar v-model="searchText" @ionChange="onSearchChange" color="light"
-					style="padding: 0; padding-top: 10px;"></ion-searchbar>
+				<ion-searchbar class="searchbar" placeholder="Modulsuche" v-model="searchText" @ionChange="onSearchChange" color="light"></ion-searchbar>
 			</div>
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid style="margin: 0; padding-bottom: 0; padding-top: 0;">
@@ -479,4 +478,9 @@ ion-item-divider {
 		justify-content: left;
 	}
 }
+.searchbar {
+	padding: 10px; 
+	padding-top: 10px;
+}
+
 </style>
