@@ -53,7 +53,7 @@
 			</div>
 			<ion-grid v-if="showAsList === false" class="searchGrid">
 				<ion-row v-if="results.length > 0">
-					<ion-col size="1.7" v-for="result in results">
+					<ion-col size="4" size-md="3" size-lg="2" v-for="result in results">
 						<ion-item lines="none" @click="openModal(result)">
 							<ion-label>{{ result.Kuerzel }}</ion-label>
 						</ion-item>
