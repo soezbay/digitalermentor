@@ -9,6 +9,11 @@ app.use(bodyParser.json({ limit: '20mb' }));
 app.use(express.json());
 app.use(cors());
 
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  next();
+});
+
 const modulRoutes = require('./routes/modulroutes');
 const bewertungsRoutes = require('./routes/bewetungroutes');
 const studiengangRoutes = require('./routes/studiengangroutes');
