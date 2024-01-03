@@ -104,9 +104,6 @@
 								</div>
 							</ion-list>
 						</div>
-						<div><img src="/resources/Sprechblase.png" alt="Sprechblase" class="speechbubble"></div>
-						<div><img src="/resources/DigitalerMentor-Koala.png" alt="Digitaler Mentor Koala"
-								class="koala-image"></div>
 					</ion-col>
 					<ion-header style="height: 0.3%"></ion-header>
 
@@ -141,6 +138,8 @@
 							<ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates"
 								size="cover" max="2100-01-01T00:00:00">
 							</ion-datetime>
+						</div>
+						<div><img src="/resources/DigitalerMentor_Koala_Sprechblase.png" alt="Digitaler Mentor Koala" class="koala-image">
 						</div>
 					</ion-col>
 				</ion-row>
@@ -649,11 +648,11 @@ ion-datetime {
 
 @media only screen and (min-width: 768px) {
 	.koala-image {
-		margin-top: -90px;
-		display: inline;
-		height: 300px;
-		margin-left: -20px;
-	}
+		margin-top: 20px;
+		height: 230px;
+		float: right;
+		margin-right: 25px;
+}
 }
 
 @media only screen and (max-width: 767px) {
@@ -662,20 +661,6 @@ ion-datetime {
 	}
 }
 
-@media only screen and (min-width: 768px) {
-	.speechbubble {
-		margin-left: 200px;
-		margin-top: 100px;
-		display: inline;
-		height: 90px;
-	}
-}
-
-@media only screen and (max-width: 767px) {
-	.speechbubble {
-		display: none;
-	}
-}
 
 .hidden {
 	opacity: 0;
