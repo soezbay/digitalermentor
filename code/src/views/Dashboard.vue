@@ -139,7 +139,8 @@
 								size="cover" max="2100-01-01T00:00:00">
 							</ion-datetime>
 						</div>
-						<div><img src="/resources/DigitalerMentor_Koala_Sprechblase.png" alt="Digitaler Mentor Koala" class="koala-image">
+						<div><img src="/resources/DigitalerMentor_Koala_Sprechblase.png" alt="Digitaler Mentor Koala"
+								class="koala-image">
 						</div>
 					</ion-col>
 				</ion-row>
@@ -357,28 +358,37 @@ export default {
 			return totalGrade / totalCreditPoints
 		},
 		getModuleClass(module) {
-			const succededModule = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
-			console.log("SUCCEDEDMODULES: ", succededModule);
-			if (succededModule.Status === 'Bestanden') {
-				return 'moduleElementSuccess';
-			} else if (succededModule.Versuch === 1 && succededModule.Status === 'Nicht Bestanden') {
-				return 'moduleElement2';
-			} else if (succededModule.Versuch === 2 && succededModule.Status === 'Nicht Bestanden') {
-				return 'moduleElement3';
-			} else if (succededModule.Versuch === 3 && succededModule.Status === 'Nicht Bestanden') {
-				return 'moduleElementFailed';
-			} else {
-				return 'moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
+			try {
+				const succededModule = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
+				console.log("SUCCEDEDMODULES: ", succededModule);
+				if (succededModule.Status === 'Bestanden') {
+					return 'moduleElementSuccess';
+				} else if (succededModule.Versuch === 1 && succededModule.Status === 'Nicht Bestanden') {
+					return 'moduleElement2';
+				} else if (succededModule.Versuch === 2 && succededModule.Status === 'Nicht Bestanden') {
+					return 'moduleElement3';
+				} else if (succededModule.Versuch === 3 && succededModule.Status === 'Nicht Bestanden') {
+					return 'moduleElementFailed';
+				} else {
+					return 'moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
+				}
+			} catch (err) {
+				return 'moduleElement1';
 			}
 		},
 
 		getGradeOfModule(module) {
-			const grade = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel).Note
-			if(grade) {
-				return "Note: " + grade;
-			} else {
-				return " ";
+			try {
+				const grade = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel).Note
+				if (grade) {
+					return "Note: " + grade;
+				} else {
+					return " ";
+				}
+			} catch (err) {
+				return ' ';
 			}
+
 		},
 	},
 
@@ -652,7 +662,7 @@ ion-datetime {
 		height: 230px;
 		float: right;
 		margin-right: 25px;
-}
+	}
 }
 
 @media only screen and (max-width: 767px) {
@@ -677,5 +687,4 @@ ion-datetime {
 ion-title {
 	margin-left: -5px;
 }
-
 </style>

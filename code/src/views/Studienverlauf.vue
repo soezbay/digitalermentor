@@ -238,7 +238,6 @@ export default defineComponent({
 			console.log(event)
 		},
 		getData() {
-
 			axios
 				.get(`${this.Adress}/modul/status/${this.studentID}`)
 				.then(Response => {
@@ -535,13 +534,17 @@ export default defineComponent({
 				if (moduleIndex !== -1) {
 					// Entferne das Modul aus dem Quellsemester-Array
 					const removedModule = sourceSemesterArray.splice(moduleIndex, 1)[0]
-
+					console.log('SPLICEDARRAY REMOVEDMODULE', removedModule);
 					// Füge das Modul zum Zielsemester-Array hinzu
 					targetSemesterArray.push(removedModule)
 
+					this.$store.commit('saveGroupeModuleChanges', semester, targetSemester, sourceSemesterArray, targetSemesterArray);
+
 					// Führe eine Aktualisierung der Vue.js-Ansicht durch
 					this.$forceUpdate()
+
 				}
+
 			}
 		},
 
@@ -579,7 +582,7 @@ export default defineComponent({
 		console.log("LENGTH_____1______", this.studentProgress);
 		console.log("LENGTH_____2______", this.modules);
 		console.log("LENGTH_____3______", this.electiveModules);
-		this.getData()
+		// this.getData()
 		// this.sortModulesAlphabetically()
 	},
 
