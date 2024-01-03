@@ -27,7 +27,7 @@ const data = ref({
 	<ion-modal
 		class="info-modal"
 		ref="modal_info"
-		trigger="open-info-modal"
+		trigger="open-info-modal-studienziele"
 		:presenting-element="presentingElement">
 		<ion-content>
 			<ion-grid>

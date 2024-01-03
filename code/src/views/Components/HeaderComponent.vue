@@ -8,7 +8,7 @@ import {
 	IonTitle,
 	IonMenuButton,
 } from '@ionic/vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { texts } from '../../texts.js'
 import { helpCircleOutline, create } from 'ionicons/icons'
 
@@ -21,6 +21,9 @@ const data = ref({
 	helpCircleOutline,
 	create,
 })
+
+const computedId = computed(() => `${props.title.toLowerCase().replace(/\s+/g, '-')}`);
+
 </script>
 
 <template>
@@ -46,8 +49,9 @@ const data = ref({
 				<ion-button
 					class="infoButton"
 					color="primary"
-					id="open-info-modal"
+					:id="`open-info-modal-`+ computedId"
 					expand="block">
+					{{ console.log(computedId) }}
 					<ion-icon :icon="helpCircleOutline"></ion-icon>
 				</ion-button>
 				<ion-menu-button color="primary"></ion-menu-button>

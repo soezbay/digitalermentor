@@ -23,7 +23,7 @@ const data = ref({
 	<ion-modal
 		class="info-modal"
 		ref="modal_info"
-		trigger="open-info-modal">
+		trigger="open-info-modal-modulübersicht">
 		<ion-content>
 			<ion-grid>
 				<ion-row justify-content-center align-items-center>
