@@ -1,4 +1,14 @@
 <script setup>
+import {
+	IonModal,
+	IonContent,
+	IonGrid,
+	IonRow,
+	IonCol,
+	IonIcon,
+	IonButton,
+	IonItemDivider,
+} from '@ionic/vue'
 import { ref } from 'vue'
 import { texts } from '../../texts.js'
 import { add, checkmarkDone, trash, create } from 'ionicons/icons'
@@ -17,7 +27,7 @@ const data = ref({
 	<ion-modal
 		class="info-modal"
 		ref="modal_info"
-		trigger="open-info-modal"
+		trigger="open-info-modal-studienziele"
 		:presenting-element="presentingElement">
 		<ion-content>
 			<ion-grid>

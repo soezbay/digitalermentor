@@ -1,4 +1,12 @@
 <script setup>
+import {
+	IonModal,
+	IonContent,
+	IonGrid,
+	IonRow,
+	IonCol,
+	IonIcon,
+} from '@ionic/vue'
 import { ref } from 'vue'
 import { texts } from '../../texts.js'
 import { book } from 'ionicons/icons'
@@ -15,7 +23,7 @@ const data = ref({
 	<ion-modal
 		class="info-modal"
 		ref="modal_info"
-		trigger="open-info-modal">
+		trigger="open-info-modal-modulübersicht">
 		<ion-content>
 			<ion-grid>
 				<ion-row justify-content-center align-items-center>
