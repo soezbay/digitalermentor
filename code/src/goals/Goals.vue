@@ -774,7 +774,6 @@ ion-modal ion-toolbar {
 }
 
 #legendBadge {
-	box-shadow: 1px 1px 7px var(--ion-color-medium);
 	margin-right: 5px;
 	margin-left: 5px;
 }
