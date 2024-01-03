@@ -510,7 +510,7 @@ const store = createStore({
         getLetzerCacheUpdate(state) {
             return state.letzterCacheUpdate;
         },
-        getTestBenutzer(state) {
+        getUserID(state) {
             return state.TestDaten.BenutzerID;
         },
         getModulesBook(state) {
