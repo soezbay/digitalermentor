@@ -48,7 +48,7 @@
 			<!--Searching Modules -->
 			<div style="padding: 0; margin-left: 15px; margin-right: 15px;">
 				<ion-searchbar v-model="searchText" animated="true" placeholder="Modulhandbuch durchsuchen"
-					@ionInput="handleInput($event)" color="light" style="padding: 0;" id="open-loading">
+					@ionInput="handleInput($event)">
 				</ion-searchbar>
 			</div>
 			<ion-grid v-if="showAsList === false" class="searchGrid">
@@ -188,7 +188,6 @@ import {
 	IonModal, modalController, IonNote, IonItemDivider,
 	loadingController
 } from '@ionic/vue';
-import { toHandlers } from 'vue';
 
 export default {
 	components: {
@@ -218,17 +217,6 @@ export default {
 		IonNote,
 		IonItemDivider
 	},
-
-	// setup() {
-	// 	const store = useStore();
-	// 	const modulesToFilter = store.getters.getModulesBook;
-	// 	const filteredModules = modulesToFilter.map(course =>
-	// 		course.faecher
-	// 	);
-	// 	const results = ref(filteredModules);
-
-	// 	return { modulesToFilter, filteredModules, results };
-	// },
 
 	data() {
 		return {
@@ -343,7 +331,6 @@ export default {
 		},
 
 		getselectedCourseModules() {
-			this.getDataOfStore;
 			console.log("-----------DIE modulesBook MIT MODULEN:", this.modulesBook);
 			const array = this.modulesBook.filter(arr => arr.course === this.selectedStudiengang);
 			console.log("________DIE GEFILTERTE LISTE", array);
@@ -409,9 +396,6 @@ export default {
 		this.studiengaenge = this.$store.getters.getCourses;
 		this.modulesBook = this.$store.getters.getModulesBook;
 		this.fetchStudiengaenge();
-		// console.log("VUEX MODULESBOOK", this.$store.getters.getModulesBook);
-		// console.log("MODULESBOOK", this.modulesBook);
-		// console.log("-----STUDIENGANG:", this.selectedStudiengang);
 		this.getModuleData(this.selectedStudiengang);
 
 		const lastSetup = this.settings;
@@ -432,10 +416,6 @@ export default {
 	},
 
 	computed: {
-		// getDataOfStore() {
-		// 	this.studiengaenge = this.$store.getters.getCourses;
-		// 	this.modulesBook = this.$store.getters.getModulesBook;
-		// },
 		settings() {
 			console.log('Getting settings')
 			return this.$store.getters.getModuleOverviewData
@@ -457,6 +437,17 @@ export default {
 	margin: 0;
 	padding: 0;
 }
+
+ion-searchbar {
+	padding: 0;
+	--background: #c8c8c8;
+	--color: #000000;
+    --placeholder-color: #000000;
+    --icon-color: #000000;
+    --clear-button-color: #000000;
+
+    --border-radius: 10px;
+  }
 
 .courseSelect {
 	width: 100%;
@@ -509,8 +500,8 @@ ion-item-divider {
 
 .ModulItemsInList:hover {
 	cursor: pointer;
-	opacity: 0.9;
-	--background: var(--ion-color-light);
+	color: #000000;
+	--background: var(--ion-color-secondary);
 }
 
 .searchGrid {
@@ -519,15 +510,20 @@ ion-item-divider {
 
 .searchGrid ion-item {
 	text-align: center;
-	border: 2px solid var(--ion-color-light);
+	border: 2px solid var(--ion-color-secondary);
 	border-radius: 10px;
 	padding: 1px;
 }
 
+.searchGrid ion-item:hover {
+	--background: var(--ion-color-secondary);
+	cursor: pointer;
+}
+
 .searchList:hover {
 	cursor: pointer;
-	opacity: 0.9;
-	--background: var(--ion-color-light);
+	color: #000000;
+	--background: var(--ion-color-secondary);
 }
 
 /* modal for desktop */
