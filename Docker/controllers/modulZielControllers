@@ -1,29 +1,47 @@
 const ModulZiel = require('../module/ModulZiel');
 
-exports.getAllZieleFromBenutzer = async (req, res, next) => {
-    try {
-        let BenutzerID = req.params.BenutzerID;
-        const [ziele, _] = await ModulZiel.findAllFromBenutzer(BenutzerID);
+const convertUmlauteToUtf8 = (data) => {
+  if (typeof data === 'string') {
+    return Buffer.from(data, 'latin1').toString('utf-8');
+  } else if (Array.isArray(data)) {
+    return data.map(item => convertUmlauteToUtf8(item));
+  } else if (typeof data === 'object' && data !== null) {
+    const newObj = {};
+    Object.keys(data).forEach(key => {
+      newObj[key] = convertUmlauteToUtf8(data[key]);
+    });
+    return newObj;
+  }
+  return data;
+};
 
-        res.status(200).json({ ziele });
-    } catch (error) {
-        console.log(error);
-        next(error);
-    }
+exports.getAllZieleFromBenutzer = async (req, res, next) => {
+  try {
+    let BenutzerID = req.params.BenutzerID;
+    const [ziele, _] = await ModulZiel.findAllFromBenutzer(BenutzerID);
+
+    // Führe die Konvertierung durch
+    const zieleWithUtf8 = convertUmlauteToUtf8(ziele);
+
+    res.status(200).json({ ziele: zieleWithUtf8 });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };
 
 exports.createZiel = async (req, res, next) => {
-    try {
-        let { ZielID, Titel, Semester, BenutzerID, Kuerzel } = req.body;
-        let modulZiel = new ModulZiel(ZielID, Titel, Semester, BenutzerID, Kuerzel);
+  try {
+    let { ZielID, Titel, Semester, BenutzerID, Kuerzel } = req.body;
+    let modulZiel = new ModulZiel(ZielID, Titel, Semester, BenutzerID, Kuerzel);
 
-        post = await modulZiel.createZiel();
+    post = await modulZiel.createZiel();
 
-        console.log(modulZiel);
+    console.log(modulZiel);
 
-        res.send("Create new ModulZiel Route.");
-    } catch (error) {
-        console.log(error);
-        next(error);
-    }
+    res.send("Create new ModulZiel Route.");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };

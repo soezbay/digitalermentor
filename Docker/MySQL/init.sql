@@ -1,5 +1,7 @@
 DROP DATABASE IF EXISTS digitalerMentorDB;
-Create DATABASE digitalerMentorDB;
+Create DATABASE digitalerMentorDB
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
 USE digitalerMentorDB;
 
 
@@ -37,7 +39,7 @@ Create Table BenutzerEmail (
 
 CREATE TABLE BenutzerCache (
     BenutzerID varchar(10) PRIMARY KEY,
-    CacheDaten TEXT,
+    CacheDaten MEDIUMTEXT,
 	Datum datetime,
 	FOREIGN KEY (BenutzerID) REFERENCES Benutzer(BenutzerID)
 );
@@ -352,6 +354,7 @@ INSERT INTO VoraussetzungenEmpfohlen(ModulKuerzel, VoraussetzungModulKuerzel) VA
 
 
 INSERT INTO Benutzer Value("Test123", 12345678, "TestV", "TestN", 404, Null, Null, Null, Null, "PI");
+INSERT INTO Benutzer Value("ad12345", 87654321, "Adrian", "Knigge", 7, "Adrian.Knigge@Studmail.w-hs.de", Null, Null, Null, "TI");
 
 -- Insert Into Ziel Value("Test1", "ADS", "Test123");
 -- Insert Into Ziel Value("Test2", "MIN", "Test123");
@@ -371,15 +374,19 @@ Insert Into Pruefung Value("PID3", 1, '2023-09-02 12:00:00', "LDS" );
 Insert Into Pruefung Value("PID4", 2, '2023-09-02 12:00:00', "GMI" );
 Insert Into Pruefung Value("PID5", 1, '2023-10-10 12:00:00', "LDS" );
 Insert Into Pruefung Value("PID6", 1, '2023-10-10 12:00:00', "TGI" );
+Insert Into Pruefung Value("PID7", 1, '2023-10-10 12:00:00', "TENI" );
+
 
 Insert Into Anmeldung Value("Test123", "PID5");
 
 
 Insert Into Note Value("PID1", "Test123", 3.0, "Bestanden", 1);
 Insert Into Note Value("PID2", "Test123", 5.0, "Nicht Bestanden", 2);
-Insert Into Note Value("PID3", "Test123", 5.0, "Nicht Bestanden", 3);
+Insert Into Note Value("PID3", "Test123", 5.0, "Nicht Bestanden", 1);
 Insert Into Note Value("PID4", "Test123", 2.0, "Bestanden", 2);
 Insert Into Note Value("PID6", "Test123", 5.0, "Nicht Bestanden", 2);
+Insert Into Note Value("PID7", "Test123", 5.0, "Nicht Bestanden", 3);
+
 
 
 INSERT INTO Bewertung (

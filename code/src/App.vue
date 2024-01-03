@@ -143,6 +143,7 @@ ion-menu ion-item {
   padding: 5px;
   font-size: larger;
   color: var(--ion-color-light);
+  transition: background-color 0.9s;
 }
 
 ion-menu ion-item.selected {
@@ -160,4 +161,8 @@ ion-menu ion-item.selected {
     --overflow: hidden;
     }
   
+
+  ion-menu ion-item:hover {
+    --background: #757e1b;
+  }
 </style>

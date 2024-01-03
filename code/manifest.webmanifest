@@ -12,8 +12,19 @@
         {
             "src": "/resources/App_Logo_DigitalerMentor_512x512.png",
             "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "/resources/App_Logo_DigitalerMentor_512x512.png",
+            "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "/resources/App_Logo_DigitalerMentor_512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ],
     "start_url": ".",
