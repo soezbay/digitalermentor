@@ -136,7 +136,7 @@
 						<br />
 						<div class="dateDiv">
 							<ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates"
-								size="cover" max="2100-01-01T00:00:00">
+								size="cover" max="2100-01-01T00:00:00" first-day-of-week="1">
 							</ion-datetime>
 						</div>
 						<div><img src="/resources/DigitalerMentor_Koala_Sprechblase.png" alt="Digitaler Mentor Koala"
@@ -224,12 +224,21 @@ export default {
 		})
 
 		const formatDate = dateString => {
-			const parts = dateString.split('-')
-			if (parts.length === 3) {
-				const [year, month, day] = parts
-				return `${day}.${month}.${year}`
-			}
-			return dateString // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+			// 	const parts = dateString.split('-')
+			// 	if (parts.length === 3) {
+			// 		const [year, month, day] = parts
+			// 		return `${day}.${month}.${year}`
+			// 	}
+			// 	return dateString // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+			// }
+
+			// Show date as dd-mm-yyyy on dashboard
+			const date = new Date(dateString);
+			const day = date.getDate();
+			const month = date.getMonth() + 1; // Monate in JavaScript sind 0-basiert
+			const year = date.getFullYear();
+
+			return `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
 		}
 
 		return {

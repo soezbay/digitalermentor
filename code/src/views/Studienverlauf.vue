@@ -767,7 +767,6 @@ ion-toast {
 	--ionicon-stroke-width: 80px;
 	padding: 3px;
 	color: var(--ion-color-light);
-	box-shadow: 1px 1px 7px grey;
 }
 
 #legend {
@@ -779,7 +778,6 @@ ion-toast {
 }
 
 #legendBadge {
-	box-shadow: 1px 1px 7px grey;
 	margin-right: 7px;
 	margin-left: 7px;
 }
