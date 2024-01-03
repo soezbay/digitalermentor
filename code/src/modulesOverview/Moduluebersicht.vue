@@ -440,7 +440,7 @@ export default {
 
 ion-searchbar {
 	padding: 0;
-	--background: #c8c8c8;
+	--background: #9ea19a;
 	--color: #000000;
     --placeholder-color: #000000;
     --icon-color: #000000;
