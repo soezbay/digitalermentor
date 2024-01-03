@@ -25,7 +25,7 @@ const sendEmail = async (to, subject, body) => {
     }
     console.log('Message sent: %s', info.messageId);
   });
-  
+
 };
 
 // Function to send an email and store it in the database
