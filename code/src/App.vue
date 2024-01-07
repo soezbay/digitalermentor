@@ -62,7 +62,7 @@ const appPages = [
     mdIcon: calendarOutline,
   },
   {
-    title: texts.titel.moduluebersicht,
+    title: texts.titel.modulhandbuch,
     url: '/menu/moduluebersicht',
     mdIcon: bookOutline,
   },

@@ -61,7 +61,7 @@ export const texts = {
     titel: {
         digitalerMentor: "Digitaler Mentor",
         dashboard: "Dashboard",
-        moduluebersicht: "Modulübersicht",
+        modulhandbuch: "Modulhandbuch",
         studienverlauf: "Studienverlauf",
         studienziele: "Studienziele",
         profil: "Profil",
