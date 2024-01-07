@@ -462,11 +462,12 @@ ion-searchbar {
 	border-radius: 20px;
 	cursor: pointer;
 	background-color: var(--ion-color-secondary);
-	transition: 0.8s;
+	transition: 0.1s;
 }
 
 .modulBlock:hover {
-	opacity: 0.7;
+	opacity: 0.8;
+	transform: translate(0px, -2px);
 }
 
 /* header of "Listenansicht" */

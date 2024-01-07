@@ -39,6 +39,10 @@ const routes = [
     component: Termine
   },
   {
+    path: '/menu/termine',
+    component: Termine
+  },
+  {
     path: '/termine/:id',
     component: () => import('../appointments/TermineDetails.vue')
   },

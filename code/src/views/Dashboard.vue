@@ -108,7 +108,7 @@
 					<ion-header style="height: 0.3%"></ion-header>
 
 					<ion-col size="12" size-md="6" class="ion-padding-horizontal ion-padding-top">
-						<ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none"
+						<ion-item color="primary" router-link="/menu/termine" id="header" detail="true" lines="none"
 							class="rounded-item ion-margin-horizontal">
 							<ion-label class="custom-label">{{ texts.dashboard.deineTermine }}</ion-label>
 						</ion-item>
@@ -476,6 +476,8 @@ ion-progress-bar {
 
 .modulesRow {
 	width: 100%;
+	height: 140px;
+	padding-top: 5px;
 	margin-left: 33px;
 	margin-right: 5px;
 	background-color: var(--ion-color-secondary);

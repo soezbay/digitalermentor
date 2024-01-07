@@ -22,7 +22,7 @@
 			<!-- Modulsuche -->
 			<ion-grid>
 				<ion-row class="ion-justify-content-center">
-					<ion-searchbar show-clear-button="always" placeholder="Modulsuche" type="text" v-model="query"
+					<ion-searchbar show-clear-button="always" animated="true" placeholder="Modulsuche" type="text" v-model="query"
 						@ionChange="handleSearchChange"></ion-searchbar>
 				</ion-row>
 			</ion-grid>
@@ -654,7 +654,8 @@ ion-searchbar {
 	--clear-button-color: #000000;
 
 	@media (max-width: 767px) {
-		width: 80%;
+		margin-left: 10px;
+		width:70%;
 		/* width for mobile devices */
 	}
 }
@@ -677,7 +678,7 @@ ion-card {
 	text-align: center;
 	border-radius: 15px;
 	transition: 0.1s;
-
+	background-color: white;
 }
 
 .moduleElement2 {

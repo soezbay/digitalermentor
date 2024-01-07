@@ -1,8 +1,8 @@
 <template>
   <ion-app>
     <!--Navigation-Umbruch width in split-pane-->
-    <ion-split-pane when= "(min-width: 1000px)" content-id="main-content">
-      <ion-menu side="end" content-id="main-content" >
+    <ion-split-pane when="(min-width: 1000px)" content-id="main-content">
+      <ion-menu side="end" content-id="main-content">
         <ion-content class="no-scroll">
           <ion-list class="padding">
             <ion-list-header>{{ texts.titel.digitalerMentor }}</ion-list-header>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { defineComponent, ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { texts } from './texts.js'
 import {
@@ -45,7 +45,8 @@ import {
   schoolOutline,
   rocketOutline,
   personOutline,
-  settingsOutline
+  settingsOutline,
+  calendarOutline
 } from 'ionicons/icons';
 
 // const selectedIndex = ref(0);
@@ -54,6 +55,11 @@ const appPages = [
     title: texts.titel.dashboard,
     url: '/menu/dashboard',
     mdIcon: desktopOutline,
+  },
+  {
+    title: 'Termine',
+    url: '/menu/termine',
+    mdIcon: calendarOutline,
   },
   {
     title: texts.titel.moduluebersicht,
@@ -89,7 +95,9 @@ const appPages = [
 
 const route = useRoute();
 const selectedIndex = ref(appPages.findIndex(page => page.url === route.path));
-
+watch(() => route.path, (newPath) => {
+  selectedIndex.value = appPages.findIndex(page => page.url === newPath);
+});
 
 </script>
 
@@ -112,11 +120,10 @@ hr.solid {
 }
 
 ion-list-header {
-
   --background: var(--ion-color-primary);
   text-align: left;
-  padding: 5px;
-  padding-left: 20px;
+  padding: 10px;
+  padding-left: 35px;
   font-size: x-large;
   color: var(--ion-color-light);
 }
@@ -132,7 +139,6 @@ ion-menu ion-content {
 ion-menu ion-list {
   padding: 5px 0;
   background: var(--ion-color-primary);
-
 }
 
 ion-menu ion-item {
@@ -143,26 +149,29 @@ ion-menu ion-item {
   padding: 5px;
   font-size: larger;
   color: var(--ion-color-light);
-  transition: background-color 0.9s;
+  transition: background-color 0.3s ease;
 }
 
 ion-menu ion-item.selected {
   --background: #757e1b;
 }
 
+ion-menu ion-item ion-label {
+  cursor: default;
+}
+
+ion-menu ion-item:hover {
+  --background: #757e1b;
+}
+
 /* Breite der Navigation anpassen: schmaler*/
-.split-pane-visible >.split-pane-side {
-    min-width: 280px!important;
-    max-width: 280px!important;
-  }
+.split-pane-visible>.split-pane-side {
+  min-width: 280px !important;
+  max-width: 280px !important;
+}
 
 /* Navigation nicht mehr scrollbar machen, in ion-content class="no-scroll" hinzugefügt */
-    .no-scroll {
-    --overflow: hidden;
-    }
-  
-
-  ion-menu ion-item:hover {
-    --background: #757e1b;
-  }
+.no-scroll {
+  --overflow: hidden;
+}
 </style>
