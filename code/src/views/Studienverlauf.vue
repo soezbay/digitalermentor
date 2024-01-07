@@ -22,8 +22,8 @@
 			<!-- Modulsuche -->
 			<ion-grid>
 				<ion-row class="ion-justify-content-center">
-					<ion-searchbar show-clear-button="always" placeholder="Modulsuche" class="searchbar" type="text"
-						color="light" v-model="query" @ionChange="handleSearchChange"></ion-searchbar>
+					<ion-searchbar show-clear-button="always" placeholder="Modulsuche" type="text" v-model="query"
+						@ionChange="handleSearchChange"></ion-searchbar>
 				</ion-row>
 			</ion-grid>
 
@@ -58,9 +58,8 @@
 										@dragstart="e => dragStart(e, 'empty', semester)">
 										<span :data-semester="semester"></span>
 									</ion-card>
-									<ion-card v-else :draggable="!isPassedModules(module)"
-										:data-semester="semester" :id="module.Kuerzel"
-										@dragstart="e => dragStart(e, module.Kuerzel, semester)"
+									<ion-card v-else :draggable="!isPassedModules(module)" :data-semester="semester"
+										:id="module.Kuerzel" @dragstart="e => dragStart(e, module.Kuerzel, semester)"
 										:class="getModuleStatusClass(module)">
 										<span data-semester="semester" v-html="highlight(module.Kuerzel, query)"></span>
 										<br />
@@ -647,12 +646,13 @@ ion-searchbar {
 	width: 50%;
 	/* width for normal screens */
 	padding-top: 20px;
-    --border-radius: 20px;
+	--border-radius: 20px;
 	--background: #d3d3d3;
 	--color: #000000;
-    --placeholder-color: #000000;
-    --icon-color: #000000;
-    --clear-button-color: #000000;
+	--placeholder-color: #000000;
+	--icon-color: #000000;
+	--clear-button-color: #000000;
+
 	@media (max-width: 767px) {
 		width: 80%;
 		/* width for mobile devices */
@@ -727,6 +727,7 @@ ion-card {
 	transition: 0.1s;
 
 }
+
 .moduleElement:hover {
 	opacity: 0.9;
 	transform: translate(0px, -8px);
