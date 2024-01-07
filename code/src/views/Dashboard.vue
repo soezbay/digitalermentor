@@ -368,21 +368,26 @@ export default {
 		},
 		getModuleClass(module) {
 			try {
-				const succededModule = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
-				console.log("SUCCEDEDMODULES: ", succededModule);
-				if (succededModule.Status === 'Bestanden') {
+				//Check if module is passed
+				const succededModule = this.studentProgress.find(
+					smodule => smodule.Kuerzel === module.Kuerzel && smodule.Status === 'Bestanden');
+				if (succededModule) {
 					return 'moduleElementSuccess';
-				} else if (succededModule.Versuch === 1 && succededModule.Status === 'Nicht Bestanden') {
-					return 'moduleElement2';
-				} else if (succededModule.Versuch === 2 && succededModule.Status === 'Nicht Bestanden') {
-					return 'moduleElement3';
-				} else if (succededModule.Versuch === 3 && succededModule.Status === 'Nicht Bestanden') {
-					return 'moduleElementFailed';
+				}
+
+				//if succededArray is empty then continue finding exam-trys
+				const foundModules = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
+				if (foundModules.Versuch === 1 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElement2';
+				} else if (foundModules.Versuch === 2 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElement3';
+				} else if (foundModules.Versuch === 3 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElementFailed';
 				} else {
-					return 'moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
+					return 'moduleElement moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
 				}
 			} catch (err) {
-				return 'moduleElement1';
+				return 'moduleElement moduleElement1';
 			}
 		},
 
@@ -457,9 +462,10 @@ export default {
 }
 
 ion-progress-bar {
-	--background: var(--ion-color-light);
+	border-radius: 10px;
+	--background: #d3d3d3;
 	--progress-background: var(--ion-color-primary);
-	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
 	height: 20px;
 	width: 70%;
 	margin-left: auto;
@@ -533,7 +539,6 @@ ion-progress-bar {
 	border-radius: 15px;
 	background-color: var(--ion-color-medium);
 }
-
 
 .custom-text {
 	color: #555;

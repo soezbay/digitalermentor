@@ -440,13 +440,12 @@ export default {
 
 ion-searchbar {
 	padding: 0;
-	--background: #9ea19a;
+	--background: #d3d3d3;
 	--color: #000000;
     --placeholder-color: #000000;
     --icon-color: #000000;
     --clear-button-color: #000000;
-
-    --border-radius: 10px;
+    --border-radius: 20px;
   }
 
 .courseSelect {
