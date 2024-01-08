@@ -15,9 +15,9 @@
                         <ion-item>
                             <ion-label class="atlab">Anstehende Klausuren:</ion-label>
                         </ion-item>
-                        <ion-item>
-                            <ion-label>-Keine anstehenden Klausuren-</ion-label>
-                        </ion-item>
+                        <ion-item lines="none" style="text-align: center;">
+                                    <ion-label color="dark">-Keine anstehenden Klausuren-</ion-label>
+                            </ion-item>
                     </ion-col>
                     <ion-col>
                         <ion-accordion-group>
@@ -38,7 +38,7 @@
                                     </ion-item>
                                 </div>
                                 <div v-else class="ion-padding" slot="content">
-                                    Keine Vergangenen Termine
+                                    <ion-label color="dark">-Keine Vergangenen Termine-</ion-label>
                                 </div>
                             </ion-accordion>
                         </ion-accordion-group>
@@ -69,9 +69,7 @@
                         </div>
                         <div v-else>
                             <ion-item lines="none" style="text-align: center;">
-                                <ion-label>
-                                    <h2>Keine anstehenden Termine.</h2>
-                                </ion-label>
+                                <ion-label color="dark">-Keine anstehenden Termine-</ion-label>
                             </ion-item>
                         </div>
                         <ion-item class="ktlab" lines="none">
@@ -101,9 +99,7 @@
                         </div>
                         <div v-else>
                             <ion-item lines="none" style="text-align: center;">
-                                <ion-label>
-                                    <h2>Keine anstehenden Termine.</h2>
-                                </ion-label>
+                                <ion-label color="dark">-Keine anstehenden Termine-</ion-label>
                             </ion-item>
                         </div>
                     </ion-col>
