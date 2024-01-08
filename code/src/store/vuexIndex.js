@@ -10,20 +10,28 @@ const store = createStore({
             //userData Storage
             userData: [],
             studentProgress: [],
-            currentModules: [],
             courses: [],
+
             //appoinments Storage
             termine: [],
             selectedDate: new Date(),
+
             //moduleOverview Storage
             modulesBook: [],
             moduleOverviewData: [],
+
+            //studienverlauf Storage
+            groupedmodules: [],
+            obligatoryModules: [],
+            electiveModules: [],
+
             //goals Storage
             goals: [],
             goals_ss: [],
             goals_ws: [],
             deletedGoals: [],
             checkedGoals: [],
+            currentModules: [],
 
             //Test Storage
             TestDaten: {
@@ -37,7 +45,8 @@ const store = createStore({
     mutations: {
         async createCacheAPI(state) {
             try {
-                console.info('Erhaltener JSON-String1:', JSON.stringify(state));
+                // console.info('Erhaltener JSON-String1:', JSON.stringify(state));
+                state.letzterCacheUpdate = new Date();
                 const requestData = {
                     BenutzerID: state.TestDaten.BenutzerID,
                     CacheDaten: JSON.stringify(state),
@@ -50,10 +59,46 @@ const store = createStore({
                 throw error;
             }
         },
+        async createCacheAPIForUser(state, BenutzerID) {
+            try {
+                // console.info('Erhaltener JSON-String1:', JSON.stringify(state));
+                state.userData = [];
+                state.studentProgress = [];
+                state.courses = [];
+                state.termine = [];
+                state.selectedDate = new Date();
+                state.modulesBook = [];
+                state.moduleOverviewData = [];
+                state.groupedmodules = [];
+                state.obligatoryModules = [];
+                state.electiveModules = [];
+                state.goals = [];
+                state.goals_ss = [];
+                state.goals_ws = [];
+                state.deletedGoals = [];
+                state.checkedGoals = [];
+                state.currentModules = [];
+                state.TestDaten = {
+                    BenutzerID: BenutzerID,
+                };
+                state.letzterCacheUpdate = new Date();
+                console.info(state)
+                const requestData = {
+                    BenutzerID: BenutzerID,
+                    CacheDaten: JSON.stringify(state),
+                };
+                await axios.post(`${Adress}/cache/`, requestData);
+                console.log('Daten wurden erfolgreich erstellt.');
+                console.info('createCacheAPIForUser wurde ausgeführt');
+            } catch (error) {
+                console.error('Fehler beim Erstellen der API-Daten:', error);
+                throw error;
+            }
+        },
         async updateAPI(state) {
             try {
 
-                console.info('Erhaltener JSON-String:', JSON.stringify(state));
+                // console.info('Erhaltener JSON-String:', JSON.stringify(state));
                 state.letzterCacheUpdate = new Date();
                 const updatedData = {
                     BenutzerID: state.TestDaten.BenutzerID,
@@ -74,20 +119,28 @@ const store = createStore({
         },
 
         deleteCache(state) {
-            state.userData = [],
-                state.termine = [],
-                state.selectedDate = new Date(),
-                state.goals = [],
-                state.goals_ss = [],
-                state.goals_ws = [],
-                state.deletedGoals = [],
-                state.checkedGoals = [],
-                state.moduleOverviewData = [],
-                state.TestDaten = {
-                    BenutzerID: 'Test123',
-                },
-                state.letzterCacheUpdate = new Date(0)
+            state.userData = [];
+            state.studentProgress = [];
+            state.courses = [];
+            state.termine = [];
+            state.selectedDate = new Date();
+            state.modulesBook = [];
+            state.moduleOverviewData = [];
+            state.groupedmodules = [];
+            state.obligatoryModules = [];
+            state.electiveModules = [];
+            state.goals = [];
+            state.goals_ss = [];
+            state.goals_ws = [];
+            state.deletedGoals = [];
+            state.checkedGoals = [];
+            state.currentModules = [];
+            state.TestDaten = {
+                BenutzerID: 'Test123',
+            };
+            state.letzterCacheUpdate = new Date(0);
         },
+
 
         setSelectedDate(state, date) {
             state.selectedDate = date;
@@ -237,7 +290,7 @@ const store = createStore({
             state.moduleOverviewData = lastSettings;
         },
         saveStudentProgress(state, progress) {
-            state.studentProgress = [...progress];;
+            state.studentProgress = progress;
         },
         saveCurrentModules(state, modules) {
             state.currentModules = modules;
@@ -245,6 +298,21 @@ const store = createStore({
         saveCourses(state, fetchedCourses) {
             state.courses = fetchedCourses;
         },
+        saveGroupedModules(state, gmodules) {
+            state.groupedmodules = gmodules;
+        },
+        saveObligatoryModules(state, omodules) {
+            state.obligatoryModules = omodules;
+        },
+        saveElectiveModules(state, emodules) {
+            state.electiveModules = emodules;
+        },
+        saveGroupeModuleChanges(state, semester, targetSemester, sourceSemesterArray, targetSemesterArray) {
+
+            // Füge das Modul zum Zielsemester-Array hinzu
+            state.groupedmodules[targetSemester] = targetSemesterArray;
+
+        }
     },
 
     actions: {
@@ -274,13 +342,37 @@ const store = createStore({
                         const innerJsonString = data.Daten[0].CacheDaten;
                         try {
                             const cachedData = JSON.parse(innerJsonString);
-                            console.info("Cache geupdated");
                             context.commit('setAPIData', cachedData);
+                            console.info("Cache geupdated");
                         } catch (error) {
                             console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
                         }
                     }
                 }
+            } catch (error) {
+                console.error('Fehler beim Abrufen des Caches von der API:', error);
+            }
+        },
+        async fetchCacheFromAPIForUser(context, Benutzer) {
+            try {
+                const BenutzerID = Benutzer
+                // Überprüfen, ob bereits ein Cache-Eintrag vorhanden ist
+                const response = await axios.get(`${Adress}/cache/` + BenutzerID);
+                const data = response.data;
+
+                if (data.Daten.length === 0) {
+                    context.commit('createCacheAPIForUser', BenutzerID);
+                } else {
+                    const innerJsonString = data.Daten[0].CacheDaten;
+                    try {
+                        const cachedData = JSON.parse(innerJsonString);;
+                        context.commit('setAPIData', cachedData);
+                        console.info("Cache geupdated");
+                    } catch (error) {
+                        console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
+                    }
+                }
+
             } catch (error) {
                 console.error('Fehler beim Abrufen des Caches von der API:', error);
             }
@@ -355,8 +447,8 @@ const store = createStore({
             context.commit('saveModulesBook', updatedModulesBook);
             context.commit('updateAPI', context);
         },
-        async updateStudenProgress(context, progress) {
-            context.commit('saveStudentProgess', progress);
+        async updateStudentProgress(context, progress) {
+            context.commit('saveStudentProgress', progress);
             context.commit('updateAPI', context);
         },
         async updateCurrentModules(context, modules) {
@@ -365,6 +457,18 @@ const store = createStore({
         },
         async updateCourses(context, fetchedCourses) {
             context.commit('saveCourses', fetchedCourses);
+            context.commit('updateAPI', context);
+        },
+        async updateGroupedModules(context, gmodules) {
+            context.commit('saveGroupedModules', gmodules);
+            context.commit('updateAPI', context);
+        },
+        async updateObligatoryModules(context, omodules) {
+            context.commit('saveObligatoryModules', omodules);
+            context.commit('updateAPI', context);
+        },
+        async updateElectiveModules(context, emodules) {
+            context.commit('saveElectiveModules', emodules);
             context.commit('updateAPI', context);
         },
 
@@ -412,7 +516,7 @@ const store = createStore({
         getLetzerCacheUpdate(state) {
             return state.letzterCacheUpdate;
         },
-        getTestBenutzer(state) {
+        getUserID(state) {
             return state.TestDaten.BenutzerID;
         },
         getModulesBook(state) {
@@ -426,6 +530,15 @@ const store = createStore({
         },
         getCourses(state) {
             return state.courses;
+        },
+        getGroupedModules(state) {
+            return state.groupedmodules;
+        },
+        getElectiveModules(state) {
+            return state.electiveModules;
+        },
+        getObligatoryModules(state) {
+            return state.obligatoryModules;
         },
     },
     setters: {

@@ -1,27 +1,17 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-toolbar>
-				<ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon
-							style="font-size: 45px"
-							src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-title>{{ texts.titel.profil }}</ion-title>
-				<ion-buttons slot="end">
-					<ion-button color="primary" router-link="/menu/profil/changeProfile">
-						<ion-icon slot="icon-only" :icon="create"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-buttons slot="end">
-					<ion-menu-button color="primary"></ion-menu-button>
-				</ion-buttons>
-			</ion-toolbar>
-		</ion-header>
-
+		<HeaderComponent :title="texts.titel.profil" :hasInfo="false" />
 		<ion-content>
+			<div id="userDropdown">
+        <ion-item v-if="this.selectedBenutzer && this.Benutzer">
+          <ion-label>Ausgewählter Benutzer:</ion-label>
+          <ion-select v-model="this.selectedBenutzer">
+            <ion-select-option v-for="benutzer in Benutzer" :key="benutzer" :value="benutzer">
+              {{ benutzer.Vorname }} {{ benutzer.Nachname }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
 			<div id="imageContainer">
 				<!-- <img
 					style="
@@ -38,27 +28,27 @@
 				</div>
 			</div>
 			<div style="height: 70px"></div>
-			<template v-if="Benutzer[0]">
+			<template v-if="selectedBenutzer">
 			<div style="text-align: center">
 				<h1>{{ texts.profil.name }}</h1>
 				<!-- <h4>{{ userdata.profile.firstname }} {{ userdata.lastname }} </h4> -->
-				<h4>{{ this.Benutzer[0].Vorname }} {{ this.Benutzer[0].Nachname }}</h4>
+				<h4>{{ this.selectedBenutzer.Vorname }} {{ this.selectedBenutzer.Nachname }}</h4>
 
 				<h1>{{ texts.profil.matrikel }}</h1>
 				<!-- <h4>{{ userdata.profile.matrikelnumber }}</h4> -->
-				<h4>{{ this.Benutzer[0].Martrikelnummer }}</h4>
+				<h4>{{ this.selectedBenutzer.Martrikelnummer }}</h4>
 
 				<h1>{{ texts.profil.studiengang }}</h1>
 				<!-- <h4>{{ userdata.profile.course }}</h4> -->
-				<h4>{{ this.Benutzer[0].Kuerzel }}</h4>
+				<h4>{{ this.selectedBenutzer.Kuerzel }}</h4>
 
 				<h1>{{ texts.profil.fachsemester }}</h1>
 				<!-- <h4 style="margin-bottom: 0px"> {{ userdata.profile.semester }}</h4> -->
-				<h4 style="margin-bottom: 0px">{{  this.Benutzer[0].Fachsemester }}</h4>
+				<h4 style="margin-bottom: 0px">{{  this.selectedBenutzer.Fachsemester }}</h4>
 
 				<h1>{{ texts.profil.email }}</h1>
 				<!-- <h4>{{ userdata.profile.email }}</h4> -->
-				<h4>{{ this.Benutzer[0].EMail }}</h4>
+				<h4>{{ this.selectedBenutzer.EMail }}</h4>
 			</div>
 		</template>
 		</ion-content>
@@ -70,6 +60,8 @@ import { userdata } from '../userdata.js';
 import { texts } from '../texts.js'
 import { create } from 'ionicons/icons'
 import axios from 'axios'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+
 import {
 	IonPage,
 	IonHeader,
@@ -88,11 +80,15 @@ import {
 	IonFabButton,
 	IonIcon,
 	IonAvatar,
+	IonSelect,
+	IonSelectOption,
 } from '@ionic/vue'
 export default {
 	components: {
 		IonPage,
 		IonHeader,
+		IonSelect,
+  		IonSelectOption,
 		IonToolbar,
 		IonTitle,
 		IonContent,
@@ -108,6 +104,7 @@ export default {
 		IonFabButton,
 		IonIcon,
 		IonAvatar,
+		HeaderComponent,
 	},
 
 	data() {
@@ -115,31 +112,67 @@ export default {
 			Adress: import.meta.env.VITE_API_URL,
 			texts,
 			userdata,
-			Benutzer: {}
+			selectedBenutzer: null,
+			Benutzer: [],
 		}
 	},
 
 	setup() {
-		return { create }
+		return { create }	
 	},
 	created() {
-		this.fetchBenutzer();
+		this.fetchAlleBenutzerUndsetzeSelectedBenutzer();
+	},
+	watch: {
+  		selectedBenutzer: function (newVal, oldVal) {
+			console.info("newVal")
+			console.info(newVal)
+			console.info("oldVal")
+			console.info(oldVal)
+			if(newVal && oldVal) {
+				console.info(newVal.BenutzerID +" "+ oldVal.BenutzerID)
+    		if (newVal.BenutzerID != oldVal.BenutzerID) {
+				this.selectedBenutzer = newVal;
+				this.$store.dispatch('fetchCacheFromAPIForUser', newVal.BenutzerID);
+      			console.info("User Change");
+    		}
+		}
+  		}
 	},
 	methods: {
-		async fetchBenutzer() {
+		async fetchAlleBenutzerUndsetzeSelectedBenutzer() {
 			try {
-				const response = await axios.get(`${this.Adress}/benutzer/${this.$store.getters.getTestBenutzer}`)
+				const response = await axios.get(`${this.Adress}/benutzer`)
 				this.Benutzer = response.data.benutzer
-				console.info(this.Benutzer);
+				await this.fetchBenutzer();
 			} catch (error) {
 				console.error('Error fetching Benutzer:', error)
 			}
-		}
+		},
+		async fetchBenutzer() {
+			console.info(this.Benutzer);
+			const userIndex = this.Benutzer.findIndex((benutzer) => benutzer.BenutzerID === this.$store.getters.getTestBenutzer);
+
+			if (userIndex !== -1) {
+			this.selectedBenutzer = this.Benutzer[userIndex];
+			console.info(this.selectedBenutzer);
+			} else {
+  			this.selectedBenutzer = {};
+			}
+		},
+	
+		async handleUserChange() {
+      		if (this.selectedBenutzer && this.selectedBenutzer.BenutzerID) {
+        		this.$store.commit('fetchCacheFromAPIForUser', this.selectedBenutzer.BenutzerID);
+        		console.info("User Change");
+      		}
+    	},
 	}
 }
 </script>
 
 <style scoped>
+
 #imageContainer {
 	position: relative;
 	display: flex;

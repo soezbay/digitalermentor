@@ -147,7 +147,7 @@
 				<div v-for="(review, index) in reviews" :key="index">
 					<ion-item style="padding-left: 10px; padding-right: 10px; height: 40px;">
 						<ion-label>Von: {{ review.BenutzerID }} ({{ review.SemsterAnzeigen }}. Semester)</ion-label>
-						<ion-label slot="end">{{ review.ErstelltAm.slice(0, 10) }}</ion-label>
+						<ion-label slot="end">{{ review.ErstelltAm }}</ion-label>
 					</ion-item>
 					<div class="reviewBox">
 						<div class="rating">
@@ -316,7 +316,7 @@ export default {
 					SemsterAnzeigen: this.formData.semesterAnzeigen ? 'Ja' : 'Nein',
 					ModulKuerzel: this.selectedModul.Kuerzel,
 					//BenutzerID: this.userdata.profile.matrikelnumber, // Setzen Sie dies auf den entsprechenden Wert
-					BenutzerID: this.$store.getters.getTestBenutzer
+					BenutzerID: this.$store.getters.getUserID
 				};
 				console.log(bewertungData);
 

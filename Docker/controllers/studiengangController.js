@@ -1,48 +1,75 @@
 const Studiengang = require('../module/Studiengang');
 
-exports.getAlleStudiengaenge = async (req, res, next) => {
-    try{
-        const [studiengaenge, _] = await Studiengang.findAll();
+const convertUmlauteToUtf8 = (data) => {
+  if (typeof data === 'string') {
+    return Buffer.from(data, 'latin1').toString('utf-8');
+  } else if (Array.isArray(data)) {
+    return data.map(item => convertUmlauteToUtf8(item));
+  } else if (typeof data === 'object' && data !== null) {
+    const newObj = {};
+    Object.keys(data).forEach(key => {
+      newObj[key] = convertUmlauteToUtf8(data[key]);
+    });
+    return newObj;
+  }
+  return data;
+};
 
-        res.status(200).json({studiengaenge});
-    }catch (error) {
-       console.log(error);
-        next(error);
-    }
+exports.getAlleStudiengaenge = async (req, res, next) => {
+  try {
+    const [studiengaenge, _] = await Studiengang.findAll();
+
+    // Führe die Konvertierung durch
+    const studiengaengeWithUtf8 = convertUmlauteToUtf8(studiengaenge);
+
+    res.status(200).json({ studiengaenge: studiengaengeWithUtf8 });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };
 
 exports.getStudiengangInfo = async (req, res, next) => {
-    try{
-        let StudiengangKuerzel = req.params.Studiengang;
-        const [studiengaenge, _] = await Studiengang.findStudiengangInfo(StudiengangKuerzel);
+  try {
+    let StudiengangKuerzel = req.params.Studiengang;
+    const [studiengaenge, _] = await Studiengang.findStudiengangInfo(StudiengangKuerzel);
 
-        res.status(200).json({studiengaenge});
-    }catch (error) {
-       console.log(error);
-        next(error);
-    }
+    // Führe die Konvertierung durch
+    const studiengaengeWithUtf8 = convertUmlauteToUtf8(studiengaenge);
+
+    res.status(200).json({ studiengaenge: studiengaengeWithUtf8 });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };
 
 exports.getPflichtModuleVonStudiengang = async (req, res, next) => {
-    try{
-        let StudiengangKuerzel = req.params.Studiengang;
-        const [pflicht, _] = await Studiengang.findAllPflichtModuleFromStudiengang(StudiengangKuerzel);
+  try {
+    let StudiengangKuerzel = req.params.Studiengang;
+    const [pflicht, _] = await Studiengang.findAllPflichtModuleFromStudiengang(StudiengangKuerzel);
 
-        res.status(200).json({pflicht});
-    }catch (error) {
-       console.log(error);
-        next(error);
-    }
-}
+    // Führe die Konvertierung durch
+    const pflichtWithUtf8 = convertUmlauteToUtf8(pflicht);
 
-    exports.getWahlpflichtModuleVonStudiengang = async (req, res, next) => {
-        try{
-            let StudiengangKuerzel = req.params.Studiengang;
-            const [wahlpflicht, _] = await Studiengang.findAllWahlpflichtModuleFromStudiengang(StudiengangKuerzel);
-    
-            res.status(200).json({wahlpflicht});
-        }catch (error) {
-           console.log(error);
-            next(error);
-        }
-}
+    res.status(200).json({ pflicht: pflichtWithUtf8 });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.getWahlpflichtModuleVonStudiengang = async (req, res, next) => {
+  try {
+    let StudiengangKuerzel = req.params.Studiengang;
+    const [wahlpflicht, _] = await Studiengang.findAllWahlpflichtModuleFromStudiengang(StudiengangKuerzel);
+
+    // Führe die Konvertierung durch
+    const wahlpflichtWithUtf8 = convertUmlauteToUtf8(wahlpflicht);
+
+    res.status(200).json({ wahlpflicht: wahlpflichtWithUtf8 });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};

@@ -131,15 +131,27 @@ export default {
             return this.$store.getters.termin(this.terminId);
         },
         formattedDate() {
-            const unformattedDate = this.loadedTermin.datum;
-            const dateParts = unformattedDate.split('-');
-            const year = dateParts[0];
-            const month = dateParts[1];
-            const day = dateParts[2];
-            return `${day}.${month}.${year}`;
+            // const unformattedDate = this.loadedTermin.datum;
+            // const dateParts = unformattedDate.split('-');
+            // const year = dateParts[0];
+            // const month = dateParts[1];
+            // const day = dateParts[2];
+            // return `${day}.${month}.${year}`;
+
+            return this.formatDate(this.loadedTermin.datum);
         }
     },
     methods: {
+
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.getMonth() + 1; // Monate in JavaScript sind 0-basiert
+            const year = date.getFullYear();
+
+            return `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
+        },
+
         startEditing() {
             // Im Bearbeitungsmodus erstellen Sie eine Kopie des geladenen Termins
             this.editedTermin = { ...this.loadedTermin };

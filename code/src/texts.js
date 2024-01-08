@@ -15,6 +15,7 @@ export const texts = {
             bestanden: "Bestanden",
             zweiterVersuch: "2. Versuch",
             dritterVersuch: "3. Versuch",
+            durchgefallen: "Nicht mehr ablegbar",
         },
         leistungspunkte: "Leistungspunkte",
         leistungspunkteKurz: "LP",
@@ -54,19 +55,20 @@ export const texts = {
 
     dashboard: {
         deineTermine: "Deine Termine",
-        keineTermine: "Keine Termine für diesen Monat.",
+        keineTermine: "Keine anstehenden Termine",
     },
 
     titel: {
         digitalerMentor: "Digitaler Mentor",
         dashboard: "Dashboard",
-        moduluebersicht: "Modulübersicht",
+        modulhandbuch: "Modulhandbuch",
         studienverlauf: "Studienverlauf",
         studienziele: "Studienziele",
         profil: "Profil",
         einstellungen: "Einstellungen",
         modulbeschreibung: "Modulbeschreibung",
         einstellungen: "Einstellungen",
+        termine: "Termine",
     },
 
     ziele: {
@@ -87,13 +89,14 @@ export const texts = {
             p4strong: "Ziel erreicht",
             p4: "Swipe nach links und klicke auf den Button, um dein Ziel als erreicht zu markieren.",
             p5strong: "Ziele bearbeiten",
-            p5: "Swipe nach links und klicke auf den Button, um deine Ziele zu bearbeiten.",
+            p5: "Swipe nach links und klicke auf den Button, um deine Ziele zu bearbeiten. Wenn du das Ziel nur in ein anderes Semester verschieben möchtest, ohne weitere Änderungen vorzunehmen, swipst du nach rechts und klickst auf NACH UNTEN oder NACH OBEN.",
             p6strong: "Modulübersicht",
             p6: "Die Modulübersicht soll dir dabei helfen, deine Ziele leichter festzulegen. Dir werden alle Module angezeigt, die du noch bestehen musst.",
             p7: "Viel Erfolg!",
         },
         nachUnten: "Nach unten",
         nachOben: "Nach oben",
+        wahlpflichtmodule: " (Du musst 5 Module bestehen)"
     },
 
     studienverlauf: {
