@@ -635,6 +635,17 @@ ion-progress-bar {
 
 #cpInfo {
 	text-align: center;
+	border-radius: 15px;
+	transition: 0.1s;
+	margin-right: 5px;
+	background-color: transparent;
+
+}
+
+#averageGrade {
+	color: var(--ion-color-primary);
+	text-align: center;
+	margin-top: px;
 }
 
 /* move to the left */
@@ -655,7 +666,7 @@ ion-searchbar {
 }
 
 .firstTry {
-	--background: rgb(238, 200, 12);
+	--background: #eec80c;
 }
 
 .gray {
@@ -664,6 +675,12 @@ ion-searchbar {
 	@media (prefers-color-scheme: dark) {
         background-color: var(--ion-color-step-300);
 	} 
+
+	@media (max-width: 767px) {
+		margin-left: 10px;
+		width:70%;
+		/* width for mobile devices */
+	}
 }
 
 ion-card {
@@ -673,7 +690,7 @@ ion-card {
 	color: black;
 	font-weight: bold;
 	border-radius: 15px;
-	transition: 0.1s;
+	transition: 0.8s;
 }
 
 .moduleElement1 {
@@ -765,6 +782,7 @@ ion-card:hover {
 	opacity: 0.5;
 }
 
+
 .modulesRow {
 	width: 100%;
 	margin-left: 5px;
@@ -797,10 +815,6 @@ ion-card:hover {
 
 .moduleElement:hover {
 	opacity: 0.6;
-}
-
-.empty-card {
-	opacity: 0.5;
 }
 
 #note {
