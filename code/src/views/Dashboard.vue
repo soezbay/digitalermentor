@@ -456,6 +456,13 @@ ion-progress-bar {
 	margin-right: 5px;
 	background-color: var(--ion-color-secondary);
 	border-radius: 10px;
+
+	@media (prefers-color-scheme: dark) {
+        /* Hintergrundfarbe für Dark Mode */
+        background-color: transparent;
+		border: 2px solid;
+		border-color: var(--ion-color-secondary);
+	}
 }
 
 .modulesContainer {
@@ -470,7 +477,6 @@ ion-progress-bar {
 .moduleElement1 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -479,7 +485,6 @@ ion-progress-bar {
 .moduleElement2 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -489,7 +494,6 @@ ion-progress-bar {
 .moduleElement3 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -499,7 +503,6 @@ ion-progress-bar {
 .moduleElementSuccess {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -509,7 +512,6 @@ ion-progress-bar {
 .moduleElementFailed {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;

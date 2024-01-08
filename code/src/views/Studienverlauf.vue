@@ -639,11 +639,15 @@ ion-progress-bar {
 }
 
 .firstTry {
-	--background: var(--ion-color-warning);
+	--background: rgb(238, 200, 12);
 }
 
 .gray {
 	--background: white;
+
+	@media (prefers-color-scheme: dark) {
+        background-color: var(--ion-color-step-300);
+	} 
 }
 
 ion-card {
@@ -654,6 +658,10 @@ ion-card {
 	font-weight: bold;
 	border-radius: 15px;
 	transition: 0.8s;
+
+	@media (prefers-color-scheme: dark) {
+		color: white;
+	}
 }
 
 ion-card:hover {
@@ -684,6 +692,13 @@ ion-card:hover {
 	margin-right: 5px;
 	background-color: var(--ion-color-secondary);
 	border-radius: 10px;
+
+	@media (prefers-color-scheme: dark) {
+        
+        background-color: transparent;
+		border: 2px solid;
+		border-color: var(--ion-color-secondary);
+	} 
 }
 
 
@@ -700,7 +715,6 @@ ion-card:hover {
 .moduleElement {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 10px grey;
 	transition: 0.8s;
 }
 
