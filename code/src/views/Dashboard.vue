@@ -430,13 +430,19 @@ export default {
 
 		// Only the first four appointments are taken to dashbaord
 		kommendeTermine() {
-			const currentDate = new Date()
-			const kommendeTermine = this.$store.getters.termine.filter(termin => {
-				const terminDate = new Date(termin.datum)
-				return terminDate >= currentDate
-			})
+			const currentDate = new Date();
 
-			return kommendeTermine.slice(0, 4)
+			// current time since midnight
+			const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
+
+			// just dates that are in the current time
+			const kommendeTermine = this.$store.getters.termine.filter(termin => {
+				const terminDateTime = new Date(`${termin.datum} ${termin.zeit}`);
+				const terminTimeInMinutes = terminDateTime.getHours() * 60 + terminDateTime.getMinutes();
+				return terminTimeInMinutes >= currentTimeInMinutes;
+			});
+
+			return kommendeTermine.slice(0, 4);
 		},
 		goals_ss() {
 			return this.$store.getters.getGoals_ss

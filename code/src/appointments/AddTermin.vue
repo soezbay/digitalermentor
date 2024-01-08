@@ -15,8 +15,8 @@
         <ion-content>
             <form @submit.prevent="submitFormTermin">
                 <ion-list>
-                    <ion-datetime :presentation="'date'" size="cover" v-model="enteredDatum" display-format="YYYY-MM-DD"
-                        required>
+                    <ion-datetime :presentation="'date'" size="cover" v-model="enteredDatum" 
+                    display-format="D MM YYYY HH:mm" first-day-of-week="1">
                     </ion-datetime>
                     <ion-item>
                         <ion-label position="fixed">Titel</ion-label>
@@ -84,8 +84,13 @@ export default {
     },
     mounted() {
         // Hier setzen wir enteredDatum und enteredZeit auf die entsprechenden Werte
-        this.enteredDatum = this.getDate();
-        this.enteredZeit = this.getTime();
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = currentDate.getDate().toString().padStart(2, '0');
+        
+        this.enteredDatum = `${year}-${month}-${day}`;
+        this.enteredZeit = '';
     },
     methods: {
         saveTermin(terminData) {

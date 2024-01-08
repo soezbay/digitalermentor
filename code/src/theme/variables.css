@@ -71,8 +71,8 @@ http://ionicframework.com/docs/theming/ */
 --ion-color-warning-rgb: 255,255,128; 
 --ion-color-warning-contrast: #000000; 
 --ion-color-warning-contrast-rgb: 0,0,0; 
---ion-color-warning-shade: #e0e071; 
---ion-color-warning-tint: #ffff8d; 
+--ion-color-warning-shade: #eec80c;
+--ion-color-warning-tint: #eec80c;
 
  
 
@@ -149,12 +149,12 @@ http://ionicframework.com/docs/theming/ */
 
 
   /** warning **/
-  --ion-color-warning: #ffff80;
+  --ion-color-warning: #eec80c;
   --ion-color-warning-rgb: 255, 255, 128;
   --ion-color-warning-contrast: #000000;
   --ion-color-warning-contrast-rgb: 0, 0, 0;
-  --ion-color-warning-shade: #e0e071;
-  --ion-color-warning-tint: #ffff8d;
+  --ion-color-warning-shade: #eec80c;
+  --ion-color-warning-tint: #eec80c;
 
 
 
@@ -274,7 +274,7 @@ http://ionicframework.com/docs/theming/ */
 
 
 
-    --ion-color-warning: #ffef70;
+    --ion-color-warning: #eec80c;;
 
     --ion-color-warning-rgb: 255, 213, 52;
 
@@ -282,9 +282,9 @@ http://ionicframework.com/docs/theming/ */
 
     --ion-color-warning-contrast-rgb: 0, 0, 0;
 
-    --ion-color-warning-shade: #ffff80;
+    --ion-color-warning-shade: #eec80c;
 
-    --ion-color-warning-tint: #ffff80;
+    --ion-color-warning-tint: #eec80c;
 
 
 
