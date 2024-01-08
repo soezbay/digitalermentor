@@ -1,19 +1,6 @@
 <template>
     <ion-page>
-        <ion-header>
-            <ion-toolbar>
-                <ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-                <ion-title>Termine</ion-title>
-                <ion-buttons slot="end">
-                    <ion-menu-button color="primary"></ion-menu-button>
-                </ion-buttons>
-            </ion-toolbar>
-        </ion-header>
-
+        <HeaderComponent title="Termine" :hasInfo="false" />
         <ion-content>
             <ion-grid>
                 <ion-row>
@@ -97,9 +84,12 @@ import {
 import { add, trash } from 'ionicons/icons';
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+import { texts } from '../texts.js'
 
 export default {
     components: {
+        HeaderComponent,
         IonPage,
         IonHeader,
         IonToolbar,
@@ -172,6 +162,9 @@ export default {
             deleteTermin,
             trash
         };
+    },
+    data() {
+        return texts
     },
 
     computed: {
