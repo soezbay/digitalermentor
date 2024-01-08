@@ -2,10 +2,12 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
-                <ion-title>Termine</ion-title>
                 <ion-buttons slot="start">
-                    <ion-back-button color="primary" router-link="/menu/dashboard"></ion-back-button>
-                </ion-buttons>
+					<ion-button router-link="/menu/dashboard">
+						<ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
+					</ion-button>
+				</ion-buttons>
+                <ion-title>Termine</ion-title>
                 <ion-buttons slot="end">
                     <ion-menu-button color="primary"></ion-menu-button>
                 </ion-buttons>

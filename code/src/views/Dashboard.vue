@@ -439,8 +439,10 @@ export default {
                 return terminDatum >= heute;
             });
 
+			// Return the first four upcoming appointments
 			return kommendeTermine.slice(0, 4);
 		},
+		
 		goals_ss() {
 			return this.$store.getters.getGoals_ss
 		},
