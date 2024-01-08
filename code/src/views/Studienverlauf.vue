@@ -653,11 +653,16 @@ ion-searchbar {
 	--icon-color: #000000;
 	--clear-button-color: #000000;
 
-	@media (max-width: 767px) {
-		margin-left: 10px;
-		width:70%;
-		/* width for mobile devices */
-	}
+.firstTry {
+	--background: rgb(238, 200, 12);
+}
+
+.gray {
+	--background: white;
+
+	@media (prefers-color-scheme: dark) {
+        background-color: var(--ion-color-step-300);
+	} 
 }
 
 ion-card {
@@ -675,6 +680,21 @@ ion-card {
 	margin: 0px;
 	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
+
+	@media (prefers-color-scheme: dark) {
+		color: white;
+	}
+}
+
+ion-card:hover {
+	opacity: 0.8;
+}
+
+#highlightText {
+	background-color: yellow;
+}
+
+#cpInfo {
 	text-align: center;
 	border-radius: 15px;
 	transition: 0.1s;
@@ -750,6 +770,13 @@ ion-card {
 	margin-right: 5px;
 	background-color: var(--ion-color-secondary);
 	border-radius: 10px;
+
+	@media (prefers-color-scheme: dark) {
+        
+        background-color: transparent;
+		border: 2px solid;
+		border-color: var(--ion-color-secondary);
+	} 
 }
 
 .modulesContainer {
@@ -761,10 +788,18 @@ ion-card {
 	margin-right: 5px;
 }
 
-#averageGrade {
-	color: var(--ion-color-primary);
-	text-align: center;
-	margin-top: px;
+.moduleElement {
+	height: 50px;
+	margin: 0px;
+	transition: 0.8s;
+}
+
+.moduleElement:hover {
+	opacity: 0.6;
+}
+
+.empty-card {
+	opacity: 0.5;
 }
 
 #note {
