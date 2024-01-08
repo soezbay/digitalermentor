@@ -652,6 +652,7 @@ ion-searchbar {
 	--placeholder-color: #000000;
 	--icon-color: #000000;
 	--clear-button-color: #000000;
+}
 
 .firstTry {
 	--background: rgb(238, 200, 12);
