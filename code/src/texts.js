@@ -68,6 +68,7 @@ export const texts = {
         einstellungen: "Einstellungen",
         modulbeschreibung: "Modulbeschreibung",
         einstellungen: "Einstellungen",
+        termine: "Termine",
     },
 
     ziele: {
