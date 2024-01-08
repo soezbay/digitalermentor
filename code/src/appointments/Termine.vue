@@ -14,7 +14,7 @@
 
         <ion-content>
             <ion-datetime presentation="date-time" :highlighted-dates="highlightedDates" size="cover"
-                max="2200-01-01T00:00:00" v-model="selectedDate" display-format="D MMM YYYY HH:mm" first-day-of-week="1"></ion-datetime>
+                max="2200-01-01T00:00:00" v-model="selectedDate" display-format="D MM YYYY HH:mm" first-day-of-week="1"></ion-datetime>
             <div v-if="termine.length > 0">
                 <ion-list>
                     <ion-item-sliding v-for="termin in termine" :router-link="`/termine/${termin.id}`" :key="termin.id">

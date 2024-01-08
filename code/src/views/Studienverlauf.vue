@@ -638,14 +638,13 @@ ion-progress-bar {
 	border-radius: 15px;
 	transition: 0.1s;
 	margin-right: 5px;
-	background-color: transparent;
-
 }
 
 #averageGrade {
 	color: var(--ion-color-primary);
 	text-align: center;
 	margin-top: px;
+	background: none;
 }
 
 /* move to the left */
@@ -666,21 +665,7 @@ ion-searchbar {
 }
 
 .firstTry {
-	--background: #eec80c;
-}
-
-.gray {
-	--background: white;
-
-	@media (prefers-color-scheme: dark) {
-        background-color: var(--ion-color-step-300);
-	} 
-
-	@media (max-width: 767px) {
-		margin-left: 10px;
-		width:70%;
-		/* width for mobile devices */
-	}
+	--background: var(--ion-color-warning);
 }
 
 ion-card {
@@ -691,12 +676,16 @@ ion-card {
 	font-weight: bold;
 	border-radius: 15px;
 	transition: 0.8s;
+
+	@media (prefers-color-scheme: dark) {
+		background: var(--ion-color-step-250);
+		
+	}
 }
 
 .moduleElement1 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 
 	@media (prefers-color-scheme: dark) {
@@ -708,21 +697,9 @@ ion-card:hover {
 	opacity: 0.8;
 }
 
-#highlightText {
-	background-color: yellow;
-}
-
-#cpInfo {
-	text-align: center;
-	border-radius: 15px;
-	transition: 0.1s;
-	background-color: white;
-}
-
 .moduleElement2 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -734,7 +711,6 @@ ion-card:hover {
 .moduleElement3 {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -746,7 +722,6 @@ ion-card:hover {
 .moduleElementSuccess {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -758,7 +733,6 @@ ion-card:hover {
 .moduleElementFailed {
 	height: 50px;
 	margin: 0px;
-	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
@@ -770,7 +744,7 @@ ion-card:hover {
 .moduleElement:hover {
 	opacity: 0.9;
 	transform: translate(0px, -8px);
-	border: 4px solid #FFB84C;
+	border: 4px solid var(--ion-color-primary);
 	cursor: grab;
 }
 
@@ -813,10 +787,6 @@ ion-card:hover {
 	transition: 0.8s;
 }
 
-.moduleElement:hover {
-	opacity: 0.6;
-}
-
 #note {
 	color: white;
 }
@@ -831,7 +801,6 @@ ion-card:hover {
 	--ionicon-stroke-width: 80px;
 	padding: 3px;
 	color: var(--ion-color-light);
-	box-shadow: 1px 1px 7px grey;
 }
 
 #removeSemesterIconUnabled {
@@ -844,7 +813,6 @@ ion-card:hover {
 	--ionicon-stroke-width: 80px;
 	padding: 3px;
 	color: var(--ion-color-light);
-	box-shadow: 1px 1px 7px grey;
 	opacity: 0.5;
 }
 
