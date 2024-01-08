@@ -88,7 +88,7 @@ export const texts = {
             p4strong: "Ziel erreicht",
             p4: "Swipe nach links und klicke auf den Button, um dein Ziel als erreicht zu markieren.",
             p5strong: "Ziele bearbeiten",
-            p5: "Swipe nach links und klicke auf den Button, um deine Ziele zu bearbeiten.",
+            p5: "Swipe nach links und klicke auf den Button, um deine Ziele zu bearbeiten. Wenn du das Ziel nur in ein anderes Semester verschieben möchtest, ohne weitere Änderungen vorzunehmen, swipst du nach rechts und klickst auf NACH UNTEN oder NACH OBEN.",
             p6strong: "Modulübersicht",
             p6: "Die Modulübersicht soll dir dabei helfen, deine Ziele leichter festzulegen. Dir werden alle Module angezeigt, die du noch bestehen musst.",
             p7: "Viel Erfolg!",
