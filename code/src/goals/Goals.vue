@@ -1,23 +1,11 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-toolbar>
-				<ion-buttons slot="start">
-					<ion-button router-link="/menu/dashboard">
-						<ion-icon style="font-size: 45px" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-				<ion-title>{{ texts.titel.studienziele }}</ion-title>
-				<ion-buttons slot="end" style="display: flex; align-items: center">
-					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
-						<ion-icon :icon="helpCircleOutline"></ion-icon>
-					</ion-button>
-					<ion-menu-button color="primary"></ion-menu-button>
-				</ion-buttons>
-			</ion-toolbar>
-		</ion-header>
-
+		<HeaderComponent :title="texts.titel.studienziele" :hasInfo="true" />
+		<InfoModalComponent />
 		<ion-content>
+			<ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+				<ion-refresher-content></ion-refresher-content>
+			</ion-refresher>
 			<ion-grid class="grid">
 				<ion-row>
 					<ion-col size="12" size-md="6" class="col">
@@ -36,9 +24,9 @@
 							</ion-buttons>
 						</div>
 						<!-- Getting Sommersemester-Goals-Array out of vuex Store and displaying all elements -->
-						<ion-list class="drag-drop-containers" v-if="goals_ss.length > 0">
+						<ion-list class="listContainer" v-if="goals_ss.length > 0">
 							<ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForSS($event)">
-								<ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="drag-drop-box-item">
+								<ion-item-sliding v-for="goal in goals_ss" :key="goal.id" class="itemSliding">
 									<ion-item-options side="start">
 										<ion-item-option color="success" @click="switchToWS(goal.id)">
 											<ion-label>{{ texts.ziele.nachUnten }}</ion-label>
@@ -84,7 +72,9 @@
 						</div>
 
 						<div class="semesterHeader">
-							<ion-label class="labelHeader">{{ texts.studium.wintersemester }}</ion-label>
+							<ion-label class="labelHeader">{{
+								texts.studium.wintersemester
+							}}</ion-label>
 							<ion-buttons slot="end">
 								<ion-button style="padding-right: 15px" color="primary" id="open-WS-modal"
 									@click="openWSModal()" expand="block">
@@ -93,9 +83,9 @@
 							</ion-buttons>
 						</div>
 						<!-- Getting Sommersemester-Array of vuex and displaying all elements -->
-						<ion-list class="drag-drop-containers" v-if="goals_ws.length > 0">
+						<ion-list class="listContainer" v-if="goals_ws.length > 0">
 							<ion-reorder-group :disabled="false" @ionItemReorder="handleReorderForWS($event)">
-								<ion-item-sliding v-for="goal in goals_ws" :key="goal.id" class="drag-drop-box-item">
+								<ion-item-sliding v-for="goal in goals_ws" :key="goal.id" class="itemSliding">
 									<ion-item-options side="start">
 										<ion-item-option color="success" @click="switchToSS(goal.id)">
 											<ion-label>{{ texts.ziele.nachOben }}</ion-label>
@@ -134,7 +124,9 @@
 						<!--Only getting displayed when Array is empty-->
 						<div v-else class="ion-padding">
 							<div class="explanatory-text">
-								<ion-label style="font-size: large">{{ texts.ziele.keineZieleDefiniert }}</ion-label>
+								<ion-label style="font-size: large">{{
+									texts.ziele.keineZieleDefiniert
+								}}</ion-label>
 							</div>
 						</div>
 					</ion-col>
@@ -143,12 +135,16 @@
 					<ion-col class="col">
 						<ion-item class="background header" color="primary" router-link="/menu/studienziele/checked"
 							detail="true" lines="none" id="reachedGoalsButton">
-							<ion-label class="labelHeader headerText">{{ texts.ziele.erreichteZiele }}</ion-label>
+							<ion-label class="labelHeader headerText">{{
+								texts.ziele.erreichteZiele
+							}}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
-						<ion-item class="background headerText" color="medium" router-link="/menu/studienziele/deleted"
+						<ion-item class="background header" color="medium" router-link="/menu/studienziele/deleted"
 							detail="true" lines="none" id="deletedGoalsButton">
-							<ion-label class="labelHeader headerText">{{ texts.ziele.geloeschteZiele }}</ion-label>
+							<ion-label class="labelHeader headerText">{{
+								texts.ziele.geloeschteZiele
+							}}</ion-label>
 						</ion-item>
 
 						<ion-item-divider class="spacer"></ion-item-divider>
@@ -168,41 +164,17 @@
 							<ion-row>
 								<ion-col size-xs="2.3" size-sm="2.6" size-md="4" size-lg="4" size-xl="2"
 									v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
-									style="padding: 1px;">
-									<!-- <div v-if="modul.tryCount === 1"> -->
+									style="padding: 1px">
 									<ion-card :class="getModuleClass(modul.tryCount, modul.Status)">
 										<ion-label style="color: #000000; font-weight: bolder">
 											{{ modul.Kuerzel }}
 										</ion-label>
 									</ion-card>
-									<!-- </div> -->
-									<!-- <div v-else-if="modul.tryCount === 2">
-										<ion-card class="secondTry">
-											<ion-label style="color: #000000; font-weight: bolder">
-												{{ modul.kuerzel }}
-											</ion-label>
-										</ion-card>
-									</div>
-									<div v-else-if="modul.tryCount === 3">
-										<ion-card  class="thirdTry">
-											<ion-label style="color: #000000; font-weight: bolder">
-												{{ modul.kuerzel }}
-											</ion-label>
-										</ion-card>
-									</div> -->
 								</ion-col>
 							</ion-row>
 						</ion-col>
-
 						<!-- Legende -->
-						<div id="legend">
-							<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
-							<span>{{ texts.studium.klausurStatus.zweiterVersuch }}</span>
-							<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
-							<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
-							<ion-badge id="legendBadge" style="background-color: grey;">&nbsp;</ion-badge>
-							<span>Nicht mehr ablegbar</span>
-						</div>
+						<LegendComponent />
 					</ion-col>
 				</ion-row>
 			</ion-grid>
@@ -213,10 +185,6 @@
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
-					<ion-buttons slot="end">
-						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white">{{
-							texts.allgemein.speichern }}</ion-button>
-					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
 			<ion-content>
@@ -226,14 +194,23 @@
 				</ion-item>
 				<ion-item>
 					<ion-select ref="semesterSelect" label="Semester" placeholder="Semesterseason" value="Sommersemester">
-						<ion-select-option value="Sommersemester">{{ texts.studium.sommersemester }}</ion-select-option>
-						<ion-select-option value="Wintersemester">{{ texts.studium.wintersemester }}</ion-select-option>
+						<ion-select-option value="Sommersemester">{{
+							texts.studium.sommersemester
+						}}</ion-select-option>
+						<ion-select-option value="Wintersemester">{{
+							texts.studium.wintersemester
+						}}</ion-select-option>
 					</ion-select>
 				</ion-item>
 				<ion-item>
 					<ion-label position="floating">{{ texts.allgemein.info }}</ion-label>
 					<ion-input v-model="info"></ion-input>
 				</ion-item>
+				<div class="saveButton">
+					<ion-button @click="saveGoal" :disabled="!goal_name">
+						{{ texts.allgemein.speichern }}
+					</ion-button>
+				</div>
 			</ion-content>
 		</ion-modal>
 
@@ -242,10 +219,6 @@
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
-					<ion-buttons slot="end">
-						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white">{{
-							texts.allgemein.speichern }}</ion-button>
-					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
 			<ion-content>
@@ -267,6 +240,11 @@
 					<ion-label position="floating">{{ texts.allgemein.info }}</ion-label>
 					<ion-input v-model="info"></ion-input>
 				</ion-item>
+				<div class="saveButton">
+					<ion-button @click="saveGoal" :disabled="!goal_name">
+						{{ texts.allgemein.speichern }}
+					</ion-button>
+				</div>
 			</ion-content>
 		</ion-modal>
 
@@ -275,10 +253,6 @@
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.bearbeiteZiel }}</ion-title>
-					<ion-buttons slot="end">
-						<ion-button @click="saveEditedGoal" :disabled="!goal_name" style="color: white">{{
-							texts.allgemein.speichern }}</ion-button>
-					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
 			<ion-content>
@@ -300,58 +274,11 @@
 					<ion-label position="floating">{{ texts.allgemein.info }}</ion-label>
 					<ion-input v-model="info"></ion-input>
 				</ion-item>
-			</ion-content>
-		</ion-modal>
-
-		<!--Help-Modal-option for user-->
-		<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal" :presenting-element="presentingElement">
-			<ion-content>
-				<ion-grid>
-					<ion-row justify-content-center align-items-center>
-						<ion-col size="12">
-							<div class="ion-text-center">
-								<p style="font-size: 22px">
-									<strong>{{ texts.ziele.erklaerung.p1strong }}</strong>
-								</p>
-								<p>
-									<ion-button color="primary" shape="round">
-										<ion-icon :icon="add" style="font-size: 20px; color: white"></ion-icon>
-									</ion-button>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p2strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p2 }}</p>
-								<p>
-									<ion-icon :icon="trash" style="font-size: 35px; color: #f07181"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p3strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p3 }}</p>
-								<p>
-									<ion-icon :icon="checkmarkDone" style="font-size: 35px; color: #bbcc00"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p4strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p4 }}</p>
-								<p>
-									<ion-icon :icon="create" style="font-size: 35px; color: grey"></ion-icon>
-								</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p5strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p5 }}</p>
-								<p>
-									<strong>{{ texts.ziele.erklaerung.p6strong }}</strong>
-								</p>
-								<p>{{ texts.ziele.erklaerung.p6 }}</p>
-								<p>{{ texts.ziele.erklaerung.p7 }}</p>
-							</div>
-						</ion-col>
-					</ion-row>
-				</ion-grid>
+				<div class="saveButton">
+					<ion-button @click="saveGoal" :disabled="!goal_name">
+						{{ texts.allgemein.speichern }}
+					</ion-button>
+				</div>
 			</ion-content>
 		</ion-modal>
 	</ion-page>
@@ -367,6 +294,9 @@ import {
 } from 'ionicons/icons'
 import axios, { formToJSON } from 'axios'
 import { texts } from '../texts.js'
+import HeaderComponent from '../views/Components/HeaderComponent.vue'
+import InfoModalComponent from '../views/Components/InfoModalStudienziele.vue'
+import LegendComponent from '../views/Components/LegendComponent.vue'
 
 import {
 	IonPage,
@@ -398,8 +328,11 @@ import {
 	IonItemDivider,
 	IonBadge,
 	modalController,
+	IonRefresher,
+	IonRefresherContent,
 } from '@ionic/vue'
 import { toHandlers } from 'vue'
+import LegendComponentVue from '../views/Components/LegendComponent.vue'
 
 export default {
 	components: {
@@ -431,6 +364,23 @@ export default {
 		IonCol,
 		IonItemDivider,
 		IonBadge,
+		InfoModalComponent,
+		HeaderComponent,
+		LegendComponent,
+		IonRefresher,
+		IonRefresherContent,
+	},
+	setup() {
+
+		const handleRefresh = (event) => {
+			setTimeout(() => {
+				// Any calls to load data go here
+				event.target.complete();
+				// Reload the page
+				window.location.reload();
+			}, 1000);
+		};
+		return { handleRefresh }
 	},
 	data() {
 		return {
@@ -450,6 +400,7 @@ export default {
 			studentID: 'test123',
 			studiengang: 'PI',
 			ModuleList: [],
+
 		}
 	},
 
@@ -555,94 +506,120 @@ export default {
 		},
 
 		async getData() {
-
 			try {
-
-				const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
-				const regelstudienzeit = studiengaengeResponse.data.studiengaenge.find(studiengang => studiengang.Kuerzel === this.studiengang).Regelstudienzeit;
-				console.log("--------Die regelstudienzeit:", regelstudienzeit);
-				console.log("u are here3");
+				const studiengaengeResponse = await axios.get(
+					`${this.Adress}/studiengang`
+				)
+				const regelstudienzeit = studiengaengeResponse.data.studiengaenge.find(
+					studiengang => studiengang.Kuerzel === this.studiengang
+				).Regelstudienzeit
+				console.log('--------Die regelstudienzeit:', regelstudienzeit)
+				console.log('u are here3')
 
 				if (regelstudienzeit) {
-					console.log("u are here");
+					console.log('u are here')
 
-					const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/${this.studiengang} `);
-					const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${this.studiengang}`);
-					const studentProgressResponse = await axios.get(`${this.Adress}/modul/status/${this.studentID}`);
+					const pflichtModuleResponse = await axios.get(
+						`${this.Adress}/studiengang/pflicht/${this.studiengang} `
+					)
+					const wahlpflichtmoduleResponse = await axios.get(
+						`${this.Adress}/studiengang/wahlpflicht/${this.studiengang}`
+					)
+					const studentProgressResponse = await axios.get(
+						`${this.Adress}/modul/status/${this.studentID}`
+					)
 
-					const studentProgress = studentProgressResponse.data.modul;
-					this.$store.dispatch('saveStudentProgress', this.studentProgress);
+					const studentProgress = studentProgressResponse.data.modul
+					this.$store.dispatch('updateStudentProgress', studentProgress)
 
-					const pflichtModule = pflichtModuleResponse.data.pflicht;
-					const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht;
-					console.log(studentProgress.find(spModule => spModule.Kuerzel === "LDS").Versuch);
+					const pflichtModule = pflichtModuleResponse.data.pflicht
+					const wahlpflichtmodule = wahlpflichtmoduleResponse.data.wahlpflicht
+					console.log(
+						studentProgress.find(spModule => spModule.Kuerzel === 'LDS').Versuch
+					)
 
 					// Sort mandatory modules by semester
-					pflichtModule.sort((a, b) => a.Semester - b.Semester);
-					console.log("------Pflichtmodule getData---------", pflichtModule);
+					pflichtModule.sort((a, b) => a.Semester - b.Semester)
+					console.log('------Pflichtmodule getData---------', pflichtModule)
 
 					// Retrieve all modules where the student has passed the exam/module
 					const passedModuleKuerzel = studentProgress
 						.filter(modul => modul.Status === 'Bestanden')
-						.map(modul => modul.Kuerzel);
+						.map(modul => modul.Kuerzel)
 
-					this.ModuleList = [];
+					this.ModuleList = []
 					// Inline getModulesForSemester function
 					for (let semester = 1; semester <= regelstudienzeit; semester++) {
 						this.ModuleList.push({
 							semestercount: `${semester}. Semester`,
 							faecher: pflichtModule
-								.filter(modul => modul.Semester === semester && !passedModuleKuerzel.includes(modul.Kuerzel))
+								.filter(
+									modul =>
+										modul.Semester === semester &&
+										!passedModuleKuerzel.includes(modul.Kuerzel)
+								)
 								.map(modul => ({
 									Name: modul.Name,
 									Kuerzel: modul.Kuerzel,
-									Status: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Status || '',
-									tryCount: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Versuch || 0,
-								}))
-						});
+									Status:
+										studentProgress.find(
+											spModule => spModule.Kuerzel === modul.Kuerzel
+										)?.Status || '',
+									tryCount:
+										studentProgress.find(
+											spModule => spModule.Kuerzel === modul.Kuerzel
+										)?.Versuch || 0,
+								})),
+						})
 					}
 
+					const modulesToPass = texts.ziele.wahlpflichtmodule;
+					console.log('MODULE ZUM BESTEHEN', modulesToPass);
 					// Add the elective modules to the semester list
 					this.ModuleList.push({
-						semestercount: 'Wahlpflichtmodule',
+						semestercount: 'Wahlpflichtmodule' + modulesToPass,
 						faecher: wahlpflichtmodule
 							.filter(modul => !passedModuleKuerzel.includes(modul.Kuerzel))
 							.map(modul => ({
 								Name: modul.Name,
 								Kuerzel: modul.Kuerzel,
-								Status: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Status || '',
-								tryCount: studentProgress.find(spModule => spModule.Kuerzel === modul.Kuerzel)?.Versuch || 0,
-							}))
-					});
+								Status:
+									studentProgress.find(
+										spModule => spModule.Kuerzel === modul.Kuerzel
+									)?.Status || '',
+								tryCount:
+									studentProgress.find(
+										spModule => spModule.Kuerzel === modul.Kuerzel
+									)?.Versuch || 0,
+							})),
+					})
 					this.$store.dispatch('updateCurrentModules', this.ModuleList)
-
-				} 
-
+				}
 			} catch (error) {
-				console.log(error);
+				console.log(error)
 			}
 		},
 
 		getModuleClass(tryCount, status) {
 			// console.log("trycount:", tryCount);
 			// console.log("status:", status);
-			if (tryCount === 1 && status !== 'Nicht Bestande') {
-				return 'secondTry';
+			if (tryCount === 1 && status === 'Nicht Bestanden') {
+				return 'secondTry'
 			} else if (tryCount === 2 && status === 'Nicht Bestanden') {
-				return 'thirdTry';
+				return 'thirdTry'
 			} else if (tryCount === 3 && status === 'Nicht Bestanden') {
-				return 'moduleFailed';
+				return 'moduleFailed'
 			} else {
-				return 'modules'; // Fallback, wenn keine spezifische Klasse gefunden wird
+				return 'modules' // Fallback, wenn keine spezifische Klasse gefunden wird
 			}
 		},
 	},
 
 	//Display when data is fetched
 	async mounted() {
-		this.ModuleList = this.$store.getters.getCurrentModules;
-		console.log("currentMODULES: ", this.ModuleList);
-		this.getData();
+		this.ModuleList = this.$store.getters.getCurrentModules
+		console.log('currentMODULES: ', this.ModuleList)
+		this.getData()
 	},
 
 	computed: {
@@ -664,12 +641,24 @@ export default {
 </script>
 
 <style scoped>
+.saveButton {
+	margin-top: 10px;
+	min-width: 100px;
+}
+
+.saveButton ion-button {
+	margin-top: 10px;
+	width: 200px;
+	margin: 0 auto;
+	display: block;
+}
+
 .infoButton {
 	font-size: 28px;
 }
 
 .goals-container {
-	background-color: #8c9900;
+	background-color: var(--ion-color-primary);
 	border-radius: 15px;
 	height: 50px;
 	text-align: center;
@@ -678,14 +667,13 @@ export default {
 }
 
 .explanatory-text {
-	color: grey;
+	color: var(--ion-color-medium);
 	text-align: center;
 }
 
 .grid {
 	padding: 25px;
 }
-
 
 .background {
 	border-radius: 15px;
@@ -718,6 +706,7 @@ export default {
 
 .headerText {
 	color: var(--ion-color-light);
+	font-weight: bold;
 }
 
 .semesterHeader ion-icon {
@@ -725,10 +714,10 @@ export default {
 	height: 25px;
 	border-radius: 30px;
 	background-color: var(--ion-color-primary);
-	color: white;
+	color: var(--ion-color-light);
 }
 
-.drag-drop-containers {
+.listContainer {
 	display: block;
 	justify-content: space-between;
 	padding-top: 5px;
@@ -737,27 +726,27 @@ export default {
 	padding-bottom: 5px;
 }
 
-.drag-drop-box-item {
+.itemSliding {
 	height: 45px;
 	margin: 10px;
 	border-radius: 30px;
 	text-align: left;
-	background-color: #d2d69e;
+	background-color: var(--ion-color-secondary);
 }
 
-.drag-drop-box-item ion-icon {
+.itemSliding ion-icon {
 	color: white;
 }
 
 .item-container {
-	background-color: #d2d69e;
+	background-color: var(--ion-color-secondary);
 }
 
 .card-label {
 	margin: 0;
 	padding-left: 15px;
 	font-weight: normal;
-	color: black;
+	color: var(--ion-color-primary-contrast);
 }
 
 .card-label h2 {
@@ -769,7 +758,7 @@ export default {
 	width: 27px;
 	margin-left: 8px;
 	margin-top: 4px;
-	border: 2px solid #ccc;
+	border: 2px solid var(--ion-color-medium);
 	border-radius: 0px;
 }
 
@@ -781,7 +770,7 @@ export default {
 }
 
 .underline {
-	border-bottom: 2px solid #8c9900;
+	border-bottom: 2px solid var(--ion-color-primary);
 	padding-bottom: 5px;
 	margin-bottom: 10px;
 }
@@ -838,8 +827,8 @@ ion-modal::part(backdrop) {
 }
 
 ion-modal ion-toolbar {
-	--background: #8c9900;
-	--color: white;
+	--background: var(--ion-color-primary);
+	--color: var(--ion-color-light);
 }
 
 #legend {
@@ -849,7 +838,6 @@ ion-modal ion-toolbar {
 }
 
 #legendBadge {
-	box-shadow: 1px 1px 7px grey;
 	margin-right: 5px;
 	margin-left: 5px;
 }
@@ -861,7 +849,7 @@ ion-modal ion-toolbar {
 	text-align: center;
 	padding: 6px;
 	border-radius: 15px;
-	background-color: #fff;
+	background-color: var(--ion-color-secondary);
 }
 
 .secondTry {
@@ -891,7 +879,7 @@ ion-modal ion-toolbar {
 	text-align: center;
 	padding: 6px;
 	border-radius: 15px;
-	background-color: grey;
+	background-color: var(--ion-color-medium);
 }
 
 #reachedGoalsButton {
