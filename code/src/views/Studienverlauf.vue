@@ -636,14 +636,14 @@ ion-progress-bar {
 #cpInfo {
 	text-align: center;
 	border-radius: 15px;
-	transition: 0.1s;
+	transition: 0.2s;
 	margin-right: 5px;
 }
 
 #averageGrade {
 	color: var(--ion-color-primary);
 	text-align: center;
-	margin-top: px;
+	margin-top: 5px;
 	background: none;
 }
 
@@ -675,7 +675,6 @@ ion-card {
 	color: black;
 	font-weight: bold;
 	border-radius: 15px;
-	transition: 0.8s;
 
 	@media (prefers-color-scheme: dark) {
 		background: var(--ion-color-step-250);
@@ -686,7 +685,7 @@ ion-card {
 .moduleElement1 {
 	height: 50px;
 	margin: 0px;
-	transition: 0.8s;
+	transition: 0.1s;
 
 	@media (prefers-color-scheme: dark) {
 		color: white;
@@ -700,7 +699,6 @@ ion-card:hover {
 .moduleElement2 {
 	height: 50px;
 	margin: 0px;
-	transition: 0.8s;
 	text-align: center;
 	border-radius: 15px;
 	background-color: var(--ion-color-warning);
@@ -738,12 +736,17 @@ ion-card:hover {
 	border-radius: 15px;
 	background-color: var(--ion-color-medium);
 	transition: 0.1s;
+}
 
+.moduleElement {
+	height: 50px;
+	margin: 0px;
+	transition: 0.3;
 }
 
 .moduleElement:hover {
 	opacity: 0.9;
-	transform: translate(0px, -8px);
+	transform: translate(0px, -10px);
 	border: 4px solid var(--ion-color-primary);
 	cursor: grab;
 }
@@ -755,7 +758,6 @@ ion-card:hover {
 .empty-card {
 	opacity: 0.5;
 }
-
 
 .modulesRow {
 	width: 100%;
@@ -779,12 +781,6 @@ ion-card:hover {
 	width: 100%;
 	margin-left: 5px;
 	margin-right: 5px;
-}
-
-.moduleElement {
-	height: 50px;
-	margin: 0px;
-	transition: 0.8s;
 }
 
 #note {

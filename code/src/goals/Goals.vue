@@ -646,8 +646,8 @@ export default {
 						})
 					}
 					
-					var modulesToPass = texts.ziele.wahlpflichtmodule;
-					
+					const modulesToPass = texts.ziele.wahlpflichtmodule;
+					console.log('MODULE ZUM BESTEHEN', modulesToPass);
 					// Add the elective modules to the semester list
 					this.ModuleList.push({
 						semestercount: 'Wahlpflichtmodule' + modulesToPass,
