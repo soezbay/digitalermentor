@@ -682,6 +682,10 @@ ion-card {
 	}
 }
 
+ion-card:hover {
+	opacity: 0.8;
+}
+
 .moduleElement1 {
 	height: 50px;
 	margin: 0px;
@@ -690,10 +694,6 @@ ion-card {
 	@media (prefers-color-scheme: dark) {
 		color: white;
 	}
-}
-
-ion-card:hover {
-	opacity: 0.8;
 }
 
 .moduleElement2 {

@@ -55,7 +55,7 @@ export const texts = {
 
     dashboard: {
         deineTermine: "Deine Termine",
-        keineTermine: "Keine Termine für diesen Monat.",
+        keineTermine: "Keine anstehenden Termine",
     },
 
     titel: {

@@ -430,17 +430,14 @@ export default {
 
 		// Only the first four appointments are taken to dashbaord
 		kommendeTermine() {
-			const currentDate = new Date();
+			const heute = new Date();
+            heute.setHours(0, 0, 0, 0); // Setzt die Zeit auf Mitternacht
 
-			// current time since midnight
-			const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
-
-			// just dates that are in the current time
-			const kommendeTermine = this.$store.getters.termine.filter(termin => {
-				const terminDateTime = new Date(`${termin.datum} ${termin.zeit}`);
-				const terminTimeInMinutes = terminDateTime.getHours() * 60 + terminDateTime.getMinutes();
-				return terminTimeInMinutes >= currentTimeInMinutes;
-			});
+            // Filtert Termine, die ab dem heutigen Datum oder später stattfinden
+            const kommendeTermine = this.$store.getters.termine.filter((termin) => {
+                const terminDatum = new Date(termin.datum);
+                return terminDatum >= heute;
+            });
 
 			return kommendeTermine.slice(0, 4);
 		},
@@ -482,8 +479,8 @@ ion-progress-bar {
 
 .modulesRow {
 	width: 100%;
-	height: 140px;
 	padding-top: 5px;
+	padding-bottom: 5px;
 	margin-left: 33px;
 	margin-right: 5px;
 	background-color: var(--ion-color-secondary);
