@@ -373,6 +373,7 @@ export default {
 			studentID: 'test123',
 			studiengang: 'PI',
 			ModuleList: [],
+		
 		}
 	},
 
@@ -524,10 +525,12 @@ export default {
 								}))
 						});
 					}
-
+					
+					var modulesToPass = texts.ziele.wahlpflichtmodule;
+					
 					// Add the elective modules to the semester list
 					this.ModuleList.push({
-						semestercount: 'Wahlpflichtmodule',
+						semestercount: 'Wahlpflichtmodule' + modulesToPass,
 						faecher: wahlpflichtmodule
 							.filter(modul => !passedModuleKuerzel.includes(modul.Kuerzel))
 							.map(modul => ({

@@ -94,6 +94,7 @@ export const texts = {
         },
         nachUnten: "Nach unten",
         nachOben: "Nach oben",
+        wahlpflichtmodule: " (Du musst 5 Module bestehen)"
     },
 
     studienverlauf: {
