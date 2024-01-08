@@ -49,12 +49,9 @@ exports.createNewBewertung = async (req, res, next) => {
     let { BewertungSterne, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID } = req.body;
     let bewertung = new Bewertung(BewertungSterne, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID);
 
-    // Führe die Konvertierung durch
-    const bewertungWithUtf8 = convertUmlauteToUtf8(bewertung);
+    post = await bewertung.createBewertung();
 
-    post = await bewertungWithUtf8.createBewertung();
-
-    console.log(bewertungWithUtf8);
+    console.log(bewertung);
 
     res.send("Create new Bewertung Route.");
   } catch (error) {

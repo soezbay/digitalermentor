@@ -15,6 +15,7 @@ export const texts = {
             bestanden: "Bestanden",
             zweiterVersuch: "2. Versuch",
             dritterVersuch: "3. Versuch",
+            durchgefallen: "Nicht mehr ablegbar",
         },
         leistungspunkte: "Leistungspunkte",
         leistungspunkteKurz: "LP",
@@ -60,7 +61,7 @@ export const texts = {
     titel: {
         digitalerMentor: "Digitaler Mentor",
         dashboard: "Dashboard",
-        moduluebersicht: "Modulübersicht",
+        modulhandbuch: "Modulhandbuch",
         studienverlauf: "Studienverlauf",
         studienziele: "Studienziele",
         profil: "Profil",

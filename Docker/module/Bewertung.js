@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 class Bewertung {
     constructor( BewertungSterne, Feedback, Schwierigkeitsgrad, Arbeitsaufwand, Lernhilfe, SemsterAnzeigen, ModulKuerzel, BenutzerID) {
+        console.log("Im Constructor: " + Lernhilfe)
         this.BewertungID = uuidv4();
         this.BewertungSterne = BewertungSterne;
         this.Feedback = Feedback;
@@ -23,21 +24,21 @@ class Bewertung {
 
         let ErstelltAM = `${yyyy}-${mm}-${dd}`;
 
-        let sql = `Insert into Bewertung values(
-            '${this.BewertungID}',
-            '${this.BewertungSterne}',
-            '${this.Feedback}',
-            '${this.Schwierigkeitsgrad}',
-            '${this.Arbeitsaufwand}',
-            '${this.Lernhilfe}',
-            '${this.SemsterAnzeigen}',
-            '${ErstelltAM}',
-            '${this.ModulKuerzel}',
-            '${this.BenutzerID}'
-        )`;
-        const [newBewertung, _] = await database.execute(sql);
+        console.log("Lernhife:" + this.Lernhilfe)
 
-        return newBewertung;
+        let sql = `INSERT INTO Bewertung VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+         return database.execute(sql, [
+            this.BewertungID,
+            this.BewertungSterne,
+            this.Feedback,
+            this.Schwierigkeitsgrad,
+            this.Arbeitsaufwand,
+            this.Lernhilfe,
+            this.SemsterAnzeigen,
+            ErstelltAM,
+            this.ModulKuerzel,
+            this.BenutzerID
+        ]);
     }
 
 

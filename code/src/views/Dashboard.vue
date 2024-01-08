@@ -104,14 +104,11 @@
 								</div>
 							</ion-list>
 						</div>
-						<div><img src="/resources/Sprechblase.png" alt="Sprechblase" class="speechbubble"></div>
-						<div><img src="/resources/DigitalerMentor-Koala.png" alt="Digitaler Mentor Koala"
-								class="koala-image"></div>
 					</ion-col>
 					<ion-header style="height: 0.3%"></ion-header>
 
 					<ion-col size="12" size-md="6" class="ion-padding-horizontal ion-padding-top">
-						<ion-item color="primary" router-link="/termine" id="header" detail="true" lines="none"
+						<ion-item color="primary" router-link="/menu/termine" id="header" detail="true" lines="none"
 							class="rounded-item ion-margin-horizontal">
 							<ion-label class="custom-label">{{ texts.dashboard.deineTermine }}</ion-label>
 						</ion-item>
@@ -139,8 +136,11 @@
 						<br />
 						<div class="dateDiv">
 							<ion-datetime presentation="date" v-model="selectedDate" :highlighted-dates="highlightedDates"
-								size="cover" max="2100-01-01T00:00:00">
+								size="cover" max="2100-01-01T00:00:00" first-day-of-week="1">
 							</ion-datetime>
+						</div>
+						<div><img src="/resources/DigitalerMentor_Koala_Sprechblase.png" alt="Digitaler Mentor Koala"
+								class="koala-image">
 						</div>
 					</ion-col>
 				</ion-row>
@@ -224,12 +224,21 @@ export default {
 		})
 
 		const formatDate = dateString => {
-			const parts = dateString.split('-')
-			if (parts.length === 3) {
-				const [year, month, day] = parts
-				return `${day}.${month}.${year}`
-			}
-			return dateString // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+			// 	const parts = dateString.split('-')
+			// 	if (parts.length === 3) {
+			// 		const [year, month, day] = parts
+			// 		return `${day}.${month}.${year}`
+			// 	}
+			// 	return dateString // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+			// }
+
+			// Show date as dd-mm-yyyy on dashboard
+			const date = new Date(dateString);
+			const day = date.getDate();
+			const month = date.getMonth() + 1; // Monate in JavaScript sind 0-basiert
+			const year = date.getFullYear();
+
+			return `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
 		}
 
 		return {
@@ -358,28 +367,42 @@ export default {
 			return totalGrade / totalCreditPoints
 		},
 		getModuleClass(module) {
-			const succededModule = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
-			console.log("SUCCEDEDMODULES: ", succededModule);
-			if (succededModule.Status === 'Bestanden') {
-				return 'moduleElementSuccess';
-			} else if (succededModule.Versuch === 1 && succededModule.Status === 'Nicht Bestanden') {
-				return 'moduleElement2';
-			} else if (succededModule.Versuch === 2 && succededModule.Status === 'Nicht Bestanden') {
-				return 'moduleElement3';
-			} else if (succededModule.Versuch === 3 && succededModule.Status === 'Nicht Bestanden') {
-				return 'moduleElementFailed';
-			} else {
-				return 'moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
+			try {
+				//Check if module is passed
+				const succededModule = this.studentProgress.find(
+					smodule => smodule.Kuerzel === module.Kuerzel && smodule.Status === 'Bestanden');
+				if (succededModule) {
+					return 'moduleElementSuccess';
+				}
+
+				//if succededArray is empty then continue finding exam-trys
+				const foundModules = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
+				if (foundModules.Versuch === 1 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElement2';
+				} else if (foundModules.Versuch === 2 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElement3';
+				} else if (foundModules.Versuch === 3 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElementFailed';
+				} else {
+					return 'moduleElement moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
+				}
+			} catch (err) {
+				return 'moduleElement moduleElement1';
 			}
 		},
 
 		getGradeOfModule(module) {
-			const grade = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel).Note
-			if(grade) {
-				return "Note: " + grade;
-			} else {
-				return " ";
+			try {
+				const grade = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel).Note
+				if (grade) {
+					return "Note: " + grade;
+				} else {
+					return " ";
+				}
+			} catch (err) {
+				return ' ';
 			}
+
 		},
 	},
 
@@ -439,9 +462,10 @@ export default {
 }
 
 ion-progress-bar {
-	--background: var(--ion-color-light);
+	border-radius: 10px;
+	--background: #d3d3d3;
 	--progress-background: var(--ion-color-primary);
-	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
 	height: 20px;
 	width: 70%;
 	margin-left: auto;
@@ -452,6 +476,8 @@ ion-progress-bar {
 
 .modulesRow {
 	width: 100%;
+	height: 140px;
+	padding-top: 5px;
 	margin-left: 33px;
 	margin-right: 5px;
 	background-color: var(--ion-color-secondary);
@@ -517,7 +543,6 @@ ion-progress-bar {
 	border-radius: 15px;
 	background-color: var(--ion-color-medium);
 }
-
 
 .custom-text {
 	color: #555;
@@ -651,10 +676,10 @@ ion-datetime {
 
 @media only screen and (min-width: 768px) {
 	.koala-image {
-		margin-top: -90px;
-		display: inline;
-		height: 300px;
-		margin-left: -20px;
+		margin-top: 20px;
+		height: 230px;
+		float: right;
+		margin-right: 25px;
 	}
 }
 
@@ -664,20 +689,6 @@ ion-datetime {
 	}
 }
 
-@media only screen and (min-width: 768px) {
-	.speechbubble {
-		margin-left: 200px;
-		margin-top: 100px;
-		display: inline;
-		height: 90px;
-	}
-}
-
-@media only screen and (max-width: 767px) {
-	.speechbubble {
-		display: none;
-	}
-}
 
 .hidden {
 	opacity: 0;
@@ -694,5 +705,4 @@ ion-datetime {
 ion-title {
 	margin-left: -5px;
 }
-
 </style>

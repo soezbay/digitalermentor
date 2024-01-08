@@ -14,11 +14,11 @@
 
         <ion-content>
             <ion-datetime presentation="date-time" :highlighted-dates="highlightedDates" size="cover"
-                max="2200-01-01T00:00:00" v-model="selectedDate" display-format="D MMM YYYY HH:mm"></ion-datetime>
+                max="2200-01-01T00:00:00" v-model="selectedDate" display-format="D MMM YYYY HH:mm" first-day-of-week="1"></ion-datetime>
             <div v-if="termine.length > 0">
                 <ion-list>
                     <ion-item-sliding v-for="termin in termine" :router-link="`/termine/${termin.id}`" :key="termin.id">
-                        <ion-item color="medium">
+                        <ion-item>
                             <ion-label>
                                 <h2>{{ termin.titel }}</h2>
                                 <h3>{{ termin.ort }}</h3>
@@ -116,12 +116,21 @@ export default {
         });
 
         const formatDate = (dateString) => {
-            const parts = dateString.split('-');
-            if (parts.length === 3) {
-                const [year, month, day] = parts;
-                return `${day}.${month}.${year}`;
-            }
-            return dateString; // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+            //     const parts = dateString.split('-');
+            //     if (parts.length === 3) {
+            //         const [year, month, day] = parts;
+            //         return `${day}.${month}.${year}`;
+            //     }
+            //     return dateString; // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
+            // };
+
+            // show date as dd-mm-yyyy in termine
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.getMonth() + 1; // Monate in JavaScript sind 0-basiert
+            const year = date.getFullYear();
+
+            return `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
         };
 
         const deleteTermin = (terminId) => {
@@ -152,5 +161,10 @@ export default {
 <style scoped>
 p {
     padding-left: 70%;
+}
+
+/* background color termine */
+ion-item-sliding ion-item {
+    --background: var(--ion-color-secondary);
 }
 </style>

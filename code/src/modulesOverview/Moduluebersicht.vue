@@ -18,9 +18,7 @@
 		</ion-header>
 
 		<ion-content>
-			<div style="padding: 0; margin: 0; margin-left: 15px; margin-right: 15px;">
-				<ion-searchbar class="searchbar" placeholder="Modulsuche" v-model="searchText" @ionChange="onSearchChange" color="light"></ion-searchbar>
-			</div>
+			<!--UTILITYS FOR SEARCHING AND CHANGING ----------------------------------------------------------------------------------->
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid style="margin: 0; padding-bottom: 0; padding-top: 0;">
 				<ion-row style="margin-bottom: 7px">
@@ -29,8 +27,8 @@
 						<ion-item lines="none">
 							<!-- choice between "Studiengängen" -->
 							<ion-select v-model="selectedStudiengang" interface="popover" label="Studiengang:"
-								placeholder="Studiengang auswählen" :interface-options="{ cssClass: 'custom-ion-select' }"
-								slot="start">
+								placeholder="Studiengang auswählen" :interface-options="{ cssClass: 'courseSelect' }"
+								slot="start" style="width: 100%;">
 								<ion-select-option v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
 									:value="studiengang.Kuerzel">
 									{{ studiengang.Name }}
@@ -47,11 +45,48 @@
 					</ion-col>
 				</ion-row>
 			</ion-grid>
+			<!--Searching Modules -->
+			<div style="padding: 0; margin-left: 15px; margin-right: 15px;">
+				<ion-searchbar v-model="searchText" animated="true" placeholder="Modulhandbuch durchsuchen"
+					@ionInput="handleInput($event)">
+				</ion-searchbar>
+			</div>
+			<ion-grid v-if="showAsList === false" class="searchGrid">
+				<ion-row v-if="results.length > 0">
+					<ion-col size="4" size-md="3" size-lg="2" v-for="result in results">
+						<ion-item lines="none" @click="openModal(result)">
+							<ion-label>{{ result.Kuerzel }}</ion-label>
+						</ion-item>
+					</ion-col>
+				</ion-row>
+				<ion-row v-else-if="searched">
+					<ion-col size="12" class="ion-text-center">
+						<p style="color: slategrey;">
+							Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
+						</p>
+					</ion-col>
+				</ion-row>
+				<ion-row v-if="!searched">
+				</ion-row>
+			</ion-grid>
+			<ion-list v-else>
+				<ion-item v-if="results.length > 0" v-for="result in results" @click="openModal(result)" class="searchList">
+					<ion-label>{{ result.Name }}</ion-label>
+				</ion-item>
+				<div v-else-if="searched" class="ion-text-center">
+					<p style="color: slategrey;">
+						Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
+					</p>
+				</div>
+				<div v-if="!searched">
+				</div>
+			</ion-list>
 
+			<!-- LIST OF MODULES ------------------------------------------------------------------------------------------------------>
 			<!-- Ion Grid for Semester -->
 			<div v-if="showAsList === false" class="ion-padding" style="padding-top: 0;">
 				<hr class="solid">
-				<ion-grid style="padding-top: 0; margin-top: 0;">
+				<ion-grid style="padding-top: 0; margin-top: 0; margin-bottom: 200px;">
 					<ion-col v-for="(semester, index) in getselectedCourseModules()" :key="index">
 						<ion-row style="padding-left: 10px;">
 							<label>
@@ -71,15 +106,14 @@
 					</ion-col>
 				</ion-grid>
 			</div>
-
-
 			<!--Show modules as List when showAsList=true-->
 			<ion-list v-else style="padding: 0; padding-top: 10px;">
 				<div v-for="(semester, index) in getselectedCourseModules()" :key="index">
 					<ion-list-header class="semesterHeaderList">
 						<ion-label>{{ semester.semestercount }}</ion-label>
 					</ion-list-header>
-					<ion-item v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex" @click="openModal(modul)">
+					<ion-item v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex" @click="openModal(modul)"
+						class="ModulItemsInList">
 						<ion-label>{{ modul.Name }} ({{ modul.Kuerzel }})</ion-label>
 						<ion-note slot="end">{{ modul.Leistungspunkte }} LP</ion-note>
 					</ion-item>
@@ -87,6 +121,7 @@
 				<div style="height: 200px"></div>
 			</ion-list>
 
+			<!-- MODALS -------------------------------------------------------------------------------------------------------------->
 			<!-- Modal for changing Courses to display -->
 			<ion-modal ref="coursesModal">
 				<ion-header>
@@ -150,7 +185,8 @@ import {
 	IonSelectOption, IonSelect,
 	IonList, IonListHeader, IonItem, IonLabel, IonIcon,
 	IonCard, IonCardTitle,
-	IonModal, modalController, IonNote, IonItemDivider
+	IonModal, modalController, IonNote, IonItemDivider,
+	loadingController
 } from '@ionic/vue';
 
 export default {
@@ -190,11 +226,35 @@ export default {
 			selectedStudiengang: null,
 			studiengaenge: [],
 			modulesBook: [],
+			results: [],
+			searched: false,
 		};
 	},
 
-
 	methods: {
+		handleInput(event) {
+			this.searched = true;
+			const query = event.target.value.toLowerCase();
+			console.log("B1-----------", this.modulesBook);
+			console.log("B1-----------", this.modulesBook);
+			const courseFilter = this.modulesBook.filter(c => c.course === this.selectedStudiengang);
+			console.log(courseFilter);
+			const allSubjects = courseFilter.flatMap(c => c.faecher);
+			console.log(allSubjects);
+			console.log(query);
+			if (query !== '') {
+				this.results = allSubjects.filter(subject =>
+					subject.Name.toLowerCase().includes(query)
+					|| subject.Kuerzel.toLowerCase().includes(query)
+					|| subject.Verantwortlicher.toLowerCase().includes(query)
+					|| subject.Turnus.toLowerCase().includes(query));
+				console.log(this.results);
+			} else {
+				this.searched = false;
+				this.results = [];
+			}
+		},
+
 		async fetchStudiengaenge() {
 			try {
 				const response = await axios.get(`${this.Adress}/studiengang`)
@@ -206,7 +266,6 @@ export default {
 		},
 
 		async getModuleData(selectedStudiengang) {
-
 
 			try {
 				console.log("ur here2");
@@ -272,23 +331,10 @@ export default {
 		},
 
 		getselectedCourseModules() {
-			this.getDataOfStore;
 			console.log("-----------DIE modulesBook MIT MODULEN:", this.modulesBook);
 			const array = this.modulesBook.filter(arr => arr.course === this.selectedStudiengang);
 			console.log("________DIE GEFILTERTE LISTE", array);
 			return array;
-		},
-
-		onSearchChange() {
-			const filteredModules = this.modulesBook.map((semester) => ({
-				...semester,
-				faecher: semester.faecher.filter((modul) =>
-					modul.Kuerzel.toLowerCase().includes(this.searchText.toLowerCase())
-				),
-			}));
-
-			// Aktualisieren Sie die gefilterten Module in Ihrer Datenoption
-			this.filteredModules = filteredModules;
 		},
 
 		async openModal(selectedModul) {
@@ -350,9 +396,6 @@ export default {
 		this.studiengaenge = this.$store.getters.getCourses;
 		this.modulesBook = this.$store.getters.getModulesBook;
 		this.fetchStudiengaenge();
-		// console.log("VUEX MODULESBOOK", this.$store.getters.getModulesBook);
-		// console.log("MODULESBOOK", this.modulesBook);
-		// console.log("-----STUDIENGANG:", this.selectedStudiengang);
 		this.getModuleData(this.selectedStudiengang);
 
 		const lastSetup = this.settings;
@@ -368,16 +411,11 @@ export default {
 	watch: {
 		selectedStudiengang(newStudiengang) {
 			this.getModuleData(newStudiengang);
-			console.info("Change")
 			this.onStudiengangChange()
 		},
 	},
 
 	computed: {
-		// getDataOfStore() {
-		// 	this.studiengaenge = this.$store.getters.getCourses;
-		// 	this.modulesBook = this.$store.getters.getModulesBook;
-		// },
 		settings() {
 			console.log('Getting settings')
 			return this.$store.getters.getModuleOverviewData
@@ -400,6 +438,20 @@ export default {
 	padding: 0;
 }
 
+ion-searchbar {
+	padding: 0;
+	--background: #d3d3d3;
+	--color: #000000;
+    --placeholder-color: #000000;
+    --icon-color: #000000;
+    --clear-button-color: #000000;
+    --border-radius: 20px;
+  }
+
+.courseSelect {
+	width: 100%;
+}
+
 .modulBlock {
 	height: 30px;
 	width: 100%;
@@ -410,11 +462,12 @@ export default {
 	border-radius: 20px;
 	cursor: pointer;
 	background-color: var(--ion-color-secondary);
-	transition: 0.8s;
+	transition: 0.1s;
 }
 
 .modulBlock:hover {
-	opacity: 0.7;
+	opacity: 0.8;
+	transform: translate(0px, -2px);
 }
 
 /* header of "Listenansicht" */
@@ -443,6 +496,34 @@ ion-item-divider {
 /* padding "Listenansicht" */
 .listenansicht {
 	padding: 0;
+}
+
+.ModulItemsInList:hover {
+	cursor: pointer;
+	color: #000000;
+	--background: var(--ion-color-secondary);
+}
+
+.searchGrid {
+	padding: 15px;
+}
+
+.searchGrid ion-item {
+	text-align: center;
+	border: 2px solid var(--ion-color-secondary);
+	border-radius: 10px;
+	padding: 1px;
+}
+
+.searchGrid ion-item:hover {
+	--background: var(--ion-color-secondary);
+	cursor: pointer;
+}
+
+.searchList:hover {
+	cursor: pointer;
+	color: #000000;
+	--background: var(--ion-color-secondary);
 }
 
 /* modal for desktop */
@@ -478,9 +559,4 @@ ion-item-divider {
 		justify-content: left;
 	}
 }
-.searchbar {
-	padding: 10px; 
-	padding-top: 10px;
-}
-
 </style>

@@ -22,8 +22,8 @@
 			<!-- Modulsuche -->
 			<ion-grid>
 				<ion-row class="ion-justify-content-center">
-					<ion-searchbar show-clear-button="always" placeholder="Modulsuche" class="searchbar" type="text" color="light"
-						v-model="query" @ionChange="handleSearchChange"></ion-searchbar>
+					<ion-searchbar show-clear-button="always" animated="true" placeholder="Modulsuche" type="text" v-model="query"
+						@ionChange="handleSearchChange"></ion-searchbar>
 				</ion-row>
 			</ion-grid>
 
@@ -33,7 +33,7 @@
 					<!-- Semester Überschriften -->
 					<ion-col size="12">
 						<!-- Zeige nur Semester ab 1. Semester (da 0. Semester Wahlmodule sind)-->
-						<ion-row v-if="semester >= 1" style="padding-left: 7px;">
+						<ion-row v-if="semester >= 1" style="padding-left: 7px">
 							<h2>{{ semester }}. {{ texts.studium.semester }}</h2>
 							<!-- Remove Button wird nur angezeigt für das letzte Semester und nur, wenn es leer ist -->
 							<ion-icon :icon="remove" id="removeSemesterIcon" v-if="semester === Object.keys(groupedModules).length - 1 &&
@@ -58,9 +58,8 @@
 										@dragstart="e => dragStart(e, 'empty', semester)">
 										<span :data-semester="semester"></span>
 									</ion-card>
-									<ion-card v-else class="moduleElement" :draggable="!isPassedModules(module)"
-										:data-semester="semester" :id="module.Kuerzel"
-										@dragstart="e => dragStart(e, module.Kuerzel, semester)"
+									<ion-card v-else :draggable="!isPassedModules(module)" :data-semester="semester"
+										:id="module.Kuerzel" @dragstart="e => dragStart(e, module.Kuerzel, semester)"
 										:class="getModuleStatusClass(module)">
 										<span data-semester="semester" v-html="highlight(module.Kuerzel, query)"></span>
 										<br />
@@ -103,7 +102,7 @@
 										@dragstart="e => dragStart(e, 'empty', semester)">
 										<span :data-semester="semester"></span>
 									</ion-card>
-									<ion-card v-else class="moduleElement" draggable="true" :data-semester="semester"
+									<ion-card v-else draggable="true" :data-semester="semester"
 										@dragstart="e => dragStart(e, module.Kuerzel, semester)" :id="module.Kuerzel"
 										:class="getModuleStatusClass(module)">
 										<span :data-semester="semester" v-html="highlight(module.Kuerzel, query)"></span>
@@ -118,17 +117,8 @@
 					</ion-col>
 				</ion-row>
 			</ion-grid>
-
-
 			<!-- Legende -->
-			<div id="legend">
-				<ion-badge id="legendBadge" color="primary">&nbsp;</ion-badge>
-				<span>{{ texts.studium.klausurStatus.bestanden }}</span>
-				<ion-badge id="legendBadge" color="warning">&nbsp;</ion-badge>
-				<span>{{ texts.studium.klausurStatus.zweiterVersuch }}</span>
-				<ion-badge id="legendBadge" color="danger">&nbsp;</ion-badge>
-				<span>{{ texts.studium.klausurStatus.dritterVersuch }}</span>
-			</div>
+			<LegendComponent />
 		</ion-content>
 	</ion-page>
 </template>
@@ -166,6 +156,7 @@ import { defineComponent, ref } from 'vue'
 import axios from 'axios'
 import HeaderComponent from '../views/Components/HeaderComponent.vue'
 import InfoModalComponent from '../views/Components/InfoModalStudienverlauf.vue'
+import LegendComponent from '../views/Components/LegendComponent.vue'
 
 export default defineComponent({
 	components: {
@@ -193,6 +184,7 @@ export default defineComponent({
 		IonSearchbar,
 		HeaderComponent,
 		InfoModalComponent,
+		LegendComponent,
 	},
 
 	setup() {
@@ -238,13 +230,12 @@ export default defineComponent({
 			console.log(event)
 		},
 		getData() {
-
 			axios
 				.get(`${this.Adress}/modul/status/${this.studentID}`)
 				.then(Response => {
-					console.log(Response.data);
-					this.studentProgress = Response.data.modul;
-					this.$store.dispatch('updateStudentProgress', this.studentProgress);
+					console.log(Response.data)
+					this.studentProgress = Response.data.modul
+					this.$store.dispatch('updateStudentProgress', this.studentProgress)
 				})
 				.catch(err => {
 					console.log(err)
@@ -252,10 +243,10 @@ export default defineComponent({
 			axios
 				.get(`${this.Adress}/studiengang/pflicht/pi`)
 				.then(Response => {
-					console.log(Response.data);
-					this.modules = Response.data.pflicht;
-					this.$store.dispatch('updateObligatoryModules', this.modules);
-					this.groupModules();
+					console.log(Response.data)
+					this.modules = Response.data.pflicht
+					this.$store.dispatch('updateObligatoryModules', this.modules)
+					this.groupModules()
 				})
 				.catch(err => {
 					console.log(err)
@@ -263,10 +254,10 @@ export default defineComponent({
 			axios
 				.get(`${this.Adress}/studiengang/wahlpflicht/pi`)
 				.then(Response => {
-					console.log(Response.data);
-					this.electiveModules = Response.data.wahlpflicht;
-					this.$store.dispatch('updateElectiveModules', this.electiveModules);
-					this.groupModules();
+					console.log(Response.data)
+					this.electiveModules = Response.data.wahlpflicht
+					this.$store.dispatch('updateElectiveModules', this.electiveModules)
+					this.groupModules()
 				})
 				.catch(err => {
 					console.log(err)
@@ -284,7 +275,7 @@ export default defineComponent({
 					clonedElectiveModules,
 					...this.groupModulesBySemester(this.modules).filter(Array),
 				]
-				this.$store.dispatch('updateGroupedModules', this.groupedModules);
+				this.$store.dispatch('updateGroupedModules', this.groupedModules)
 			}
 		},
 
@@ -323,28 +314,27 @@ export default defineComponent({
 
 		// Status des Moduls herausfinden (Bestanden oder nicht Bestanden)
 		getModuleStatusClass(module) {
-			// Einträge aus studentProgress mit dem übergebenen Modul werden zu enteredModules hinzugefügt
-			const enteredModules = this.studentProgress.filter(
-				progressModule => progressModule.Kuerzel === module.Kuerzel
-			)
-			// Wenn enteredModules leer ist, ist das Modul noch nicht angetreten worden
-			if (enteredModules.length === 0) {
-				return 'gray'
-			}
+			try {
+				//Check if module is passed
+				const succededModule = this.studentProgress.find(
+					smodule => smodule.Kuerzel === module.Kuerzel && smodule.Status === 'Bestanden');
+				if (succededModule) {
+					return 'moduleElementSuccess';
+				}
 
-			// Berechnen des Notendurchschnitts
-			const averageGrade =
-				enteredModules.reduce(
-					(total, progressModule) => total + parseFloat(progressModule.Note),
-					0
-				) / enteredModules.length
-
-			if (averageGrade >= 5 && enteredModules.length == 1) {
-				return 'firstTry' // Modul ein mal nicht bestanden, gelbe Farbe
-			} else if (averageGrade >= 5 && enteredModules.length == 2) {
-				return 'secondTry' // Modul zwei mal nicht bestanden, rote Farbe
-			} else {
-				return 'passed' // Modul bestanden, grüne Farbe
+				//if succededArray is empty then continue finding exam-trys
+				const foundModules = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
+				if (foundModules.Versuch === 1 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElement2';
+				} else if (foundModules.Versuch === 2 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElement3';
+				} else if (foundModules.Versuch === 3 && foundModules.Status === 'Nicht Bestanden') {
+					return 'moduleElement moduleElementFailed';
+				} else {
+					return 'moduleElement moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
+				}
+			} catch (err) {
+				return 'moduleElement moduleElement1';
 			}
 		},
 
@@ -450,7 +440,7 @@ export default defineComponent({
 			console.log('dragOver')
 		},
 
-		dragLeave(e) { 
+		dragLeave(e) {
 			e.target.classList.remove('drag-enter')
 			console.log('dragLeave')
 
@@ -458,7 +448,7 @@ export default defineComponent({
 			console.log('dragLeave targetSemester: ' + targetSemester)
 
 			const targetSemesterArray = this.groupedModules[targetSemester]
-			console.log("THE TARGET____________", targetSemesterArray);
+			console.log('THE TARGET____________', targetSemesterArray)
 
 			// Entfernen des leeren Elements ('empty') aus dem Array
 			const index = targetSemesterArray.indexOf('empty')
@@ -535,9 +525,17 @@ export default defineComponent({
 				if (moduleIndex !== -1) {
 					// Entferne das Modul aus dem Quellsemester-Array
 					const removedModule = sourceSemesterArray.splice(moduleIndex, 1)[0]
-
+					console.log('SPLICEDARRAY REMOVEDMODULE', removedModule)
 					// Füge das Modul zum Zielsemester-Array hinzu
 					targetSemesterArray.push(removedModule)
+
+					this.$store.commit(
+						'saveGroupeModuleChanges',
+						semester,
+						targetSemester,
+						sourceSemesterArray,
+						targetSemesterArray
+					)
 
 					// Führe eine Aktualisierung der Vue.js-Ansicht durch
 					this.$forceUpdate()
@@ -570,16 +568,22 @@ export default defineComponent({
 	},
 
 	mounted() {
-		this.groupedModules = this.$store.getters.getGroupedModules;
-		this.studentProgress = this.$store.getters.getStudentProgress;
-		this.modules = this.$store.getters.getObligatoryModules;
-		this.electiveModules = this.$store.getters.getElectiveModules;
-		console.log("LENGTH____________________!!_!______________!!_!_", this.groupedModules.length);
-		console.log("LENGTH____________________!!_!______________!!_!_", this.groupedModules);
-		console.log("LENGTH_____1______", this.studentProgress);
-		console.log("LENGTH_____2______", this.modules);
-		console.log("LENGTH_____3______", this.electiveModules);
-		this.getData()
+		this.groupedModules = this.$store.getters.getGroupedModules
+		this.studentProgress = this.$store.getters.getStudentProgress
+		this.modules = this.$store.getters.getObligatoryModules
+		this.electiveModules = this.$store.getters.getElectiveModules
+		console.log(
+			'LENGTH____________________!!_!______________!!_!_',
+			this.groupedModules.length
+		)
+		console.log(
+			'LENGTH____________________!!_!______________!!_!_',
+			this.groupedModules
+		)
+		console.log('LENGTH_____1______', this.studentProgress)
+		console.log('LENGTH_____2______', this.modules)
+		console.log('LENGTH_____3______', this.electiveModules)
+		// this.getData()
 		// this.sortModulesAlphabetically()
 	},
 
@@ -615,28 +619,39 @@ export default defineComponent({
 }
 
 ion-progress-bar {
+	border-radius: 10px;
 	--background: var(--ion-color-light);
 	--progress-background: var(--ion-color-primary);
-	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 	height: 20px;
 	width: 70%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 30px;
 	margin-bottom: 10px;
+	--background: #d3d3d3;
+
 }
 
-.passed {
-	--background: var(--ion-color-success);
+#cpInfo {
+	text-align: center;
 }
 
-.passed:hover {
-	opacity: 0.8;
+/* move to the left */
+ion-title {
+	margin-left: -5px;
 }
 
-.secondTry {
-	--background: var(--ion-color-danger);
-}
+ion-searchbar {
+	width: 50%;
+	/* width for normal screens */
+	padding-top: 20px;
+	--border-radius: 20px;
+	--background: #d3d3d3;
+	--color: #000000;
+	--placeholder-color: #000000;
+	--icon-color: #000000;
+	--clear-button-color: #000000;
 
 .firstTry {
 	--background: rgb(238, 200, 12);
@@ -657,6 +672,13 @@ ion-card {
 	color: black;
 	font-weight: bold;
 	border-radius: 15px;
+	transition: 0.1s;
+}
+
+.moduleElement1 {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 5px grey;
 	transition: 0.8s;
 
 	@media (prefers-color-scheme: dark) {
@@ -674,16 +696,72 @@ ion-card:hover {
 
 #cpInfo {
 	text-align: center;
+	border-radius: 15px;
+	transition: 0.1s;
+	background-color: white;
 }
 
-#averageGrade {
-	color: var(--ion-color-primary);
+.moduleElement2 {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 5px grey;
+	transition: 0.8s;
 	text-align: center;
-	margin-top: px;
+	border-radius: 15px;
+	background-color: var(--ion-color-warning);
+	transition: 0.1s;
+
 }
 
-.drag-start:active {
-	opacity: 0.7;
+.moduleElement3 {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 5px grey;
+	transition: 0.8s;
+	text-align: center;
+	border-radius: 15px;
+	background-color: var(--ion-color-danger);
+	transition: 0.1s;
+
+}
+
+.moduleElementSuccess {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 5px grey;
+	transition: 0.8s;
+	text-align: center;
+	border-radius: 15px;
+	background-color: var(--ion-color-primary);
+	transition: 0.1s;
+
+}
+
+.moduleElementFailed {
+	height: 50px;
+	margin: 0px;
+	box-shadow: 5px 5px 5px grey;
+	transition: 0.8s;
+	text-align: center;
+	border-radius: 15px;
+	background-color: var(--ion-color-medium);
+	transition: 0.1s;
+
+}
+
+.moduleElement:hover {
+	opacity: 0.9;
+	transform: translate(0px, -8px);
+	border: 4px solid #FFB84C;
+	cursor: grab;
+}
+
+.moduleElement:active {
+	cursor: grabbing;
+}
+
+.empty-card {
+	opacity: 0.5;
 }
 
 .modulesRow {
@@ -700,8 +778,6 @@ ion-card:hover {
 		border-color: var(--ion-color-secondary);
 	} 
 }
-
-
 
 .modulesContainer {
 	height: auto;
@@ -778,19 +854,15 @@ ion-toast {
 	--ionicon-stroke-width: 80px;
 	padding: 3px;
 	color: var(--ion-color-light);
-	box-shadow: 1px 1px 7px grey;
 }
 
 #legend {
 	text-align: center;
 	font-size: large;
 	margin-bottom: 10px;
-
-
 }
 
 #legendBadge {
-	box-shadow: 1px 1px 7px grey;
 	margin-right: 7px;
 	margin-left: 7px;
 }
@@ -804,7 +876,7 @@ ion-grid {
 	padding-right: 15px;
 }
 
-@media (max-width:950px) {
+@media (max-width: 950px) {
 	.info-modal {
 		--height: 75%;
 		--width: 75%;
@@ -814,29 +886,13 @@ ion-grid {
 	}
 }
 
-@media (min-width:950px) {
+@media (min-width: 950px) {
 	.info-modal {
 		--height: 80%;
 		--width: 45%;
 		--border-radius: 16px;
 		--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-			0 4px 6px -4px rgb(0 0 0 / 0.1)
-	}
-}
-
-/* move to the left */
-ion-title {
-	margin-left: -5px;
-}
-
-.searchbar {
-	width: 50%;
-	/* width for normal screens */
-	padding-top: 20px;
-
-	@media (max-width: 767px) {
-		width: 80%;
-		/* width for mobile devices */
+			0 4px 6px -4px rgb(0 0 0 / 0.1);
 	}
 }
 </style>

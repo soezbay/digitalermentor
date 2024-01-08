@@ -307,6 +307,12 @@ const store = createStore({
         saveElectiveModules(state, emodules) {
             state.electiveModules = emodules;
         },
+        saveGroupeModuleChanges(state, semester, targetSemester, sourceSemesterArray, targetSemesterArray) {
+
+            // Füge das Modul zum Zielsemester-Array hinzu
+            state.groupedmodules[targetSemester] = targetSemesterArray;
+
+        }
     },
 
     actions: {
@@ -357,16 +363,16 @@ const store = createStore({
                 if (data.Daten.length === 0) {
                     context.commit('createCacheAPIForUser', BenutzerID);
                 } else {
-                        const innerJsonString = data.Daten[0].CacheDaten;
-                        try {
-                            const cachedData = JSON.parse(innerJsonString);;
-                            context.commit('setAPIData', cachedData);
-                            console.info("Cache geupdated");
-                        } catch (error) {
-                            console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
-                        }
+                    const innerJsonString = data.Daten[0].CacheDaten;
+                    try {
+                        const cachedData = JSON.parse(innerJsonString);;
+                        context.commit('setAPIData', cachedData);
+                        console.info("Cache geupdated");
+                    } catch (error) {
+                        console.log('Fehler beim Parsen von JSON:', error, innerJsonString);
                     }
-                
+                }
+
             } catch (error) {
                 console.error('Fehler beim Abrufen des Caches von der API:', error);
             }
@@ -510,7 +516,7 @@ const store = createStore({
         getLetzerCacheUpdate(state) {
             return state.letzterCacheUpdate;
         },
-        getTestBenutzer(state) {
+        getUserID(state) {
             return state.TestDaten.BenutzerID;
         },
         getModulesBook(state) {
