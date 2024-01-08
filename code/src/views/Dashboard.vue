@@ -432,18 +432,23 @@ export default {
 		kommendeTermine() {
 			const currentDate = new Date();
 
-			// current time since midnight
-			const currentTimeInMinutes = currentDate.getHours() * 60 + currentDate.getMinutes();
-
-			// just dates that are in the current time
+			// Filter appointments that have dates greater than or equal to the current date
 			const kommendeTermine = this.$store.getters.termine.filter(termin => {
 				const terminDateTime = new Date(`${termin.datum} ${termin.zeit}`);
-				const terminTimeInMinutes = terminDateTime.getHours() * 60 + terminDateTime.getMinutes();
-				return terminTimeInMinutes >= currentTimeInMinutes;
+				return terminDateTime >= currentDate;
 			});
 
+			// Sort appointments based on date and time
+			kommendeTermine.sort((a, b) => {
+				const dateA = new Date(`${a.datum} ${a.zeit}`);
+				const dateB = new Date(`${b.datum} ${b.zeit}`);
+				return dateA - dateB;
+			});
+
+			// Return the first four upcoming appointments
 			return kommendeTermine.slice(0, 4);
 		},
+		
 		goals_ss() {
 			return this.$store.getters.getGoals_ss
 		},
