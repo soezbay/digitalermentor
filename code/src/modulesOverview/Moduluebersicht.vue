@@ -18,6 +18,10 @@
 		</ion-header>
 
 		<ion-content>
+			<ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+				<ion-refresher-content></ion-refresher-content>
+			</ion-refresher>
+
 			<!--UTILITYS FOR SEARCHING AND CHANGING ----------------------------------------------------------------------------------->
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid style="margin: 0; padding-bottom: 0; padding-top: 0;">
@@ -186,7 +190,9 @@ import {
 	IonList, IonListHeader, IonItem, IonLabel, IonIcon,
 	IonCard, IonCardTitle,
 	IonModal, modalController, IonNote, IonItemDivider,
-	loadingController
+	loadingController,
+	IonRefresher,
+	IonRefresherContent,
 } from '@ionic/vue';
 
 export default {
@@ -215,9 +221,22 @@ export default {
 		IonCardTitle,
 		IonModal,
 		IonNote,
-		IonItemDivider
+		IonItemDivider,
+		IonRefresher,
+		IonRefresherContent,
 	},
+	setup() {
 
+		const handleRefresh = (event) => {
+			setTimeout(() => {
+				// Any calls to load data go here
+				event.target.complete();
+				// Reload the page
+				window.location.reload();
+			}, 1000);
+		};
+		return { handleRefresh }
+	},
 	data() {
 		return {
 			helpCircleOutline, book, texts,
@@ -442,11 +461,11 @@ ion-searchbar {
 	padding: 0;
 	--background: #d3d3d3;
 	--color: #000000;
-    --placeholder-color: #000000;
-    --icon-color: #000000;
-    --clear-button-color: #000000;
-    --border-radius: 20px;
-  }
+	--placeholder-color: #000000;
+	--icon-color: #000000;
+	--clear-button-color: #000000;
+	--border-radius: 20px;
+}
 
 .courseSelect {
 	width: 100%;

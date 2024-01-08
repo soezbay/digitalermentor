@@ -3,6 +3,9 @@
 		<HeaderComponent :title="texts.titel.studienverlauf" :hasInfo="true" />
 		<InfoModalComponent />
 		<ion-content>
+			<ion-refresher @ionRefresh="handleRefresh(event)">
+				<ion-refresher-content></ion-refresher-content>
+			</ion-refresher>
 			<!-- CP Progress bar mit Notendurchschnitt -->
 			<ion-progress-bar :value="progress" :buffer="1"></ion-progress-bar>
 			<div id="cpInfo">
@@ -22,8 +25,8 @@
 			<!-- Modulsuche -->
 			<ion-grid>
 				<ion-row class="ion-justify-content-center">
-					<ion-searchbar show-clear-button="always" animated="true" placeholder="Modulsuche" type="text" v-model="query"
-						@ionChange="handleSearchChange"></ion-searchbar>
+					<ion-searchbar show-clear-button="always" animated="true" placeholder="Modulsuche" type="text"
+						v-model="query" @ionChange="handleSearchChange"></ion-searchbar>
 				</ion-row>
 			</ion-grid>
 
@@ -149,6 +152,8 @@ import {
 	IonToast,
 	toastController,
 	IonSearchbar,
+	IonRefresher,
+	IonRefresherContent
 } from '@ionic/vue'
 import { remove, add, ellipse, helpCircleOutline, school } from 'ionicons/icons'
 import { texts } from '../texts.js'
@@ -182,12 +187,23 @@ export default defineComponent({
 		IonCard,
 		IonToast,
 		IonSearchbar,
+		IonRefresher,
+		IonRefresherContent,
 		HeaderComponent,
 		InfoModalComponent,
 		LegendComponent,
 	},
 
 	setup() {
+		const handleRefresh = (event) => {
+			setTimeout(() => {
+				// Any calls to load data go here
+				event.target.complete();
+				// Reload the page
+				window.location.reload();
+			}, 1000);
+		};
+
 		const isOpen = ref(false)
 
 		const setOpen = state => {
@@ -207,6 +223,7 @@ export default defineComponent({
 			isOpen,
 			setOpen,
 			showToast,
+			handleRefresh
 		}
 	},
 	data() {
@@ -678,7 +695,7 @@ ion-card {
 
 	@media (prefers-color-scheme: dark) {
 		background: var(--ion-color-step-250);
-		
+
 	}
 }
 
@@ -767,11 +784,11 @@ ion-card:hover {
 	border-radius: 10px;
 
 	@media (prefers-color-scheme: dark) {
-        
-        background-color: transparent;
+
+		background-color: transparent;
 		border: 2px solid;
 		border-color: var(--ion-color-secondary);
-	} 
+	}
 }
 
 .modulesContainer {

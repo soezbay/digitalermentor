@@ -2,6 +2,9 @@
 	<ion-page>
 		<HeaderComponent :title="texts.titel.dashboard" :hasInfo="false" />
 		<ion-content>
+			<ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+				<ion-refresher-content></ion-refresher-content>
+			</ion-refresher>
 			<ion-header id="displayUsername">
 				{{ getGreeting() }}, {{ getUsername() }}
 			</ion-header>
@@ -115,7 +118,7 @@
 						<div v-if="kommendeTermine.length > 0">
 							<ion-list v-for="termin in kommendeTermine" :router-link="`/termine/${termin.id}`"
 								style="padding: 0%" :key="termin">
-								<ion-item style="background-color: #3d3e40">
+								<ion-item class="ktlab" lines="none">
 									<ion-label>
 										<h2>{{ termin.titel }}</h2>
 										<h3>{{ termin.ort }}</h3>
@@ -177,7 +180,9 @@ import {
 	IonIcon,
 	IonDatetime,
 	IonProgressBar,
-	IonCard
+	IonCard,
+	IonRefresher,
+	IonRefresherContent
 } from '@ionic/vue'
 
 export default {
@@ -202,9 +207,21 @@ export default {
 		HeaderComponent,
 		IonProgressBar,
 		Studienverlauf,
-		IonCard
+		IonCard,
+		IonRefresher,
+		IonRefresherContent,
 	},
 	setup() {
+
+		const handleRefresh = (event) => {
+			setTimeout(() => {
+				// Any calls to load data go here
+				event.target.complete();
+				// Reload the page
+				window.location.reload();
+			}, 1000);
+		};
+
 		const store = useStore()
 
 		const termine = computed(() => {
@@ -218,20 +235,12 @@ export default {
 				return {
 					date: termine.datum, // Use the appropriate property from your termine data
 					textColor: '#000000', // Customize as needed
-					backgroundColor: '#D7D5D5', // Customize as needed
+					backgroundColor: '#d2d69e', // Customize as needed
 				}
 			})
 		})
 
 		const formatDate = dateString => {
-			// 	const parts = dateString.split('-')
-			// 	if (parts.length === 3) {
-			// 		const [year, month, day] = parts
-			// 		return `${day}.${month}.${year}`
-			// 	}
-			// 	return dateString // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
-			// }
-
 			// Show date as dd-mm-yyyy on dashboard
 			const date = new Date(dateString);
 			const day = date.getDate();
@@ -244,6 +253,7 @@ export default {
 		return {
 			highlightedDates,
 			formatDate,
+			handleRefresh
 		}
 	},
 	data() {
@@ -431,18 +441,18 @@ export default {
 		// Only the first four appointments are taken to dashbaord
 		kommendeTermine() {
 			const heute = new Date();
-            heute.setHours(0, 0, 0, 0); // Setzt die Zeit auf Mitternacht
+			heute.setHours(0, 0, 0, 0); // Setzt die Zeit auf Mitternacht
 
-            // Filtert Termine, die ab dem heutigen Datum oder später stattfinden
-            const kommendeTermine = this.$store.getters.termine.filter((termin) => {
-                const terminDatum = new Date(termin.datum);
-                return terminDatum >= heute;
-            });
+			// Filtert Termine, die ab dem heutigen Datum oder später stattfinden
+			const kommendeTermine = this.$store.getters.termine.filter((termin) => {
+				const terminDatum = new Date(termin.datum);
+				return terminDatum >= heute;
+			});
 
 			// Return the first four upcoming appointments
 			return kommendeTermine.slice(0, 4);
 		},
-		
+
 		goals_ss() {
 			return this.$store.getters.getGoals_ss
 		},
@@ -489,8 +499,8 @@ ion-progress-bar {
 	border-radius: 10px;
 
 	@media (prefers-color-scheme: dark) {
-        /* Hintergrundfarbe für Dark Mode */
-        background-color: transparent;
+		/* Hintergrundfarbe für Dark Mode */
+		background-color: transparent;
 		border: 2px solid;
 		border-color: var(--ion-color-secondary);
 	}
@@ -575,6 +585,7 @@ ion-progress-bar {
 	.ion-margin-horizontal {
 		margin-left: 20px;
 		margin-right: 20px;
+		margin-bottom: 5px;
 	}
 }
 
@@ -583,6 +594,7 @@ ion-progress-bar {
 		max-width: 1400px;
 		padding-left: 20px;
 		padding-right: 20px;
+		margin-bottom: 5px;
 	}
 }
 
@@ -673,8 +685,20 @@ ion-progress-bar {
 	margin: 10px;
 }
 
+.ktlab {
+    --background: var(--ion-color-secondary);
+    border-radius: 20px;
+    margin: 3px;
+	margin-left: 35px;
+	margin-right: 30px;
+    color: black;
+    transition: 0.3s
+}
+
 ion-datetime {
-	background: var(--ion-item-background, var(--ion-background-color, #d2d69e));
+	/* background: var(--ion-item-background, var(--ion-background-color, #d2d69e)); */
+	margin-top: -20px;
+	border: 2px solid var(--ion-color-secondary);
 	color: var(--ion-color #fff);
 	border-radius: 16px;
 }

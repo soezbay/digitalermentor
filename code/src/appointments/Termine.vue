@@ -2,6 +2,9 @@
     <ion-page>
         <HeaderComponent title="Termine" :hasInfo="false" />
         <ion-content>
+            <ion-refresher @ionRefresh="handleRefresh(event)">
+                <ion-refresher-content></ion-refresher-content>
+            </ion-refresher>
             <ion-grid>
                 <ion-row>
                     <ion-col>
@@ -13,15 +16,66 @@
                             <ion-label class="atlab">Anstehende Klausuren:</ion-label>
                         </ion-item>
                         <ion-item>
-                            <ion-label>Keine anstehenden Klausuren</ion-label>
+                            <ion-label>-Keine anstehenden Klausuren-</ion-label>
                         </ion-item>
                     </ion-col>
                     <ion-col>
-                        <ion-item class="vtlab" button detail="true">
-                            <ion-label>Vergangene Termine</ion-label>
-                        </ion-item>
+                        <ion-accordion-group>
+                            <ion-accordion value="first">
+                                <ion-item slot="header" color="light">
+                                    <ion-label>Vergangene Termine</ion-label>
+                                </ion-item>
+                                <div v-if="vergangeneTermine.length > 0" class="ion-padding" slot="content">
+                                    <ion-item v-for="termin in vergangeneTermine" :key="termin.id" lines="none"
+                                        class="vtlab">
+                                        <ion-label>
+                                            <h2>{{ termin.titel }}</h2>
+                                            <h3>{{ termin.ort }}</h3>
+                                        </ion-label>
+                                        <ion-label slot="end">
+                                            <h2>{{ formatDate(termin.datum) }} - {{ termin.zeit }}</h2>
+                                        </ion-label>
+                                    </ion-item>
+                                </div>
+                                <div v-else class="ion-padding" slot="content">
+                                    Keine Vergangenen Termine
+                                </div>
+                            </ion-accordion>
+                        </ion-accordion-group>
                         <ion-item class="ktlab" lines="none">
-                            <ion-label >Kommende Termine:</ion-label>
+                            <ion-label>Heutige Termine:</ion-label>
+                        </ion-item>
+                        <div v-if="heutigeTermine.length > 0">
+                            <ion-list>
+                                <ion-item-sliding v-for="termin in heutigeTermine" :router-link="`/termine/${termin.id}`"
+                                    :key="termin.id">
+                                    <ion-item lines="none" class="aktuelleTermine">
+                                        <ion-label>
+                                            <h2>{{ termin.titel }}</h2>
+                                            <h3>{{ termin.ort }}</h3>
+                                        </ion-label>
+                                        <ion-label slot="end">
+                                            <h2>{{ formatDate(termin.datum) }} - {{ termin.zeit }}</h2>
+                                        </ion-label>
+                                    </ion-item>
+                                    <ion-item-options>
+                                        <ion-item-option style="margin-bottom: 0.5px;" color="danger"
+                                            @click="deleteTermin(termin.id)">
+                                            <ion-icon slot="icon-only" :icon="trash"></ion-icon>
+                                        </ion-item-option>
+                                    </ion-item-options>
+                                </ion-item-sliding>
+                            </ion-list>
+                        </div>
+                        <div v-else>
+                            <ion-item lines="none" style="text-align: center;">
+                                <ion-label>
+                                    <h2>Keine anstehenden Termine.</h2>
+                                </ion-label>
+                            </ion-item>
+                        </div>
+                        <ion-item class="ktlab" lines="none">
+                            <ion-label>Kommende Termine:</ion-label>
                         </ion-item>
                         <div v-if="aktuelleTermine.length > 0">
                             <ion-list>
@@ -79,6 +133,10 @@ import {
     IonList,
     IonFab, IonFabButton, IonIcon,
     IonItemSliding, IonItemOptions, IonItemOption,
+    IonRefresher,
+    IonRefresherContent,
+    IonAccordion,
+    IonAccordionGroup
 
 } from '@ionic/vue';
 import { add, trash } from 'ionicons/icons';
@@ -103,9 +161,21 @@ export default {
         IonFab,
         IonFabButton,
         IonIcon,
-        IonItemSliding, IonItemOptions, IonItemOption
+        IonItemSliding, IonItemOptions, IonItemOption,
+        IonRefresher,
+        IonRefresherContent,
+        IonAccordion,
+        IonAccordionGroup
     },
     setup() {
+        const handleRefresh = (event) => {
+            setTimeout(() => {
+                // Any calls to load data go here
+                event.target.complete();
+                // Reload the page
+                window.location.reload();
+            }, 1000);
+        };
         const selectedDate = ref(null);
         const store = useStore();
 
@@ -126,20 +196,12 @@ export default {
                 return {
                     date: termine.datum, // Use the appropriate property from your termine data
                     textColor: '#000000', // Customize as needed
-                    backgroundColor: '#D7D5D5', // Customize as needed
+                    backgroundColor: '#d2d69e', // Customize as needed
                 };
             });
         });
 
         const formatDate = (dateString) => {
-            //     const parts = dateString.split('-');
-            //     if (parts.length === 3) {
-            //         const [year, month, day] = parts;
-            //         return `${day}.${month}.${year}`;
-            //     }
-            //     return dateString; // Rückgabe des ursprünglichen Datums, falls das Format ungültig ist
-            // };
-
             // show date as dd-mm-yyyy in termine
             const date = new Date(dateString);
             const day = date.getDate();
@@ -154,6 +216,7 @@ export default {
         };
 
         return {
+            handleRefresh,
             add,
             selectedDate,
             highlightedDates,
@@ -173,13 +236,37 @@ export default {
         },
         aktuelleTermine() {
             const heute = new Date();
-            heute.setHours(0, 0, 0, 0); // Setzt die Zeit auf Mitternacht
 
             // Filtert Termine, die ab dem heutigen Datum oder später stattfinden
             return this.$store.getters.termine.filter((termin) => {
                 const terminDatum = new Date(termin.datum);
-                return terminDatum >= heute;
+                return terminDatum > heute;
             });
+        },
+        heutigeTermine() {
+            const heute = new Date();
+            heute.setHours(0, 0, 0, 0); // Setzt die Zeit auf Mitternacht
+            const heuteISOString = heute.toISOString().split('T')[0]; // Konvertiert in ISO-Format und extrahiert das Datum
+
+            // Filtert Termine, die für den heutigen Tag geplant sind
+            return this.$store.getters.termine.filter((termin) => {
+                const terminDatum = new Date(termin.datum);
+                terminDatum.setHours(0, 0, 0, 0); // Setzt die Zeit des Termins auf Mitternacht
+                const terminDatumISOString = terminDatum.toISOString().split('T')[0]; // Konvertiert in ISO-Format und extrahiert das Datum
+                return terminDatumISOString === heuteISOString;
+            });
+        },
+        vergangeneTermine() {
+            const heute = new Date();
+            heute.setHours(0, 0, 0, 0); // Setzt die Zeit auf Mitternacht
+
+            // Filtert Termine, die ab dem heutigen Datum oder später stattfinden
+            const pastAppoint = this.$store.getters.termine.filter((termin) => {
+                const terminDatum = new Date(termin.datum);
+                return terminDatum < heute;
+            });
+            console.log("VERGANGENE", pastAppoint);
+            return pastAppoint;
         }
     }
 }
@@ -200,7 +287,7 @@ ion-item {
 
 .aktuelleTermine:hover {
     border-radius: 15px;
-    --background: var(--ion-color-medium);
+    --background: var(--ion-color-primary);
     margin: 3px;
 }
 
@@ -214,10 +301,15 @@ ion-item {
 }
 
 .vtlab {
-    
+    --background: var(--ion-color-medium);
+    border-radius: 20px;
+    margin: 3px;
+    color: black;
+    transition: 0.3s
 }
-.vtlab ion-label {
-    --color: var(--ion-color-dark);
+
+.vtlab:hover {
+    --background: var(--ion-color-secondary);
 }
 
 .atlab {

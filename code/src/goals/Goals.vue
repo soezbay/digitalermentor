@@ -3,6 +3,9 @@
 		<HeaderComponent :title="texts.titel.studienziele" :hasInfo="true" />
 		<InfoModalComponent />
 		<ion-content>
+			<ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+				<ion-refresher-content></ion-refresher-content>
+			</ion-refresher>
 			<ion-grid class="grid">
 				<ion-row>
 					<ion-col size="12" size-md="6" class="col">
@@ -182,10 +185,6 @@
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
-					<ion-buttons slot="end">
-						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white">{{
-							texts.allgemein.speichern }}</ion-button>
-					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
 			<ion-content>
@@ -207,6 +206,11 @@
 					<ion-label position="floating">{{ texts.allgemein.info }}</ion-label>
 					<ion-input v-model="info"></ion-input>
 				</ion-item>
+				<div class="saveButton">
+					<ion-button @click="saveGoal" :disabled="!goal_name">
+						{{ texts.allgemein.speichern }}
+					</ion-button>
+				</div>
 			</ion-content>
 		</ion-modal>
 
@@ -215,10 +219,6 @@
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.erstelleZiel }}</ion-title>
-					<ion-buttons slot="end">
-						<ion-button @click="saveGoal" :disabled="!goal_name" style="color: white">{{
-							texts.allgemein.speichern }}</ion-button>
-					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
 			<ion-content>
@@ -240,6 +240,11 @@
 					<ion-label position="floating">{{ texts.allgemein.info }}</ion-label>
 					<ion-input v-model="info"></ion-input>
 				</ion-item>
+				<div class="saveButton">
+					<ion-button @click="saveGoal" :disabled="!goal_name">
+						{{ texts.allgemein.speichern }}
+					</ion-button>
+				</div>
 			</ion-content>
 		</ion-modal>
 
@@ -248,10 +253,6 @@
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>{{ texts.ziele.bearbeiteZiel }}</ion-title>
-					<ion-buttons slot="end">
-						<ion-button @click="saveEditedGoal" :disabled="!goal_name" style="color: white">{{
-							texts.allgemein.speichern }}</ion-button>
-					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
 			<ion-content>
@@ -273,6 +274,11 @@
 					<ion-label position="floating">{{ texts.allgemein.info }}</ion-label>
 					<ion-input v-model="info"></ion-input>
 				</ion-item>
+				<div class="saveButton">
+					<ion-button @click="saveGoal" :disabled="!goal_name">
+						{{ texts.allgemein.speichern }}
+					</ion-button>
+				</div>
 			</ion-content>
 		</ion-modal>
 	</ion-page>
@@ -322,6 +328,8 @@ import {
 	IonItemDivider,
 	IonBadge,
 	modalController,
+	IonRefresher,
+	IonRefresherContent,
 } from '@ionic/vue'
 import { toHandlers } from 'vue'
 import LegendComponentVue from '../views/Components/LegendComponent.vue'
@@ -359,6 +367,20 @@ export default {
 		InfoModalComponent,
 		HeaderComponent,
 		LegendComponent,
+		IonRefresher,
+		IonRefresherContent,
+	},
+	setup() {
+
+		const handleRefresh = (event) => {
+			setTimeout(() => {
+				// Any calls to load data go here
+				event.target.complete();
+				// Reload the page
+				window.location.reload();
+			}, 1000);
+		};
+		return { handleRefresh }
 	},
 	data() {
 		return {
@@ -619,6 +641,18 @@ export default {
 </script>
 
 <style scoped>
+.saveButton {
+	margin-top: 10px;
+	min-width: 100px;
+}
+
+.saveButton ion-button {
+	margin-top: 10px;
+	width: 200px;
+	margin: 0 auto;
+	display: block;
+}
+
 .infoButton {
 	font-size: 28px;
 }
