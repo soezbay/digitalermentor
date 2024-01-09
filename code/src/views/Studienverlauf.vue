@@ -764,8 +764,12 @@ ion-card:hover {
 .moduleElement:hover {
 	opacity: 0.9;
 	transform: translate(0px, -10px);
-	border: 4px solid var(--ion-color-primary);
+	border-bottom: 4px solid var(--ion-color-primary);
+	border-left: 4px solid var(--ion-color-primary);
+	border-top: 1px solid var(--ion-color-primary);
+	border-right: 1px solid var(--ion-color-primary);
 	cursor: grab;
+	box-shadow: 0px 10px 4px rgba(86, 86, 86, 0.3);
 }
 
 .moduleElement:active {
