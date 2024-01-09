@@ -600,7 +600,7 @@ export default defineComponent({
 		console.log('LENGTH_____1______', this.studentProgress)
 		console.log('LENGTH_____2______', this.modules)
 		console.log('LENGTH_____3______', this.electiveModules)
-		// this.getData()
+		this.getData()
 		// this.sortModulesAlphabetically()
 	},
 
