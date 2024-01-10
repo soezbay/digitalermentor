@@ -56,6 +56,8 @@
 								</ion-col>
 							</ion-row>
 						</ion-grid>
+						<!-- Legende -->
+						<LegendComponent :hasPassed="true"/>
 
 						<br>
 						<ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none"
@@ -160,6 +162,7 @@ import { useStore } from 'vuex'
 import { texts } from '../texts.js'
 import HeaderComponent from '../views/Components/HeaderComponent.vue'
 import Studienverlauf from './Studienverlauf.vue'
+import LegendComponent from '../views/Components/LegendComponent.vue'
 
 import {
 	IonPage,
@@ -210,6 +213,7 @@ export default {
 		IonCard,
 		IonRefresher,
 		IonRefresherContent,
+		LegendComponent,
 	},
 	setup() {
 
@@ -733,5 +737,16 @@ ion-datetime {
 /* move to the left */
 ion-title {
 	margin-left: -5px;
+}
+
+#legend {
+	text-align: center;
+	font-size: medium;
+	margin-top: 25px;
+}
+
+#legendBadge {
+	margin-right: 5px;
+	margin-left: 5px;
 }
 </style>
