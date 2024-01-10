@@ -39,12 +39,13 @@
 						<ion-row v-if="semester >= 1" style="padding-left: 7px">
 							<h2>{{ semester }}. {{ texts.studium.semester }}</h2>
 							<!-- Remove Button wird nur angezeigt für das letzte Semester und nur, wenn es leer ist -->
-							<ion-icon :icon="remove" id="removeSemesterIcon" v-if="semester === Object.keys(groupedModules).length - 1 &&
-								emptySemesters != 0 &&
+							<ion-icon :icon="remove" id="removeSemesterIcon" v-if="semester === this.groupedModules.length - 1 &&
+								emptySemesters !== 0 &&
 								groupedModules[semester].length === 0
-								" @click="removeEmptySemester"></ion-icon>
-							<ion-icon :icon="remove" id="removeSemesterIconUnabled" v-else-if="semester === Object.keys(groupedModules).length - 1 &&
-								emptySemesters != 0
+								" @click="removeEmptySemester(semester)"></ion-icon>
+							<ion-icon :icon="remove" id="removeSemesterIconUnabled" v-else-if="semester === this.groupedModules.length - 1 &&
+								emptySemesters > 0 &&
+								this.groupedModules[semester].length !== 0
 								" @click="setOpen(true)"></ion-icon>
 							<ion-toast :is-open="isOpen" :message="texts.studienverlauf.toastSemesterEntfernen"
 								:duration="1500" @didDismiss="setOpen(false)"></ion-toast>
@@ -322,10 +323,10 @@ export default defineComponent({
 		},
 
 		// Methode, um ein leeres Semester zu entfernen
-		removeEmptySemester() {
+		removeEmptySemester(semester) {
 			if (this.emptySemesters > 0) {
 				this.emptySemesters--
-				this.groupedModules.pop([])
+				this.groupedModules.splice([semester])
 			}
 		},
 
@@ -545,7 +546,6 @@ export default defineComponent({
 					console.log('SPLICEDARRAY REMOVEDMODULE', removedModule)
 					// Füge das Modul zum Zielsemester-Array hinzu
 					targetSemesterArray.push(removedModule)
-
 					this.$store.commit(
 						'saveGroupeModuleChanges',
 						semester,
@@ -619,11 +619,10 @@ export default defineComponent({
 		addEmptySemesters() {
 			// Füge leere Semester basierend auf this.emptySemesters hinzu
 			for (let i = 1; i <= this.emptySemesters; i++) {
-				const semesterNumber = Object.keys(this.groupedModules).length
+				const semesterNumber = this.groupedModules.length - 1
 				this.groupedModules[semesterNumber] = []
 				this.$forceUpdate()
 			}
-
 			return groupedModules
 		},
 	},
