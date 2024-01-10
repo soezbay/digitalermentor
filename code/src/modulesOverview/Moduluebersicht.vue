@@ -7,7 +7,7 @@
 						<ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
-				<ion-title>Modulübersicht</ion-title>
+				<ion-title>Modulhandbuch</ion-title>
 				<ion-buttons slot="end" style="display: flex; align-items: center">
 					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
 						<ion-icon :icon="helpCircleOutline"></ion-icon>

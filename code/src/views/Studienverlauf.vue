@@ -177,7 +177,7 @@
 				</ion-row>
 			</ion-grid>
 			<!-- Legende -->
-			<LegendComponent />
+			<LegendComponent :hasPassed="true"/>
 		</ion-content>
 	</ion-page>
 </template>
