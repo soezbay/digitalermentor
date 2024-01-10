@@ -22,3 +22,8 @@ services:
       - MYSQL_CHARSET=utf8mb4
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
+  ionic-app:
+    build: 
+      context: ../code/
+    ports:
+      - "${IONIC_APP_HOST_PORT}:${IONIC_APP_CONTAINER_PORT}"

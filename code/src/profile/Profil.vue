@@ -151,7 +151,9 @@ export default {
 		},
 		async fetchBenutzer() {
 			console.info(this.Benutzer);
-			const userIndex = this.Benutzer.findIndex((benutzer) => benutzer.BenutzerID === this.$store.getters.getTestBenutzer);
+			const testBenutzer = await this.$store.getters.getUserID;
+			console.info(testBenutzer)
+			const userIndex = this.Benutzer.findIndex((benutzer) => benutzer.BenutzerID === this.$store.getters.getUserID);
 
 			if (userIndex !== -1) {
 			this.selectedBenutzer = this.Benutzer[userIndex];
