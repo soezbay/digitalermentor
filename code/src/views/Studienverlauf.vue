@@ -25,13 +25,21 @@
 			<!-- Modulsuche -->
 			<ion-grid>
 				<ion-row class="ion-justify-content-center">
-					<ion-searchbar show-clear-button="always" animated="true" placeholder="Modulsuche" type="text"
-						v-model="query" @ionChange="handleSearchChange"></ion-searchbar>
+					<ion-searchbar
+						show-clear-button="always"
+						animated="true"
+						placeholder="Modulsuche"
+						type="text"
+						v-model="query"
+						@ionChange="handleSearchChange"></ion-searchbar>
 				</ion-row>
 			</ion-grid>
 
 			<!-- Pflichtmodule -->
-			<ion-grid :fixed="true" v-for="(semesterModules, semester) in groupedModules" :key="semester">
+			<ion-grid
+				:fixed="true"
+				v-for="(semesterModules, semester) in groupedModules"
+				:key="semester">
 				<ion-row :key="semester">
 					<!-- Semester Überschriften -->
 					<ion-col size="12">
@@ -39,33 +47,60 @@
 						<ion-row v-if="semester >= 1" style="padding-left: 7px">
 							<h2>{{ semester }}. {{ texts.studium.semester }}</h2>
 							<!-- Remove Button wird nur angezeigt für das letzte Semester und nur, wenn es leer ist -->
-							<ion-icon :icon="remove" id="removeSemesterIcon" v-if="semester === this.groupedModules.length - 1 &&
-								emptySemesters !== 0 &&
-								groupedModules[semester].length === 0
-								" @click="removeEmptySemester(semester)"></ion-icon>
-							<ion-icon :icon="remove" id="removeSemesterIconUnabled" v-else-if="semester === this.groupedModules.length - 1 &&
-								emptySemesters > 0 &&
-								this.groupedModules[semester].length !== 0
-								" @click="setOpen(true)"></ion-icon>
-							<ion-toast :is-open="isOpen" :message="texts.studienverlauf.toastSemesterEntfernen"
-								:duration="1500" @didDismiss="setOpen(false)"></ion-toast>
+							<ion-icon
+								:icon="remove"
+								id="removeSemesterIcon"
+								v-if="
+									semester === this.groupedModules.length - 1 &&
+									emptySemesters !== 0 &&
+									groupedModules[semester].length === 0
+								"
+								@click="removeEmptySemester(semester)"></ion-icon>
+							<ion-icon
+								:icon="remove"
+								id="removeSemesterIconUnabled"
+								v-else-if="
+									semester === this.groupedModules.length - 1 &&
+									emptySemesters > 0 &&
+									this.groupedModules[semester].length !== 0
+								"
+								@click="showToastFilledSemester()"></ion-icon>
 						</ion-row>
 						<ion-row class="modulesRow" @drop="drop" @dragover="dragOver">
 							<!-- Zeige nur Semester ab 1. Semester (da 0. Semester Wahlmodule sind)-->
-							<ion-row class="modulesContainer" :key="`modules-${semester}`" v-if="semester >= 1"
-								:data-semester="semester" @dragenter="dragEnter" @dragleave="dragLeave">
-								<ion-col size="4" size-md="3" v-for="(module, index) in semesterModules" :key="index"
+							<ion-row
+								class="modulesContainer"
+								:key="`modules-${semester}`"
+								v-if="semester >= 1"
+								:data-semester="semester"
+								@dragenter="dragEnter"
+								@dragleave="dragLeave">
+								<ion-col
+									size="4"
+									size-md="3"
+									v-for="(module, index) in semesterModules"
+									:key="index"
 									:data-semester="semester">
 									<!-- Bestandene Module können nicht verschoben werden -->
-									<ion-card v-if="module === 'empty'" class="moduleElement empty-card" :draggable="false"
-										:data-semester="semester" :id="'empty-' + semester"
+									<ion-card
+										v-if="module === 'empty'"
+										class="moduleElement empty-card"
+										:draggable="false"
+										:data-semester="semester"
+										:id="'empty-' + semester"
 										@dragstart="e => dragStart(e, 'empty', semester)">
 										<span :data-semester="semester"></span>
 									</ion-card>
-									<ion-card v-else :draggable="!isPassedModules(module)" :data-semester="semester"
-										:id="module.Kuerzel" @dragstart="e => dragStart(e, module.Kuerzel, semester)"
+									<ion-card
+										v-else
+										:draggable="!isPassedModules(module)"
+										:data-semester="semester"
+										:id="module.Kuerzel"
+										@dragstart="e => dragStart(e, module.Kuerzel, semester)"
 										:class="getModuleStatusClass(module)">
-										<span data-semester="semester" v-html="highlight(module.Kuerzel, query)"></span>
+										<span
+											data-semester="semester"
+											v-html="highlight(module.Kuerzel, query)"></span>
 										<br />
 										<span id="note" :data-semester="semester">
 											{{ getStudentModuleNoteForPass(module) }}
@@ -90,26 +125,46 @@
 			</ion-grid>
 			<!-- Wahlpflichtmodule -->
 			<ion-grid :fixed="true">
-				<ion-row v-for="(semesterModules, semester) in groupedModules" :key="semester">
+				<ion-row
+					v-for="(semesterModules, semester) in groupedModules"
+					:key="semester">
 					<!-- Nur das Semester mit Index 0 anzeigen -->
 					<ion-col size="12" v-if="semester === 0">
 						<ion-row>
 							<h2>{{ texts.studium.wahlpflichtmodule }}</h2>
 						</ion-row>
 						<ion-row class="modulesRow" @drop="drop" @dragover="dragOver">
-							<ion-row :key="`modules-${semester}`" class="modulesContainer" :data-semester="semester"
-								@dragenter="dragEnter" @dragleave="dragLeave">
-								<ion-col size="4" size-md="3" v-for="(module, index) in semesterModules" :key="index"
+							<ion-row
+								:key="`modules-${semester}`"
+								class="modulesContainer"
+								:data-semester="semester"
+								@dragenter="dragEnter"
+								@dragleave="dragLeave">
+								<ion-col
+									size="4"
+									size-md="3"
+									v-for="(module, index) in semesterModules"
+									:key="index"
 									:data-semester="semester">
-									<ion-card v-if="module === 'empty'" class="moduleElement empty-card" :draggable="false"
-										:data-semester="semester" :id="'empty-' + semester"
+									<ion-card
+										v-if="module === 'empty'"
+										class="moduleElement empty-card"
+										:draggable="false"
+										:data-semester="semester"
+										:id="'empty-' + semester"
 										@dragstart="e => dragStart(e, 'empty', semester)">
 										<span :data-semester="semester"></span>
 									</ion-card>
-									<ion-card v-else draggable="true" :data-semester="semester"
-										@dragstart="e => dragStart(e, module.Kuerzel, semester)" :id="module.Kuerzel"
+									<ion-card
+										v-else
+										draggable="true"
+										:data-semester="semester"
+										@dragstart="e => dragStart(e, module.Kuerzel, semester)"
+										:id="module.Kuerzel"
 										:class="getModuleStatusClass(module)">
-										<span :data-semester="semester" v-html="highlight(module.Kuerzel, query)"></span>
+										<span
+											:data-semester="semester"
+											v-html="highlight(module.Kuerzel, query)"></span>
 										<br />
 										<span id="note" :data-semester="semester">
 											{{ getStudentModuleNoteForPass(module) }}
@@ -135,7 +190,6 @@ import {
 	IonToolbar,
 	IonButtons,
 	IonItem,
-	modalController,
 	IonDatetime,
 	IonLabel,
 	IonList,
@@ -154,7 +208,7 @@ import {
 	toastController,
 	IonSearchbar,
 	IonRefresher,
-	IonRefresherContent
+	IonRefresherContent,
 } from '@ionic/vue'
 import { remove, add, ellipse, helpCircleOutline, school } from 'ionicons/icons'
 import { texts } from '../texts.js'
@@ -196,14 +250,14 @@ export default defineComponent({
 	},
 
 	setup() {
-		const handleRefresh = (event) => {
+		const handleRefresh = event => {
 			setTimeout(() => {
 				// Any calls to load data go here
-				event.target.complete();
+				event.target.complete()
 				// Reload the page
-				window.location.reload();
-			}, 1000);
-		};
+				window.location.reload()
+			}, 1000)
+		}
 
 		const isOpen = ref(false)
 
@@ -224,7 +278,7 @@ export default defineComponent({
 			isOpen,
 			setOpen,
 			showToast,
-			handleRefresh
+			handleRefresh,
 		}
 	},
 	data() {
@@ -335,24 +389,37 @@ export default defineComponent({
 			try {
 				//Check if module is passed
 				const succededModule = this.studentProgress.find(
-					smodule => smodule.Kuerzel === module.Kuerzel && smodule.Status === 'Bestanden');
+					smodule =>
+						smodule.Kuerzel === module.Kuerzel && smodule.Status === 'Bestanden'
+				)
 				if (succededModule) {
-					return 'moduleElementSuccess';
+					return 'moduleElementSuccess'
 				}
 
 				//if succededArray is empty then continue finding exam-trys
-				const foundModules = this.studentProgress.find(smodule => smodule.Kuerzel === module.Kuerzel);
-				if (foundModules.Versuch === 1 && foundModules.Status === 'Nicht Bestanden') {
-					return 'moduleElement moduleElement2';
-				} else if (foundModules.Versuch === 2 && foundModules.Status === 'Nicht Bestanden') {
-					return 'moduleElement moduleElement3';
-				} else if (foundModules.Versuch === 3 && foundModules.Status === 'Nicht Bestanden') {
-					return 'moduleElement moduleElementFailed';
+				const foundModules = this.studentProgress.find(
+					smodule => smodule.Kuerzel === module.Kuerzel
+				)
+				if (
+					foundModules.Versuch === 1 &&
+					foundModules.Status === 'Nicht Bestanden'
+				) {
+					return 'moduleElement moduleElement2'
+				} else if (
+					foundModules.Versuch === 2 &&
+					foundModules.Status === 'Nicht Bestanden'
+				) {
+					return 'moduleElement moduleElement3'
+				} else if (
+					foundModules.Versuch === 3 &&
+					foundModules.Status === 'Nicht Bestanden'
+				) {
+					return 'moduleElement moduleElementFailed'
 				} else {
-					return 'moduleElement moduleElement1'; // Fallback, wenn keine spezifische Klasse gefunden wird
+					return 'moduleElement moduleElement1' // Fallback, wenn keine spezifische Klasse gefunden wird
 				}
 			} catch (err) {
-				return 'moduleElement moduleElement1';
+				return 'moduleElement moduleElement1'
 			}
 		},
 
@@ -559,6 +626,15 @@ export default defineComponent({
 				}
 			}
 		},
+		async showToastFilledSemester() {
+			const toast = await toastController.create({
+				message: texts.studienverlauf.toastSemesterEntfernen,
+				duration: 1500,
+				position: 'bottom',
+				color: 'warning',
+			})
+			toast.present()
+		},
 
 		isPassedModules(module) {
 			return this.getModuleStatusClass(module) === 'passed'
@@ -581,7 +657,7 @@ export default defineComponent({
 				)
 			})
 		},
-		handleSearchChange() { },
+		handleSearchChange() {},
 	},
 
 	mounted() {
@@ -646,7 +722,6 @@ ion-progress-bar {
 	margin-top: 30px;
 	margin-bottom: 10px;
 	--background: #d3d3d3;
-
 }
 
 #cpInfo {
@@ -694,7 +769,6 @@ ion-card {
 
 	@media (prefers-color-scheme: dark) {
 		background: var(--ion-color-step-250);
-
 	}
 }
 
@@ -719,7 +793,6 @@ ion-card:hover {
 	border-radius: 15px;
 	background-color: var(--ion-color-warning);
 	transition: 0.1s;
-
 }
 
 .moduleElement3 {
@@ -730,7 +803,6 @@ ion-card:hover {
 	border-radius: 15px;
 	background-color: var(--ion-color-danger);
 	transition: 0.1s;
-
 }
 
 .moduleElementSuccess {
@@ -741,7 +813,6 @@ ion-card:hover {
 	border-radius: 15px;
 	background-color: var(--ion-color-primary);
 	transition: 0.1s;
-
 }
 
 .moduleElementFailed {
@@ -787,7 +858,6 @@ ion-card:hover {
 	border-radius: 10px;
 
 	@media (prefers-color-scheme: dark) {
-
 		background-color: transparent;
 		border: 2px solid;
 		border-color: var(--ion-color-secondary);
