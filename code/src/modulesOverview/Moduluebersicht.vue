@@ -7,11 +7,7 @@
 						<ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
-<<<<<<< HEAD
 				<ion-title>{{ texts.titel.modulhandbuch }}</ion-title>
-=======
-				<ion-title>Modulhandbuch</ion-title>
->>>>>>> origin/development
 				<ion-buttons slot="end" style="display: flex; align-items: center">
 					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
 						<ion-icon :icon="helpCircleOutline"></ion-icon>
