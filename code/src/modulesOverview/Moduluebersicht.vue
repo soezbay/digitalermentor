@@ -7,7 +7,7 @@
 						<ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
-				<ion-title>Modulhandbuch</ion-title>
+				<ion-title>{{ texts.titel.modulhandbuch }}</ion-title>
 				<ion-buttons slot="end" style="display: flex; align-items: center">
 					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
 						<ion-icon :icon="helpCircleOutline"></ion-icon>
@@ -44,7 +44,7 @@
 					<ion-col class="listenansicht" size="12" size-sm="6">
 						<ion-item lines="none">
 							<!-- ion-toggle for "Listenansicht" -->
-							<ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">Listenansicht</ion-toggle>
+							<ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">{{ texts.moduluebersicht.listenansicht }}</ion-toggle>
 						</ion-item>
 					</ion-col>
 				</ion-row>
@@ -66,7 +66,7 @@
 				<ion-row v-else-if="searched">
 					<ion-col size="12" class="ion-text-center">
 						<p style="color: slategrey;">
-							Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
+							{{ texts.moduluebersicht.keineModuleGefunden.replace('{Studiengang}', this.selectedStudiengang)}}
 						</p>
 					</ion-col>
 				</ion-row>
@@ -79,7 +79,7 @@
 				</ion-item>
 				<div v-else-if="searched" class="ion-text-center">
 					<p style="color: slategrey;">
-						Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
+						{{ texts.moduluebersicht.keineModuleGefunden.replace('{Studiengang}', this.selectedStudiengang)}}
 					</p>
 				</div>
 				<div v-if="!searched">
@@ -130,7 +130,7 @@
 			<ion-modal ref="coursesModal">
 				<ion-header>
 					<ion-toolbar>
-						<ion-title>Wähle einen Studiengang aus</ion-title>
+						<ion-title>{{ texts.moduluebersicht.studiengangAuswaehlen }}</ion-title>
 					</ion-toolbar>
 				</ion-header>
 				<ion-content>
