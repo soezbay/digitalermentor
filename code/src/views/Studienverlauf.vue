@@ -297,6 +297,25 @@ export default defineComponent({
 			query: '',
 		}
 	},
+	mounted() {
+		this.groupedModules = this.$store.getters.getGroupedModules
+		this.studentProgress = this.$store.getters.getStudentProgress
+		this.modules = this.$store.getters.getObligatoryModules
+		this.electiveModules = this.$store.getters.getElectiveModules
+		console.log(
+			'LENGTH____________________!!_!______________!!_!_',
+			this.groupedModules.length
+		)
+		console.log(
+			'LENGTH____________________!!_!______________!!_!_',
+			this.groupedModules
+		)
+		console.log('LENGTH_____1______', this.studentProgress)
+		console.log('LENGTH_____2______', this.modules)
+		console.log('LENGTH_____3______', this.electiveModules)
+		this.getData()
+		// this.sortModulesAlphabetically()
+	},
 	methods: {
 		log(event) {
 			console.log(event)
@@ -342,13 +361,14 @@ export default defineComponent({
 			const clonedElectiveModules = JSON.parse(
 				JSON.stringify(this.electiveModules)
 			)
-			if (this.groupedModules) {
-				this.groupedModules = [
+			if (this.groupedModules.length === 0) {
+				const groupingModules = [
 					clonedElectiveModules,
 					...this.groupModulesBySemester(this.modules).filter(Array),
 				]
-				this.$store.dispatch('updateGroupedModules', this.groupedModules)
-			}
+				
+				this.$store.dispatch('updateGroupedModules', groupingModules)
+			} 
 		},
 
 		// Funktion zum Gruppieren der Module nach Semestern
@@ -363,7 +383,7 @@ export default defineComponent({
 				}
 
 				groupedObliModules[semester].push(module)
-				groupedObliModules[semester].sort()
+				// groupedObliModules[semester].sort()
 			})
 
 			return groupedObliModules
@@ -658,26 +678,6 @@ export default defineComponent({
 			})
 		},
 		handleSearchChange() {},
-	},
-
-	mounted() {
-		this.groupedModules = this.$store.getters.getGroupedModules
-		this.studentProgress = this.$store.getters.getStudentProgress
-		this.modules = this.$store.getters.getObligatoryModules
-		this.electiveModules = this.$store.getters.getElectiveModules
-		console.log(
-			'LENGTH____________________!!_!______________!!_!_',
-			this.groupedModules.length
-		)
-		console.log(
-			'LENGTH____________________!!_!______________!!_!_',
-			this.groupedModules
-		)
-		console.log('LENGTH_____1______', this.studentProgress)
-		console.log('LENGTH_____2______', this.modules)
-		console.log('LENGTH_____3______', this.electiveModules)
-		this.getData()
-		// this.sortModulesAlphabetically()
 	},
 
 	computed: {
