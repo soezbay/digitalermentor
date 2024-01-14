@@ -140,7 +140,7 @@
 							}}</ion-label>
 						</ion-item>
 						<ion-item-divider class="spacer"></ion-item-divider>
-						<ion-item class="background header" color="medium" router-link="/menu/studienziele/deleted"
+						<ion-item class="background header" color="tertiary" router-link="/menu/studienziele/deleted"
 							detail="true" lines="none" id="deletedGoalsButton">
 							<ion-label class="labelHeader headerText">{{
 								texts.ziele.geloeschteZiele
@@ -174,7 +174,7 @@
 							</ion-row>
 						</ion-col>
 						<!-- Legende -->
-						<LegendComponent />
+						<LegendComponent :hasPassed="false" />
 					</ion-col>
 				</ion-row>
 			</ion-grid>
@@ -909,4 +909,5 @@ ion-modal ion-toolbar {
 ion-title {
 	margin-left: -5px;
 }
+
 </style>
