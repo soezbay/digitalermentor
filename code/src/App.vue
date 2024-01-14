@@ -57,7 +57,7 @@ const appPages = [
     mdIcon: desktopOutline,
   },
   {
-    title: 'Termine',
+    title: texts.titel.termine,
     url: '/menu/termine',
     mdIcon: calendarOutline,
   },

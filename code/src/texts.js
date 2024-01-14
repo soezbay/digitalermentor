@@ -41,8 +41,8 @@ export const texts = {
             p4: "Erfahre mehr über ein Modul, indem du auf das Modulkürzel oder den Modulnamen klickst.",
             p5strong: "Modulbewertungen",
             p5: "Teile deine Erfahrungen, indem du Module bewertest und sieh dir die Bewertungen anderer Studierender an. Profitiere von Tipps, um Module erfolgreich zu absolvieren.",
-
         },
+        keineModuleGefunden: "Keine passenden Module in {Studiengang} in der Suche gefunden",
 
     },
 
