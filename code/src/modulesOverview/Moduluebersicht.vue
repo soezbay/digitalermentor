@@ -7,7 +7,7 @@
 						<ion-icon style="font-size: 45px;" src="/resources/Logo_DigitalerMentor.svg"></ion-icon>
 					</ion-button>
 				</ion-buttons>
-				<ion-title>{{ texts.titel.modulhandbuch }}</ion-title>
+				<ion-title>Modulhandbuch</ion-title>
 				<ion-buttons slot="end" style="display: flex; align-items: center">
 					<ion-button class="infoButton" color="primary" id="open-info-modal" expand="block">
 						<ion-icon :icon="helpCircleOutline"></ion-icon>
@@ -44,7 +44,7 @@
 					<ion-col class="listenansicht" size="12" size-sm="6">
 						<ion-item lines="none">
 							<!-- ion-toggle for "Listenansicht" -->
-							<ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">{{ texts.moduluebersicht.listenansicht }}</ion-toggle>
+							<ion-toggle v-model="showAsList" @click="onToggleChange()" slot="end">Listenansicht</ion-toggle>
 						</ion-item>
 					</ion-col>
 				</ion-row>
@@ -66,7 +66,7 @@
 				<ion-row v-else-if="searched">
 					<ion-col size="12" class="ion-text-center">
 						<p style="color: slategrey;">
-							{{ texts.moduluebersicht.keineModuleGefunden.replace('{Studiengang}', this.selectedStudiengang)}}
+							Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
 						</p>
 					</ion-col>
 				</ion-row>
@@ -75,11 +75,11 @@
 			</ion-grid>
 			<ion-list v-else>
 				<ion-item v-if="results.length > 0" v-for="result in results" @click="openModal(result)" class="searchList">
-					<ion-label>{{ result.Name }}</ion-label>
+					<ion-label>{{ result.Name + " (" + result.Kuerzel + ")" }}</ion-label>
 				</ion-item>
 				<div v-else-if="searched" class="ion-text-center">
 					<p style="color: slategrey;">
-						{{ texts.moduluebersicht.keineModuleGefunden.replace('{Studiengang}', this.selectedStudiengang)}}
+						Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
 					</p>
 				</div>
 				<div v-if="!searched">
@@ -88,49 +88,80 @@
 
 			<!-- LIST OF MODULES ------------------------------------------------------------------------------------------------------>
 			<!-- Ion Grid for Semester -->
-			<div v-if="showAsList === false" class="ion-padding" style="padding-top: 0;">
-				<hr class="solid">
-				<ion-grid style="padding-top: 0; margin-top: 0; margin-bottom: 200px;">
-					<ion-col v-for="(semester, index) in getselectedCourseModules()" :key="index">
-						<ion-row style="padding-left: 10px;">
-							<label>
-								{{ semester.semestercount }}
-							</label>
-						</ion-row>
-						<ion-row style="max-width: 750px;">
-							<ion-col size="1.7" v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
-								style="width: 100px; max-width: 100px; min-width: 68px;">
-								<ion-card class="modulBlock" @click="openModal(modul)">
-									<ion-label style="color: #000000; font-weight: bolder">
-										{{ modul.Kuerzel }}
-									</ion-label>
-								</ion-card>
+			<ion-grid style="margin: 0; padding: 0;">
+				<ion-row>
+					<ion-col v-if="showAsList === false" class="ion-padding" style="padding-top: 0; " size="12" size-md="6">
+						<hr class="solid">
+						<ion-grid style="padding-top: 0; margin-top: 0; margin-bottom: 200px;">
+							<ion-col v-for="(semester, index) in getselectedCourseModules()" :key="index">
+								<ion-row style="padding-left: 10px;">
+									<label>
+										{{ semester.semestercount }}
+									</label>
+								</ion-row>
+								<ion-row style="max-width: 750px;">
+									<ion-col size="1.7" v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
+										style="width: 100px; max-width: 100px; min-width: 68px;">
+										<ion-card class="modulBlock" @click="openModal(modul)">
+											<ion-label style="color: #000000; font-weight: bolder">
+												{{ modul.Kuerzel }}
+											</ion-label>
+										</ion-card>
+									</ion-col>
+								</ion-row>
 							</ion-col>
-						</ion-row>
+						</ion-grid>
 					</ion-col>
-				</ion-grid>
-			</div>
-			<!--Show modules as List when showAsList=true-->
-			<ion-list v-else style="padding: 0; padding-top: 10px;">
-				<div v-for="(semester, index) in getselectedCourseModules()" :key="index">
-					<ion-list-header class="semesterHeaderList">
-						<ion-label>{{ semester.semestercount }}</ion-label>
-					</ion-list-header>
-					<ion-item v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex" @click="openModal(modul)"
-						class="ModulItemsInList">
-						<ion-label>{{ modul.Name }} ({{ modul.Kuerzel }})</ion-label>
-						<ion-note slot="end">{{ modul.Leistungspunkte }} LP</ion-note>
-					</ion-item>
-				</div>
-				<div style="height: 200px"></div>
-			</ion-list>
+					<!--Show modules as List when showAsList=true-->
+					<ion-col v-else size="12" size-md="6" style="margin: 0; padding: 0;">
+						<ion-list style="padding: 0; padding-top: 10px;">
+							<div v-for="(semester, index) in getselectedCourseModules()" :key="index">
+								<ion-list-header class="semesterHeaderList">
+									<ion-label>{{ semester.semestercount }}</ion-label>
+								</ion-list-header>
+								<ion-item v-for="(modul, moduleIndex) in semester.faecher" :key="moduleIndex"
+									@click="openModal(modul)" class="ModulItemsInList">
+									<ion-label>{{ modul.Name }} ({{ modul.Kuerzel }})</ion-label>
+									<ion-note slot="end">{{ modul.Leistungspunkte }} LP</ion-note>
+								</ion-item>
+							</div>
+							<div style="height: 200px"></div>
+						</ion-list>
+					</ion-col>
+					<ion-col size="12" size-md="6">
+						<div class="ion-text-center">
+							<h4 class="modalheader"
+								style=" text-align: center; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
+								{{ texts.titel.modulbeschreibung }}
+							</h4>
+							<h5 style=" text-align: center; font-size: 1.3em;">
+								{{ this.selectedModul.Name }}
+							</h5>
+							<h6 style=" text-align: center; font-size: 1.3em;">
+								({{ this.selectedModul.Kuerzel }})
+							</h6>
+							<ion-button @click="openModalReviews" class="weitereBewertungenButton">{{
+								texts.modulbeschreibung.weitereBewertungen }}</ion-button>
+						</div>
+						<div>
+							<ion-list>
+								<ion-item v-for="(item, key) in filteredList()" :key="key">
+										<ion-label class="ion-text-wrap" style="font-weight: 800;">
+										{{ insertSpaceBetweenLowerAndUpper(key) }}:</ion-label>
+										<ion-label class="ion-text-wrap">{{ item }}</ion-label>
+									</ion-item>
+							</ion-list>
+						</div>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
 
 			<!-- MODALS -------------------------------------------------------------------------------------------------------------->
 			<!-- Modal for changing Courses to display -->
 			<ion-modal ref="coursesModal">
 				<ion-header>
 					<ion-toolbar>
-						<ion-title>{{ texts.moduluebersicht.studiengangAuswaehlen }}</ion-title>
+						<ion-title>Wähle einen Studiengang aus</ion-title>
 					</ion-toolbar>
 				</ion-header>
 				<ion-content>
@@ -242,6 +273,7 @@ export default {
 			helpCircleOutline, book, texts,
 			Adress: import.meta.env.VITE_API_URL,
 			showAsList: false,
+			selectedModul: '',
 			selectedStudiengang: null,
 			studiengaenge: [],
 			modulesBook: [],
@@ -287,7 +319,6 @@ export default {
 		async getModuleData(selectedStudiengang) {
 
 			try {
-				console.log("ur here2");
 
 				if (selectedStudiengang === null || selectedStudiengang === undefined) {
 					throw new Error('selectedStudiengang ist null oder undefined');
@@ -300,11 +331,9 @@ export default {
 					console.log(`Studiengang ${selectedStudiengang} ist bereits in der modulesBook vorhanden.`);
 					return;
 				}
-				console.log("ur here3");
 
 				// Retrieve the regular study duration for the specific study program
 				const studiengaengeResponse = await axios.get(`${this.Adress}/studiengang`);
-				console.log("ur here4");
 
 				const pflichtModuleResponse = await axios.get(`${this.Adress}/studiengang/pflicht/${selectedStudiengang}`);
 				const wahlpflichtmoduleResponse = await axios.get(`${this.Adress}/studiengang/wahlpflicht/${selectedStudiengang}`);
@@ -315,10 +344,8 @@ export default {
 
 				const regelstudienzeit = studiengang.Regelstudienzeit;
 
-				console.log("--------Die regelstudienzeit:", regelstudienzeit);
 				// Sort mandatory modules by semester
 				pflichtModule.sort((a, b) => a.Semester - b.Semester);
-				console.log("------Pflichtmodule getData---------", pflichtModule);
 
 				// Inline getModulesForSemester function
 				for (let semester = 1; semester <= regelstudienzeit; semester++) {
@@ -339,35 +366,36 @@ export default {
 				this.$store.dispatch('updateModulesBook', this.modulesBook);
 
 			} catch (error) {
-				// Fehlerbehandlung: Gib den Fehler aus
 				console.error('Fehler beim Abrufen oder Verarbeiten der Daten:', error.message);
 				if (error.message.includes('Network Error')) {
 					console.error('Keine Internetverbindung!');
-					// Hier könntest du zusätzliche Maßnahmen ergreifen oder eine Meldung an den Benutzer anzeigen
 				}
 			}
 
 		},
 
 		getselectedCourseModules() {
-			console.log("-----------DIE modulesBook MIT MODULEN:", this.modulesBook);
-			const array = this.modulesBook.filter(arr => arr.course === this.selectedStudiengang);
-			console.log("________DIE GEFILTERTE LISTE", array);
-			return array;
+			console.log("--------DIE modulesBook MIT MODULEN:", this.modulesBook);
+			const filteredBook = this.modulesBook.filter(arr => arr.course === this.selectedStudiengang);
+			console.log("--------DIE GEFILTERTE LISTE", filteredBook);
+			return filteredBook;
 		},
 
 		async openModal(selectedModul) {
-			console.log('selectedModul:', selectedModul)
-			const modal = await modalController
-				.create({
-					component: Modal,
-					componentProps: {
-						selectedModul: selectedModul,
-					},
-				})
-				.then(modal => {
-					modal.present()
-				})
+			if (window.innerWidth < 767) {
+				const modal = await modalController
+					.create({
+						component: Modal,
+						componentProps: {
+							selectedModul: selectedModul,
+						},
+					})
+					.then(modal => {
+						modal.present();
+					});
+			} else {
+				this.selectedModul = selectedModul;
+			}
 		},
 
 		async openCourses(selectedModul) {
@@ -409,6 +437,20 @@ export default {
 			}
 			this.$store.commit('saveSettingsModuleOverview', settingsArr)
 		},
+
+		filteredList() {
+			const filtered = {};
+			for (const key in this.selectedModul) {
+				if (this.selectedModul[key] !== null) {
+					filtered[key] = this.selectedModul[key];
+				}
+			}
+			return filtered;
+		},
+
+		insertSpaceBetweenLowerAndUpper(text) {
+			return text.replace(/([a-z])([A-Z])/g, "$1 $2");
+		},
 	},
 
 	async mounted() {
@@ -416,6 +458,7 @@ export default {
 		this.modulesBook = this.$store.getters.getModulesBook;
 		this.fetchStudiengaenge();
 		this.getModuleData(this.selectedStudiengang);
+		// this.selectedModul = 
 
 		const lastSetup = this.settings;
 		if (lastSetup.selectedStudiengang !== undefined && lastSetup.selectedStudiengang !== null) {
