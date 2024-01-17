@@ -128,7 +128,7 @@
 							<div style="height: 200px"></div>
 						</ion-list>
 					</ion-col>
-					<ion-col size="12" size-md="6">
+					<ion-col size="12" size-md="6" class="modulinfo-col">
 						<div class="ion-text-center">
 							<h4 class="modalheader"
 								style=" text-align: center; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
@@ -138,19 +138,25 @@
 								{{ this.selectedModul.Name }}
 							</h5>
 							<h6 style=" text-align: center; font-size: 1.3em;">
-								({{ this.selectedModul.Kuerzel }})
+								{{ this.selectedModul.Kuerzel }}
 							</h6>
 							<ion-button @click="openModalReviews" class="weitereBewertungenButton">{{
 								texts.modulbeschreibung.weitereBewertungen }}</ion-button>
 						</div>
 						<div>
-							<ion-list>
-								<ion-item v-for="(item, key) in filteredList()" :key="key">
-										<ion-label class="ion-text-wrap" style="font-weight: 800;">
-										{{ insertSpaceBetweenLowerAndUpper(key) }}:</ion-label>
-										<ion-label class="ion-text-wrap">{{ item }}</ion-label>
-									</ion-item>
-							</ion-list>
+							<div v-if="this.selectedModul !== ''">
+								<ion-list>
+									<ion-item v-for="(item, key) in filteredList()" :key="key">
+											<ion-label class="ion-text-wrap" style="font-weight: 800;">
+											{{ insertSpaceBetweenLowerAndUpper(key) }}:</ion-label>
+											<ion-label class="ion-text-wrap">{{ item }}</ion-label>
+										</ion-item>
+								</ion-list>
+							</div>
+							<div v-else class="ion-text-center">
+								<br>
+								<ion-label> -Wähle links ein Modul aus-</ion-label>
+							</div>
 						</div>
 					</ion-col>
 				</ion-row>
@@ -286,8 +292,7 @@ export default {
 		handleInput(event) {
 			this.searched = true;
 			const query = event.target.value.toLowerCase();
-			console.log("B1-----------", this.modulesBook);
-			console.log("B1-----------", this.modulesBook);
+			console.log("", this.modulesBook);
 			const courseFilter = this.modulesBook.filter(c => c.course === this.selectedStudiengang);
 			console.log(courseFilter);
 			const allSubjects = courseFilter.flatMap(c => c.faecher);
@@ -620,5 +625,11 @@ ion-item-divider {
 		align-items: left;
 		justify-content: left;
 	}
+}
+
+@media (max-width: 767px) {
+  .modulinfo-col {
+    display: none;
+  }
 }
 </style>
