@@ -24,7 +24,7 @@
 					texts.modulbeschreibung.weitereBewertungen }}</ion-button>
 			</div>
 			<ion-list>
-				<ion-item v-for="(item, key) in filteredList" :key="key">
+				<ion-item v-for="(item, key) in filteredList()" :key="key">
 					<ion-label class="ion-text-wrap" style="font-weight: 800;">{{ insertSpaceBetweenLowerAndUpper(key)
 					}}:</ion-label>
 					<ion-label class="ion-text-wrap">{{ item }}</ion-label>
@@ -239,7 +239,7 @@ export default {
 			Adress : import.meta.env.VITE_API_URL,
 			editingMode: false,
 			modul: [],
-			filteredList: this.filteredList(),
+			// filteredList: this.filteredList(),
 			texts,
 			userdata,
 			formData: {
