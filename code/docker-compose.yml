@@ -1,8 +1,8 @@
 version: '3'
 services:
-  ionic-app:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${IONIC_APP_HOST_PORT}:${IONIC_APP_CONTAINER_PORT}"
+  # ionic-app:
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "${IONIC_APP_HOST_PORT}:${IONIC_APP_CONTAINER_PORT}"

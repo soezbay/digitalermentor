@@ -1,29 +1,11 @@
 const ModulZiel = require('../module/ModulZiel');
 
-const convertUmlauteToUtf8 = (data) => {
-  if (typeof data === 'string') {
-    return Buffer.from(data, 'latin1').toString('utf-8');
-  } else if (Array.isArray(data)) {
-    return data.map(item => convertUmlauteToUtf8(item));
-  } else if (typeof data === 'object' && data !== null) {
-    const newObj = {};
-    Object.keys(data).forEach(key => {
-      newObj[key] = convertUmlauteToUtf8(data[key]);
-    });
-    return newObj;
-  }
-  return data;
-};
-
 exports.getAllZieleFromBenutzer = async (req, res, next) => {
   try {
     let BenutzerID = req.params.BenutzerID;
     const [ziele, _] = await ModulZiel.findAllFromBenutzer(BenutzerID);
 
-    // Führe die Konvertierung durch
-    const zieleWithUtf8 = convertUmlauteToUtf8(ziele);
-
-    res.status(200).json({ ziele: zieleWithUtf8 });
+    res.status(200).json({ ziele: ziele });
   } catch (error) {
     console.log(error);
     next(error);
