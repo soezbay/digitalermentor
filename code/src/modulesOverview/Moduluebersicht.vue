@@ -15,13 +15,6 @@
 					<ion-menu-button color="primary"></ion-menu-button>
 				</ion-buttons>
 			</ion-toolbar>
-		</ion-header>
-
-		<ion-content>
-			<ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
-				<ion-refresher-content></ion-refresher-content>
-			</ion-refresher>
-
 			<!--UTILITIES FOR SEARCHING AND CHANGING ----------------------------------------------------------------------------------->
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid style="margin: 0; padding-bottom: 0; padding-top: 0;">
@@ -55,6 +48,12 @@
 					@ionInput="handleInput($event)">
 				</ion-searchbar>
 			</div>
+		</ion-header>
+
+		<ion-content>
+			<ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+				<ion-refresher-content></ion-refresher-content>
+			</ion-refresher>
 
 			<!-- SHOW MODULES ------------------------------------------------------------------------------------------------------>
 			<!-- Ion Grid for Semester -->
@@ -161,56 +160,56 @@
 								<ion-label> -Wähle links ein Modul aus-</ion-label>
 							</div>
 						</div>
+						<div style="height: 200px"></div>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
-
-			<!-- MODALS -------------------------------------------------------------------------------------------------------------->
-			<!-- Modal for changing Courses to display -->
-			<ion-modal ref="coursesModal">
-				<ion-header>
-					<ion-toolbar>
-						<ion-title>Wähle einen Studiengang aus</ion-title>
-					</ion-toolbar>
-				</ion-header>
-				<ion-content>
-					<ion-list>
-						<ion-item button v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
-							:value="studiengang.Kuerzel">
-							<ion-label>{{ studiengang.Name }}</ion-label>
-						</ion-item>
-					</ion-list>
-				</ion-content>
-			</ion-modal>
-
-			<!--Help-Modal-option for user-->
-			<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal">
-				<ion-content>
-					<ion-grid>
-						<ion-row justify-content-center align-items-center>
-							<ion-col size="12">
-								<div class="ion-text-center">
-									<p><ion-icon :icon="book" style="font-size: 40px; color:#BBCC00"></ion-icon></p>
-									<p style="font-size: 22px;">
-										<strong>{{ texts.moduluebersicht.erklaerung.p1strong }}</strong>
-									</p>
-									<p> {{ texts.moduluebersicht.erklaerung.p1 }}</p>
-									<p><strong>{{ texts.moduluebersicht.erklaerung.p2strong }}</strong></p>
-									<p> {{ texts.moduluebersicht.erklaerung.p2 }}</p>
-									<p><strong>{{ texts.moduluebersicht.erklaerung.p3strong }}</strong></p>
-									<p> {{ texts.moduluebersicht.erklaerung.p3 }}</p>
-									<p><strong>{{ texts.moduluebersicht.erklaerung.p4strong }}</strong></p>
-									<p> {{ texts.moduluebersicht.erklaerung.p4 }}</p>
-									<p><strong>{{ texts.moduluebersicht.erklaerung.p5strong }}</strong></p>
-									<p>{{ texts.moduluebersicht.erklaerung.p5 }}</p>
-								</div>
-							</ion-col>
-						</ion-row>
-					</ion-grid>
-				</ion-content>
-			</ion-modal>
-
 		</ion-content>
+
+		<!-- MODALS -------------------------------------------------------------------------------------------------------------->
+		<!-- Modal for changing Courses to display -->
+		<ion-modal ref="coursesModal">
+			<ion-header>
+				<ion-toolbar>
+					<ion-title>Wähle einen Studiengang aus</ion-title>
+				</ion-toolbar>
+			</ion-header>
+			<ion-content>
+				<ion-list>
+					<ion-item button v-for="studiengang in studiengaenge" :key="studiengang.Kuerzel"
+						:value="studiengang.Kuerzel">
+						<ion-label>{{ studiengang.Name }}</ion-label>
+					</ion-item>
+				</ion-list>
+			</ion-content>
+		</ion-modal>
+
+		<!--Help-Modal-option for user-->
+		<ion-modal class="info-modal" ref="modal_info" trigger="open-info-modal">
+			<ion-content>
+				<ion-grid>
+					<ion-row justify-content-center align-items-center>
+						<ion-col size="12">
+							<div class="ion-text-center">
+								<p><ion-icon :icon="book" style="font-size: 40px; color:#BBCC00"></ion-icon></p>
+								<p style="font-size: 22px;">
+									<strong>{{ texts.moduluebersicht.erklaerung.p1strong }}</strong>
+								</p>
+								<p> {{ texts.moduluebersicht.erklaerung.p1 }}</p>
+								<p><strong>{{ texts.moduluebersicht.erklaerung.p2strong }}</strong></p>
+								<p> {{ texts.moduluebersicht.erklaerung.p2 }}</p>
+								<p><strong>{{ texts.moduluebersicht.erklaerung.p3strong }}</strong></p>
+								<p> {{ texts.moduluebersicht.erklaerung.p3 }}</p>
+								<p><strong>{{ texts.moduluebersicht.erklaerung.p4strong }}</strong></p>
+								<p> {{ texts.moduluebersicht.erklaerung.p4 }}</p>
+								<p><strong>{{ texts.moduluebersicht.erklaerung.p5strong }}</strong></p>
+								<p>{{ texts.moduluebersicht.erklaerung.p5 }}</p>
+							</div>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-content>
+		</ion-modal>
 	</ion-page>
 </template>
 
@@ -575,7 +574,7 @@ ion-item-divider {
 }
 
 .searchGrid {
-	padding: 15px;
+	padding: 0px;
 }
 
 .searchGrid ion-item {
@@ -647,13 +646,10 @@ ion-item-divider {
 		max-height: 100vh;
 	}
 }
+
 .modulinfo-col {
 	overflow-y: auto;
 	max-height: 100vh;
-}
-
-ion-content {
-	height: 100vh;
 }
 
 .divider {
@@ -661,4 +657,7 @@ ion-content {
 	max-height: 100vh;
 }
 
+ion-content {
+    --overflow: hidden;
+}
 </style>
