@@ -22,7 +22,7 @@
 				<ion-refresher-content></ion-refresher-content>
 			</ion-refresher>
 
-			<!--UTILITYS FOR SEARCHING AND CHANGING ----------------------------------------------------------------------------------->
+			<!--UTILITIES FOR SEARCHING AND CHANGING ----------------------------------------------------------------------------------->
 			<!-- ion-grid for "Studiengang and Listenansicht" in one line -->
 			<ion-grid style="margin: 0; padding-bottom: 0; padding-top: 0;">
 				<ion-row style="margin-bottom: 7px">
@@ -55,43 +55,30 @@
 					@ionInput="handleInput($event)">
 				</ion-searchbar>
 			</div>
-			<ion-grid v-if="showAsList === false" class="searchGrid">
-				<ion-row v-if="results.length > 0">
-					<ion-col size="4" size-md="3" size-lg="2" v-for="result in results">
-						<ion-item lines="none" @click="openModal(result)">
-							<ion-label>{{ result.Kuerzel }}</ion-label>
-						</ion-item>
-					</ion-col>
-				</ion-row>
-				<ion-row v-else-if="searched">
-					<ion-col size="12" class="ion-text-center">
-						<p style="color: slategrey;">
-							Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
-						</p>
-					</ion-col>
-				</ion-row>
-				<ion-row v-if="!searched">
-				</ion-row>
-			</ion-grid>
-			<ion-list v-else>
-				<ion-item v-if="results.length > 0" v-for="result in results" @click="openModal(result)" class="searchList">
-					<ion-label>{{ result.Name + " (" + result.Kuerzel + ")" }}</ion-label>
-				</ion-item>
-				<div v-else-if="searched" class="ion-text-center">
-					<p style="color: slategrey;">
-						Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
-					</p>
-				</div>
-				<div v-if="!searched">
-				</div>
-			</ion-list>
 
-			<!-- LIST OF MODULES ------------------------------------------------------------------------------------------------------>
+			<!-- SHOW MODULES ------------------------------------------------------------------------------------------------------>
 			<!-- Ion Grid for Semester -->
-			<ion-grid style="margin: 0; padding: 0;">
+			<ion-grid style="margin: 0; padding: 0px;">
 				<ion-row>
-					<ion-col v-if="showAsList === false" class="ion-padding" style="padding-top: 0; " size="12" size-md="6">
-						<hr class="solid">
+					<ion-col v-if="showAsList === false" size="12" size-md="6" style="padding: 5px; padding-top: 0;">
+						<ion-grid class="searchGrid">
+							<ion-row v-if="results.length > 0">
+								<ion-col size="4" size-md="3" size-lg="2" v-for="result in results">
+									<ion-item lines="none" @click="openModal(result)">
+										<ion-label>{{ result.Kuerzel }}</ion-label>
+									</ion-item>
+								</ion-col>
+							</ion-row>
+							<ion-row v-else-if="searched">
+								<ion-col size="12" class="ion-text-center">
+									<p style="color: slategrey;">
+										Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
+									</p>
+								</ion-col>
+							</ion-row>
+							<ion-row v-if="!searched">
+							</ion-row>
+						</ion-grid>
 						<ion-grid style="padding-top: 0; margin-top: 0; margin-bottom: 200px;">
 							<ion-col v-for="(semester, index) in getselectedCourseModules()" :key="index">
 								<ion-row style="padding-left: 10px;">
@@ -112,8 +99,22 @@
 							</ion-col>
 						</ion-grid>
 					</ion-col>
+
 					<!--Show modules as List when showAsList=true-->
-					<ion-col v-else size="12" size-md="6" style="margin: 0; padding: 0;">
+					<ion-col v-else size="12" size-md="6" style="margin: 0; padding: 0;" class="divider">
+						<ion-list>
+							<ion-item v-if="results.length > 0" v-for="result in results" @click="openModal(result)"
+								class="searchList">
+								<ion-label>{{ result.Name + " (" + result.Kuerzel + ")" }}</ion-label>
+							</ion-item>
+							<div v-else-if="searched" class="ion-text-center">
+								<p style="color: slategrey;">
+									Keine Module für {{ this.selectedStudiengang }} in der Suche gefunden
+								</p>
+							</div>
+							<div v-if="!searched">
+							</div>
+						</ion-list>
 						<ion-list style="padding: 0; padding-top: 10px;">
 							<div v-for="(semester, index) in getselectedCourseModules()" :key="index">
 								<ion-list-header class="semesterHeaderList">
@@ -128,10 +129,11 @@
 							<div style="height: 200px"></div>
 						</ion-list>
 					</ion-col>
+
+					<!--Show Module Description and Divide Screen into two Screens-->
 					<ion-col size="12" size-md="6" class="modulinfo-col">
 						<div class="ion-text-center">
-							<h4 class="modalheader"
-								style=" text-align: center; background-color: var(--ion-color-primary); border-radius: 20px; padding: 10px; margin-left: 70px; margin-right: 70px; color: #fff;">
+							<h4 class="modalheader">
 								{{ texts.titel.modulbeschreibung }}
 							</h4>
 							<h5 style=" text-align: center; font-size: 1.3em;">
@@ -140,17 +142,18 @@
 							<h6 style=" text-align: center; font-size: 1.3em;">
 								{{ this.selectedModul.Kuerzel }}
 							</h6>
-							<ion-button @click="openModalReviews" class="weitereBewertungenButton">{{
-								texts.modulbeschreibung.weitereBewertungen }}</ion-button>
+							<ion-button v-if="this.selectedModul !== ''" @click="openModalReviews"
+								class="weitereBewertungenButton">{{
+									texts.modulbeschreibung.weitereBewertungen }}</ion-button>
 						</div>
 						<div>
 							<div v-if="this.selectedModul !== ''">
 								<ion-list>
 									<ion-item v-for="(item, key) in filteredList()" :key="key">
-											<ion-label class="ion-text-wrap" style="font-weight: 800;">
+										<ion-label class="ion-text-wrap" style="font-weight: 800;">
 											{{ insertSpaceBetweenLowerAndUpper(key) }}:</ion-label>
-											<ion-label class="ion-text-wrap">{{ item }}</ion-label>
-										</ion-item>
+										<ion-label class="ion-text-wrap">{{ item }}</ion-label>
+									</ion-item>
 								</ion-list>
 							</div>
 							<div v-else class="ion-text-center">
@@ -593,6 +596,16 @@ ion-item-divider {
 	--background: var(--ion-color-secondary);
 }
 
+.modalheader {
+	text-align: center;
+	background-color: var(--ion-color-primary);
+	border-radius: 20px;
+	padding: 10px;
+	margin-left: 70px;
+	margin-right: 70px;
+	color: #fff;
+}
+
 /* modal for desktop */
 @media (max-width:950px) {
 	.info-modal {
@@ -628,8 +641,24 @@ ion-item-divider {
 }
 
 @media (max-width: 767px) {
-  .modulinfo-col {
-    display: none;
-  }
+	.modulinfo-col {
+		display: none;
+		overflow-y: auto;
+		max-height: 100vh;
+	}
 }
+.modulinfo-col {
+	overflow-y: auto;
+	max-height: 100vh;
+}
+
+ion-content {
+	height: 100vh;
+}
+
+.divider {
+	overflow-y: auto;
+	max-height: 100vh;
+}
+
 </style>
