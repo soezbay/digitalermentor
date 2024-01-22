@@ -19,6 +19,7 @@ const store = createStore({
             //moduleOverview Storage
             modulesBook: [],
             moduleOverviewData: [],
+            selectedModule: '',
 
             //studienverlauf Storage
             groupedmodules: [],
@@ -141,7 +142,6 @@ const store = createStore({
             state.letzterCacheUpdate = new Date(0);
         },
 
-
         setSelectedDate(state, date) {
             state.selectedDate = date;
         },
@@ -163,7 +163,6 @@ const store = createStore({
                 return dateA - dateB;
             });
         },
-
         updateTermin(state, updatedTermin) {
             const index = state.termine.findIndex((termin) => termin.id === updatedTermin.id);
             if (index !== -1) {
@@ -171,11 +170,9 @@ const store = createStore({
                 state.termine[index] = updatedTermin;
             }
         },
-
         removeTermin(state, terminId) {
             state.termine = state.termine.filter(termin => termin.id !== terminId);
         },
-
         addGoal(state, goal_data) {
             const newGoal = {
                 id: goal_data.id,
@@ -242,7 +239,6 @@ const store = createStore({
             state.deletedGoals = state.deletedGoals.filter(goal => goal.id !== goal_ID);
             state.checkedGoals = state.checkedGoals.filter(goal => goal.id !== goal_ID)
         },
-
         removeAllGoals(state) {
             console.log("lösche alle ziele")
             state.deletedGoals = [];
@@ -285,6 +281,9 @@ const store = createStore({
         },
         saveModulesBook(state, updatedModulesBook) {
             state.modulesBook = [...state.modulesBook, updatedModulesBook];
+        },
+        saveSelectedModule(state, updateSelectedModule) {
+            state.selectedModule = updateSelectedModule;
         },
         saveSettingsModuleOverview(state, lastSettings) {
             state.moduleOverviewData = lastSettings;
@@ -521,6 +520,9 @@ const store = createStore({
         },
         getModulesBook(state) {
             return state.modulesBook;
+        },
+        getSelectedModule(state) {
+            return state.selectedModule;
         },
         getStudentProgress(state) {
             return state.studentProgress;

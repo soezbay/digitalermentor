@@ -141,9 +141,8 @@
 							<h6 style=" text-align: center; font-size: 1.3em;">
 								{{ this.selectedModul.Kuerzel }}
 							</h6>
-							<ion-button v-if="this.selectedModul !== ''" @click="openModalReviews"
-								class="weitereBewertungenButton">{{
-									texts.modulbeschreibung.weitereBewertungen }}</ion-button>
+							<ion-button v-if="this.selectedModul !== ''" router-link="/menu/modulbeschreibung/bewertungen">
+								{{ texts.modulbeschreibung.weitereBewertungen }}</ion-button>
 						</div>
 						<div>
 							<div v-if="this.selectedModul !== ''">
@@ -402,6 +401,8 @@ export default {
 					});
 			} else {
 				this.selectedModul = selectedModul;
+				console.log('SPEICHERE SELECTED MODULE');
+				this.$store.commit('saveSelectedModule', this.selectedModul);
 			}
 		},
 
@@ -658,6 +659,6 @@ ion-item-divider {
 }
 
 ion-content {
-    --overflow: hidden;
+	--overflow: hidden;
 }
 </style>

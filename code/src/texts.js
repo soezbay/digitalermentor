@@ -67,6 +67,7 @@ export const texts = {
         profil: "Profil",
         einstellungen: "Einstellungen",
         modulbeschreibung: "Modulbeschreibung",
+        modulbewertung: "Modulbewertung",
         einstellungen: "Einstellungen",
         termine: "Termine",
     },

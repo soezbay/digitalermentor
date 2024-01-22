@@ -19,6 +19,22 @@ const routes = [
     component: Dashboard
   },
   {
+    path: '/termine',
+    component: Termine
+  },
+  {
+    path: '/menu/termine',
+    component: Termine
+  },
+  {
+    path: '/termine/:id',
+    component: () => import('../appointments/TermineDetails.vue')
+  },
+  {
+    path: '/menu/dashboard/termine/add_termin',
+    component: () => import('../appointments/AddTermin.vue')
+  },
+  {
     path: '/moduluebersicht',
     component: Moduluebersicht
   },
@@ -35,28 +51,8 @@ const routes = [
     component: () => import('../modulesOverview/Modulbeschreibung.vue')
   },
   {
-    path: '/termine',
-    component: Termine
-  },
-  {
-    path: '/menu/termine',
-    component: Termine
-  },
-  {
-    path: '/termine/:id',
-    component: () => import('../appointments/TermineDetails.vue')
-  },
-  {
-    path: '/menu/dashboard/termine',
-    component: Termine
-  },
-   {
-    path: '/menu/dashboard/termine',
-    component: Termine
-  },
-  {
-    path: '/menu/dashboard/termine/add_termin',
-    component: () => import('../appointments/AddTermin.vue')
+    path: '/menu/modulbeschreibung/bewertungen',
+    component: () => import('../modulesOverview/Modulbewertung.vue')
   },
   {
     path: '/studienverlauf',
@@ -67,11 +63,11 @@ const routes = [
     component: Studienverlauf
   },
   {
-    path: '/menu/studienziele',
+    path: '/studienziele',
     component: Studienziele
   },
   {
-    path: '/studienziele',
+    path: '/menu/studienziele',
     component: Studienziele
   },
   {
