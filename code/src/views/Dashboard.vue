@@ -57,7 +57,7 @@
 							</ion-row>
 						</ion-grid>
 						<!-- Legende -->
-						<LegendComponent :hasPassed="true"/>
+						<LegendComponent :hasPassed="true" />
 
 						<br>
 						<ion-item color="primary" router-link="/menu/studienziele" id="header" detail="true" lines="none"
@@ -354,31 +354,36 @@ export default {
 
 		// Durchschnittsnote berechnen
 		calculateAverageGrade() {
-			let totalGrade = 0
-			let totalModules = 0
-			let totalCreditPoints = 0
+			try {
+				let totalGrade = 0
+				let totalModules = 0
+				let totalCreditPoints = 0
 
-			for (const progressModule of this.studentProgress) {
-				if (progressModule.Status === 'Bestanden') {
-					// Findet das entsprechende Modul im Array 'modules' und fügt die Credit Points hinzu
-					const matchingModule = this.modules.find(
-						module => module.Kuerzel === progressModule.Kuerzel
-					)
-					if (matchingModule) {
-						totalCreditPoints += matchingModule.Leistungspunkte
+				for (const progressModule of this.studentProgress) {
+					if (progressModule.Status === 'Bestanden') {
+						// Findet das entsprechende Modul im Array 'modules' und fügt die Credit Points hinzu
+						const matchingModule = this.modules.find(
+							module => module.Kuerzel === progressModule.Kuerzel
+						)
+						if (matchingModule) {
+							totalCreditPoints += matchingModule.Leistungspunkte
+						}
+
+						totalGrade +=
+							parseFloat(progressModule.Note) * matchingModule.Leistungspunkte
+						totalModules++
 					}
-
-					totalGrade +=
-						parseFloat(progressModule.Note) * matchingModule.Leistungspunkte
-					totalModules++
 				}
-			}
 
-			if (totalModules === 0) {
-				return 0 // Keine bestandenen Module, Durchschnittsnote ist 0
-			}
+				if (totalModules === 0) {
+					return 0 // Keine bestandenen Module, Durchschnittsnote ist 0
+				}
 
-			return totalGrade / totalCreditPoints
+				return totalGrade / totalCreditPoints
+			} catch (err) {
+				console.log(err);
+				return 0;
+			}
 		},
 		getModuleClass(module) {
 			try {
@@ -690,13 +695,13 @@ ion-progress-bar {
 }
 
 .ktlab {
-    --background: var(--ion-color-secondary);
-    border-radius: 20px;
-    margin: 3px;
+	--background: var(--ion-color-secondary);
+	border-radius: 20px;
+	margin: 3px;
 	margin-left: 35px;
 	margin-right: 30px;
-    color: black;
-    transition: 0.3s
+	color: black;
+	transition: 0.3s
 }
 
 ion-datetime {
