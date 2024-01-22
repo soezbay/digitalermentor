@@ -218,7 +218,7 @@
 import { helpCircleOutline, book } from 'ionicons/icons'
 import { texts } from '../texts.js'
 import axios from 'axios';
-import Modal from "./Modulbeschreibung.vue";
+import Modal from "./modulbeschreibung.vue";
 
 import {
 	IonPage, IonContent, IonHeader, IonTitle, IonToolbar,
